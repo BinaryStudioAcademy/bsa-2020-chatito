@@ -1,5 +1,6 @@
-import React from 'react';
-import { connect, mapDispatchToProps, bindActionCreators } from 'react-redux';
+import React, { Dispatch } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Formik, Form, useField } from 'formik';
 import * as Yup from 'yup';
 import './SignUp.sass';
@@ -106,8 +107,8 @@ export const SignUp = (props: any) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: Function) => ({
-    actions: bindActionCreators(
+const mapDispatchToProps = (dispatch: any) => ({
+    actions: bindActionCreators<any, any>(
       addNewUserAction,
       dispatch
     )
