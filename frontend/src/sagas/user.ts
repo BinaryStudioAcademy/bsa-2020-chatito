@@ -1,6 +1,6 @@
 import { all } from 'redux-saga/effects';
 
-export default function* usersSagas() {
+export default function* userSaga() {
   yield all([
   ]);
 }
