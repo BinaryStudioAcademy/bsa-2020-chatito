@@ -1,6 +1,4 @@
-interface actionIS {
-  type:string;
-}
+import { actionIS } from './root';
 
 export default (state = {}, action:actionIS) => {
   switch (action.type) {
