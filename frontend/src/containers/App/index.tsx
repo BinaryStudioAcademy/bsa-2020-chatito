@@ -1,13 +1,15 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from '../../store';
+import { ConnectedRouter } from 'connected-react-router';
+import { history } from "../../common/helpers/historyHelper"
 
 const App = () => (
-  <div>
-    <Provider store={store}>
+  <Provider store={store}>
+      <ConnectedRouter history={history}>
       <span>Welcome to Chatito!</span>
-    </Provider>
-  </div>
+      </ConnectedRouter>
+  </Provider>
 );
 
 export default App;
