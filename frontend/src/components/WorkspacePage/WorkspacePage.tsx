@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import styles from './WorkspacePage.module.sass';
 import logo from '../../img/chatitoTemp.png';
-import bgImg from '../../img/bgImg.png';
+import bgImg from '../../img/bg-img.png';
 import { connect, useDispatch, Provider } from 'react-redux';
 // import addWorkspace from '';
 
