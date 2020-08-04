@@ -1,9 +1,10 @@
 import styles from './styles.module.scss';
 import React from 'react';
+import Image from 'react-bootstrap/Image';
 
 const UserAvatar = ({ imgUrl, isOnline }: IComponentProps) => (
   <div className={styles.userLogoWrapper}>
-    <img alt="user avatar" src={imgUrl} className={styles.userLogo} />
+    <Image alt="user avatar" src={imgUrl} className={styles.userLogo} roundedCircle />
     <div className={isOnline ? styles.isOnline : styles.isOffline} />
   </div>
 );

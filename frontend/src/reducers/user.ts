@@ -1,7 +1,7 @@
 import { Routine } from 'redux-saga-routines';
 
 export interface IUserState {
-  loading: boolean
+  loading: boolean;
 }
 
 const initialState: IUserState = {

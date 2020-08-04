@@ -16,25 +16,27 @@ const Header = () => {
   const togglePopUp = () => setPopUp(!isPopUp);
 
   const toggleButtonClick = () => {
-    console.log('Button click');
+    // @todo decide which button to trigger
   };
 
+  const getAvatar = () => (
+    <div
+      className={styles.popUpWrapper}
+      role="button"
+      tabIndex={0}
+      onKeyDown={toggleButtonClick}
+      onClick={togglePopUp}
+    >
+      <UserAvatar imgUrl={defaultAvatar} isOnline />
+    </div>
+  );
   return (
     <header className={styles.headerContainer}>
       <div className={styles.mainLogo}>Logo</div>
 
       <div>Some components here</div>
+      <UserPopUp user={testUser} trigger={getAvatar} id="mainHeaderPopUp" placement="bottom" />
 
-      <div
-        className={styles.popUpWrapper}
-        role="button"
-        tabIndex={0}
-        onKeyDown={toggleButtonClick}
-        onClick={togglePopUp}
-      >
-        <UserAvatar imgUrl={defaultAvatar} isOnline />
-        <UserPopUp isShown={isPopUp} user={testUser} />
-      </div>
     </header>
   );
 };
