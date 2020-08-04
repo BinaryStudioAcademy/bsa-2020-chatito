@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
 import React from 'react';
-import IUser from '../../common/models/user';
+import {IUser} from '../../common/models/user';
 import Image from 'react-bootstrap/Image';
 import Popover from 'react-bootstrap/Popover';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
