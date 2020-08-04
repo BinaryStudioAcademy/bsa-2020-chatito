@@ -5,6 +5,7 @@ dotenv.config();
 
 export const env = {
   app: {
-    port: getOsEnv('APP_SERVER_PORT')
+    port: getOsEnv('APP_SERVER_PORT'),
+    secret: process.env.SECRET_KEY
   }
 };
