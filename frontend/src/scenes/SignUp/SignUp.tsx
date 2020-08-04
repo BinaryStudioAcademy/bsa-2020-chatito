@@ -1,25 +1,13 @@
-import React, { Dispatch } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Formik, Form, useField } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import './SignUp.sass';
 import { registration } from '../../services/authService';
-import { setLocalStorageItem } from '../../helpers/localStorageHelper';
+import { setLocalStorageItem } from '../../common/helpers/localStorageHelper';
 import { addNewUserAction } from './actions';
-
-const InputField = ({ label, ...props }: { label: string, name: string, type: string, placeholder?: string }) => {
-  const [field, meta] = useField(props);
-  return (
-    <div className="inputField form-group d-flex flex-column">
-      <span>{label}</span>
-      <input className={`text-input ${meta.touched && meta.error ? 'invalid-input' : ''}`} {...field} {...props} />
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
-    </div>
-  );
-};
+import InputField from '../../components/InputField/InputField';
 
 export const SignUp = (props: any) => {
   return (

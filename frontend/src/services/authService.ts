@@ -1,19 +1,13 @@
-import callWebApi from '../helpers/webApiHelper';
+import api from '../common/helpers/apiHelper';
 
-export const login = async (request: string) => {
-  const response = await callWebApi({
-    endpoint: '/api/auth/login',
-    type: 'POST',
-    request
-  });
+export const login = async (userData: string) => {
+  const response: Response = await api.post('/api/auth/login', {userData});
+
   return response.json();
 };
 
-export const registration = async (request: string) => {
-  const response = await callWebApi({
-    endpoint: '/api/auth/register',
-    type: 'POST',
-    request
-  });
+
+export const registration = async (userData: string) => {
+  const response: Response = await api.post('/api/auth/register', {userData});
   return response.json();
 };

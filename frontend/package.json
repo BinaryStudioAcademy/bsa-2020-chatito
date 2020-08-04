@@ -57,6 +57,6 @@
     ]
   },
   "devDependencies": {
-    "@types/yup": "^0.29.4"
+    "@types/yup": "0.29.4"
   }
 }
