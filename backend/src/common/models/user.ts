@@ -17,3 +17,7 @@ export interface IUser {
   imageUrl: string,
   title: string
 }
+
+export interface IUserResponse extends IUser {
+  token: string,
+}
