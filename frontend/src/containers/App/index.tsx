@@ -2,13 +2,14 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from '../../store';
 import { ConnectedRouter } from 'connected-react-router';
-import { history } from "../../common/helpers/historyHelper"
+import { history } from '../../common/helpers/historyHelper';
+import Workspace from '../../scenes/Workspace/Workspace';
 
 const App = () => (
   <Provider store={store}>
-      <ConnectedRouter history={history}>
-      <span>Welcome to Chatito!</span>
-      </ConnectedRouter>
+    <ConnectedRouter history={history}>
+      <Workspace />
+    </ConnectedRouter>
   </Provider>
 );
 
