@@ -3,10 +3,8 @@ import { IAuthUser } from "../../models/user";
 
 declare global {
   namespace Express {
-    interface User extends IAuthUser {}
-
     interface Request {
-      user?: User;
+      user?: IAuthUser;
       id?: string;
     }
   }

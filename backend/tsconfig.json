@@ -23,9 +23,9 @@
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "types": ["node"],
+    "types": ["node", "./src/common/@types/express"],
     "lib": ["es2020"],
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types", "./src/common/@types/express"]
   },
   "include": ["./src/**/*"]
 }
