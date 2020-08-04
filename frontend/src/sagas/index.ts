@@ -1,8 +1,8 @@
 import { all } from 'redux-saga/effects';
-import usersSagas from './usersSagas';
+import userSaga from './user';
 
 export default function* rootSaga() {
   yield all([
-    usersSagas()
+    userSaga()
   ]);
 }
