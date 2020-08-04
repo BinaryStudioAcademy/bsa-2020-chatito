@@ -1,4 +1,4 @@
-export default interface IUser {
+export interface IUser {
   name?: string;
   imgUrl?: string;
   isOnline?: boolean;

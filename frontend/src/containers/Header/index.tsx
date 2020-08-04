@@ -2,7 +2,7 @@ import styles from './styles.module.scss';
 import React, { useState } from 'react';
 import UserAvatar from '../../components/UserLogo';
 import UserPopUp from '../../components/UserPopUp';
-import IUser from '../../common/models/IUser';
+import IUser from '../../common/models/user';
 
 const defaultAvatar = 'https://img.favpng.com/25/13/19/samsung-galaxy-a8-a8-user-login-telephone-avatar-png-favpng-dqKEPfX7hPbc6SMVUCteANKwj.jpg'; // eslint-disable-line max-len
 const testUser: IUser = {
