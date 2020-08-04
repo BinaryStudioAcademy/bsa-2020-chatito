@@ -1,5 +1,5 @@
 import React from 'react';
 
-const App = () => <span>Welcome to Chatito!</span>;
+const App = () => <App />;
 
 export default App;
