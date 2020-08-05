@@ -4,6 +4,8 @@ import { Icon } from 'semantic-ui-react';
 import { IAppState } from '../../common/models/store';
 import 'semantic-ui-css/semantic.min.css';
 import css from './styles.module.css';
+import triangle from './leftsideToolbar.data';
+// import { createElement } from '../../common/helpers/domHelper';
 
 // Все интерфейсы временные
 interface IChanel {
@@ -89,7 +91,7 @@ const LeftSideToolbar: React.FC<IProps> = ({ user }) => {
       </button>
       <hr />
       <button type="submit" className={css.button}>
-        <Icon name="code" />
+        <img src={triangle} alt="treancl" />
         Text
       </button>
 

@@ -1,6 +1,11 @@
+body {
+  padding: 0;
+}
 
 .leftToolbar {
   position: fixed;
+  margin: -10px;
+  top: 50px; /* Отступ дял Headera */
   left: 10px;
   height: 100%;
   width: 270px;
@@ -20,7 +25,8 @@
   position: relative;
   float: left;
   text-align: left;
-  width: 82%;
+  margin-left: 2%;
+  width: 80%;
 }
 
 .capletter {
