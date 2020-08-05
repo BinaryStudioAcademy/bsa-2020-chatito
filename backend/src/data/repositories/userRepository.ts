@@ -11,6 +11,10 @@ class UserRepository extends Repository<User> {
 
     return user;
   }
+
+  getById(id: string): Promise<User> {
+    return this.findOne(id);
+  }
 }
 
 export default UserRepository;
