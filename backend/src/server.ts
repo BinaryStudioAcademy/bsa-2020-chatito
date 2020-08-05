@@ -1,13 +1,20 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import passport from 'passport';
 import { createConnection } from 'typeorm';
 import { env } from './env';
 import routes from './api/routes';
+import authorizationMiddleware from './api/middlewares/authorizationMiddleware';
+import routesWhiteList from './config/routesWhiteListConfig';
+import './config/passportConfig';
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(passport.initialize());
+
+app.use('/api/', authorizationMiddleware(routesWhiteList));
 
 routes(app);
 
