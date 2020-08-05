@@ -2,15 +2,19 @@ import { getCustomRepository } from 'typeorm';
 
 import UserRepository from '../data/repositories/userRepository';
 
-import { IRegisterUser } from '../common/models/user';
+import { IRegisterUser } from '../common/models/user/IRegisterUser';
 import { encrypt } from '../common/utils/encryptHelper';
-import { signUpResponseMapper } from '../common/utils/userHelper';
+import { fromUserToUserClient, fromRegisterUserToCreateUser } from '../common/mappers/user';
+import { createToken } from '../common/utils/tokenHelper';
 
 export const register = async ({ password, ...userData }: IRegisterUser) => {
-  const newUser = await getCustomRepository(UserRepository).addUser({
-    ...userData,
-    password: await encrypt(password)
-  });
+  const passwordHash = await encrypt(password);
+  const createUserData = fromRegisterUserToCreateUser({ ...userData, password: passwordHash });
 
-  return signUpResponseMapper(newUser);
+  const newUser = await getCustomRepository(UserRepository).addUser(createUserData);
+
+  return {
+    user: fromUserToUserClient(newUser),
+    token: createToken({ id: newUser.id })
+  };
 };
