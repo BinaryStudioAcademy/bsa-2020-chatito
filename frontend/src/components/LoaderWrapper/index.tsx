@@ -1,12 +1,12 @@
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
 
-interface ILoaderWrapperProps {
+interface IProps {
   loading: boolean;
   height?: string;
 }
 
-const LoaderWrapper: React.FC<ILoaderWrapperProps> = ({
+const LoaderWrapper: React.FC<IProps> = ({
   loading,
   children,
   height = '100vh'

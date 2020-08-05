@@ -10,20 +10,20 @@ import Header from '../Header';
 import { fetchUserRoutine } from '../../routines/user';
 
 interface IProps {
-  loading: boolean;
+  isLoading: boolean;
   isAuthorized: boolean;
   fetchUser: IBindingAction;
 }
 
 const Routing: React.FC<IProps> = ({
-  loading,
+  isLoading,
   isAuthorized,
   fetchUser
 }) => {
   const hasToken = Boolean(getAccessToken());
 
   useEffect(() => {
-    if (hasToken && !isAuthorized && !loading) {
+    if (hasToken && !isAuthorized && !isLoading) {
       fetchUser();
     }
   });
@@ -31,7 +31,7 @@ const Routing: React.FC<IProps> = ({
   const signInMock = () => <div>Sign In</div>;
 
   return (
-    <LoaderWrapper loading={loading || (hasToken && !isAuthorized)}>
+    <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <Header />
       <Switch>
         <Route path={Routes.SignIn} component={signInMock} />
@@ -41,9 +41,9 @@ const Routing: React.FC<IProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { user: { loading, isAuthorized } } = state;
+  const { user: { isLoading, isAuthorized } } = state;
   return {
-    loading,
+    isLoading,
     isAuthorized
   };
 };
