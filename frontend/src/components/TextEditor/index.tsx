@@ -1,5 +1,5 @@
 import styles from './styles.module.sass';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { env } from '../../env';
 import Button from 'react-bootstrap/Button';
@@ -8,12 +8,23 @@ interface IProps{
   placeholder: string;
   height: number | 'auto';
   width: number | 'auto';
-  onSend: () => any;
+  onSend: (message: string) => void;
+  onEdit?: (content: string) => {};
 }
 
-const App: FunctionComponent<IProps> = ({ placeholder, width, height, onSend }) => {
-  const handleEditorChange = (content: string, editor: any) => {
-    console.log(content);
+const App: FunctionComponent<IProps> = ({ placeholder, width, height, onSend, onEdit }) => {
+  const [message, setMessage] = useState('');
+
+  const onEditorChange = (content: string, editor: any) => {
+    setMessage(content);
+
+    if (onEdit) {
+      onEdit(content);
+    }
+  };
+
+  const onSendMessage = () => {
+    onSend(message);
   };
 
   return (
@@ -31,10 +42,11 @@ const App: FunctionComponent<IProps> = ({ placeholder, width, height, onSend }) 
           toolbar:
             'undo redo | bold italic | bullist numlist | emoticons |'
         }}
-        onEditorChange={handleEditorChange}
+
+        onEditorChange={onEditorChange}
       />
 
-      <Button variant="secondary" onClick={onSend}>Send</Button>
+      <Button variant="secondary" onClick={onSendMessage}>Send</Button>
     </div>
 
   );
