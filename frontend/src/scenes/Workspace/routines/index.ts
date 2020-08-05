@@ -1,3 +1,3 @@
 import { createRoutine } from 'redux-saga-routines';
 
-export const postWorkspaceNameRoutine = createRoutine('ADD_WORKSPACE');
+export const addWorkspaceRoutine = createRoutine('ADD_WORKSPACE');
