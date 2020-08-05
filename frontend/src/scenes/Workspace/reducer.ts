@@ -1,31 +1,33 @@
 import { Routine } from 'redux-saga-routines';
-import { postWorkspaceNameRoutine } from '../Workspace/routines'
+import { addWorkspaceRoutine } from './routines';
+
 interface IWorkspaceState{
   name: string;
-  loading: boolean
+  loading: boolean;
 }
 
 const initialState: IWorkspaceState = {
   name: '',
   loading: false
-}
+};
 
-export const workspace = (state: IWorkspaceState = initialState, {type, payload}: Routine<any>) => {
-
-  switch(type) {
-    case postWorkspaceNameRoutine.TRIGGER:
+const WorkspaceReducer = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>) => {
+  switch (type) {
+    case addWorkspaceRoutine.TRIGGER:
       return {
         ...state, name: payload, loading: true
-      }
-    case postWorkspaceNameRoutine.FAILURE:
+      };
+    case addWorkspaceRoutine.FAILURE:
       return {
         ...state, loading: false
-      }
-    case postWorkspaceNameRoutine.SUCCESS:
+      };
+    case addWorkspaceRoutine.SUCCESS:
       return {
         ...state, loading: false
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};
+
+export default WorkspaceReducer;

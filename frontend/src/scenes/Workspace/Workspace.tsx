@@ -1,5 +1,5 @@
 import React from 'react';
-import AddWorkspace from '../../components/AddWorkspace';
+import AddWorkspace from '../../containers/AddWorkspace';
 
 const Workspace = () => (
   <AddWorkspace />
