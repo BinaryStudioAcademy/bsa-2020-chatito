@@ -1,8 +1,8 @@
 import { EntityRepository, Repository } from 'typeorm';
 
-import { User } from '../entities/User/UserEntity';
+import { User } from '../entities/UserEntity';
 import { IRegisterUser } from '../../common/models/user/IRegisterUser';
-import { createUserDataMapper } from '../../common/utils/userHelper';
+import { createUserDataMapper } from '../../common/mappers/user';
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> {

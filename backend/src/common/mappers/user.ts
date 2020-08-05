@@ -1,16 +1,22 @@
-import { createToken } from './tokenHelper';
+import { createToken } from '../utils/tokenHelper';
 import { IUser } from '../models/user/IUser';
 import { IUserResponse } from '../models/user/IUserResponse';
 import { IRegisterUser } from '../models/user/IRegisterUser';
 import { ICreateUser } from '../models/user/ICreateUser';
 
 export const signUpResponseMapper = (user: IUser): IUserResponse => {
-  const responseUser = user;
-  delete responseUser.password;
+  const { id, fullName, displayName, email, imageUrl, title } = user;
 
   return {
-    user: responseUser,
-    token: createToken({ id: responseUser.id })
+    user: {
+      id,
+      fullName,
+      email,
+      displayName,
+      imageUrl,
+      title
+    },
+    token: createToken({ id })
   };
 };
 

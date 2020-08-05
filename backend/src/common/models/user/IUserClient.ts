@@ -1,8 +1,7 @@
-export interface IUser {
+export interface IUserClient {
   id: string;
   fullName: string;
   email: string;
-  password: string;
   displayName: string;
   imageUrl?: string;
   title?: string;
