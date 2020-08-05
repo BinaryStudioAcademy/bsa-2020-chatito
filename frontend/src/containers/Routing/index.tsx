@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { IBindingAction } from '../../common/models/callback';
 import { IAppState } from '../../common/models/store';
@@ -37,8 +37,8 @@ const Routing: React.FC<IProps> = ({
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <Header />
       <Switch>
-        <PublicRoute path={Routes.SignIn} component={signInMock} />
-        <PrivateRoute path="/" component={mainMock} />
+        <PublicRoute exact path={Routes.SignIn} component={signInMock} />
+        <PrivateRoute exact path="/" component={mainMock} />
       </Switch>
     </LoaderWrapper>
   );

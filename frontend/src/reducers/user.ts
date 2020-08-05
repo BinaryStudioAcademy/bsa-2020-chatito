@@ -8,7 +8,7 @@ export interface IUserState {
 
 const initialState: IUserState = {
   isLoading: false,
-  isAuthorized: true
+  isAuthorized: false
 };
 
 export default (state = initialState, action: Routine<any>) => {

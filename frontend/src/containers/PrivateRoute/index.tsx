@@ -17,12 +17,11 @@ const PrivateRoute: React.FC<IProps> = ({
 }) => (
   <Route
     {...rest}
-    render={props => {
-      if (!isAuthorized) {
-        return <Redirect to={{ pathname: Routes.SignIn, state: { from: props.location } }} />;
-      }
-      return <Component {...props} />;
-    }}
+    render={props => (
+      !isAuthorized
+        ? <Redirect to={{ pathname: Routes.SignIn, state: { from: props.location } }} />
+        : <Component {...props} />
+    )}
   />
 );
 
