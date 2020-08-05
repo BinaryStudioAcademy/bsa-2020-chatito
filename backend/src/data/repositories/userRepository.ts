@@ -10,6 +10,10 @@ class UserRepository extends Repository<User> {
 
     return user.save();
   }
+
+  getById(id: string): Promise<User> {
+    return this.findOne(id);
+  }
 }
 
 export default UserRepository;
