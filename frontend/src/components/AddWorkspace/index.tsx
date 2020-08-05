@@ -5,7 +5,6 @@ import styles from './styles.module.sass';
 import logo from '../../img/chatitoTemp.png';
 import bgImg from '../../img/bg-img.png';
 import { connect } from 'react-redux';
-import addWorkspace from '../../reducers/actions/actions';
 import { postWorkspaceNameRoutine } from '../../scenes/Workspace/routines';
 
 type IFetchWorkspace<T, S> = (name: T) => S;
