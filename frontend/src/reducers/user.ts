@@ -1,12 +1,12 @@
 import { Routine } from 'redux-saga-routines';
 import { addNewUserRoutine, fetchUserRoutine } from '../routines/user';
 
-export interface IUserState {
+export interface IUserInitState {
   isLoading: boolean;
   isAuthorized: boolean;
 }
 
-const initialState: IUserState = {
+const initialState: IUserInitState = {
   isLoading: false,
   isAuthorized: false
 };

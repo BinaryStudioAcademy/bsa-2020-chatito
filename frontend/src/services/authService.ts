@@ -1,5 +1,4 @@
 import api from '../common/helpers/apiHelper';
-import { string } from 'yup';
 import { IUser } from '../common/models/user/user';
 import { ISignServerResponse } from '../common/models/signIn-signUp/user';
 

@@ -1,8 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Formik, Form } from 'formik';
 import styles from './styles.module.sass';
-import { login } from '../../services/authService';
-import { setAccessToken } from '../../common/helpers/storageHelper';
 import InputField from '../../components/InputField/InputField';
 import { signInValSchema as validationSchema } from '../../common/models/formik/ValSchema';
 import { IUserInput } from '../../common/models/signIn-signUp/user';
@@ -16,17 +14,17 @@ interface IProps {
 
 const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
   const onSubmit = async (values: IUserInput,
-    { setSubmitting }: { setSubmitting: Function }) => {
-      const { email, password } = values;
-      const mappedValues = {
-        email,
-        password
-      };
-      const payload = {
-        payload: mappedValues
-      };
-      fetchUser(payload);
-      setSubmitting(false);
+    { setSubmitting }: { setSubmitting: CallableFunction }) => {
+    const { email, password } = values;
+    const mappedValues = {
+      email,
+      password
+    };
+    const payload = {
+      payload: mappedValues
+    };
+    fetchUser(payload);
+    setSubmitting(false);
   };
   const initialValues = {
     email: '',
