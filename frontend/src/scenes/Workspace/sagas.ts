@@ -1,12 +1,17 @@
 import { postWorkspaceNameRoutine } from './routines'
 import { Routine } from 'redux-saga-routines';
 import {takeEvery, put, call} from 'redux-saga/effects'
-import {makeRequest} from '../../services/workspaceService'
+import {addWorkspace} from '../../services/workspaceService'
 
-function* makeWorkspaceRequest({ payload }: Routine<any>){
-  yield put(makeRequest(payload));
+function* addWorkspaceReq({ payload }: Routine<any>) {
+  try {
+    const workspace = yield call(addWorkspace, payload);
+    yield put(postWorkspaceNameRoutine.success(workspace));
+  } catch (error) {
+    yield put(postWorkspaceNameRoutine.failure(error));
+  }
 }
 
 function* watchPostWorkspaceName() {
-  yield takeEvery(postWorkspaceNameRoutine.TRIGGER, makeWorkspaceRequest)
+  yield takeEvery(postWorkspaceNameRoutine.TRIGGER, addWorkspaceReq)
 }
