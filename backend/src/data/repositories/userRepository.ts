@@ -1,15 +1,12 @@
 import { EntityRepository, Repository } from 'typeorm';
 
 import { User } from '../entities/UserEntity';
-import { IRegisterUser } from '../../common/models/user/IRegisterUser';
-import { fromRegisterUserToCreateUser } from '../../common/mappers/user';
+import { ICreateUser } from '../../common/models/user/ICreateUser';
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
-  async addUser(data: IRegisterUser): Promise<User> {
-    const createUserData = fromRegisterUserToCreateUser(data);
-
-    const user = this.create(createUserData);
+  async addUser(data: ICreateUser): Promise<User> {
+    const user = this.create(data);
     await user.save();
 
     return user;
