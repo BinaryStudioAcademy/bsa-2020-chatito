@@ -2,7 +2,7 @@ import { getCustomRepository } from 'typeorm';
 
 import UserRepository from '../data/repositories/userRepository';
 
-import { IRegisterUser } from '../common/models/user';
+import { IRegisterUser } from '../common/models/user/IRegisterUser';
 import { encrypt } from '../common/utils/encryptHelper';
 import { signUpResponseMapper } from '../common/utils/userHelper';
 

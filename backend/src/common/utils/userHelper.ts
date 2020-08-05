@@ -1,5 +1,6 @@
 import { createToken } from './tokenHelper';
-import { IUser, IUserResponse } from '../models/user';
+import { IUser } from '../models/user/IUser';
+import { IUserResponse } from '../models/user/IUserResponse';
 
 export const signUpResponseMapper = (user: IUser): IUserResponse => ({
   ...user,
