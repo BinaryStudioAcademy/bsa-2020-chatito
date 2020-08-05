@@ -4,7 +4,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import { env } from '../../env';
 import Button from 'react-bootstrap/Button';
 
-interface IProps{
+interface IProps {
   placeholder: string;
   height: number | 'auto';
   width: number | 'auto';
@@ -12,7 +12,7 @@ interface IProps{
   onEdit?: (content: string) => {};
 }
 
-const App: FunctionComponent<IProps> = ({ placeholder, width, height, onSend, onEdit }) => {
+const TextEditor: FunctionComponent<IProps> = ({ placeholder, width, height, onSend, onEdit }) => {
   const [message, setMessage] = useState('');
 
   const onEditorChange = (content: string, editor: any) => {
@@ -52,4 +52,4 @@ const App: FunctionComponent<IProps> = ({ placeholder, width, height, onSend, on
   );
 };
 
-export default App;
+export default TextEditor;
