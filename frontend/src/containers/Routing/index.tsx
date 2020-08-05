@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { IBindingAction } from '../../common/models/callback';
 import { IAppState } from '../../common/models/store';
 import { Routes } from '../../common/enums/Routes';
-import { getAccessToken } from '../../common/helpers/tokenHelper';
+import { getAccessToken } from '../../common/helpers/storageHelper';
 import LoaderWrapper from '../../components/LoaderWrapper';
 import Header from '../Header';
 import { fetchUserRoutine } from '../../routines/user';
