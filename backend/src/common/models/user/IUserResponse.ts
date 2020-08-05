@@ -1,5 +1,9 @@
-import { IUser } from './IUser';
-
-export interface IUserResponse extends IUser {
-  token: string,
+export interface IUserResponse {
+  id: string;
+  fullName: string;
+  email: string;
+  displayName: string;
+  imageUrl: string;
+  title: string;
+  token: string;
 }
