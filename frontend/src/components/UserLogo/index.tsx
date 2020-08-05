@@ -7,11 +7,11 @@ interface IProps {
   isOnline: boolean;
 }
 
-const UserAvatar: FunctionComponent<IProps> = ({ imgUrl, isOnline }) => (
+const UserLogo: FunctionComponent<IProps> = ({ imgUrl, isOnline }) => (
   <div className={styles.userLogoWrapper}>
     <Image alt="user avatar" src={imgUrl} className={styles.userLogo} roundedCircle />
     <div className={isOnline ? styles.isOnline : styles.isOffline} />
   </div>
 );
 
-export default UserAvatar;
+export default UserLogo;
