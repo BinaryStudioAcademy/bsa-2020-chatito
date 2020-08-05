@@ -4,3 +4,15 @@ Content-Type: application/json
 
 GET http://localhost:3001/api/users/1
 Content-Type: application/json
+###
+
+POST http://localhost:3001/api/auth/register
+Content-Type: application/json
+
+{
+    "user": {
+        "email": "test@gmail.com",
+        "password": "password",
+        "fullName": "Name Surname"
+    }
+}
