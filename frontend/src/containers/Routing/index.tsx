@@ -2,61 +2,46 @@ import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { IBindingAction } from '../../common/models/callback';
+import { IAppState } from '../../common/models/store';
 import { Routes } from '../../common/enums/Routes';
 import { getAccessToken } from '../../common/helpers/tokenHelper';
-import LoaderSpinner from '../../components/Spinner/index';
+import LoaderWrapper from '../../components/LoaderWrapper';
 import Header from '../Header';
-import { fetchUserRoutine } from '../../scenes/Authorization/routines';
+import { fetchUserRoutine } from '../../routines/user';
 
-export interface IRoutingProps {
+interface IProps {
   loading: boolean;
   isAuthorized: boolean;
-  fetchCurrentUser: IBindingAction;
+  fetchUser: IBindingAction;
 }
 
-const Routing: React.FC<IRoutingProps> = ({
+const Routing: React.FC<IProps> = ({
   loading,
   isAuthorized,
-  fetchCurrentUser
+  fetchUser
 }) => {
   const hasToken = Boolean(getAccessToken());
 
   useEffect(() => {
     if (hasToken && !isAuthorized && !loading) {
-      fetchCurrentUser();
+      fetchUser();
     }
   });
 
-  const mainMock = () => <div>Chatito main</div>;
   const signInMock = () => <div>Sign In</div>;
-  const signUpMock = () => <div>Sign Up</div>;
-  const workspaceMock = () => <div>workspace</div>;
-  const profileMock = () => <div>profile</div>;
-  const notFound = () => <div>not found</div>;
 
   return (
-    <>
-      <header>
-        <Header />
-      </header>
-      {loading
-        ? <LoaderSpinner />
-        : (
-          <Switch>
-            <Route exact path="/" component={mainMock} />
-            <Route exact path={Routes.SignIn} component={signInMock} />
-            <Route exact path={Routes.SignUp} component={signUpMock} />
-            <Route exact path={Routes.Workspace} component={workspaceMock} />
-            <Route exact path={Routes.Profile} component={profileMock} />
-            <Route path="*" component={notFound} />
-          </Switch>
-        )}
-    </>
+    <LoaderWrapper loading={loading || (hasToken && !isAuthorized)}>
+      <Header />
+      <Switch>
+        <Route path={Routes.SignIn} component={signInMock} />
+      </Switch>
+    </LoaderWrapper>
   );
 };
 
-const mapStateToProps = (state: any) => {
-  const { UserReducer: { loading, isAuthorized } } = state;
+const mapStateToProps = (state: IAppState) => {
+  const { user: { loading, isAuthorized } } = state;
   return {
     loading,
     isAuthorized
@@ -64,7 +49,7 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = {
-  fetchCurrentUser: fetchUserRoutine
+  fetchUser: fetchUserRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Routing);

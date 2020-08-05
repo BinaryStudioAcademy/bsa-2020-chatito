@@ -4,5 +4,7 @@ export enum Routes {
   Profile = '/profile',
   Workspace = '/workspace',
   Room = '/room',
-  Channel = '/channel'
+  Channel = '/channel',
+  Thread = '/thread',
+  Direct = '/direct'
 }
