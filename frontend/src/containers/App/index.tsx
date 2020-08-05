@@ -1,4 +1,5 @@
 import React from 'react';
+import Routing from '../Routing';
 import { Provider } from 'react-redux';
 import { store } from '../../store';
 import { ConnectedRouter } from 'connected-react-router';
@@ -9,7 +10,7 @@ const App = () => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <Header />
-      <span>Welcome to Chatito!</span>
+      <Routing />
     </ConnectedRouter>
   </Provider>
 );
