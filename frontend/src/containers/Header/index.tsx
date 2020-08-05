@@ -45,11 +45,7 @@ const Header: FunctionComponent<IProps> = ({ user }) => {
   );
 };
 
-function mapStateToProps(state: IAppState) {
-  return {
-    user: state.user
-  };
-}
+const mapStateToProps = (state: IAppState) => ({ user: state.user });
 
 export default connect(
   mapStateToProps
