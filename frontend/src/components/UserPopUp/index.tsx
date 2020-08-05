@@ -1,11 +1,11 @@
-import styles from './styles.module.scss';
-import React from 'react';
-import {IUser} from '../../common/models/user';
+import styles from './styles.module.sass';
+import React, { FunctionComponent } from 'react';
+import { IUser } from '../../common/models/user';
 import Image from 'react-bootstrap/Image';
 import Popover from 'react-bootstrap/Popover';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
-const UserPopUp = ({ user, trigger, id, placement }: IPropsType) => {
+const UserPopUp: FunctionComponent<IProps> = ({ user, trigger, id, placement }) => {
   const popOver = (
     <Popover id={id}>
       <Image className={styles.userAvatarBig} src={user.imgUrl} alt="User avatar big" thumbnail />
@@ -26,7 +26,7 @@ const UserPopUp = ({ user, trigger, id, placement }: IPropsType) => {
   );
 };
 
-interface IPropsType {
+interface IProps {
   user: IUser;
   trigger: () => React.ReactElement;
   id: string;
