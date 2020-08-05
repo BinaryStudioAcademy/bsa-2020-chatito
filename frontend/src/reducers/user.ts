@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchUserRoutine } from '../routines/user';
+import { addNewUserRoutine, fetchUserRoutine } from '../routines/user';
 
 export interface IUserState {
   isLoading: boolean;
@@ -11,15 +11,26 @@ const initialState: IUserState = {
   isAuthorized: false
 };
 
-export default (state = initialState, action: Routine<any>) => {
-  switch (action.type) {
+const reducer = (state = initialState, { type, payload }: Routine<any>) => {
+  switch (type) {
+    case addNewUserRoutine.TRIGGER:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case addNewUserRoutine.SUCCESS:
+      return {
+        ...state,
+        ...payload,
+        isLoading: false,
+        isAuthorized: Boolean(payload?.id)
+      };
     case fetchUserRoutine.TRIGGER:
       return {
         ...state,
         isLoading: true
       };
     case fetchUserRoutine.SUCCESS:
-      const { payload } = action;
       return {
         ...state,
         ...payload,
@@ -30,3 +41,5 @@ export default (state = initialState, action: Routine<any>) => {
       return state;
   }
 };
+
+export default reducer;

@@ -5,6 +5,8 @@ interface IUser {
   displayName: string;
   imageUrl: string | null | undefined;
   title: string | null | undefined;
+  isLoading: boolean;
+  isAuthorized: boolean;
 }
 
 export type { IUser };

@@ -29,7 +29,6 @@
     ],
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "comma-dangle": ["error", "never"],
     "no-multiple-empty-lines": ["error", { "max": 1 }],

@@ -1,6 +1,7 @@
 import api from '../common/helpers/apiHelper';
 import { string } from 'yup';
 import { IUser } from '../common/models/user/user';
+import { ISignServerResponse } from '../common/models/signIn-signUp/user';
 
 interface ISignUpFields {
   email: string;
@@ -17,7 +18,7 @@ export const login = async (userInput: ISignInFields) => {
   const userData = {
     userData: JSON.stringify(userInput)
   };
-  const response: Response = await api.post('/api/auth/login', userData);
+  const response: ISignServerResponse & Response = await api.post('/api/auth/login', userData);
 
   return response.json();
 };
@@ -32,7 +33,7 @@ export const registration = async (userInput: ISignUpFields): Promise<IUser> => 
   const userData = {
     userData: JSON.stringify(mappedFields)
   };
-  const response: Response = await api.post('/api/auth/register', userData);
+  const response: ISignServerResponse & Response = await api.post('/api/auth/register', userData);
 
   return response.json();
 };

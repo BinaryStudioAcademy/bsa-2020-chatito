@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { Formik, Form } from 'formik';
 import styles from './styles.module.sass';
 import { login } from '../../services/authService';
@@ -6,13 +6,27 @@ import { setAccessToken } from '../../common/helpers/storageHelper';
 import InputField from '../../components/InputField/InputField';
 import { signInValSchema as validationSchema } from '../../common/models/formik/ValSchema';
 import { IUserInput } from '../../common/models/signIn-signUp/user';
+import { fetchUserRoutine } from '../../routines/user';
+import { connect } from 'react-redux';
+import { Routine } from 'redux-saga-routines';
 
-const SignIn = () => {
+interface IProps {
+  fetchUser: Routine;
+}
+
+const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
   const onSubmit = async (values: IUserInput,
     { setSubmitting }: { setSubmitting: Function }) => {
-    const { token } = await login(values);
-    setAccessToken(token);
-    setSubmitting(false);
+      const { email, password } = values;
+      const mappedValues = {
+        email,
+        password
+      };
+      const payload = {
+        payload: mappedValues
+      };
+      fetchUser(payload);
+      setSubmitting(false);
   };
   const initialValues = {
     email: '',
@@ -51,4 +65,11 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+const mapDispatchToProps = {
+  fetchUser: fetchUserRoutine
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(SignIn);
