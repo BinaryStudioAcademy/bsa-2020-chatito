@@ -1,5 +1,6 @@
-import { IRegisterUser } from './IRegisterUser';
-
-export interface ICreateUser extends IRegisterUser {
+export interface ICreateUser {
+  fullName: string;
+  email: string;
+  password: string;
   displayName: string;
 }
