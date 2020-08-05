@@ -9,7 +9,7 @@ export const signUpResponseMapper = (user: IUser): IUserResponse => {
   delete responseUser.password;
 
   return {
-    ...responseUser,
+    user: responseUser,
     token: createToken({ id: responseUser.id })
   };
 };
