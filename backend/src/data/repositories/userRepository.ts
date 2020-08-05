@@ -13,6 +13,10 @@ class UserRepository extends Repository<User> {
     return user;
   }
 
+  getById(id: string): Promise<User> {
+    return this.findOne(id);
+  }
+
   async editUser(id:string, data: IUserClient): Promise<User> {
     await this.update(
       id,
