@@ -1,4 +1,4 @@
-import React, { useState, FunctionComponent, JSXElementConstructor, FunctionComponentElement } from 'react';
+import React, { useState, FunctionComponent } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import styles from './styles.module.sass';
@@ -13,13 +13,12 @@ interface IProps {
   addWorkspace: IFetchWorkspace<string, void>;
 }
 
-const AddWorkspace: FunctionComponent<IProps> = () => {
+const AddWorkspace: FunctionComponent<IProps> = (props) => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    console.log(e.currentTarget.value);
   };
   const onSubmit = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    console.log('sth');
+    props.addWorkspace(e.target.value)
   };
 
   const [name, setState] = useState('');
