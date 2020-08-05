@@ -1,11 +1,18 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, ManyToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
-
+import { User } from './User';
 @Entity()
 export class Workspace extends AbstractEntity {
-  @Column()
+  @Column({ unique: true, length: 100 })
   name: string;
 
+  @ManyToOne(() => User, user => user.workspacesCreatedByUser)
+  @JoinColumn({ name: 'createdByUserId' })
+  createdByUser: User;
+
   @Column()
-  userId: string;
+  createdByUserId: string;
+
+  @ManyToMany(() => User, user => user.workspaces)
+  members: User[];
 }

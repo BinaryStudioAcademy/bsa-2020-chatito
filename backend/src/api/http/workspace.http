@@ -1,0 +1,9 @@
+###
+
+# req.user.id needed, how to fix...
+# POST http://localhost:3001/api/workspaces
+# Content-Type: application/json
+
+# {
+#   "name": "test workspace"
+# }

@@ -1,14 +1,13 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Workspace } from '../entities/Workspace';
-import { ICreateWorkspace, IWorkspaceResponse } from '../../common/models/workspace';
+import { ICreateWorkspace } from '../../common/models/workspace/createWorkspace';
 
 @EntityRepository(Workspace)
-export class WorkspaceRepository extends Repository<Workspace> {
-  async addWorkspace(data: ICreateWorkspace): Promise<IWorkspaceResponse> {
+class WorkspaceRepository extends Repository<Workspace> {
+  addWorkspace(data: ICreateWorkspace): Promise<Workspace> {
     const workspace = this.create(data);
 
-    await workspace.save();
-    return workspace;
+    return workspace.save();
   }
 
   findByName(name: string) {
@@ -16,3 +15,4 @@ export class WorkspaceRepository extends Repository<Workspace> {
   }
 }
 
+export default WorkspaceRepository;
