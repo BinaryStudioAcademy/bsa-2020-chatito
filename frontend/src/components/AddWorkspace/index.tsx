@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, FunctionComponent, JSXElementConstructor, FunctionComponentElement } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
-import styles from './WorkspacePage.module.sass';
+import styles from './styles.module.sass';
 import logo from '../../img/chatitoTemp.png';
 import bgImg from '../../img/bg-img.png';
-import { connect, useDispatch } from 'react-redux';
-import addWorkspace from '../../reducers/actions/actions';
+import { connect } from 'react-redux';
+import { postWorkspaceNameRoutine } from '../../scenes/Workspace/routines';
 
-// const dispatch = useDispatch();
+type IFetchWorkspace<T, S> = (name: T) => S;
 
-const WorkspacePage = () => {
+interface IProps {
+  addWorkspace: IFetchWorkspace<string, void>;
+}
+
+const AddWorkspace: FunctionComponent<IProps> = () => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     console.log(e.currentTarget.value);
   };
@@ -21,8 +24,8 @@ const WorkspacePage = () => {
 
   const [name, setState] = useState('');
   return (
-    <div className={styles.workspacePage}>
-      <div className={styles.workspacePage__container}>
+    <div className={styles.AddWorkspace}>
+      <div className={styles.AddWorkspace__container}>
         <Form className={styles.inputWorkspace} onSubmit={onSubmit}>
           <div className={styles.logoContainer}>
             <img className={styles.logoContainer__item} src={logo} alt="logo" />
@@ -60,12 +63,8 @@ const WorkspacePage = () => {
   );
 };
 
-// WorkspacePage.propTypes = {
-//   addWorkspace: PropTypes.func.isRequired
-// };
+const mapDispatchToProps = {
+  addWorkspace: postWorkspaceNameRoutine
+};
 
-export default WorkspacePage;
-// const actions = { addWorkspace };
-
-// const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
-// export default connect(null, mapDispatchToProps)(WorkspacePage);
+export default connect(null, mapDispatchToProps)(AddWorkspace);

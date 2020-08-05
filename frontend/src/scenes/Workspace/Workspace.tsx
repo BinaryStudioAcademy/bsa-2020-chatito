@@ -1,8 +1,8 @@
 import React from 'react';
-import WorkspacePage from '../../components/WorkspacePage/WorkspacePage';
+import AddWorkspace from '../../components/AddWorkspace';
 
 const Workspace = () => (
-  <WorkspacePage />
+  <AddWorkspace />
 );
 
 export default Workspace;
