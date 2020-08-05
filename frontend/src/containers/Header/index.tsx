@@ -3,6 +3,7 @@ import React from 'react';
 import UserAvatar from '../../components/UserLogo';
 import UserPopUp from '../../components/UserPopUp';
 import { IUser } from '../../common/models/user';
+import SearchInput from '../../components/SearchInput';
 
 const defaultAvatar = 'https://img.favpng.com/25/13/19/samsung-galaxy-a8-a8-user-login-telephone-avatar-png-favpng-dqKEPfX7hPbc6SMVUCteANKwj.jpg'; // eslint-disable-line max-len
 const testUser: IUser = {
@@ -30,12 +31,11 @@ const Header = () => {
     <header className={styles.headerContainer}>
       <div className={styles.mainLogo}>Logo</div>
 
-      <div>Some components here</div>
+      <SearchInput onSearch={t => console.log('Search for', t)} stylesClassName={styles.searchInput} />
       <UserPopUp user={testUser} trigger={getAvatar} id="mainHeaderPopUp" placement="bottom" />
 
     </header>
   );
 };
-
 
 export default Header;
