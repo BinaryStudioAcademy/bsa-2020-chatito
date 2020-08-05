@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { IBindingAction } from '../../common/models/callback';
 import { IAppState } from '../../common/models/store';
@@ -7,6 +7,8 @@ import { Routes } from '../../common/enums/Routes';
 import { getAccessToken } from '../../common/helpers/storageHelper';
 import LoaderWrapper from '../../components/LoaderWrapper';
 import Header from '../Header';
+import PublicRoute from '../PublicRoute';
+import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from '../../routines/user';
 
 interface IProps {
@@ -29,12 +31,14 @@ const Routing: React.FC<IProps> = ({
   });
 
   const signInMock = () => <div>Sign In</div>;
+  const mainMock = () => <div>Main</div>;
 
   return (
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <Header />
       <Switch>
-        <Route path={Routes.SignIn} component={signInMock} />
+        <PublicRoute exact path={Routes.SignIn} component={signInMock} />
+        <PrivateRoute exact path="/" component={mainMock} />
       </Switch>
     </LoaderWrapper>
   );
