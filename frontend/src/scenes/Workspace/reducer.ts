@@ -11,7 +11,7 @@ const initialState: IWorkspaceState = {
   loading: false
 };
 
-const WorkspaceReducer = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>) => {
+const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>) => {
   switch (type) {
     case addWorkspaceRoutine.TRIGGER:
       return {
@@ -30,4 +30,4 @@ const WorkspaceReducer = (state: IWorkspaceState = initialState, { type, payload
   }
 };
 
-export default WorkspaceReducer;
+export default workspace;
