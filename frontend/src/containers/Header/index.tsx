@@ -45,17 +45,17 @@ const Header: FunctionComponent<IProps> = ({ user, showEditModal }) => {
         stylesClassName={styles.searchInput}
       />
 
-      {/* {user.isAuthorized ? ( */}
-      <UserPopUp
-        user={user}
-        trigger={getAvatar}
-        id="mainHeaderPopUp"
-        placement="bottom"
-        onEditProfileClick={showEditModal}
-      />
-      {/* ) : (
+      {user.isAuthorized ? (
+        <UserPopUp
+          user={user}
+          trigger={getAvatar}
+          id="mainHeaderPopUp"
+          placement="bottom"
+          onEditProfileClick={showEditModal}
+        />
+      ) : (
         <div>You need to sign in</div>
-      )} */}
+      )}
       <EditProfile />
     </header>
   );
