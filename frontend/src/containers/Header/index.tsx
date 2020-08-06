@@ -1,4 +1,5 @@
 import styles from './styles.module.sass';
+
 import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import UserAvatar from '../../components/UserLogo';
