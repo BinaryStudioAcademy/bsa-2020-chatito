@@ -1,4 +1,4 @@
-interface IUser {
+export interface IUser {
   id: string;
   email: string;
   fullName: string;
@@ -6,5 +6,3 @@ interface IUser {
   imageUrl?: string | null | undefined;
   title?: string | null | undefined;
 }
-
-export type { IUser };
