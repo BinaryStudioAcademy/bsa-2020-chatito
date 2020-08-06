@@ -2,10 +2,10 @@ import React, { useState, FunctionComponent } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import styles from './styles.module.sass';
-import logo from '../../img/chatitoTemp.png';
-import bgImg from '../../img/bg-img.png';
+import logo from '../../../../img/chatitoTemp.png';
+import bgImg from '../../../../img/bg-img.png';
 import { connect } from 'react-redux';
-import { addWorkspaceRoutine } from '../../scenes/Workspace/routines';
+import { addWorkspaceRoutine } from '../../routines';
 
 type IFetchWorkspace<T, S> = (name: T) => S;
 
@@ -14,17 +14,17 @@ interface IProps {
 }
 
 const AddWorkspace: FunctionComponent<IProps> = props => {
+  const [name, setName] = useState('');
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    console.log('changes');
+    setName(e.target.value);
   };
   const onSubmit = (e: React.ChangeEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    props.addWorkspace(e.target.value);
+    props.addWorkspace(name);
+    setName('');
   };
-
-  const [name, setState] = useState('');
   return (
-    <div className={styles.AddWorkspace__container}>
+    <div className={styles.container}>
       <Form className={styles.inputWorkspace} onSubmit={onSubmit}>
         <div className={styles.logoContainer}>
           <img className={styles.logoContainer__item} src={logo} alt="logo" />
@@ -37,6 +37,7 @@ const AddWorkspace: FunctionComponent<IProps> = props => {
             type="text"
             placeholder="workspace name"
             className={styles.inputContainer__input}
+            value={name}
             onChange={onChange}
           />
         </Form.Group>
@@ -50,11 +51,11 @@ const AddWorkspace: FunctionComponent<IProps> = props => {
       </Form>
       <div className={styles.infoSide}>
         <div className={styles.infoSide__topContainer}>
-          <span>Looking to join an existing workspace?</span>
+          <span className={styles.label}>Looking to join an existing workspace?</span>
           <Button className={styles.infoButton} variant="light">Find your workspace</Button>
         </div>
         <div className={styles.infoSide__imageContainer}>
-          <img src={bgImg} alt="background" />
+          <img className={styles.bgImage} src={bgImg} alt="background" />
         </div>
       </div>
     </div>

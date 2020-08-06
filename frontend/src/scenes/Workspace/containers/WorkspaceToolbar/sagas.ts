@@ -1,7 +1,7 @@
 import { fetchWorkspacesRoutine } from './routines'
 import { Routine } from 'redux-saga-routines';
 import {takeEvery, put, call, all} from 'redux-saga/effects'
-import {getWorkspaces} from '../../services/workspaceService'
+import {getWorkspaces} from '../../../../services/workspaceService'
 
 function* fetchWorkspaces() {
   try {

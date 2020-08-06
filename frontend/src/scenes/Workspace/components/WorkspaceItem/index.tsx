@@ -12,7 +12,7 @@ interface IProps {
 export default function WorkspaceItem({ workspace }: IProps) {
   return (
     <div className={styles.imageContainer}>
-      <img className={styles.imageContainer__item} src={workspace.imgUrl} alt="workspaceItem" />
+      <img className={styles.item} src={workspace.imgUrl} alt="workspaceItem" />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
-import AddWorkspace from '../../containers/AddWorkspace';
-import WorkspaceToolbar from '../../containers/WorkspaceToolbar';
+import AddWorkspace from './containers/AddWorkspace';
+import WorkspaceToolbar from './containers/WorkspaceToolbar/index';
 import styles from './styles.module.sass';
 
 const Workspace = () => (

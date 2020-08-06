@@ -1,18 +1,13 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { history } from '../common/helpers/historyHelper';
-import workspace from '../scenes/Workspace/reducer';
+import workspace from '../scenes/Workspace/reducers/reducer';
 import user from './user';
 
 const rootReducer = () => combineReducers({
   router: connectRouter(history),
-<<<<<<< HEAD
-  UserReducer,
-  WorkspaceReducer
-=======
   user,
   workspace
->>>>>>> feat/add-workspace
 });
 
 export default rootReducer;

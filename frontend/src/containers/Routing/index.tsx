@@ -10,7 +10,7 @@ import Header from '../Header';
 import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from '../../routines/user';
-import AddWorkspace from '../../scenes/Workspace';
+import AddWorkspace from '../../scenes/Workspace/Workspace';
 
 interface IProps {
   isLoading: boolean;
