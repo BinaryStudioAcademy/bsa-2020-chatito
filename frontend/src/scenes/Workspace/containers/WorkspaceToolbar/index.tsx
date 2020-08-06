@@ -7,7 +7,7 @@ import { IWorkspaceToolbarState } from './reducer';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-interface IWorkspace {
+export interface IWorkspace {
   [key: string]: string;
 }
 
@@ -26,7 +26,7 @@ const WorkspaceToolbar: FunctionComponent<IProps> = (props: IProps) => {
   }, []);
   return (
     <div className={styles.workspaceToolbarContainer}>
-      {workspaces.map(workspace => <WorkspaceItem key={workspace.id} workspace={workspace} />)}
+      {workspaces.map(workspace => <WorkspaceItem id={workspace.id} key={workspace.id} workspace={workspace} />)}
       <div className={styles.plusIconContainer}>
         <FontAwesomeIcon
           className={styles.plusIcon}
