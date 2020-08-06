@@ -1,4 +1,5 @@
 import styles from './styles.module.sass';
+
 import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import UserAvatar from '../../components/UserLogo';
@@ -6,6 +7,7 @@ import UserPopUp from '../../components/UserPopUp';
 import SearchInput from '../../components/SearchInput';
 import { IAppState } from '../../common/models/store';
 import { IUserState } from '../../reducers/user';
+import logo from '../../img/chatitoTemp.png';
 
 interface IProps {
   user: IUserState;
@@ -33,7 +35,7 @@ const Header: FunctionComponent<IProps> = ({ user }) => {
 
   return (
     <header className={styles.headerContainer}>
-      <div className={styles.mainLogo}>Logo</div>
+      <div className={styles.mainLogo}><img className={styles.logo} src={logo} alt="logo" /></div>
 
       <SearchInput onSearch={t => console.log('Search for ', t)} stylesClassName={styles.searchInput} />
 
