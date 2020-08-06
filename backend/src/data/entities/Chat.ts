@@ -3,7 +3,7 @@ import { AbstractEntity } from '../abstract/AbstractEntity';
 import { Post } from './Post';
 import { User } from './User';
 import { Workspace } from './Workspace';
-import { ChatType } from '../../common/enums/chat';
+import { ChatType } from '../../common/enums/ChatType';
 
 @Entity()
 export class Chat extends AbstractEntity {
@@ -20,15 +20,18 @@ export class Chat extends AbstractEntity {
   posts: Post[];
 
   @ManyToOne(() => User, user => user.chatsCreated)
-  @JoinColumn({ name: 'createdByUserIdChat' })
+  @JoinColumn({ name: 'createdByUserId' })
   createdByUser: User;
+
+  @RelationId((chat: Chat) => chat.createdByUser)
+  readonly createdByUserId: string;
 
   @ManyToOne(() => Workspace, wp => wp.chats)
   @JoinColumn({ name: 'relatedWorkspaceId' })
   workspace: Workspace;
 
-  @RelationId((post: Post) => post.chat)
-  readonly relatedChat: string;
+  @RelationId((chat: Chat) => chat.workspace)
+  readonly relatedWorkspaceId: string;
 
   @ManyToMany(() => User, user => user.chats)
   users: User[];

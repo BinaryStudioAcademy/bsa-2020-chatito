@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, RelationId } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
 import { User } from './User';
 
@@ -8,6 +8,9 @@ export class RefreshToken extends AbstractEntity {
   expiresAt: Date;
 
   @ManyToOne(() => User, user => user.refreshToken)
-  @JoinColumn({ name: 'tokerOwnerId' })
+  @JoinColumn({ name: 'userOwnerId' })
   user: User;
+
+  @RelationId((token: RefreshToken) => token.user)
+  readonly userOwnerId: string;
 }

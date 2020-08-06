@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToMany, JoinTable, OneToMany, OneToOne, RelationId } from 'typeorm';
+import { Entity, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
 import { Workspace } from './Workspace';
 import { Chat } from './Chat';
@@ -40,21 +40,6 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => Workspace, wp => wp.createdByUser)
   workspacesCreated: Workspace[];
-
-  @RelationId((chat: Chat) => chat.createdByUser)
-  readonly createdByUserIdChat: string;
-
-  @RelationId((workspace: Workspace) => workspace.createdByUser)
-  readonly createdByUserIdWorkspace: string;
-
-  @RelationId((post: Post) => post.createdByUser)
-  readonly createdByUserIdPost: string;
-
-  @RelationId((token: RefreshToken) => token.user)
-  readonly tokerOwnerId: string;
-
-  @RelationId((comment: Comment) => comment.createdByUser)
-  readonly createdByUserIdComment: string;
 
   @ManyToMany(() => Workspace, workspace => workspace.users)
   @JoinTable()

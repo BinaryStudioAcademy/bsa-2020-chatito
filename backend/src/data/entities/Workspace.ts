@@ -15,12 +15,12 @@ export class Workspace extends AbstractEntity {
   chats: Chat[];
 
   @ManyToOne(() => User, user => user.workspacesCreated)
-  @JoinColumn({ name: 'createdByUserIdWorkspace' })
+  @JoinColumn({ name: 'createdByUserId' })
   createdByUser: User;
+
+  @RelationId((workspace: Workspace) => workspace.createdByUser)
+  readonly createdByUserId: string;
 
   @ManyToMany(() => User, user => user.workspaces)
   users: User[];
-
-  @RelationId((chat: Chat) => chat.workspace)
-  readonly relatedWorkspaceId: string;
 }

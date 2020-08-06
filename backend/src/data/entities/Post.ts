@@ -13,13 +13,16 @@ export class Post extends AbstractEntity {
   comments: Comment[];
 
   @ManyToOne(() => User, user => user.posts)
-  @JoinColumn({ name: 'createdByUserIdPost' })
+  @JoinColumn({ name: 'createdByUserId' })
   createdByUser: User;
 
+  @RelationId((post: Post) => post.createdByUser)
+  readonly createdByUserId: string;
+
   @ManyToOne(() => Chat, chat => chat.posts)
-  @JoinColumn({ name: 'relatedChat' })
+  @JoinColumn({ name: 'relatedChatId' })
   chat: Chat;
 
-  @RelationId((comment: Comment) => comment.post)
-  readonly relaterPost: string;
+  @RelationId((post: Post) => post.chat)
+  readonly relatedChatId: string;
 }
