@@ -1,7 +1,9 @@
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
 import { Post } from './PostEntity';
 import { Comment } from './CommentEntity';
+import { Chat } from './ChatEntity';
+import { Workspace } from './WorkspaceEntity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -24,8 +26,15 @@ export class User extends AbstractEntity {
   title: string;
 
   @OneToMany(() => Post, post => post.createdByUserId)
-    posts: Post[];
+  posts: Post[];
+
+  @OneToMany(() => Workspace, wp => wp.createdByUserId)
+  workspaces: Workspace[];
 
   @OneToMany(() => Comment, comment => comment.createdByUserId)
   comments: Comment[];
+
+  @ManyToMany(() => Chat, chat => chat.users)
+  @JoinTable()
+  chats: Chat[];
 }

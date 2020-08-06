@@ -1,6 +1,8 @@
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne, OneToOne, JoinTable, ManyToMany } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
 import { Post } from './PostEntity';
+import { User } from './UserEntity';
+import { Workspace } from './WorkspaceEntity';
 
 @Entity()
 export class Chat extends AbstractEntity {
@@ -16,7 +18,13 @@ export class Chat extends AbstractEntity {
   @OneToMany(() => Post, post => post.chatId)
   posts: Post[];
 
-  // add workspace id
+  @OneToOne(() => User)
+  @JoinTable()
+  createdByUserId: User;
 
-  // add createdBy user id
+  @ManyToMany(() => User, user => user.chats)
+  users: User[];
+
+  @ManyToOne(() => Workspace, wp => wp.chats)
+  workspaceId: Workspace;
 }
