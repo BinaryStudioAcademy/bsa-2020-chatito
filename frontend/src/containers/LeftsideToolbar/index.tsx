@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Icon } from 'semantic-ui-react';
 import { IAppState } from '../../common/models/store';
 import 'semantic-ui-css/semantic.min.css';
 import css from './styles.module.css';
 import triangle from './leftsideToolbar.data';
-// import { createElement } from '../../common/helpers/domHelper';
 
 // Все интерфейсы временные
 interface IChanel {
   chanelname: string;
-  private: boolean;
+  privat: boolean;
 }
 
 interface ILink {
@@ -28,13 +27,101 @@ interface IProps {
   user: IUser;
 }
 
-const LeftSideToolbar: React.FC<IProps> = ({ user }) => {
-  const [chanelsView, setChanelsView] = useState(true);
-  const [linksView, setLinksView] = useState(true);
-  if (chanelsView) setChanelsView(false);
-  if (linksView) setLinksView(false);
+const chanelButton = (item: IChanel, index: number) => {
+  const { chanelname, privat } = item;
+  return (
+    <button key={`cB${index}`} type="submit" className={css.button}>
+      <Icon name={
+        privat
+          ? 'lock'
+          : 'hashtag'
+        }
+      />
+      <span className={css.buttontext}>{chanelname}</span>
+    </button>
+  );
+};
 
+const linkButton = (item: ILink, index: number) => {
+  const { linkname, active } = item;
+  return (
+    <button key={`cB${index}`} type="submit" className={css.button}>
+      <div className={
+        active
+          ? css.metkaOnLine
+          : css.metkaOfLine
+        }
+      />
+      <span className={css.buttontext}>{linkname}</span>
+    </button>
+  );
+};
+
+interface IState {
+  linkPanel: boolean;
+  directPanel: boolean;
+}
+
+const itemCurrent = 'currentState';
+
+const loadCurrentState = (): IState => {
+  try {
+    const data = sessionStorage.getItem(itemCurrent);
+    if (data) {
+      return JSON.parse(data);
+    }
+    return { linkPanel: false, directPanel: false };
+  } catch {
+    return { linkPanel: false, directPanel: false };
+  }
+};
+
+export const saveCurrentState = (data: IState) => {
+  try {
+    const usData = JSON.stringify(data);
+    sessionStorage.setItem(itemCurrent, usData);
+  } catch {
+    // ignore write errors
+  }
+};
+
+const LeftSideToolbar: React.FC<IProps> = ({ user }) => {
   const { username } = user;
+
+  let { linkPanel, directPanel } = loadCurrentState();
+  const getClassNameDiv = (state: boolean) => (
+    state
+      ? css.listboxHidden
+      : css.listbox
+  );
+  const getClassNameDivDefault = (state: boolean) => (
+    state
+      ? css.listboxHiddenDeff
+      : css.listboxDeff
+  );
+  const getClassNameImg = (state: boolean) => (
+    state
+      ? css.chanelsImgRotate
+      : css.chanelsImg
+  );
+
+  const changeListView = () => {
+    linkPanel = !linkPanel;
+    const element = document.getElementById('divChanel') as HTMLElement;
+    element.className = getClassNameDiv(linkPanel);
+    const imgs = document.getElementById('imgChanel') as HTMLElement;
+    imgs.className = getClassNameImg(linkPanel);
+    saveCurrentState({ linkPanel, directPanel });
+  };
+
+  const changeDirectView = () => {
+    directPanel = !directPanel;
+    const element = document.getElementById('divDirect') as HTMLElement;
+    element.className = getClassNameDiv(directPanel);
+    const imgs = document.getElementById('imgDirect') as HTMLElement;
+    imgs.className = getClassNameImg(directPanel);
+    saveCurrentState({ linkPanel, directPanel });
+  };
 
   return (
     <div className={css.leftToolbar}>
@@ -90,20 +177,42 @@ const LeftSideToolbar: React.FC<IProps> = ({ user }) => {
         <span className={css.buttontext}>Show less</span>
       </button>
       <hr />
-      <button type="submit" className={css.button}>
-        <img src={triangle} alt="treancl" />
-        Text
+      <button type="submit" className={css.buttonChanel}>
+        <button type="submit" className={css.buttonSelect} onClick={changeListView}>
+          <img id="imgChanel" src={triangle} alt="treancl" className={getClassNameImg(linkPanel)} />
+          <span className={css.buttontext}>Chanels</span>
+        </button>
+        <div className={css.buttonPlus}>
+          <Icon name="plus" />
+        </div>
+        <div className={css.chanelinfo}>
+          Create New Chanel
+        </div>
       </button>
-
-      <button type="submit" className={css.button}>
-        <Icon name="hashtag" />
-        Text
+      <div id="divChanel" className={getClassNameDivDefault(linkPanel)}>
+        {user.chanels.map((item, index) => (
+          chanelButton(item, index)))}
+      </div>
+      <hr />
+      <button type="submit" className={css.buttonChanel}>
+        <button type="submit" className={css.buttonSelect} onClick={changeDirectView}>
+          <img id="imgDirect" src={triangle} alt="treancl" className={getClassNameImg(directPanel)} />
+          <span className={css.buttontext}>Direct Messages</span>
+        </button>
+        <div className={`${css.buttonPlus} ${css.buttonLink}`}>
+          <Icon name="plus" />
+        </div>
+        <div className={css.directinfo}>
+          Open a direct message
+          <br />
+          Ctrl + Shift + K
+        </div>
       </button>
-      <button type="submit" className={css.button}>
-        <Icon name="lock" />
-        Text
-      </button>
-
+      <div id="divDirect" className={getClassNameDivDefault(directPanel)}>
+        {user.links.map((item, index) => (
+          linkButton(item, index)))}
+      </div>
+      <hr />
     </div>
   );
 };

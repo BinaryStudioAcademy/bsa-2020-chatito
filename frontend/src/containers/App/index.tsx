@@ -12,27 +12,27 @@ const defUser = {
   chanels: [
     {
       chanelname: 'First Chanel',
-      private: false
+      privat: false
     },
     {
       chanelname: 'Second Chanel',
-      private: false
+      privat: false
     },
     {
       chanelname: 'Third Chanel',
-      private: false
+      privat: false
     },
     {
       chanelname: 'Fourth Chanel',
-      private: true
+      privat: true
     },
     {
       chanelname: 'Fifth Chanel',
-      private: false
+      privat: false
     },
     {
       chanelname: 'Sixth Chanel',
-      private: true
+      privat: true
     }
   ],
   links: [
