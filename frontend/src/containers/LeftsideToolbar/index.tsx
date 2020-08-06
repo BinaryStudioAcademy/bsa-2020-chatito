@@ -1,10 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Icon } from 'semantic-ui-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faLock,
+  faHashtag,
+  faEdit,
+  faPodcast,
+  faAt,
+  faCopy,
+  faSearch,
+  faIdCard,
+  faTh,
+  faDatabase,
+  faReply,
+  faPlus,
+  faPlay
+} from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from '../../common/models/store';
-import 'semantic-ui-css/semantic.min.css';
-import css from './styles.module.css';
-import triangle from './leftsideToolbar.data';
+import css from './styles.module.sass';
 
 // Все интерфейсы временные
 interface IChanel {
@@ -31,11 +44,13 @@ const chanelButton = (item: IChanel, index: number) => {
   const { chanelname, privat } = item;
   return (
     <button key={`cB${index}`} type="submit" className={css.button}>
-      <Icon name={
-        privat
-          ? 'lock'
-          : 'hashtag'
+      <FontAwesomeIcon
+        icon={
+          privat
+            ? faLock
+            : faHashtag
         }
+        color="white"
       />
       <span className={css.buttontext}>{chanelname}</span>
     </button>
@@ -110,7 +125,7 @@ const LeftSideToolbar: React.FC<IProps> = ({ user }) => {
     const element = document.getElementById('divChanel') as HTMLElement;
     element.className = getClassNameDiv(linkPanel);
     const imgs = document.getElementById('imgChanel') as HTMLElement;
-    imgs.className = getClassNameImg(linkPanel);
+    imgs.style.transform = linkPanel ? 'none' : 'rotate(90deg)';
     saveCurrentState({ linkPanel, directPanel });
   };
 
@@ -119,7 +134,7 @@ const LeftSideToolbar: React.FC<IProps> = ({ user }) => {
     const element = document.getElementById('divDirect') as HTMLElement;
     element.className = getClassNameDiv(directPanel);
     const imgs = document.getElementById('imgDirect') as HTMLElement;
-    imgs.className = getClassNameImg(directPanel);
+    imgs.style.transform = directPanel ? 'none' : 'rotate(90deg)';
     saveCurrentState({ linkPanel, directPanel });
   };
 
@@ -137,7 +152,7 @@ const LeftSideToolbar: React.FC<IProps> = ({ user }) => {
           </div>
         </div>
         <div className={css.topiconbox}>
-          <Icon name="edit" />
+          <FontAwesomeIcon icon={faEdit} color="black" style={{ fontSize: '20px' }} />
         </div>
         <div className={css.topinfo}>
           New Message
@@ -145,45 +160,45 @@ const LeftSideToolbar: React.FC<IProps> = ({ user }) => {
       </button>
       <hr />
       <button type="submit" className={css.button}>
-        <Icon name="podcast" />
+        <FontAwesomeIcon icon={faPodcast} color="white" />
         <span className={css.buttontext}>Threads</span>
       </button>
       <button type="submit" className={css.button}>
-        <Icon name="at" />
+        <FontAwesomeIcon icon={faAt} color="white" />
         <span className={css.buttontext}>Mentions & reactions</span>
       </button>
       <button type="submit" className={css.button}>
-        <Icon name="copy" />
+        <FontAwesomeIcon icon={faCopy} color="white" />
         <span className={css.buttontext}>Drafts</span>
       </button>
       <button type="submit" className={css.button}>
-        <Icon name="search" />
+        <FontAwesomeIcon icon={faSearch} color="white" />
         <span className={css.buttontext}>Channel browser</span>
       </button>
       <button type="submit" className={css.button}>
-        <Icon name="vcard" />
+        <FontAwesomeIcon icon={faIdCard} color="white" />
         <span className={css.buttontext}>People & user groups</span>
       </button>
       <button type="submit" className={css.button}>
-        <Icon name="th" />
+        <FontAwesomeIcon icon={faTh} color="white" />
         <span className={css.buttontext}>Apps</span>
       </button>
       <button type="submit" className={css.button}>
-        <Icon name="database" />
+        <FontAwesomeIcon icon={faDatabase} color="white" />
         <span className={css.buttontext}>File Browser</span>
       </button>
       <button type="submit" className={css.button}>
-        <Icon name="reply" />
+        <FontAwesomeIcon icon={faReply} color="white" />
         <span className={css.buttontext}>Show less</span>
       </button>
       <hr />
       <button type="submit" className={css.buttonChanel}>
         <button type="submit" className={css.buttonSelect} onClick={changeListView}>
-          <img id="imgChanel" src={triangle} alt="treancl" className={getClassNameImg(linkPanel)} />
+          <FontAwesomeIcon id="imgChanel" icon={faPlay} color="blue" className={getClassNameImg(linkPanel)} />
           <span className={css.buttontext}>Chanels</span>
         </button>
         <div className={css.buttonPlus}>
-          <Icon name="plus" />
+          <FontAwesomeIcon icon={faPlus} color="white" />
         </div>
         <div className={css.chanelinfo}>
           Create New Chanel
@@ -196,11 +211,11 @@ const LeftSideToolbar: React.FC<IProps> = ({ user }) => {
       <hr />
       <button type="submit" className={css.buttonChanel}>
         <button type="submit" className={css.buttonSelect} onClick={changeDirectView}>
-          <img id="imgDirect" src={triangle} alt="treancl" className={getClassNameImg(directPanel)} />
+          <FontAwesomeIcon id="imgDirect" icon={faPlay} color="blue" className={getClassNameImg(linkPanel)} />
           <span className={css.buttontext}>Direct Messages</span>
         </button>
         <div className={`${css.buttonPlus} ${css.buttonLink}`}>
-          <Icon name="plus" />
+          <FontAwesomeIcon icon={faPlus} color="white" />
         </div>
         <div className={css.directinfo}>
           Open a direct message

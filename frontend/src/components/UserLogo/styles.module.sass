@@ -1,0 +1,25 @@
+.userLogo
+  object-fit: cover
+  width: 30px
+  height: 30px
+
+.userLogoWrapper
+  position: relative
+
+.detector
+  width: 8px
+  height: 8px
+  border-radius: 50%
+
+  position: absolute
+  bottom: 3px
+  right: 3px
+  border: 1px solid var(--user-detector-border)
+
+.isOnline
+  composes: detector
+  background-color: var(--user-detector-online)
+
+.isOffline
+  composes: detector
+  background-color: var(--user-detector-offline)
