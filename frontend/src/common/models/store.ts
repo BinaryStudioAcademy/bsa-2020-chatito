@@ -1,9 +1,9 @@
-import { IUserState } from '../../reducers/user';
 import { RouterState } from 'connected-react-router';
-import { IEditProfileState } from '../../containers/EditProfile/reducer';
+import { IUserState } from '../../reducers/user';
+import { IModalState } from '../../reducers/modal';
 
 export interface IAppState {
   router: RouterState;
   user: IUserState;
-  editUserProfile: IEditProfileState
+  modal: IModalState;
 }

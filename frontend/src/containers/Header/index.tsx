@@ -7,7 +7,7 @@ import UserPopUp from '../../components/UserPopUp';
 import SearchInput from '../../components/SearchInput';
 import { IAppState } from '../../common/models/store';
 import { IUserState } from '../../reducers/user';
-import { showEditModal as showEditModalRoutine } from '../EditProfile/routines';
+import logo from '../../img/chatitoTemp.png';
 import EditProfile from '../EditProfile';
 
 interface IProps {
@@ -38,7 +38,7 @@ const Header: FunctionComponent<IProps> = ({ user, showEditModal }) => {
 
   return (
     <header className={styles.headerContainer}>
-      <div className={styles.mainLogo}>Logo</div>
+      <div className={styles.mainLogo}><img className={styles.logo} src={logo} alt="logo" /></div>
 
       <SearchInput
         onSearch={t => console.log('Search for ', t)}
