@@ -5,8 +5,12 @@ interface IUser {
   displayName: string;
   imageUrl: string | null | undefined;
   title: string | null | undefined;
+}
+
+interface IUserState {
+  data: IUser;
   isLoading: boolean;
   isAuthorized: boolean;
 }
 
-export type { IUser };
+export type { IUser, IUserState };

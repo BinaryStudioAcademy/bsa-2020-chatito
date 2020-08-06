@@ -5,14 +5,14 @@ const signInValSchema = Yup.object().shape({
     .email('Email is invalid')
     .required('Email is required'),
   password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
+    .min(3, 'Password must be at least 3 characters')
     .required('Password is required')
 });
 
 const signUpValSchema = Yup.object().shape({
   fullName: Yup.string()
     .required('Full Name is required')
-    .max(40, 'Full name should be no longer 40 characters'),
+    .max(100, 'Full name should be no longer 100 characters'),
   email: Yup.string()
     .email('Email is invalid')
     .required('Email is required'),

@@ -21,7 +21,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case addNewUserRoutine.SUCCESS:
       return {
         ...state,
-        ...payload,
+        data: { ...payload },
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
       };
@@ -33,7 +33,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case fetchUserRoutine.SUCCESS:
       return {
         ...state,
-        ...payload,
+        data: { ...payload },
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
       };

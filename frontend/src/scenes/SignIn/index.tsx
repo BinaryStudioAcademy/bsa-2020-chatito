@@ -2,8 +2,8 @@ import React, { FunctionComponent } from 'react';
 import { Formik, Form } from 'formik';
 import styles from './styles.module.sass';
 import InputField from '../../components/InputField/InputField';
-import { signInValSchema as validationSchema } from '../../common/models/formik/ValSchema';
-import { IUserInput } from '../../common/models/signIn-signUp/user';
+import { signInValSchema as validationSchema } from '../../common/models/formik/ValidationSchemas';
+import { IUserInput } from '../../common/models/auth/auth';
 import { fetchUserRoutine } from '../../routines/user';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
@@ -16,12 +16,8 @@ const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
   const onSubmit = async (values: IUserInput,
     { setSubmitting }: { setSubmitting: CallableFunction }) => {
     const { email, password } = values;
-    const mappedValues = {
-      email,
-      password
-    };
     const payload = {
-      payload: mappedValues
+      payload: { email, password }
     };
     fetchUser(payload);
     setSubmitting(false);

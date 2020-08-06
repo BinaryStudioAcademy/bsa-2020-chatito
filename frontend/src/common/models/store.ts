@@ -1,7 +1,7 @@
 import { RouterState } from 'connected-react-router';
-import { IUser } from './user/user';
+import { IUserState } from './user/user';
 
 export interface IAppState {
   router: RouterState;
-  user: IUser;
+  user: IUserState;
 }
