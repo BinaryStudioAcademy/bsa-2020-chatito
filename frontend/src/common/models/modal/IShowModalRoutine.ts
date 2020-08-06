@@ -1,6 +1,6 @@
 import { ModalTypes } from '../../enums/ModalTypes';
 
-export interface IModalRoutine{
+export interface IModalRoutine {
   modalType: ModalTypes;
   show: boolean;
 }
