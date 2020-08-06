@@ -8,7 +8,7 @@ interface IUser {
 }
 
 interface IUserState {
-  data: IUser;
+  data: IUser | null;
   isLoading: boolean;
   isAuthorized: boolean;
 }

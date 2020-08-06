@@ -1,7 +1,7 @@
-const tokenFieldName = 'token';
+import { LocalStorageFields } from '../enums/LocalStorageFields';
 
-const setAccessToken = (token: string): void => localStorage.setItem(tokenFieldName, token);
+const setAccessToken = (token: string): void => localStorage.setItem(LocalStorageFields.Token, token);
 
-const getAccessToken = (): string | null => localStorage.getItem(tokenFieldName);
+const getAccessToken = (): string | null => localStorage.getItem(LocalStorageFields.Token);
 
 export { setAccessToken, getAccessToken };

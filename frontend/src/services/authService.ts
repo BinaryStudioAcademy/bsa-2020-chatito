@@ -12,14 +12,8 @@ export const login = async (userInput: ISignInFields) => {
 };
 
 export const registration = async (userInput: ISignUpFields): Promise<IUser> => {
-  const { email, password, fullName } = userInput;
-  const mappedFields = {
-    email,
-    password,
-    fullName
-  };
   const userData = {
-    userData: JSON.stringify(mappedFields)
+    userData: JSON.stringify(userInput)
   };
   const response: ISignServerResponse & Response = await api.post('/api/auth/register', userData);
 

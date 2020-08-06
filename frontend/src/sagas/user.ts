@@ -25,7 +25,7 @@ function* addNewUserRequest({ payload }: any): Routine<any> {
     yield put(addNewUserRoutine.success({ payload: user }));
     setAccessToken(token);
   } catch (error) {
-    throw Error;
+    yield put(addNewUserRoutine.failure(error.message));
   }
 }
 
