@@ -19,9 +19,15 @@ export const register = async ({ password, ...userData }: IRegisterUser) => {
 };
 
 export const login = async ({ id }: ILoginUser) => {
-  const logUser = await getCustomRepository(UserRepository).getById(id);
+  if (id) {
+    const logUser = await getCustomRepository(UserRepository).getById(id);
+    return {
+      user: fromUserToUserClient(logUser),
+      token: createToken({ id: logUser.id })
+    };
+  };
   return {
-    user: fromUserToUserClient(logUser),
-    token: createToken({ id: logUser.id })
+    user: {},
+    token: ''
   };
 };
