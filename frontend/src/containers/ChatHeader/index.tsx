@@ -44,9 +44,7 @@ const ChatHeader = () => {
       <div className={styles.headerInfo}>
         <div className={styles.titleBlock}>
           {privateChannelIcon}
-
           <div className={styles.title}>chatito</div>
-
           <FontAwesomeIcon icon={faStar} className={styles.icon} />
         </div>
 
