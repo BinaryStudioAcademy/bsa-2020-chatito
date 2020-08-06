@@ -11,6 +11,8 @@ import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from '../../routines/user';
 
+import CreateChannel from '../CreateChannel';
+
 interface IProps {
   isLoading: boolean;
   isAuthorized: boolean;
@@ -37,7 +39,7 @@ const Routing: React.FC<IProps> = ({
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <Header />
       <Switch>
-        <PublicRoute exact path={Routes.SignIn} component={signInMock} />
+        <PublicRoute exact path={Routes.SignIn} component={CreateChannel} />
         <PrivateRoute exact path="/" component={mainMock} />
       </Switch>
     </LoaderWrapper>
