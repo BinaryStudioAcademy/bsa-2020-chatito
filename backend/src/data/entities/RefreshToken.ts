@@ -3,7 +3,7 @@ import { AbstractEntity } from '../abstract/AbstractEntity';
 
 @Entity()
 export class RefreshToken extends AbstractEntity {
-  @Column()
+  @Column({ type: 'bigint' })
   expiresAt: number;
 
   @Column()
