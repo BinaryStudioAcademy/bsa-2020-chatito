@@ -3,8 +3,15 @@ interface IUser {
   email: string;
   fullName: string;
   displayName: string;
-  imageUrl?: string;
-  title?: string;
+  imageUrl: string | null | undefined;
+  title: string | null | undefined;
 }
 
-export type { IUser };
+interface IUserState {
+  data: IUser | null;
+  isLoading: boolean;
+  isAuthorized: boolean;
+}
+
+export type { IUser, IUserState };
+

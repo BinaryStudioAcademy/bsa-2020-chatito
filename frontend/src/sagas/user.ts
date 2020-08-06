@@ -1,14 +1,18 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
-import { fetchUserRoutine, editProfile, deleteAccountRoutine as delAccount } from '../routines/user';
+import { fetchUserRoutine, editProfile, deleteAccountRoutine as delAccount, addNewUserRoutine } from '../routines/user';
 import { Routine } from 'redux-saga-routines';
+import { registration, login } from '../services/authService';
+import { setAccessToken } from '../common/helpers/storageHelper';
 import { hideEditModal } from '../containers/EditProfile/routines';
-
+import { ISignServerResponse } from '../common/models/auth/auth';
 import api from '../common/helpers/apiHelper';
 
-function* fetchUserRequest() {
+
+function* fetchUserRequest({ payload }: any): Routine<any> {
   try {
-    const response = yield call(() => 'implement service');
-    yield put(fetchUserRoutine.success(response));
+    const { token, user }: ISignServerResponse = yield call(login, payload);
+    yield put(fetchUserRoutine.success({ payload: user }));
+    setAccessToken(token);
   } catch (error) {
     yield put(fetchUserRoutine.failure(error.message));
   }
@@ -54,10 +58,25 @@ function* watchDeleteAccount() {
   yield takeEvery(delAccount.TRIGGER, deleteAccount);
 }
 
+function* addNewUserRequest({ payload }: any): Routine<any> {
+  try {
+    const { token, user }: ISignServerResponse = yield call(registration, payload);
+    yield put(addNewUserRoutine.success({ payload: user }));
+    setAccessToken(token);
+  } catch (error) {
+    yield put(addNewUserRoutine.failure(error.message));
+  }
+}
+
+function* watchAddNewUserRequest() {
+  yield takeEvery(addNewUserRoutine.TRIGGER, addNewUserRequest);
+}
+
 export default function* userSaga() {
   yield all([
     watchUserRequest(),
     watchUpdateProfile(),
-    watchDeleteAccount()
+    watchDeleteAccount(),
+    watchAddNewUserRequest(),
   ]);
 }
