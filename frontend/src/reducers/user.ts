@@ -1,6 +1,6 @@
 import { Routine } from 'redux-saga-routines';
 import { addNewUserRoutine, fetchUserRoutine } from '../routines/user';
-import { IUserState } from '../common/models/user/user';
+import { IUserState } from '../common/models/user/IUserState';
 
 const initialState: IUserState = {
   isLoading: false,

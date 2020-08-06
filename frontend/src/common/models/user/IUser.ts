@@ -7,10 +7,4 @@ interface IUser {
   title: string | null | undefined;
 }
 
-interface IUserState {
-  data: IUser | null;
-  isLoading: boolean;
-  isAuthorized: boolean;
-}
-
-export type { IUser, IUserState };
+export type { IUser };

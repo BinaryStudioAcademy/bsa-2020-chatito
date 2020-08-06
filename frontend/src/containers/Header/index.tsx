@@ -6,8 +6,8 @@ import UserAvatar from '../../components/UserLogo';
 import UserPopUp from '../../components/UserPopUp';
 import SearchInput from '../../components/SearchInput';
 import { IAppState } from '../../common/models/store';
-import { IUserState } from '../../reducers/user';
-import logo from '../../img/chatitoTemp.png';
+import { IUserState } from '../../common/models/user/IUserState';
+import logo from '../../img/ChatitoTemp.png';
 
 interface IProps {
   user: IUserState;

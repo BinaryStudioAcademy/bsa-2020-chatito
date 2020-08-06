@@ -1,4 +1,4 @@
-import { IUser } from '../user/user';
+import { IUser } from '../user/IUser';
 
 interface IUserInput {
   email: string;

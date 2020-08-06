@@ -1,5 +1,5 @@
 import api from '../common/helpers/apiHelper';
-import { IUser } from '../common/models/user/user';
+import { IUser } from '../common/models/user/IUser';
 import { ISignServerResponse, ISignUpFields, ISignInFields } from '../common/models/auth/auth';
 
 export const login = async (userInput: ISignInFields) => {
