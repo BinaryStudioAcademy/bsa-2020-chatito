@@ -3,7 +3,7 @@ import { Formik, Form } from 'formik';
 import styles from './styles.module.sass';
 import InputField from '../../components/InputField/InputField';
 import { signInValSchema as validationSchema } from '../../common/models/formik/ValidationSchemas';
-import { IUserInput } from '../../common/models/auth/auth';
+import { IUserInput } from '../../common/models/auth/IUserInput';
 import { fetchUserRoutine } from '../../routines/user';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';

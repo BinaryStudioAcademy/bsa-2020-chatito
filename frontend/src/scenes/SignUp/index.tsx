@@ -6,7 +6,7 @@ import styles from './styles.module.sass';
 import { addNewUserRoutine } from '../../routines/user';
 import InputField from '../../components/InputField/InputField';
 import { Routine } from 'redux-saga-routines';
-import { IUserInput } from '../../common/models/auth/auth';
+import { IUserInput } from '../../common/models/auth/IUserInput';
 
 interface IProps {
   addNewUser: Routine;

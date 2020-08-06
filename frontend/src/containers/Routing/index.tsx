@@ -12,7 +12,7 @@ import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from '../../routines/user';
 import AddWorkspace from '../../scenes/Workspace/Workspace';
 import SignIn from '../../scenes/SignIn';
-import { SignUp } from '../../scenes/SignUp';
+import SignUp from '../../scenes/SignUp';
 
 interface IProps {
   isLoading: boolean;
