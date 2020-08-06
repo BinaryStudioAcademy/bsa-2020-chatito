@@ -3,18 +3,19 @@ import { connect } from 'react-redux';
 import { Button, Modal, Form, Image } from 'react-bootstrap';
 import { IAppState } from '../../common/models/store';
 import { hideEditModal as hideEditModalRoutine } from './routines';
-import { editProfile as editProfileRoutine } from '../../routines/user';
+import { editProfile as editProfileRoutine, deleteAccountRoutine } from '../../routines/user';
 import styles from './styles.module.sass';
 import { IUser } from '../../common/models/user/user';
 
 interface IProps {
   hideEditModal: () => void;
   editProfile: (userProps: IUser) => void;
+  deleteAccount: () => void;
   isShown: boolean;
   user?: IUser;
 }
 
-const EditProfile: FunctionComponent<IProps> = ({ hideEditModal, editProfile, isShown, user = undefined }: IProps) => {
+const EditProfile: FunctionComponent<IProps> = ({ hideEditModal, editProfile, deleteAccount, isShown, user = undefined }: IProps) => {
   if (!user) return <></>;
   const [fullName, setFullName] = useState(user.fullName);
   const [displayName, setDisplayName] = useState(user.displayName);
@@ -28,6 +29,10 @@ const EditProfile: FunctionComponent<IProps> = ({ hideEditModal, editProfile, is
     const editUserProps = { ...user, fullName, displayName, title };
     editProfile(editUserProps);
   };
+
+  const handleDeleteAccount = () => {
+    deleteAccount();
+  }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, id } = event.currentTarget;
@@ -114,6 +119,9 @@ const EditProfile: FunctionComponent<IProps> = ({ hideEditModal, editProfile, is
                 Remove photo
               </Button>
             ) : null}
+            <Button variant="light" className={styles.deleteAccountButton} onClick={handleDeleteAccount}>
+              Delete account
+            </Button>
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -136,7 +144,8 @@ const mapStateToProps = (state: IAppState) => ({
 
 const mapDispatchToProps = {
   hideEditModal: hideEditModalRoutine,
-  editProfile: editProfileRoutine
+  editProfile: editProfileRoutine,
+  deleteAccount: deleteAccountRoutine
 };
 
 EditProfile.defaultProps = {

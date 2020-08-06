@@ -1,5 +1,5 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
-import { fetchUserRoutine, editProfile } from '../routines/user';
+import { fetchUserRoutine, editProfile, deleteAccountRoutine as delAccount } from '../routines/user';
 import { Routine } from 'redux-saga-routines';
 import { hideEditModal } from '../containers/EditProfile/routines';
 
@@ -36,9 +36,28 @@ function* watchUpdateProfile() {
   yield takeEvery(editProfile.TRIGGER, updateProfile);
 }
 
+function* deleteAccount() {
+  try {
+    const response = yield call(api.delete, '/api/users/');
+    const data = {
+      ...response
+    };
+    yield put(delAccount.success(data));
+  } catch (error) {
+    yield put(delAccount.failure(error.message));
+  } finally {
+    yield put(hideEditModal.trigger());
+  }
+}
+
+function* watchDeleteAccount() {
+  yield takeEvery(delAccount.TRIGGER, deleteAccount);
+}
+
 export default function* userSaga() {
   yield all([
     watchUserRequest(),
-    watchUpdateProfile()
+    watchUpdateProfile(),
+    watchDeleteAccount()
   ]);
 }

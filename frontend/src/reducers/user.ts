@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchUserRoutine, editProfile } from '../routines/user';
+import { fetchUserRoutine, editProfile, deleteAccountRoutine } from '../routines/user';
 import { IUser } from '../common/models/user/user';
 
 export interface IUserState {
@@ -36,6 +36,15 @@ export default (state = initialState, action: Routine<any>) => {
     }
     case editProfile.FAILURE: {
       return { ...state, loading: false };
+    }
+    case deleteAccountRoutine.TRIGGER: {
+      return { ...state, isLoading: true };
+    }
+    case deleteAccountRoutine.SUCCESS: {
+      return { isAuthorized: false, isLoading: false };
+    }
+    case deleteAccountRoutine.FAILURE: {
+      return { ...state, isLoading: false };
     }
     default:
       return state;
