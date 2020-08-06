@@ -1,32 +1,49 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchUserRoutine } from '../routines/user';
-
-export interface IUserState {
-  isLoading: boolean;
-  isAuthorized: boolean;
-}
+import { addNewUserRoutine, fetchUserRoutine } from '../routines/user';
+import { IUserState } from '../common/models/user/user';
 
 const initialState: IUserState = {
   isLoading: false,
-  isAuthorized: false
+  isAuthorized: false,
+  data: null
 };
 
-export default (state = initialState, action: Routine<any>) => {
-  switch (action.type) {
+const reducer = (state = initialState, { type, payload }: Routine<any>) => {
+  switch (type) {
+    case addNewUserRoutine.TRIGGER:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case addNewUserRoutine.SUCCESS:
+      return {
+        ...state,
+        data: { ...payload },
+        isLoading: false,
+        isAuthorized: Boolean(payload?.id)
+      };
     case fetchUserRoutine.TRIGGER:
       return {
         ...state,
         isLoading: true
       };
     case fetchUserRoutine.SUCCESS:
-      const { payload } = action;
       return {
         ...state,
-        ...payload,
+        data: { ...payload },
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
+      };
+    case fetchUserRoutine.FAILURE:
+    case addNewUserRoutine.FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        isAuthorized: false
       };
     default:
       return state;
   }
 };
+
+export default reducer;
