@@ -1,12 +1,12 @@
 import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
-import { User } from './UserEntity';
-import { Chat } from './ChatEntity';
-import { Comment } from './CommentEntity';
+import { User } from './User';
+import { Chat } from './Chat';
+import { Comment } from './Comment';
 
 @Entity()
 export class Post extends AbstractEntity {
-  @Column({ nullable: false, length: 400 })
+  @Column({ nullable: false })
   text: string;
 
   @ManyToOne(() => User, user => user.posts)
