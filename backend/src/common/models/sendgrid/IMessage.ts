@@ -1,5 +1,5 @@
 export interface IMessage {
-  from: string;
+  from?: string;
   to: string;
   subject: string;
   text: string;
