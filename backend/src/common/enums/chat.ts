@@ -1,4 +1,4 @@
-export enum chatType {
-    'channel',
-    'directMessage'
+export enum ChatType {
+    'Channel',
+    'DirectMessage'
 }

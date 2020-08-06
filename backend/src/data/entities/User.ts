@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToMany, JoinTable, OneToMany, OneToOne } from 'typeorm';
+import { Entity, Column, ManyToMany, JoinTable, OneToMany, OneToOne, RelationId } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
 import { Workspace } from './Workspace';
 import { Chat } from './Chat';
@@ -26,27 +26,41 @@ export class User extends AbstractEntity {
   @Column({ nullable: true, length: 300 })
   title: string;
 
-  @OneToOne(() => RefreshToken)
-  @JoinTable()
-  refreshToken: RefreshToken
-
-  @OneToMany(() => Post, post => post.createdByUserId)
+  @OneToMany(() => Post, post => post.createdByUser)
   posts: Post[];
 
-  @OneToMany(() => Comment, comment => comment.createdByUserId)
+  @OneToMany(() => RefreshToken, token => token.user)
+  refreshToken: RefreshToken[];
+
+  @OneToMany(() => Comment, comment => comment.createdByUser)
   comments: Comment[];
 
-  @OneToMany(() => Chat, chat => chat.createdByUserId)
+  @OneToMany(() => Chat, chat => chat.createdByUser)
   chatsCreated: Chat[];
 
-  @OneToMany(() => Workspace, wp => wp.createdByUserId)
+  @OneToMany(() => Workspace, wp => wp.createdByUser)
   workspacesCreated: Workspace[];
 
-  @ManyToMany(() => Workspace, workspace => workspace.members)
+  @RelationId((chat: Chat) => chat.createdByUser)
+  readonly createdByUserIdChat: string;
+
+  @RelationId((workspace: Workspace) => workspace.createdByUser)
+  readonly createdByUserIdWorkspace: string;
+
+  @RelationId((post: Post) => post.createdByUser)
+  readonly createdByUserIdPost: string;
+
+  @RelationId((token: RefreshToken) => token.user)
+  readonly tokerOwnerId: string;
+
+  @RelationId((comment: Comment) => comment.createdByUser)
+  readonly createdByUserIdComment: string;
+
+  @ManyToMany(() => Workspace, workspace => workspace.users)
   @JoinTable()
   workspaces: Workspace[];
 
-  @ManyToMany(() => Chat, chat => chat.members)
+  @ManyToMany(() => Chat, chat => chat.users)
   @JoinTable()
   chats: Chat[];
 }

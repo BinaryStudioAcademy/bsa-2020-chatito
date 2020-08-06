@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToMany, ManyToOne, OneToMany, RelationId, JoinColumn } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
 import { User } from './User';
 import { Chat } from './Chat';
@@ -11,12 +11,16 @@ export class Workspace extends AbstractEntity {
   @Column()
   imageUrl: string;
 
+  @OneToMany(() => Chat, chat => chat.workspace)
+  chats: Chat[];
+
   @ManyToOne(() => User, user => user.workspacesCreated)
-  createdByUserId: User;
+  @JoinColumn({ name: 'createdByUserIdWorkspace' })
+  createdByUser: User;
 
   @ManyToMany(() => User, user => user.workspaces)
-  members: User[];
+  users: User[];
 
-  @OneToMany(() => Chat, chat => chat.workspaceId)
-  chats: Chat[];
+  @RelationId((chat: Chat) => chat.workspace)
+  readonly relatedWorkspaceId: string;
 }

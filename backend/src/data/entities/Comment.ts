@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
 import { User } from './User';
 import { Post } from './Post';
@@ -9,8 +9,10 @@ export class Comment extends AbstractEntity {
   text: string;
 
   @ManyToOne(() => User, user => user.comments)
-  createdByUserId: User;
+  @JoinColumn({ name: 'createdByUserIdComment' })
+  createdByUser: User;
 
   @ManyToOne(() => Post, post => post.comments)
-  postId: Post;
+  @JoinColumn({ name: 'relaterPost' })
+  post: Post;
 }

@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn, RelationId } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
 import { User } from './User';
 import { Chat } from './Chat';
@@ -9,12 +9,17 @@ export class Post extends AbstractEntity {
   @Column()
   text: string;
 
+  @OneToMany(() => Comment, comment => comment.post)
+  comments: Comment[];
+
   @ManyToOne(() => User, user => user.posts)
-  createdByUserId: User;
+  @JoinColumn({ name: 'createdByUserIdPost' })
+  createdByUser: User;
 
   @ManyToOne(() => Chat, chat => chat.posts)
-  chatId: Chat;
+  @JoinColumn({ name: 'relatedChat' })
+  chat: Chat;
 
-  @OneToMany(() => Comment, comment => comment.postId)
-  comments: Comment[];
+  @RelationId((comment: Comment) => comment.post)
+  readonly relaterPost: string;
 }
