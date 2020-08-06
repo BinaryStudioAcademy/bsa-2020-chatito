@@ -1,4 +1,4 @@
-import { IWorkspaceResponse } from '../models/workspace/workspaceResponse';
+import { IWorkspaceResponse } from '../models/workspace/IWorkspaceResponse';
 import { Workspace } from '../../data/entities/Workspace';
 
 export const fromCreatedWorkspaceToClient = (newWorkspace: Workspace): IWorkspaceResponse => {
