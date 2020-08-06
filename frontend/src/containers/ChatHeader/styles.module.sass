@@ -1,6 +1,84 @@
-.chat__header
-  height: 64px
-  display: flex
-  align-items: center
-  border-bottom: 1px solid #e2e2e2 // set color global
-  padding: 5px 15px
+.ChatHeader
+  &__container
+    height: 64px
+    display: flex
+    align-items: center
+    justify-content: space-between
+    border-bottom: 1px solid #e2e2e2 // set color global
+    padding: 5px 20px
+
+    .headerInfo
+      display: flex
+      flex-direction: column
+      align-items: center
+
+      .titleBlock
+        display: flex
+        align-items: center
+        cursor: pointer
+
+        .title
+          font-size: 14px
+          font-weight: 700
+          margin-left: 3px
+
+        .icon
+          font-size: 20px
+
+        .iconChatType
+          font-size: 10px
+
+          &__active
+            color: green // set global
+
+      .topic
+        font-size: 12px
+        color: #8a8888 // set global
+        width: 100%
+        cursor: pointer
+
+    .rightHeaderBlock
+      display: flex
+      align-items: center
+
+      .memberAvatarBlock
+        display: flex
+        align-items: center
+        cursor: pointer
+        border-radius: 4px
+        margin-right: 8px
+
+        &:hover
+          background-color: #e2e2e2 // set global
+
+        .memberAvatarIcon
+          margin-right: -4px
+          position: relative
+          box-shadow: 0 0 0 2px white // set global
+
+          &:nth-child(1)
+            z-index: 3
+
+          &:nth-child(2)
+            z-index: 2
+
+          &:nth-child(3)
+            z-index: 1
+
+        .memberCounter
+          font-size: 12px
+          font-weight: 600
+          padding: 0 8px 0 14px
+
+.icon
+  font-size: 30px
+  line-height: 0
+  color: #8a8888 // set color global
+  margin-left: 4px
+  padding: 5px
+  border-radius: 4px
+
+  &:hover
+    background-color: #e2e2e2 // set global
+    color: #5c5b5b // set color global
+    cursor: pointer
