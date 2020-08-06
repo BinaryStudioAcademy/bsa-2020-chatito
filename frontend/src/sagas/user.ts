@@ -30,7 +30,7 @@ function* updateProfile({ payload }: Routine<any>) {
       ...response
     };
     yield put(editProfileRoutine.success(data));
-    yield put(showModalRoutine({ modalType: ModalTypes.editProfile, show: false }));
+    yield put(showModalRoutine({ modalType: ModalTypes.EditProfile, show: false }));
   } catch (error) {
     yield put(editProfileRoutine.failure(error.message));
   }

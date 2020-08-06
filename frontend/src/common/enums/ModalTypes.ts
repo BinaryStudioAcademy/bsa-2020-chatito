@@ -1,3 +1,3 @@
 export enum ModalTypes {
-  editProfile,
+  EditProfile,
 }

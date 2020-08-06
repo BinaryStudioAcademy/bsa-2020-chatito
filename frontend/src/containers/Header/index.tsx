@@ -39,7 +39,7 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
   );
 
   const showEditModal = () => {
-    showModalRoutine({ modalType: ModalTypes.editProfile, show: true });
+    showModalRoutine({ modalType: ModalTypes.EditProfile, show: true });
   };
 
   return (

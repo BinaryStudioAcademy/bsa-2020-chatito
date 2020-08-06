@@ -15,7 +15,7 @@ export default (state = initialState, action: Routine<any>) => {
     case showModalRoutine.TRIGGER: {
       const { modalType, show } = action.payload;
       switch (modalType) {
-        case ModalTypes.editProfile: {
+        case ModalTypes.EditProfile: {
           return { ...state, editProfile: show };
         }
         default:

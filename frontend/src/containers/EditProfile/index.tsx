@@ -28,7 +28,7 @@ const EditProfile: FunctionComponent<IProps> = ({
   const [title, setTitle] = useState(user.title ? user.title : '');
 
   const handleClose = () => {
-    showModal({ modalType: ModalTypes.editProfile, show: false });
+    showModal({ modalType: ModalTypes.EditProfile, show: false });
   };
 
   const handleSubmit = () => {
