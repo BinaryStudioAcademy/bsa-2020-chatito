@@ -1,9 +1,11 @@
-###
+# Before sending you need to get a user token. 
+# Send a POST request from user.http file and copy 
+# the token value from response (without quotes).
 
-# req.user.id needed, how to fix...
-# POST http://localhost:3001/api/workspaces
-# Content-Type: application/json
+POST http://localhost:3001/api/workspaces
+Content-Type: application/json
+Authorization: Bearer <insert token here>
 
-# {
-#   "name": "test workspace"
-# }
+{
+  "name": "test workspace"
+}
