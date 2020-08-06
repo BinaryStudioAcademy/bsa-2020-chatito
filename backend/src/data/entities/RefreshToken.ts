@@ -4,7 +4,7 @@ import { User } from './User';
 
 @Entity()
 export class RefreshToken extends AbstractEntity {
-  @Column({ nullable: false })
+  @Column()
   expiresAt: Date;
 
   @OneToOne(() => User)

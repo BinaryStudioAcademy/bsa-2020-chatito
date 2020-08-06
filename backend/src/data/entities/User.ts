@@ -8,16 +8,16 @@ import { RefreshToken } from './RefreshToken';
 
 @Entity()
 export class User extends AbstractEntity {
-  @Column({ nullable: false, length: 100 }) // nullable: false is default value, unnecessary (gooogle)
+  @Column({ length: 100 })
   fullName: string;
 
-  @Column({ nullable: false, length: 100 })
+  @Column({ length: 100 })
   displayName: string;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ unique: true })
   email: string;
 
-  @Column({ nullable: false })
+  @Column()
   password: string;
 
   @Column({ nullable: true })

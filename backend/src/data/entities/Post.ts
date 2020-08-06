@@ -6,7 +6,7 @@ import { Comment } from './Comment';
 
 @Entity()
 export class Post extends AbstractEntity {
-  @Column({ nullable: false })
+  @Column()
   text: string;
 
   @ManyToOne(() => User, user => user.posts)

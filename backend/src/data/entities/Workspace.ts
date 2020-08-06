@@ -5,10 +5,10 @@ import { Chat } from './Chat';
 
 @Entity()
 export class Workspace extends AbstractEntity {
-  @Column({ nullable: false, length: 150 })
+  @Column({ length: 150 })
   name: string;
 
-  @Column({ nullable: false })
+  @Column()
   imageUrl: string;
 
   @ManyToOne(() => User, user => user.workspacesCreated)
