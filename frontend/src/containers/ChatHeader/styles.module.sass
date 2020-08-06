@@ -4,7 +4,7 @@
     display: flex
     align-items: center
     justify-content: space-between
-    border-bottom: 1px solid #e2e2e2 // set color global
+    border-bottom: 1px solid var(--border)
     padding: 5px 20px
 
     .headerInfo
@@ -29,11 +29,11 @@
           font-size: 10px
 
           &__active
-            color: green // set global
+            color: var(--icon-active)
 
       .topic
         font-size: 12px
-        color: #8a8888 // set global
+        color: var(--secondary-text)
         width: 100%
         cursor: pointer
 
@@ -49,12 +49,12 @@
         margin-right: 8px
 
         &:hover
-          background-color: #e2e2e2 // set global
+          background-color: var(--icon-hover-background)
 
         .memberAvatarIcon
           margin-right: -4px
           position: relative
-          box-shadow: 0 0 0 2px white // set global
+          box-shadow: 0 0 0 2px var(--member-avatar-box-shadow)
 
           &:nth-child(1)
             z-index: 3
@@ -73,12 +73,12 @@
 .icon
   font-size: 30px
   line-height: 0
-  color: #8a8888 // set color global
+  color: var(--icon)
   margin-left: 4px
   padding: 5px
   border-radius: 4px
 
   &:hover
-    background-color: #e2e2e2 // set global
-    color: #5c5b5b // set color global
+    background-color: var(--icon-hover-background)
+    color: var(--icon-hover)
     cursor: pointer
