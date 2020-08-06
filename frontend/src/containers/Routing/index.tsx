@@ -37,10 +37,11 @@ const Routing: React.FC<IProps> = ({
   return (
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <Header />
-      <AddWorkspace />
+      {/* <AddWorkspace /> */}
       <Switch>
         <PublicRoute exact path={Routes.SignIn} component={signInMock} />
         <PrivateRoute exact path="/" component={mainMock} />
+        <PrivateRoute exact path="/add-workspace" component={AddWorkspace} />
       </Switch>
     </LoaderWrapper>
   );

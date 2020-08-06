@@ -1,9 +1,6 @@
 import { Routine } from 'redux-saga-routines';
 import { fetchWorkspacesRoutine } from './routines';
-
-interface IWorkspace {
-  [key: string]: string;
-}
+import { IWorkspace } from '../../../../common/models/workspace'
 
 export interface IWorkspaceToolbarState {
   workspaces: IWorkspace[];
