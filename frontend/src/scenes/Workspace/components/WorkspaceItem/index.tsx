@@ -1,6 +1,9 @@
 import React from 'react';
 import styles from './styles.module.sass';
-import { IWorkspace } from '../../../../common/models/workspace';
+
+export interface IWorkspace {
+  [key: string]: string;
+}
 
 interface IProps {
   workspace: IWorkspace;

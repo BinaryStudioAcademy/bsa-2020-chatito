@@ -6,7 +6,10 @@ import WorkspaceItem from '../../components/WorkspaceItem';
 import { IWorkspaceToolbarState } from './reducer';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IWorkspace } from '../../../../common/models/workspace';
+
+export interface IWorkspace {
+  [key: string]: string;
+}
 
 interface IProps {
   fetchWorkspaces: Function;
