@@ -1,9 +1,11 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchUserRoutine } from '../routines/user';
+import { fetchUserRoutine, editProfile } from '../routines/user';
+import { IUser } from '../common/models/user/user';
 
 export interface IUserState {
   isLoading: boolean;
   isAuthorized: boolean;
+  data?: IUser;
 }
 
 const initialState: IUserState = {
@@ -26,6 +28,15 @@ export default (state = initialState, action: Routine<any>) => {
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
       };
+    case editProfile.TRIGGER: {
+      return { ...state, loading: true };
+    }
+    case editProfile.SUCCESS: {
+      return { ...state, loading: false };
+    }
+    case editProfile.FAILURE: {
+      return { ...state, loading: false };
+    }
     default:
       return state;
   }
