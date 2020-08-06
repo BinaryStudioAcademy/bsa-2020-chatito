@@ -7,18 +7,22 @@ import UserPopUp from '../../components/UserPopUp';
 import SearchInput from '../../components/SearchInput';
 import { IAppState } from '../../common/models/store';
 import { IUserState } from '../../reducers/user';
+import { showEditModal as showEditModalRoutine } from '../EditProfile/routines';
+import EditProfile from '../EditProfile';
 
 interface IProps {
   user: IUserState;
+  showEditModal: () => void;
 }
 
-const Header: FunctionComponent<IProps> = ({ user }) => {
+const Header: FunctionComponent<IProps> = ({ user, showEditModal }) => {
   const toggleButtonClick = () => {
     // @todo decide which button to trigger
   };
 
   const testUser = {
-    imgUrl: 'https://img.favpng.com/25/13/19/samsung-galaxy-a8-a8-user-login-telephone-avatar-png-favpng-dqKEPfX7hPbc6SMVUCteANKwj.jpg' // eslint-disable-line max-len
+    imgUrl:
+      'https://img.favpng.com/25/13/19/samsung-galaxy-a8-a8-user-login-telephone-avatar-png-favpng-dqKEPfX7hPbc6SMVUCteANKwj.jpg' // eslint-disable-line max-len
   };
 
   const getAvatar = () => (
@@ -36,18 +40,31 @@ const Header: FunctionComponent<IProps> = ({ user }) => {
     <header className={styles.headerContainer}>
       <div className={styles.mainLogo}>Logo</div>
 
-      <SearchInput onSearch={t => console.log('Search for ', t)} stylesClassName={styles.searchInput} />
+      <SearchInput
+        onSearch={t => console.log('Search for ', t)}
+        stylesClassName={styles.searchInput}
+      />
 
-      {user.isAuthorized
-        ? <UserPopUp user={user} trigger={getAvatar} id="mainHeaderPopUp" placement="bottom" />
-        : <div>You need to sign in</div>}
-
+      {/* {user.isAuthorized ? ( */}
+      <UserPopUp
+        user={user}
+        trigger={getAvatar}
+        id="mainHeaderPopUp"
+        placement="bottom"
+        onEditProfileClick={showEditModal}
+      />
+      {/* ) : (
+        <div>You need to sign in</div>
+      )} */}
+      <EditProfile />
     </header>
   );
 };
 
 const mapStateToProps = (state: IAppState) => ({ user: state.user });
 
-export default connect(
-  mapStateToProps
-)(Header);
+const mapDispatchToProps = {
+  showEditModal: showEditModalRoutine
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
