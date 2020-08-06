@@ -7,12 +7,11 @@ import Button from 'react-bootstrap/Button';
 interface IProps {
   placeholder: string;
   height: number | 'auto';
-  width: number | 'auto';
   onSend: (message: string) => void;
   onEdit?: (content: string) => {};
 }
 
-const TextEditor: FunctionComponent<IProps> = ({ placeholder, width, height, onSend, onEdit }) => {
+const TextEditor: FunctionComponent<IProps> = ({ placeholder, height, onSend, onEdit }) => {
   const [message, setMessage] = useState('');
 
   const onEditorChange = (content: string, editor: any) => {
@@ -28,7 +27,7 @@ const TextEditor: FunctionComponent<IProps> = ({ placeholder, width, height, onS
   };
 
   return (
-    <div className={styles.wrapper} style={{ height, width }}>
+    <div className={styles.wrapper} style={{ height }}>
       <Editor
         apiKey={env.apiKeys.textEditor}
         init={{
