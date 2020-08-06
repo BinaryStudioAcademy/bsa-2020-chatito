@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { modal } from '../routines/modal';
+import { showModalRoutine } from '../routines/modal';
 import { ModalTypes } from '../common/enums/ModalTypes';
 
 export interface IModalState {
@@ -12,7 +12,7 @@ const initialState: IModalState = {
 
 export default (state = initialState, action: Routine<any>) => {
   switch (action.type) {
-    case modal.TRIGGER: {
+    case showModalRoutine.TRIGGER: {
       const { modalType, show } = action.payload;
       switch (modalType) {
         case ModalTypes.editProfile: {

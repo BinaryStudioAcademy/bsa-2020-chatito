@@ -1,10 +1,10 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
-import { fetchUserRoutine, editProfile, addNewUserRoutine } from '../routines/user';
+import { fetchUserRoutine, editProfileRoutine, addNewUserRoutine } from '../routines/user';
 import { Routine } from 'redux-saga-routines';
 import { registration, login } from '../services/authService';
 import { setAccessToken } from '../common/helpers/storageHelper';
 import { ISignServerResponse } from '../common/models/auth/auth';
-import { modal } from '../routines/modal';
+import { showModalRoutine } from '../routines/modal';
 import { ModalTypes } from '../common/enums/ModalTypes';
 
 import api from '../common/helpers/apiHelper';
@@ -29,16 +29,15 @@ function* updateProfile({ payload }: Routine<any>) {
     const data = {
       ...response
     };
-    yield put(editProfile.success(data));
+    yield put(editProfileRoutine.success(data));
+    yield put(showModalRoutine({ modalType: ModalTypes.editProfile, show: false }));
   } catch (error) {
-    yield put(editProfile.failure(error.message));
-  } finally {
-    yield put(modal({ modalType: ModalTypes.editProfile, show: false }));
+    yield put(editProfileRoutine.failure(error.message));
   }
 }
 
 function* watchUpdateProfile() {
-  yield takeEvery(editProfile.TRIGGER, updateProfile);
+  yield takeEvery(editProfileRoutine.TRIGGER, updateProfile);
 }
 
 function* addNewUserRequest({ payload }: any): Routine<any> {
