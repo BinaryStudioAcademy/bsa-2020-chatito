@@ -8,6 +8,7 @@ import routes from './api/routes';
 import authorizationMiddleware from './api/middlewares/authorizationMiddleware';
 import routesWhiteList from './config/routesWhiteListConfig';
 import './config/passportConfig';
+import './config/sendgridConfig';
 
 const app = express();
 

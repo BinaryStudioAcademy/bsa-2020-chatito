@@ -7,7 +7,7 @@ const router = Router();
 router
   .get('/', run(getUsers))
   .get('/:id', run((req: Request) => getUserById(req.params.id)))
-  .delete('/:id', run((req: Request) => deleteUser(req.params.id)))
+  .delete('/', run((req: Request) => deleteUser(req.user.id)))
   .put('/', run((req: Request) => editProfile(req.body)));
 
 export default router;

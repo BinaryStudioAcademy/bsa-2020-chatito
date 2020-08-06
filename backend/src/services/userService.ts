@@ -17,7 +17,9 @@ export const getUserById = (id: string) => Promise.resolve(users.find(u => u.id 
 
 export const deleteUser = async (id: string) => {
   const deletedUser = await getCustomRepository(UserRepository).deleteUser(id);
-  return deletedUser;
+  return {
+    user: fromUserToUserClient(deletedUser)
+  };
 };
 
 export const editProfile = async (user: IUserClient) => {
