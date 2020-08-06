@@ -1,5 +1,4 @@
 import { EntityRepository, Repository } from 'typeorm';
-
 import { User } from '../entities/UserEntity';
 import { ICreateUser } from '../../common/models/user/ICreateUser';
 
@@ -14,6 +13,14 @@ class UserRepository extends Repository<User> {
 
   getById(id: string): Promise<User> {
     return this.findOne(id);
+  }
+
+  async deleteUser(id: string): Promise<User> {
+    const user = await this.getById(id);
+    const data = { id };
+    await user.remove({ data });
+
+    return user;
   }
 }
 
