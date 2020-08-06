@@ -10,6 +10,7 @@ import Header from '../Header';
 import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from '../../routines/user';
+import AddWorkspace from '../../scenes/Workspace/Workspace';
 
 interface IProps {
   isLoading: boolean;
@@ -39,6 +40,7 @@ const Routing: React.FC<IProps> = ({
       <Switch>
         <PublicRoute exact path={Routes.SignIn} component={signInMock} />
         <PrivateRoute exact path="/" component={mainMock} />
+        <PrivateRoute exact path="/add-workspace" component={AddWorkspace} />
       </Switch>
     </LoaderWrapper>
   );
