@@ -1,5 +1,4 @@
 import styles from './styles.module.sass';
-
 import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import UserAvatar from '../../components/UserLogo';
@@ -7,15 +6,17 @@ import UserPopUp from '../../components/UserPopUp';
 import SearchInput from '../../components/SearchInput';
 import { IAppState } from '../../common/models/store';
 import { IUserState } from '../../reducers/user';
-import logo from '../../img/chatitoTemp.png';
+import logo from '../../img/ChatitoTemp.png';
 import EditProfile from '../EditProfile';
+import { modal as modalRoutine, IModalRoutine } from '../../routines/modal';
+import { ModalTypes } from '../../common/enums/ModalTypes';
 
 interface IProps {
   user: IUserState;
-  showEditModal: () => void;
+  modal: ({ modalType, show }: IModalRoutine) => void;
 }
 
-const Header: FunctionComponent<IProps> = ({ user, showEditModal }) => {
+const Header: FunctionComponent<IProps> = ({ user, modal }) => {
   const toggleButtonClick = () => {
     // @todo decide which button to trigger
   };
@@ -36,6 +37,10 @@ const Header: FunctionComponent<IProps> = ({ user, showEditModal }) => {
     </div>
   );
 
+  const showEditModal = () => {
+    modal({ modalType: ModalTypes.editProfile, show: true });
+  };
+
   return (
     <header className={styles.headerContainer}>
       <div className={styles.mainLogo}><img className={styles.logo} src={logo} alt="logo" /></div>
@@ -45,17 +50,17 @@ const Header: FunctionComponent<IProps> = ({ user, showEditModal }) => {
         stylesClassName={styles.searchInput}
       />
 
-      {user.isAuthorized ? (
-        <UserPopUp
-          user={user}
-          trigger={getAvatar}
-          id="mainHeaderPopUp"
-          placement="bottom"
-          onEditProfileClick={showEditModal}
-        />
-      ) : (
-        <div>You need to sign in</div>
-      )}
+      {/* {user.isAuthorized ? ( */}
+      <UserPopUp
+        user={user}
+        trigger={getAvatar}
+        id="mainHeaderPopUp"
+        placement="bottom"
+        onEditProfileClick={showEditModal}
+      />
+      {/* ) : (
+         <div>You need to sign in</div>
+       )} */}
       <EditProfile />
     </header>
   );
@@ -64,7 +69,7 @@ const Header: FunctionComponent<IProps> = ({ user, showEditModal }) => {
 const mapStateToProps = (state: IAppState) => ({ user: state.user });
 
 const mapDispatchToProps = {
-  showEditModal: showEditModalRoutine
+  modal: modalRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

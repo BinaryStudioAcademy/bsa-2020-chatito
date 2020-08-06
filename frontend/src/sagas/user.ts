@@ -4,6 +4,8 @@ import { Routine } from 'redux-saga-routines';
 import { registration, login } from '../services/authService';
 import { setAccessToken } from '../common/helpers/storageHelper';
 import { ISignServerResponse } from '../common/models/auth/auth';
+import { modal } from '../routines/modal';
+import { ModalTypes } from '../common/enums/ModalTypes';
 
 import api from '../common/helpers/apiHelper';
 
@@ -31,7 +33,7 @@ function* updateProfile({ payload }: Routine<any>) {
   } catch (error) {
     yield put(editProfile.failure(error.message));
   } finally {
-    yield put(hideEditModal.trigger());
+    yield put(modal({ modalType: ModalTypes.editProfile, show: false }));
   }
 }
 
@@ -57,6 +59,6 @@ export default function* userSaga() {
   yield all([
     watchUserRequest(),
     watchUpdateProfile(),
-    watchAddNewUserRequest(),
+    watchAddNewUserRequest()
   ]);
 }

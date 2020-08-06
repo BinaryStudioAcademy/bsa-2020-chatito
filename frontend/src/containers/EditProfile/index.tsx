@@ -2,26 +2,27 @@ import React, { useState, FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal, Form, Image } from 'react-bootstrap';
 import { IAppState } from '../../common/models/store';
-import { hideEditModal as hideEditModalRoutine } from './routines';
+import { modal as modalRoutine, IModalRoutine } from '../../routines/modal';
 import { editProfile as editProfileRoutine } from '../../routines/user';
 import styles from './styles.module.sass';
 import { IUser } from '../../common/models/user/user';
+import { ModalTypes } from '../../common/enums/ModalTypes';
 
 interface IProps {
-  hideEditModal: () => void;
+  modal: ({ modalType, show }: IModalRoutine) => void;
   editProfile: (userProps: IUser) => void;
   isShown: boolean;
-  user?: IUser;
+  user?: IUser | null;
 }
 
-const EditProfile: FunctionComponent<IProps> = ({ hideEditModal, editProfile, isShown, user = undefined }: IProps) => {
+const EditProfile: FunctionComponent<IProps> = ({ modal, editProfile, isShown, user = undefined }: IProps) => {
   if (!user) return <></>;
   const [fullName, setFullName] = useState(user.fullName);
   const [displayName, setDisplayName] = useState(user.displayName);
   const [title, setTitle] = useState(user.title ? user.title : '');
 
   const handleClose = () => {
-    hideEditModal();
+    modal({ modalType: ModalTypes.editProfile, show: false });
   };
 
   const handleSubmit = () => {
@@ -130,17 +131,17 @@ const EditProfile: FunctionComponent<IProps> = ({ hideEditModal, editProfile, is
 };
 
 const mapStateToProps = (state: IAppState) => ({
-  isShown: state.editUserProfile.isShown,
+  isShown: state.modal.editProfile,
   user: state.user.data
 });
 
 const mapDispatchToProps = {
-  hideEditModal: hideEditModalRoutine,
+  modal: modalRoutine,
   editProfile: editProfileRoutine
 };
 
 EditProfile.defaultProps = {
-  user: undefined
+  user: null
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);
