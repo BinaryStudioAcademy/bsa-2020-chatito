@@ -22,7 +22,7 @@ const publicChannelIcon = (
 );
 
 const directMessageIcon = (
-  <FontAwesomeIcon icon={faCircle} className={`${styles.iconChatType} ${styles.iconChatType__active}`} />
+  <FontAwesomeIcon icon={faCircle} className={`${styles.iconChatType} ${styles.active}`} />
 );
 
 const callIcon = (
@@ -39,7 +39,7 @@ const ChatHeader = () => {
   );
 
   return (
-    <div className={styles.ChatHeader__container}>
+    <div className={styles.chatContainer}>
 
       <div className={styles.headerInfo}>
         <div className={styles.titleBlock}>

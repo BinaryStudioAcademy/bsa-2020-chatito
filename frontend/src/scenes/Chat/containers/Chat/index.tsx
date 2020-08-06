@@ -6,7 +6,7 @@ import ChatBody from '../ChatBody';
 import ChatFooter from '../ChatFooter';
 
 const ChatContainer = () => (
-  <div className={styles.chat__container}>
+  <div className={styles.chatContainer}>
     <ChatHeader />
     <ChatBody />
     <ChatFooter />

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './styles.module.sass';
 
 const ChatBody = () => (
-  <div className={styles.chat__body}>
+  <div className={styles.chatBody}>
     <div />
   </div>
 );

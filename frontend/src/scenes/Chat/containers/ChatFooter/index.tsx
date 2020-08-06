@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './styles.module.sass';
 
-import TextEditor from '../../components/TextEditor';
+import TextEditor from '../../../../components/TextEditor';
 
 const ChatFooter = () => (
-  <div className={styles.chat_footer}>
+  <div className={styles.chatFooter}>
     <TextEditor
       placeholder=""
       height={120}
