@@ -1,22 +1,24 @@
 import styles from './styles.module.sass';
-import React, { useState } from 'react';
+
+import React, { FunctionComponent } from 'react';
+import { connect } from 'react-redux';
 import UserAvatar from '../../components/UserLogo';
 import UserPopUp from '../../components/UserPopUp';
-import { IUser } from '../../common/models/user';
+import SearchInput from '../../components/SearchInput';
+import { IAppState } from '../../common/models/store';
+import { IUserState } from '../../reducers/user';
 
-const defaultAvatar = 'https://img.favpng.com/25/13/19/samsung-galaxy-a8-a8-user-login-telephone-avatar-png-favpng-dqKEPfX7hPbc6SMVUCteANKwj.jpg'; // eslint-disable-line max-len
-const testUser: IUser = {
-  imgUrl: defaultAvatar,
-  name: 'YareK'
-};
+interface IProps {
+  user: IUserState;
+}
 
-const Header = () => {
-  const [isPopUp, setPopUp] = useState(false);
-
-  const togglePopUp = () => setPopUp(!isPopUp);
-
+const Header: FunctionComponent<IProps> = ({ user }) => {
   const toggleButtonClick = () => {
     // @todo decide which button to trigger
+  };
+
+  const testUser = {
+    imgUrl: 'https://img.favpng.com/25/13/19/samsung-galaxy-a8-a8-user-login-telephone-avatar-png-favpng-dqKEPfX7hPbc6SMVUCteANKwj.jpg' // eslint-disable-line max-len
   };
 
   const getAvatar = () => (
@@ -25,9 +27,8 @@ const Header = () => {
       role="button"
       tabIndex={0}
       onKeyDown={toggleButtonClick}
-      onClick={togglePopUp}
     >
-      <UserAvatar imgUrl={defaultAvatar} isOnline />
+      <UserAvatar imgUrl={testUser.imgUrl} isOnline />
     </div>
   );
 
@@ -35,11 +36,18 @@ const Header = () => {
     <header className={styles.headerContainer}>
       <div className={styles.mainLogo}>Logo</div>
 
-      <div>Some components here</div>
-      <UserPopUp user={testUser} trigger={getAvatar} id="mainHeaderPopUp" placement="bottom" />
+      <SearchInput onSearch={t => console.log('Search for ', t)} stylesClassName={styles.searchInput} />
+
+      {user.isAuthorized
+        ? <UserPopUp user={user} trigger={getAvatar} id="mainHeaderPopUp" placement="bottom" />
+        : <div>You need to sign in</div>}
 
     </header>
   );
 };
 
-export default Header;
+const mapStateToProps = (state: IAppState) => ({ user: state.user });
+
+export default connect(
+  mapStateToProps
+)(Header);

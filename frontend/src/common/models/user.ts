@@ -1,5 +1,5 @@
 export interface IUser {
-  name?: string;
+  fullname: string;
   imgUrl?: string;
   isOnline?: boolean;
 }

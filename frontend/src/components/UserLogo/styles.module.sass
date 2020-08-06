@@ -14,13 +14,12 @@
   position: absolute
   bottom: 3px
   right: 3px
-  border: 1px solid black
+  border: 1px solid var(--user-detector-border)
 
 .isOnline
   composes: detector
-  background-color: greenyellow
+  background-color: var(--user-detector-online)
 
 .isOffline
   composes: detector
-  background-color: grey
-
+  background-color: var(--user-detector-offline)
