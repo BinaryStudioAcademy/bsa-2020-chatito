@@ -16,13 +16,14 @@ interface IProps {
 
 const WorkspaceToolbar: FunctionComponent<IProps> = (props: IProps) => {
   const [workspaces, setWorkspaces]: [IWorkspace[], Function] = useState([]);
+  const url = 'https://miro.medium.com/max/1200/1*PmenN7tXUwWN019qGJQ_SQ.jpeg';
   useEffect(() => {
-    const fetched = props.fetchWorkspaces();
+    const fetched = [{ name: 'first', id: '1', imgUrl: url }, { name: 'first', id: '1', imgUrl: url }];
+    // const fetched = props.fetchWorkspaces();
     setWorkspaces(fetched);
   }, []);
-  console.log('workspaces', workspaces);
   return (
-    <div className={styles.workspaceContainer}>
+    <div className={styles.workspaceToolbarContainer}>
       {workspaces.map(workspace => <WorkspaceItem key={workspace.id} workspace={workspace} />)}
     </div>
   );

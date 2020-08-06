@@ -1,11 +1,12 @@
 import React from 'react';
 import AddWorkspace from '../../containers/AddWorkspace';
 import WorkspaceToolbar from '../../containers/WorkspaceToolbar';
+import styles from './styles.module.sass';
 
 const Workspace = () => (
-  <div>
-    <AddWorkspace />
+  <div className={styles.workspace}>
     <WorkspaceToolbar />
+    <AddWorkspace />
   </div>
 );
 
