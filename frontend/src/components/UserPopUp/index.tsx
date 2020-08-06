@@ -6,7 +6,7 @@ import { blockPosition } from '../../common/types/types';
 import Image from 'react-bootstrap/Image';
 import Popover from 'react-bootstrap/Popover';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import { IUserState } from '../../reducers/user';
+import { IUserState } from '../../common/models/user/user';
 
 interface IProps {
   user: IUserState;

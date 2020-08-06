@@ -6,7 +6,7 @@ import UserAvatar from '../../components/UserLogo';
 import UserPopUp from '../../components/UserPopUp';
 import SearchInput from '../../components/SearchInput';
 import { IAppState } from '../../common/models/store';
-import { IUserState } from '../../reducers/user';
+import { IUserState } from '../../common/models/user/user';
 import logo from '../../img/chatitoTemp.png';
 
 interface IProps {
@@ -39,7 +39,7 @@ const Header: FunctionComponent<IProps> = ({ user }) => {
 
       <SearchInput onSearch={t => console.log('Search for ', t)} stylesClassName={styles.searchInput} />
 
-      {user.isAuthorized
+      {!user.isAuthorized
         ? <UserPopUp user={user} trigger={getAvatar} id="mainHeaderPopUp" placement="bottom" />
         : <div>You need to sign in</div>}
 
