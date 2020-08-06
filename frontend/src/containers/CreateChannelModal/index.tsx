@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form, InputGroup } from 'react-bootstrap';
+import { IBindingCallback1 } from '../../common/models/callback';
+import { ICreateChannel } from '../../common/models/channel';
 import styles from './styles.module.sass';
 
 interface IProps {
-  show: boolean;
   toggle: () => void;
+  createChannel: IBindingCallback1<ICreateChannel>;
 }
 
-const CreateChannel = ({ show, toggle }: IProps) => {
+const CreateChannelModal = ({ toggle, createChannel }: IProps) => {
   const [channelName, setChannelName] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const [channelDescription, setChannelDescription] = useState<string>('');
   const [privateChannel, setPrivateChannel] = useState<boolean>(false);
   const NAME_MAX_CHARACTERS = 80;
 
   const isNameEmpty = () => !channelName.length;
 
   const handleSubmit = () => {
-    console.log(channelName, description, privateChannel);
+    createChannel({
+      name: channelName,
+      description: channelDescription,
+      private: privateChannel
+    });
+    toggle();
   };
 
   const modalTitle = privateChannel
@@ -73,7 +80,7 @@ const CreateChannel = ({ show, toggle }: IProps) => {
       </Form.Label>
       <Form.Control
         type="text"
-        onChange={e => setDescription(e.target.value)}
+        onChange={e => setChannelDescription(e.target.value)}
       />
       <Form.Text>What this channel about?</Form.Text>
     </Form.Group>
@@ -124,7 +131,7 @@ const CreateChannel = ({ show, toggle }: IProps) => {
   );
 
   return (
-    <Modal show={show} onHide={toggle} className={styles.modal}>
+    <Modal show onHide={toggle} className={styles.modal}>
       {modalHeader}
       {modalBody}
       {modalFooter}
@@ -132,18 +139,4 @@ const CreateChannel = ({ show, toggle }: IProps) => {
   );
 };
 
-const Container = () => {
-  const [showModal, setShowModal] = React.useState(false);
-  const toggleModal = () => setShowModal(!showModal);
-
-  return (
-    <>
-      <Button variant="primary" onClick={() => setShowModal(true)}>
-        Create channel
-      </Button>
-      <CreateChannel show={showModal} toggle={toggleModal} />
-    </>
-  );
-};
-
-export default Container;
+export default CreateChannelModal;
