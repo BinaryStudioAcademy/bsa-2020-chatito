@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.sass';
 
-export interface IWorkspace {
+interface IWorkspace {
   [key: string]: string;
 }
 

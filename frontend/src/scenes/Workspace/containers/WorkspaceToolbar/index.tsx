@@ -7,7 +7,7 @@ import { IWorkspaceToolbarState } from './reducer';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export interface IWorkspace {
+interface IWorkspace {
   [key: string]: string;
 }
 
