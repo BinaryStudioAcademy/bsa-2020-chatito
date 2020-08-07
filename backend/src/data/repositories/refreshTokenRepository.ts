@@ -1,14 +1,14 @@
 import { EntityRepository, Repository } from 'typeorm';
 
 import { RefreshToken } from '../entities/RefreshToken';
-import { IRefreshToken } from '../../common/models/IRefreshToken';
+import { ICreateRefreshToken } from '../../common/models/refreshToken/ICreateRefreshToken';
 
 @EntityRepository(RefreshToken)
 class RefreshTokenRepository extends Repository<RefreshToken> {
-  async addToken(data: IRefreshToken) {
+  async addToken(data: ICreateRefreshToken) {
     const token = this.create(data);
 
-    return this.save(token);
+    return token.save();
   }
 
   deleteToken(id: string) {

@@ -7,6 +7,7 @@ import { IRegisterUser } from '../common/models/user/IRegisterUser';
 import { hash, encrypt, decrypt } from '../common/utils/encryptHelper';
 import { fromUserToUserClient, fromRegisterUserToCreateUser } from '../common/mappers/user';
 import { createToken } from '../common/utils/tokenHelper';
+import { IRefreshToken } from '../common/models/refreshToken/IRefreshToken';
 
 const createRefreshTokenData = (userId: string) => {
   const cur = new Date();
@@ -18,14 +19,20 @@ const createRefreshTokenData = (userId: string) => {
   };
 };
 
+const createRefreshToken = async (userId: string): Promise<IRefreshToken> => {
+  const refreshTokenData = createRefreshTokenData(userId);
+  const refreshToken = await getCustomRepository(RefreshTokenRepository).addToken(refreshTokenData);
+
+  return refreshToken;
+};
+
 export const register = async ({ password, ...userData }: IRegisterUser) => {
   const passwordHash = await hash(password);
   const createUserData = fromRegisterUserToCreateUser({ ...userData, password: passwordHash });
 
   const newUser = await getCustomRepository(UserRepository).addUser(createUserData);
 
-  const refreshTokenData = createRefreshTokenData(newUser.id);
-  const refreshToken = await getCustomRepository(RefreshTokenRepository).addToken(refreshTokenData);
+  const refreshToken = await createRefreshToken(newUser.id);
 
   return {
     user: fromUserToUserClient(newUser),
@@ -48,8 +55,7 @@ export const refreshTokens = async (encryptedId: string) => {
       throw Error('Token expired');
     }
 
-    const newRefreshTokenData = createRefreshTokenData(refreshToken.userId);
-    const newRefreshToken = await refreshTokenRepository.addToken(newRefreshTokenData);
+    const newRefreshToken = await createRefreshToken(refreshToken.userId);
 
     await refreshTokenRepository.deleteToken(id);
 
