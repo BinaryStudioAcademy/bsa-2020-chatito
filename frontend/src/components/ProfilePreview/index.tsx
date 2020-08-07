@@ -1,49 +1,83 @@
 import styles from './styles.module.sass';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { IUser } from '../../common/models/user';
-import { blockPosition } from '../../common/types/types';
 import { OverlayTrigger, Button, Image, Popover, Form } from 'react-bootstrap';
 import { IUserState } from '../../common/models/user/user';
-import { Link } from 'react-router-dom';
+import { Link, Route, Redirect } from 'react-router-dom';
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { userInfo } from 'os';
 
 interface IProps {
   user: IUserState;
   trigger: () => React.ReactElement;
   id: string;
-  placement: blockPosition;
+  onSend: (message: string) => void;
 }
 
-// const ProfilePreview: FunctionComponent<IProps> = ({ user, trigger, id, placement }) => {
+// const ProfilePreview: FunctionComponent<IProps> = ({ user, trigger, id, onSend }) => {
 const ProfilePreview: FunctionComponent = () => {
-  const testUser = {
-    imgUrl: 'https://images.unsplash.com/photo-1555445091-5a8b655e8a4a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80', // eslint-disable-line max-len
-    fullname: 'Test Fullname',
-    whatIDo: 'coding',
-    status: 'online',
-    myId: '1'
+  // Mocked data: testData and trigger function
+  const testData = {
+    user: {
+      imgUrl: 'https://images.unsplash.com/photo-1555445091-5a8b655e8a4a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80', // eslint-disable-line max-len
+      fullname: 'Test Fullname',
+      whatIDo: 'coding',
+      status: 'online'
+    },
+    id: '1',
+    onSend: (message: string) => console.log(message),
+    redirectTo: '/profile'
   };
-
+  const trigger = () => <Button variant="success">Show</Button>;
+  const [text, setText] = useState('');
+  const onSendMessage = (message: string) => {
+    testData.onSend(message);
+    setText('');
+  };
+  function keycheck(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      onSendMessage(text);
+      // make redirect
+    }
+  }
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setText(e.target.value);
+  };
   const popOver = (
-    <Popover id="2343fwfsdf" className={styles.popOverWindow}>
+    <Popover id={testData.id} className={styles.popOverWindow}>
       <div className={styles.avatarContainer}>
-        <Image className={styles.userAvatar} src={testUser.imgUrl} alt="User avatar" thumbnail />
+        <Image className={styles.userAvatar} src={testData.user.imgUrl} alt="User avatar" thumbnail />
       </div>
       <Popover.Content>
-        <p className={styles.fullname}>{testUser.fullname}</p>
-        <p className={styles.whatIDo}>{testUser.whatIDo}</p>
-        {testUser.myId === '1' ? (
-          <Link to="." className={styles.viewProfile}>View full profile</Link>
-        ) : ' '}
-        <Form.Group className={styles.sendMessageBlock}>
-          <Form.Control className={styles.textField} as="textarea" rows={3} />
-          <div className={styles.arrowButton}>
+        {testData.user.status === 'online' ? (
+          <p className={`${styles.fullname} ${styles.online}`}>{testData.user.fullname}</p>
+        ) : (
+          <p className={`${styles.fullname} ${styles.offline}`}>{testData.user.fullname}</p>
+        )}
+        <p className={styles.whatIDo}>{testData.user.whatIDo}</p>
+        <Link to="." className={styles.link}>View full profile</Link>
+        {/* put redirection path in `to` */}
+        <Form.Group
+          className={styles.sendMessageBlock}
+        >
+          <Form.Control
+            onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => keycheck(e)}
+            className={styles.textField}
+            type="text"
+            value={text}
+            onChange={onChange}
+          />
+          <button
+            type="button"
+            className={`${styles.arrowButton} ${styles.arrowButton_reset}`}
+            onClick={() => onSendMessage(text)}
+          >
             <FontAwesomeIcon
               className={styles.arrowIcon}
               icon={faLocationArrow}
             />
-          </div>
+          </button>
         </Form.Group>
       </Popover.Content>
 
@@ -52,7 +86,7 @@ const ProfilePreview: FunctionComponent = () => {
 
   return (
     <OverlayTrigger trigger="click" placement="right" overlay={popOver}>
-      <Button variant="success">Show</Button>
+      {trigger()}
     </OverlayTrigger>
   );
 };

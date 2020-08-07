@@ -1,7 +1,16 @@
+@mixin status
+  content: ""
+  height: 10px
+  width: 10px
+  border-radius: 100px
+  display: inline-block
+  margin-left: 5px
+  display: inline-block
+
 .popOverWindow
   width: 250px
   max-width: 250px
-  background-color: var(--icon-hover)
+  background-color: var(--toolbar-bgc)
   
 .avatarContainer
   width: 100%
@@ -20,26 +29,26 @@
   margin-bottom: 5px
   font-weight: 900
   letter-spacing: 0.5px
-  &:after
-    content: ""
-    display: block
-    background-color: var(--icon-active)
-    height: 10px
-    width: 10px
-    border-radius: 100px
-    display: inline-block
-    margin-left: 5px
+
+.online:after
+  @include status
+  background-color: var(--workspace-background-color)
+
+.offline:after
+  @include status
+  background-color: var(--offline)
 
 .whatIDo
   color: #ffffff
   margin-bottom: 5px
   font-size: 16px
 
-.viewProfile
+.link
+  display: block
   font-size: 16px
-  color: var(--links)
+  color: var(--icon-active)
   &:visited
-    color: var(--links)
+    color: var(--icon-active)
 
 .textField
   margin-top: 10px
@@ -48,7 +57,8 @@
 .arrowIcon
   transform: rotate(45deg)
   color: #ffffff
-  font-size: 20px
+  font-size: 30px
+  transition: all .3s
 
 .sendMessageBlock
   display: flex
@@ -56,10 +66,31 @@
   margin-bottom: 3px
 
 .arrowButton
-  width: 30px
-  height: 20px
+  width: 40px
+  height: 38px
   cursor: pointer
-  margin-left: 7px
+  margin: 0 5px 0 5px
   display: flex
   justify-content: center
   align-items: center
+  outline: none
+  background-color: transparent
+  &:hover .arrowIcon
+    color: var(--offline)
+  &_reset
+    border: none
+    padding: 0
+    width: auto
+    overflow: visible
+    background: transparent
+    color: inherit
+    font: inherit
+    line-height: normal
+    -webkit-font-smoothing: inherit
+    -moz-osx-font-smoothing: inherit
+    -webkit-appearance: none
+    &::-moz-focus-inner
+        border: 0
+        padding: 0
+    &:focus
+      outline: none
