@@ -25,7 +25,7 @@ const ForgotPassword: FunctionComponent<IProps> = ({ forgotPassword }) => {
 
   return (
     <div className={styles.forgotPassword}>
-      <h1 className="text-center p-5">Forgot Password</h1>
+      <h1 className="text-center p-5">Recover your password</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -36,12 +36,12 @@ const ForgotPassword: FunctionComponent<IProps> = ({ forgotPassword }) => {
             label="Email:"
             name="email"
             type="email"
-            placeholder="example@gmail.com"
+            placeholder="Your email address"
           />
 
           <div className="form-group">
             <button type="submit" className="btn btn-primary mr-2">
-              Reset password
+              Recover
             </button>
           </div>
         </Form>
