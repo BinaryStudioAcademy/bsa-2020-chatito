@@ -7,12 +7,16 @@ import { IUserInput } from '../../common/models/auth/auth';
 import { fetchUserRoutine } from '../../routines/user';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
+import { Button } from 'react-bootstrap';
+import { push } from 'connected-react-router';
+import { Routes } from '../../common/enums/Routes';
 
 interface IProps {
   fetchUser: Routine;
+  router: (route: string) => void;
 }
 
-const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
+const SignIn: FunctionComponent<IProps> = ({ fetchUser, router }) => {
   const onSubmit = async (values: IUserInput,
     { setSubmitting }: { setSubmitting: CallableFunction }) => {
     const { email, password } = values;
@@ -25,6 +29,10 @@ const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
   const initialValues = {
     email: '',
     password: ''
+  };
+
+  const onForgotPassword = () => {
+    router(Routes.ForgotPassword);
   };
 
   return (
@@ -47,11 +55,14 @@ const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
             name="password"
             type="password"
           />
+          <Button variant="link" size="sm" onClick={onForgotPassword}>
+            Forgot password
+          </Button>
 
           <div className="form-group">
-            <button type="submit" className="btn btn-primary mr-2">
+            <Button type="submit" variant="primary">
               Sign In
-            </button>
+            </Button>
           </div>
         </Form>
       </Formik>
@@ -60,7 +71,8 @@ const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
 };
 
 const mapDispatchToProps = {
-  fetchUser: fetchUserRoutine
+  fetchUser: fetchUserRoutine,
+  router: push
 };
 
 export default connect(
