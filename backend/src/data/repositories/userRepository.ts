@@ -11,6 +11,10 @@ class UserRepository extends Repository<User> {
     return user.save();
   }
 
+  getAll(): Promise<User[]> {
+    return this.find();
+  }
+
   getById(id: string): Promise<User> {
     return this.findOne(id);
   }

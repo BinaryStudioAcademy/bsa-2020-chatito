@@ -1,12 +1,12 @@
+import { ModalTypes } from './../common/enums/ModalTypes';
 import { all, put, call, takeEvery } from 'redux-saga/effects';
-import { fetchUserRoutine, editProfile, deleteAccountRoutine as delAccount, addNewUserRoutine } from '../routines/user';
+import { fetchUserRoutine, editProfileRoutine, deleteAccountRoutine as delAccount, addNewUserRoutine } from '../routines/user';
 import { Routine } from 'redux-saga-routines';
 import { registration, login } from '../services/authService';
 import { setAccessToken } from '../common/helpers/storageHelper';
-import { hideEditModal } from '../containers/EditProfile/routines';
 import { ISignServerResponse } from '../common/models/auth/auth';
+import { showModalRoutine } from '../routines/modal';
 import api from '../common/helpers/apiHelper';
-
 
 function* fetchUserRequest({ payload }: any): Routine<any> {
   try {
@@ -28,16 +28,15 @@ function* updateProfile({ payload }: Routine<any>) {
     const data = {
       ...response
     };
-    yield put(editProfile.success(data));
+    yield put(editProfileRoutine.success(data));
+    yield put(showModalRoutine({ modalType: ModalTypes.EditProfile, show: false }));
   } catch (error) {
-    yield put(editProfile.failure(error.message));
-  } finally {
-    yield put(hideEditModal.trigger());
+    yield put(editProfileRoutine.failure(error.message));
   }
 }
 
 function* watchUpdateProfile() {
-  yield takeEvery(editProfile.TRIGGER, updateProfile);
+  yield takeEvery(editProfileRoutine.TRIGGER, updateProfile);
 }
 
 function* deleteAccount() {
@@ -50,7 +49,7 @@ function* deleteAccount() {
   } catch (error) {
     yield put(delAccount.failure(error.message));
   } finally {
-    yield put(hideEditModal.trigger());
+    yield put(showModalRoutine.trigger({ modalType: ModalTypes.EditProfile, show: false }));
   }
 }
 
@@ -77,6 +76,6 @@ export default function* userSaga() {
     watchUserRequest(),
     watchUpdateProfile(),
     watchDeleteAccount(),
-    watchAddNewUserRequest(),
+    watchAddNewUserRequest()
   ]);
 }

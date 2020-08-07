@@ -2,27 +2,35 @@ import React, { useState, FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal, Form, Image } from 'react-bootstrap';
 import { IAppState } from '../../common/models/store';
-import { hideEditModal as hideEditModalRoutine } from './routines';
-import { editProfile as editProfileRoutine, deleteAccountRoutine } from '../../routines/user';
+import { showModalRoutine } from '../../routines/modal';
+import { editProfileRoutine, deleteAccountRoutine } from '../../routines/user';
 import styles from './styles.module.sass';
 import { IUser } from '../../common/models/user/user';
+import { ModalTypes } from '../../common/enums/ModalTypes';
+import { IModalRoutine } from '../../common/models/modal/IShowModalRoutine';
 
 interface IProps {
-  hideEditModal: () => void;
+  showModal: ({ modalType, show }: IModalRoutine) => void;
   editProfile: (userProps: IUser) => void;
   deleteAccount: () => void;
   isShown: boolean;
-  user?: IUser;
+  user?: IUser | null;
 }
 
-const EditProfile: FunctionComponent<IProps> = ({ hideEditModal, editProfile, deleteAccount, isShown, user = undefined }: IProps) => {
+const EditProfile: FunctionComponent<IProps> = ({
+  showModal,
+  editProfile,
+  deleteAccount,
+  isShown,
+  user = undefined
+}: IProps) => {
   if (!user) return <></>;
   const [fullName, setFullName] = useState(user.fullName);
   const [displayName, setDisplayName] = useState(user.displayName);
   const [title, setTitle] = useState(user.title ? user.title : '');
 
   const handleClose = () => {
-    hideEditModal();
+    showModal({ modalType: ModalTypes.EditProfile, show: false });
   };
 
   const handleSubmit = () => {
@@ -138,18 +146,18 @@ const EditProfile: FunctionComponent<IProps> = ({ hideEditModal, editProfile, de
 };
 
 const mapStateToProps = (state: IAppState) => ({
-  isShown: state.editUserProfile.isShown,
+  isShown: state.modal.editProfile,
   user: state.user.data
 });
 
 const mapDispatchToProps = {
-  hideEditModal: hideEditModalRoutine,
+  showModal: showModalRoutine,
   editProfile: editProfileRoutine,
   deleteAccount: deleteAccountRoutine
 };
 
 EditProfile.defaultProps = {
-  user: undefined
+  user: null
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);

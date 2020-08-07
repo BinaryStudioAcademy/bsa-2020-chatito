@@ -13,7 +13,7 @@ export interface IWorkspaceToolbarState {
 const initialState = {
   workspaces: [],
   loading: false
-}
+};
 
 const WorkspaceToolbarReducer = (state: IWorkspaceToolbarState = initialState, { type, payload }: Routine<any>) => {
   switch (type) {

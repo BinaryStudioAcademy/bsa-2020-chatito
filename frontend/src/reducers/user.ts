@@ -1,6 +1,6 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchUserRoutine, editProfile, deleteAccountRoutine, addNewUserRoutine } from '../routines/user';
-import { IUser, IUserState } from '../common/models/user/user';
+import { fetchUserRoutine, editProfileRoutine, deleteAccountRoutine, addNewUserRoutine } from '../routines/user';
+import { IUserState } from '../common/models/user/user';
 
 const initialState: IUserState = {
   isLoading: false,
@@ -46,13 +46,13 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         isLoading: false,
         isAuthorized: false
       };
-    case editProfile.TRIGGER: {
+    case editProfileRoutine.TRIGGER: {
       return { ...state, loading: true };
     }
-    case editProfile.SUCCESS: {
+    case editProfileRoutine.SUCCESS: {
       return { ...state, loading: false };
     }
-    case editProfile.FAILURE: {
+    case editProfileRoutine.FAILURE: {
       return { ...state, loading: false };
     }
     case deleteAccountRoutine.TRIGGER: {
