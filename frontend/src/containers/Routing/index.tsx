@@ -11,7 +11,7 @@ import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from '../../routines/user';
 import AddWorkspace from '../../scenes/Workspace/Workspace';
-import Thread from '../../scenes/Chat/containers/Thread';
+import Thread from '../../components/Thread';
 
 interface IProps {
   isLoading: boolean;

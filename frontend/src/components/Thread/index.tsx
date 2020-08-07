@@ -1,6 +1,6 @@
 import React, { FunctionComponent, CSSProperties } from 'react';
-import PartisipantsList from '../../components/ParticipantsList';
-import TextEditor from '../../../../components/TextEditor';
+import PartisipantsList from '../ParticipantsList';
+import TextEditor from '../TextEditor';
 import styles from './styles.module.sass';
 
 interface IProps {
