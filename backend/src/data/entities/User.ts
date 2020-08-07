@@ -1,19 +1,23 @@
 import { Entity, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
 import { Workspace } from './Workspace';
+import { Chat } from './Chat';
+import { Post } from './Post';
+import { Comment } from './Comment';
+import { RefreshToken } from './RefreshToken';
 
 @Entity()
 export class User extends AbstractEntity {
-  @Column({ nullable: false, length: 100 }) // nullable: false is default value, unnecessary (gooogle)
+  @Column({ length: 100 })
   fullName: string;
 
-  @Column({ nullable: false, length: 100 })
+  @Column({ length: 100 })
   displayName: string;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ unique: true })
   email: string;
 
-  @Column({ nullable: false })
+  @Column()
   password: string;
 
   @Column({ nullable: true })
@@ -22,10 +26,26 @@ export class User extends AbstractEntity {
   @Column({ nullable: true, length: 300 })
   title: string;
 
-  @OneToMany(() => Workspace, workspace => workspace.createdByUser)
-  workspacesCreatedByUser: Workspace[];
+  @OneToMany(() => Post, post => post.createdByUser)
+  posts: Post[];
 
-  @ManyToMany(() => Workspace, workspace => workspace.members)
-  @JoinTable({ name: 'users_workspaces' })
+  @OneToMany(() => RefreshToken, token => token.user)
+  refreshTokens: RefreshToken[];
+
+  @OneToMany(() => Comment, comment => comment.createdByUser)
+  comments: Comment[];
+
+  @OneToMany(() => Chat, chat => chat.createdByUser)
+  chatsCreated: Chat[];
+
+  @OneToMany(() => Workspace, wp => wp.createdByUser)
+  workspacesCreated: Workspace[];
+
+  @ManyToMany(() => Workspace, workspace => workspace.users)
+  @JoinTable()
   workspaces: Workspace[];
+
+  @ManyToMany(() => Chat, chat => chat.users)
+  @JoinTable()
+  chats: Chat[];
 }
