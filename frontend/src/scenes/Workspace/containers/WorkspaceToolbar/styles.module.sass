@@ -1,0 +1,27 @@
+.workspaceToolbarContainer
+  padding-top: 3px
+  height: 100%
+  width: 65px
+  background-color: var(--workspace-background-color)
+  display: flex
+  flex-direction: column
+  align-items: center
+
+.plusIconContainer
+  margin-top: 3px
+  cursor: pointer
+  display: flex
+  justify-content: center
+  align-items: center
+  width: 50px
+  height: 50px
+  border-radius: 10px
+  transition: all .3s
+  &:hover
+    background-color: #ffffff
+  &:hover .plusIcon
+    color: var(--workspace-background-color)
+
+.plusIcon
+  color: #ffffff
+  transition: all .3s

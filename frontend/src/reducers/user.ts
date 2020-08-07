@@ -1,32 +1,64 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchUserRoutine } from '../routines/user';
+import { fetchUserRoutine, editProfileRoutine, addNewUserRoutine } from '../routines/user';
+import { IUser } from '../common/models/user/user';
 
 export interface IUserState {
   isLoading: boolean;
   isAuthorized: boolean;
+  data: IUser | null;
 }
 
 const initialState: IUserState = {
   isLoading: false,
-  isAuthorized: false
+  isAuthorized: false,
+  data: null
 };
 
-export default (state = initialState, action: Routine<any>) => {
-  switch (action.type) {
+const reducer = (state = initialState, { type, payload }: Routine<any>) => {
+  switch (type) {
+    case addNewUserRoutine.TRIGGER:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case addNewUserRoutine.SUCCESS:
+      return {
+        ...state,
+        data: { ...payload },
+        isLoading: false,
+        isAuthorized: Boolean(payload?.id)
+      };
     case fetchUserRoutine.TRIGGER:
       return {
         ...state,
         isLoading: true
       };
     case fetchUserRoutine.SUCCESS:
-      const { payload } = action;
       return {
         ...state,
-        ...payload,
+        data: { ...payload },
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
+      };
+    case editProfileRoutine.TRIGGER: {
+      return { ...state, loading: true };
+    }
+    case editProfileRoutine.SUCCESS: {
+      return { ...state, loading: false };
+    }
+    case editProfileRoutine.FAILURE: {
+      return { ...state, loading: false };
+    }
+    case fetchUserRoutine.FAILURE:
+    case addNewUserRoutine.FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        isAuthorized: false
       };
     default:
       return state;
   }
 };
+
+export default reducer;
