@@ -1,17 +1,18 @@
 import { Routine } from 'redux-saga-routines';
 import { fetchWorkspacesRoutine } from './routines';
-
-interface IWorkspace {
-  [key: string]: string;
-}
+import { IWorkspace } from '../../common/models/workspace/IWorkspace';
 
 export interface IWorkspaceToolbarState {
-  workspaces: IWorkspace[];
+  workspacesList: IWorkspace[];
+  selected: IWorkspace;
   loading: boolean;
 }
 
 const initialState = {
-  workspaces: [],
+  workspacesList: [],
+  selected: {
+    id: ''
+  },
   loading: false
 };
 
