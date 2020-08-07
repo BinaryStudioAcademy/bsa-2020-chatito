@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styles from './styles.module.sass';
 import { IWorkspaceToolbarState } from './reducer';
 import { fetchWorkspacesRoutine } from './routines';
-import { IWorkspace } from '../../common/models/workspace/IWorkspace';
+import { IWorkspace } from '../../../../common/models/workspace/IWorkspace';
 
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
