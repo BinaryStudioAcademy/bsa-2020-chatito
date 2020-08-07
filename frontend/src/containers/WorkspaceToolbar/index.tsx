@@ -2,7 +2,7 @@ import React, { useState, useEffect, FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import { fetchWorkspacesRoutine } from './routines';
 import styles from './styles.module.sass';
-import WorkspaceItem from '../../components/WorkspaceItem';
+import WorkspaceItem from './components/WorkspaceItem';
 import { IWorkspaceToolbarState } from './reducer';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
