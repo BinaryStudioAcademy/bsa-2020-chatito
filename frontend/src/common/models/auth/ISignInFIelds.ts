@@ -1,6 +1,4 @@
-interface ISignInFields {
+export interface ISignInFields {
   email: string;
   password: string;
 }
-
-export type { ISignInFields };

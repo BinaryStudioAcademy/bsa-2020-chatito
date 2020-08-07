@@ -1,9 +1,7 @@
 import { IUser } from './IUser';
 
-interface IUserState {
+export interface IUserState {
   data: IUser | null;
   isLoading: boolean;
   isAuthorized: boolean;
 }
-
-export type { IUserState };

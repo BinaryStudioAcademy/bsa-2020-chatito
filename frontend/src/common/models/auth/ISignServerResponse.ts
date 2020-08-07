@@ -1,8 +1,6 @@
 import { IUser } from '../user/IUser';
 
-interface ISignServerResponse {
+export interface ISignServerResponse {
   token: string;
   user?: IUser
 }
-
-export type { ISignServerResponse };
