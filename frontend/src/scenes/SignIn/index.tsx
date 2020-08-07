@@ -55,13 +55,13 @@ const SignIn: FunctionComponent<IProps> = ({ fetchUser, router }) => {
             name="password"
             type="password"
           />
+          <Button variant="link" size="sm" onClick={onForgotPassword}>
+            Forgot password
+          </Button>
 
           <div className="form-group">
             <Button type="submit" variant="primary">
               Sign In
-            </Button>
-            <Button variant="link" onClick={onForgotPassword}>
-              Forgot password
             </Button>
           </div>
         </Form>
