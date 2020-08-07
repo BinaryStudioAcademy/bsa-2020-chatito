@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { IBindingCallback1 } from '../../common/models/callback';
-import { ICreateChannel } from '../../common/models/channel';
+import { ICreateChannel } from '../../common/models/channel/ICreateChannel';
 import styles from './styles.module.sass';
 
 interface IProps {
-  toggle: () => void;
   createChannel: IBindingCallback1<ICreateChannel>;
 }
 
-const CreateChannel = ({ toggle, createChannel }: IProps) => {
+const CreateChannel = ({ createChannel }: IProps) => {
   const [channelName, setChannelName] = useState<string>('');
   const [channelDescription, setChannelDescription] = useState<string>('');
   const [privateChannel, setPrivateChannel] = useState<boolean>(false);
@@ -23,7 +22,6 @@ const CreateChannel = ({ toggle, createChannel }: IProps) => {
       description: channelDescription,
       private: privateChannel
     });
-    toggle();
   };
 
   const title = privateChannel
