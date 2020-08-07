@@ -1,8 +1,8 @@
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
-import { IWorkspaceToolbarState } from './reducer';
-import { fetchWorkspacesRoutine } from './routines';
+import { IAppState } from '../../../../common/models/store';
+import { fetchWorkspacesRoutine } from '../../../../routines/user';
 import { IWorkspace } from '../../../../common/models/workspace/IWorkspace';
 
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -12,6 +12,7 @@ import WorkspaceItem from './components/WorkspaceItem';
 
 interface IProps {
   fetchWorkspaces: Function;
+  workspaces: IWorkspace[];
   loading: boolean;
 }
 
@@ -41,7 +42,10 @@ const WorkspaceToolbar: FunctionComponent<IProps> = (props: IProps) => {
   );
 };
 
-const mapStateToProps = (loading: IWorkspaceToolbarState) => (loading);
+const mapStateToProps = (state: IAppState) => ({
+  loading: state.user.isLoading,
+  workspaces: state.user.workspaceList
+});
 
 const mapDispatchToProps = {
   fetchWorkspaces: fetchWorkspacesRoutine

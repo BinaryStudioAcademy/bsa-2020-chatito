@@ -6,7 +6,8 @@ import {
   loginUserRoutine,
   deleteAccountRoutine,
   forgotPasswordRoutine,
-  resetPasswordRoutine
+  resetPasswordRoutine,
+  fetchWorkspacesRoutine
 } from '../routines/user';
 import { IUser } from '../common/models/user/IUser';
 import { IWorkspace } from '../common/models/workspace/IWorkspace';
@@ -113,6 +114,23 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case resetPasswordRoutine.FAILURE: {
       return { ...state, loading: false };
     }
+
+    case fetchWorkspacesRoutine.TRIGGER:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case fetchWorkspacesRoutine.FAILURE:
+      return {
+        ...state,
+        isLoading: false
+      };
+    case fetchWorkspacesRoutine.SUCCESS:
+      return {
+        ...state,
+        workspaceList: payload,
+        isLoading: false
+      };
     default:
       return state;
   }

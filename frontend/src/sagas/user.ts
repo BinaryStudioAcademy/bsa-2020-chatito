@@ -6,9 +6,11 @@ import {
   deleteAccountRoutine,
   loginUserRoutine,
   forgotPasswordRoutine,
-  resetPasswordRoutine
+  resetPasswordRoutine,
+  fetchWorkspacesRoutine
 } from '../routines/user';
 import { IAuthServerResponse } from '../common/models/auth/IAuthServerResponse';
+import { getWorkspaces } from '../services/workspaceService';
 import { showModalRoutine } from '../routines/modal';
 import { ModalTypes } from '../common/enums/ModalTypes';
 import api from '../common/helpers/apiHelper';
@@ -129,6 +131,20 @@ function* watchResetPasswordRequest() {
   yield takeEvery(resetPasswordRoutine.TRIGGER, resetPasswordRequest);
 }
 
+function* fetchWorkspaces() {
+  try {
+    const workspaces = yield call(getWorkspaces);
+
+    yield put(fetchWorkspacesRoutine.success(workspaces));
+  } catch (error) {
+    yield put(fetchWorkspacesRoutine.failure(error));
+  }
+}
+
+function* watchFetchWorkspaces() {
+  yield takeEvery(fetchWorkspacesRoutine.TRIGGER, fetchWorkspaces);
+}
+
 export default function* userSaga() {
   yield all([
     watchAddNewUserRequest(),
@@ -139,6 +155,7 @@ export default function* userSaga() {
     watchForgotPasswordRequest(),
     watchLoginUserRequest(),
     watchDeleteAccount(),
-    watchResetPasswordRequest()
+    watchResetPasswordRequest(),
+    watchFetchWorkspaces()
   ]);
 }
