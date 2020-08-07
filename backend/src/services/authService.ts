@@ -9,6 +9,11 @@ import { fromUserToUserClient, fromRegisterUserToCreateUser } from '../common/ma
 import { createToken } from '../common/utils/tokenHelper';
 import { IRefreshToken } from '../common/models/refreshToken/IRefreshToken';
 import { User } from '../data/entities/User';
+import { IForgotPasswordUser } from '../common/models/user/IForgotPasswordUser';
+import { IResetPasswordUser } from '../common/models/user/IResetPasswordUser';
+import CustomError from '../common/models/CustomError';
+import { sendResetPasswordMail } from './mailService';
+import { ErrorCode } from '../common/enums/ErrorCode';
 
 const createRefreshTokenData = (user: User) => {
   const cur = new Date();
@@ -95,4 +100,20 @@ export const refreshTokens = async (encryptedId: string) => {
   } catch (err) {
     throw Error(err.message);
   }
+};
+
+export const forgotPassword = async ({ email }: IForgotPasswordUser) => {
+  const user = await getCustomRepository(UserRepository).getByEmail(email);
+  if (!user) {
+    throw new CustomError(404, 'Wrong email', ErrorCode.UserNotFound);
+  }
+
+  await sendResetPasswordMail({ to: email, token: createToken({ id: user.id }) });
+  return user;
+};
+
+export const resetPassword = async ({ id, password }: IResetPasswordUser) => {
+  const passwordHash = await encrypt(password);
+  const user = await getCustomRepository(UserRepository).editPassword(id, passwordHash);
+  return user;
 };
