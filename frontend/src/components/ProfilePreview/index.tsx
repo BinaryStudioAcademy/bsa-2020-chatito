@@ -1,15 +1,14 @@
 import styles from './styles.module.sass';
 import React, { FunctionComponent, useState } from 'react';
-import { IUser } from '../../common/models/user';
 import { OverlayTrigger, Button, Image, Popover, Form } from 'react-bootstrap';
-import { IUserState } from '../../common/models/user/user';
+import { IUser } from '../../common/models/user';
 import { Link, Route, Redirect } from 'react-router-dom';
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { userInfo } from 'os';
 
 interface IProps {
-  user: IUserState;
+  user: IUser;
   trigger: () => React.ReactElement;
   id: string;
   onSend: (message: string) => void;

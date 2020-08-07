@@ -6,7 +6,7 @@ import UserPopUp from '../../components/UserPopUp';
 import SearchInput from '../../components/SearchInput';
 import { IAppState } from '../../common/models/store';
 import { IUserState } from '../../reducers/user';
-import logo from '../../img/ChatitoTemp.png';
+import logo from '../../img/chatitoTemp.png';
 import EditProfile from '../EditProfile';
 import { showModalRoutine } from '../../routines/modal';
 import { ModalTypes } from '../../common/enums/ModalTypes';

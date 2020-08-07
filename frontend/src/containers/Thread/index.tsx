@@ -1,10 +1,14 @@
 import React from 'react';
 import styles from './styles.module.sass';
 
-const Thread = () => (
+interface IProps {
+  thread: string;
+}
+
+const Thread: React.FC<IProps> = ({ thread }) => (
   <div className={styles.threadContainer}>
     <header>
-
+      <p>{thread}</p>
     </header>
   </div>
 );
