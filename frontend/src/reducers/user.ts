@@ -9,16 +9,19 @@ import {
   resetPasswordRoutine
 } from '../routines/user';
 import { IUser } from '../common/models/user/IUser';
+import { IWorkspace } from '../common/models/workspace/IWorkspace';
 
 export interface IUserState {
   user?: IUser;
   isLoading: boolean;
   isAuthorized: boolean;
+  workspaceList: IWorkspace[];
 }
 
 const initialState: IUserState = {
   isLoading: false,
-  isAuthorized: false
+  isAuthorized: false,
+  workspaceList: []
 };
 
 const reducer = (state = initialState, { type, payload }: Routine<any>) => {

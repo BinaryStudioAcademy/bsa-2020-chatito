@@ -1,4 +1,4 @@
-import { addWorkspaceRoutine } from './routines';
+import { addWorkspaceRoutine } from '../routines/routines';
 import { Routine } from 'redux-saga-routines';
 import { takeEvery, put, call } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr'
