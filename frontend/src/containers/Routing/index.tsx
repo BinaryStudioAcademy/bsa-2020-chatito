@@ -11,7 +11,7 @@ import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from '../../routines/user';
 
-import CreateChannel from '../CreateChannelModalWrapper';
+import CreateChannelModal from '../CreateChannelModal';
 
 interface IProps {
   isLoading: boolean;
@@ -34,13 +34,12 @@ const Routing: React.FC<IProps> = ({
 
   const signInMock = () => <div>Sign In</div>;
   const mainMock = () => <div>Main</div>;
-  const createChannelBtn = () => <CreateChannel><span>+</span></CreateChannel>;
 
   return (
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <Header />
       <Switch>
-        <PublicRoute exact path={Routes.SignIn} component={createChannelBtn} />
+        <PublicRoute exact path={Routes.SignIn} component={CreateChannelModal} />
         <PrivateRoute exact path="/" component={mainMock} />
       </Switch>
     </LoaderWrapper>
