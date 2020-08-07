@@ -8,22 +8,27 @@ import { hash, encrypt, decrypt } from '../common/utils/encryptHelper';
 import { fromUserToUserClient, fromRegisterUserToCreateUser } from '../common/mappers/user';
 import { createToken } from '../common/utils/tokenHelper';
 import { IRefreshToken } from '../common/models/refreshToken/IRefreshToken';
+import { User } from '../data/entities/User';
 
-const createRefreshTokenData = (userId: string) => {
+const createRefreshTokenData = (user: User) => {
   const cur = new Date();
   const after30days = cur.setDate(cur.getDate() + 30);
 
   return {
-    userId,
+    user,
     expiresAt: after30days
   };
 };
 
-const createRefreshToken = async (userId: string): Promise<IRefreshToken> => {
-  const refreshTokenData = createRefreshTokenData(userId);
-  const refreshToken = await getCustomRepository(RefreshTokenRepository).addToken(refreshTokenData);
+const createRefreshToken = async (user: User): Promise<IRefreshToken> => {
+  try {
+    const refreshTokenData = createRefreshTokenData(user);
+    const refreshToken = await getCustomRepository(RefreshTokenRepository).addToken(refreshTokenData);
 
-  return refreshToken;
+    return refreshToken;
+  } catch (err) {
+    throw Error('Internal error');
+  }
 };
 
 export const register = async ({ password, ...userData }: IRegisterUser) => {
@@ -32,7 +37,7 @@ export const register = async ({ password, ...userData }: IRegisterUser) => {
 
   const newUser = await getCustomRepository(UserRepository).addUser(createUserData);
 
-  const refreshToken = await createRefreshToken(newUser.id);
+  const refreshToken = await createRefreshToken(newUser);
 
   return {
     user: fromUserToUserClient(newUser),
@@ -55,7 +60,8 @@ export const refreshTokens = async (encryptedId: string) => {
       throw Error('Token expired');
     }
 
-    const newRefreshToken = await createRefreshToken(refreshToken.userId);
+    const user = await getCustomRepository(UserRepository).getById(refreshToken.userId);
+    const newRefreshToken = await createRefreshToken(user);
 
     await refreshTokenRepository.deleteToken(id);
 
@@ -64,6 +70,6 @@ export const refreshTokens = async (encryptedId: string) => {
       refreshToken: encrypt(newRefreshToken.id)
     };
   } catch (err) {
-    throw Error('Internal error');
+    throw Error(err.message);
   }
 };
