@@ -4,13 +4,12 @@ import UserRepository from '../data/repositories/userRepository';
 import RefreshTokenRepository from '../data/repositories/refreshTokenRepository';
 
 import { IRegisterUser } from '../common/models/user/IRegisterUser';
-import { encrypt } from '../common/utils/encryptHelper';
+import { hash, encrypt, decrypt } from '../common/utils/encryptHelper';
 import { fromUserToUserClient, fromRegisterUserToCreateUser } from '../common/mappers/user';
 import { createToken, createRefreshTokenData } from '../common/utils/tokenHelper';
-import { encryptString, decryptString } from '../common/utils/cryptrHelper';
 
 export const register = async ({ password, ...userData }: IRegisterUser) => {
-  const passwordHash = await encrypt(password);
+  const passwordHash = await hash(password);
   const createUserData = fromRegisterUserToCreateUser({ ...userData, password: passwordHash });
 
   const newUser = await getCustomRepository(UserRepository).addUser(createUserData);
@@ -21,13 +20,13 @@ export const register = async ({ password, ...userData }: IRegisterUser) => {
   return {
     user: fromUserToUserClient(newUser),
     accessToken: createToken({ id: newUser.id }),
-    refreshToken: encryptString(refreshToken.id)
+    refreshToken: encrypt(refreshToken.id)
   };
 };
 
 export const refreshTokens = async (encryptedId: string) => {
   try {
-    const id = decryptString(encryptedId);
+    const id = decrypt(encryptedId);
     const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
 
     const refreshToken = await refreshTokenRepository.getById(id);
@@ -46,7 +45,7 @@ export const refreshTokens = async (encryptedId: string) => {
 
     return {
       accessToken: createToken({ id: newRefreshToken.userId }),
-      refreshToken: encryptString(newRefreshToken.id)
+      refreshToken: encrypt(newRefreshToken.id)
     };
   } catch (err) {
     throw Error('Internal error');
