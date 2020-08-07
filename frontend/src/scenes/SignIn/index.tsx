@@ -3,17 +3,17 @@ import { Formik, Form } from 'formik';
 import styles from './styles.module.sass';
 import InputField from '../../components/InputField/InputField';
 import { signInValSchema as validationSchema } from '../../common/models/formik/ValidationSchemas';
-import { IUserInput } from '../../common/models/auth/IUserInput';
 import { fetchUserRoutine } from '../../routines/user';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
+import { ILoginUser } from '../../common/models/auth/ILoginUser';
 
 interface IProps {
   fetchUser: Routine;
 }
 
 const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
-  const onSubmit = async (values: IUserInput,
+  const onSubmit = async (values: ILoginUser,
     { setSubmitting }: { setSubmitting: CallableFunction }) => {
     const { email, password } = values;
     const payload = {
@@ -29,7 +29,7 @@ const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
 
   return (
     <div className={styles.signIn}>
-      <h1 className={`text-center ${styles['signIn-header']}`}>Sign in</h1>
+      <h1 className={`text-center ${styles.signInHeader}`}>Sign in</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

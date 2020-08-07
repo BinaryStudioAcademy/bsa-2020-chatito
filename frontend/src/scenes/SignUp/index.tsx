@@ -6,14 +6,14 @@ import styles from './styles.module.sass';
 import { addNewUserRoutine } from '../../routines/user';
 import InputField from '../../components/InputField/InputField';
 import { Routine } from 'redux-saga-routines';
-import { IUserInput } from '../../common/models/auth/IUserInput';
+import { IRegisterUser } from '../../common/models/auth/IRegisterUser';
 
 interface IProps {
   addNewUser: Routine;
 }
 
 export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
-  const onSubmit = async (values: IUserInput,
+  const onSubmit = async (values: IRegisterUser,
     { setSubmitting }: { setSubmitting: CallableFunction }) => {
     const { email, password, fullName } = values;
     const user = { email, password, fullName };

@@ -1,6 +1,6 @@
 import { RouterState } from 'connected-react-router';
 import { IModalState } from '../../reducers/modal';
-import { IUserState } from './user/IUserState';
+import { IUserState } from '../../reducers/user';
 
 export interface IAppState {
   router: RouterState;

@@ -1,11 +1,16 @@
 import { Routine } from 'redux-saga-routines';
 import { addNewUserRoutine, fetchUserRoutine, editProfileRoutine, loginUserRoutine } from '../routines/user';
-import { IUserState } from '../common/models/user/IUserState';
+import { IUser } from '../common/models/user/IUser';
+
+export interface IUserState {
+  user?: IUser;
+  isLoading: boolean;
+  isAuthorized: boolean;
+}
 
 const initialState: IUserState = {
   isLoading: false,
-  isAuthorized: false,
-  data: null
+  isAuthorized: false
 };
 
 const reducer = (state = initialState, { type, payload }: Routine<any>) => {

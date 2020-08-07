@@ -1,29 +1,31 @@
 import api from '../common/helpers/apiHelper';
 import { IUser } from '../common/models/user/IUser';
-import { ISignServerResponse } from '../common/models/auth/ISignServerResponse';
-import { ISignUpFields } from '../common/models/auth/ISignUpFields';
-import { ISignInFields } from '../common/models/auth/ISignInFIelds';
+import { IAuthServerResponse } from '../common/models/auth/IAuthServerResponse';
+import { IRegisterUser } from '../common/models/auth/IRegisterUser';
+import { ILoginUser } from '../common/models/auth/ILoginUser';
 
-export const login = async (userInput: ISignInFields) => {
+type ServerResponse = IAuthServerResponse & Response;
+
+export const login = async (userInput: ILoginUser) => {
   const userData = {
     user: { ...userInput }
   };
-  const response: ISignServerResponse & Response = await api.post('/api/auth/login', userData);
+  const response = await api.post<ServerResponse>('/api/auth/login', userData);
 
   return response.json();
 };
 
-export const registration = async (userInput: ISignUpFields): Promise<IUser> => {
+export const registration = async (userInput: IRegisterUser): Promise<IUser> => {
   const userData = {
     user: { ...userInput }
   };
-  const response: ISignServerResponse & Response = await api.post('/api/auth/register', userData);
+  const response = await api.post<ServerResponse>('/api/auth/register', userData);
 
   return response.json();
 };
 
 export const fetchUser = async (): Promise<IUser> => {
-  const response: ISignServerResponse & Response = await api.get('/api/me/');
+  const response = await api.get<ServerResponse>('/api/me/');
 
   return response.json();
 };

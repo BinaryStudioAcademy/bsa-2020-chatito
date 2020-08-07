@@ -10,7 +10,7 @@ import EditProfile from '../EditProfile';
 import { showModalRoutine } from '../../routines/modal';
 import { ModalTypes } from '../../common/enums/ModalTypes';
 import { IModalRoutine } from '../../common/models/modal/IShowModalRoutine';
-import { IUserState } from '../../common/models/user/IUserState';
+import { IUserState } from '../../reducers/user';
 
 interface IProps {
   user: IUserState;

@@ -138,7 +138,7 @@ const EditProfile: FunctionComponent<IProps> = ({
 
 const mapStateToProps = (state: IAppState) => ({
   isShown: state.modal.editProfile,
-  user: state.user.data
+  user: state.user.user
 });
 
 const mapDispatchToProps = {

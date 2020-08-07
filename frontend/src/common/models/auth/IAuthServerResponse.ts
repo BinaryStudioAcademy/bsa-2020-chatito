@@ -1,6 +1,6 @@
 import { IUser } from '../user/IUser';
 
-export interface ISignServerResponse {
+export interface IAuthServerResponse {
   token: string;
   user?: IUser
 }

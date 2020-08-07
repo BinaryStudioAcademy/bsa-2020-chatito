@@ -1,6 +1,6 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
 import { fetchUserRoutine, editProfileRoutine, addNewUserRoutine, loginUserRoutine } from '../routines/user';
-import { ISignServerResponse } from '../common/models/auth/ISignServerResponse';
+import { IAuthServerResponse } from '../common/models/auth/IAuthServerResponse';
 import { showModalRoutine } from '../routines/modal';
 import { ModalTypes } from '../common/enums/ModalTypes';
 import api from '../common/helpers/apiHelper';
@@ -10,7 +10,7 @@ import { setAccessToken } from '../common/helpers/storageHelper';
 
 function* fetchUserRequest(): Routine<any> {
   try {
-    const { token, user }: ISignServerResponse = yield call(fetchUser);
+    const { token, user }: IAuthServerResponse = yield call(fetchUser);
     yield put(fetchUserRoutine.success({ payload: user }));
     setAccessToken(token);
   } catch (error) {
@@ -24,7 +24,7 @@ function* watchUserRequest() {
 
 function* loginUserRequest({ payload }: any): Routine<any> {
   try {
-    const { token, user }: ISignServerResponse = yield call(login, payload);
+    const { token, user }: IAuthServerResponse = yield call(login, payload);
     yield put(loginUserRoutine.success({ payload: user }));
     setAccessToken(token);
   } catch (error) {
@@ -55,7 +55,7 @@ function* watchUpdateProfile() {
 
 function* addNewUserRequest({ payload }: any): Routine<any> {
   try {
-    const { token, user }: ISignServerResponse = yield call(registration, payload);
+    const { token, user }: IAuthServerResponse = yield call(registration, payload);
     yield put(addNewUserRoutine.success({ payload: user }));
     setAccessToken(token);
   } catch (error) {
