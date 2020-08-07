@@ -4,8 +4,8 @@ import { User } from './User';
 
 @Entity()
 export class RefreshToken extends AbstractEntity {
-  @Column()
-  expiresAt: Date;
+  @Column({ type: 'bigint' })
+  expiresAt: number;
 
   @ManyToOne(() => User, user => user.refreshTokens)
   @JoinColumn({ name: 'userId' })
