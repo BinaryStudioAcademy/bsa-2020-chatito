@@ -1,0 +1,180 @@
+$color: rgb(67, 6, 82) // цвет фона
+$coloractive: rgb(120, 21, 145) // цвет активной строки
+
+.leftToolbar
+  position: fixed   // при компоновке с другими элементами изменить
+  margin: -10px
+  padding-top: 15px
+  top: 0px
+  left: 10px
+  height: 100%
+  width: 270px
+  background-color: $color
+  overflow-y: auto
+
+.channelSelect
+  display: flex
+  flex-direction: row
+  align-items: center
+  border: 0
+  padding: 3px
+  padding-left: 28px
+  align-content: left
+  outline: none
+  width: 100%
+  color: white
+  cursor: pointer
+
+.channelCurrent
+  background-color: $coloractive
+
+.buttonText
+  margin-left: 10px
+
+.metkaOnLine
+  position: relative
+  float: left
+  width: 10px
+  height: 10px
+  border-radius: 5px
+  background-color: rgb(43, 230, 83)
+  margin-top: 2px
+  margin-left: 3px
+
+.metkaOfLine
+  position: relative
+  float: left
+  width: 10px
+  height: 10px
+  border-radius: 5px
+  border: 2px solid gray
+  margin-top: 2px
+  margin-left: 3px
+
+.channelSelect:hover
+  color: white
+  background-color: $coloractive
+
+.channelSelect:active
+  color: white
+  background-color: $coloractive
+
+.hrr
+  margin-top: 10px
+  height: 2px
+  background-color: rgb(98, 16, 119)
+
+.buttonChanel
+  display: flex
+  flex-direction: row
+  align-items: center
+  border: 0
+  padding: 0
+  align-content: left
+  outline: none
+  width: 100%
+  color: white
+
+.buttonSelect
+  display: flex
+  flex-direction: row
+  justify-content: flex-start
+  align-items: center
+  padding: 5px
+  padding-left: 25px
+  border: 0
+  outline: none
+  width: 85%
+  color: white
+  background-color: $color
+
+.chanelsImg
+  width: 22px
+  height: 22px
+  transition-property: transform
+  transition-duration: 1000ms
+  transform: rotate(90deg)
+
+.chanelsImgRotate
+  width: 22px
+  height: 22px
+  transition-property: transform
+  transition-duration: 1000ms
+  transform: none
+
+.buttonSelect:hover
+  background-color: rgb(120, 21, 145)
+
+.buttonSelect:focus
+  outline: none
+  font-weight: bold
+
+.buttonPlus
+  width: 35px
+  padding: 6px
+
+.chanelInfo
+  position: absolute
+  padding: 5px
+  left: 110px
+  top: 320px
+  width: 150px
+  color: white
+  background: #495474
+  border-radius: 5px
+  font-size: 18px
+  transition: opacity 500ms
+  opacity: 0
+  z-index: -1
+
+.directInfo
+  position: absolute
+  padding: 5px
+  left: 50px
+  top: 450px
+  width: 200px
+  color: white
+  background: #495474
+  border-radius: 5px
+  font-size: 16px
+  transition: opacity 500ms
+  opacity: 0
+  z-index: -1
+    
+.buttonPlus:hover
+  background-color: rgb(120, 21, 145)
+    
+.buttonPlus:hover ~ .chanelInfo
+  z-index: 3
+  opacity: 1
+
+.buttonPlus:hover ~ .directInfo
+  z-index: 3
+  opacity: 1;
+
+@keyframes listShow
+  0%  { height: 0 }
+  100%  { height: 100px }
+    
+@keyframes listHide
+  0%  { height: 100px }
+  100%  { height: 0 }
+    
+.listBox
+  overflow: hidden
+  height: auto
+  animation: listShow 1s linear
+
+.listBoxHidden
+  overflow: hidden
+  height: 0
+  animation: listHide 1s linear
+
+.listBoxDeff
+  overflow: hidden
+  height: auto
+
+.listBoxHiddenDeff
+  overflow: hidden
+  height: 0
+  

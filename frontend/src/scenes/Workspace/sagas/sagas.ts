@@ -1,4 +1,4 @@
-import { addWorkspaceRoutine } from '../routines';
+import { addWorkspaceRoutine, userChannelRoutine } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import { takeEvery, put, call } from 'redux-saga/effects';
 import { addWorkspace } from '../../../services/workspaceService';
@@ -12,6 +12,11 @@ function* addWorkspaceReq({ payload }: Routine<any>) {
   }
 }
 
-function* watchPostWorkspaceName() {
+function* userSelectChannelReq({ payload }: Routine<any>) {
+  yield put(userChannelRoutine.success(payload));
+}
+
+export default function* watchPostWorkspaceName() {
   yield takeEvery(addWorkspaceRoutine.TRIGGER, addWorkspaceReq);
+  yield takeEvery(userChannelRoutine.TRIGGER, userSelectChannelReq);
 }
