@@ -1,5 +1,11 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
-import { fetchUserRoutine, editProfileRoutine, addNewUserRoutine } from '../routines/user';
+import {
+  fetchUserRoutine,
+  editProfileRoutine,
+  addNewUserRoutine,
+  forgotPasswordRoutine,
+  resetPasswordRoutine
+} from '../routines/user';
 import { Routine } from 'redux-saga-routines';
 import { registration, login } from '../services/authService';
 import { setAccessToken } from '../common/helpers/storageHelper';
@@ -54,10 +60,40 @@ function* watchAddNewUserRequest() {
   yield takeEvery(addNewUserRoutine.TRIGGER, addNewUserRequest);
 }
 
+function* forgotPasswordRequest({ payload }: Routine<any>) {
+  try {
+    const response = yield call(api.put, '/api/auth/forgotpass', payload);
+    yield put(forgotPasswordRoutine.success());
+  } catch (error) {
+    yield put(forgotPasswordRoutine.failure(error.message));
+  }
+}
+
+function* watchForgotPasswordRequest() {
+  yield takeEvery(forgotPasswordRoutine.TRIGGER, forgotPasswordRequest);
+}
+
+function* resetPasswordRequest({ payload }: Routine<any>) {
+  try {
+    const { token, password } = payload;
+    setAccessToken(token);
+    const response = yield call(api.put, '/api/auth/resetpass', { password });
+    yield put(resetPasswordRoutine.success());
+  } catch (error) {
+    yield put(resetPasswordRoutine.failure(error.message));
+  }
+}
+
+function* watchResetPasswordRequest() {
+  yield takeEvery(resetPasswordRoutine.TRIGGER, resetPasswordRequest);
+}
+
 export default function* userSaga() {
   yield all([
     watchUserRequest(),
     watchUpdateProfile(),
-    watchAddNewUserRequest()
+    watchAddNewUserRequest(),
+    watchForgotPasswordRequest(),
+    watchResetPasswordRequest()
   ]);
 }
