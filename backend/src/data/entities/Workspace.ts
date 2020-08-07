@@ -5,7 +5,7 @@ import { Chat } from './Chat';
 
 @Entity()
 export class Workspace extends AbstractEntity {
-  @Column({ length: 150 })
+  @Column({ unique: true, length: 150 })
   name: string;
 
   @Column()

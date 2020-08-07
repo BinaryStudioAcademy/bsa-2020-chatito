@@ -30,7 +30,7 @@ export class User extends AbstractEntity {
   posts: Post[];
 
   @OneToMany(() => RefreshToken, token => token.user)
-  refreshToken: RefreshToken[];
+  refreshTokens: RefreshToken[];
 
   @OneToMany(() => Comment, comment => comment.createdByUser)
   comments: Comment[];
