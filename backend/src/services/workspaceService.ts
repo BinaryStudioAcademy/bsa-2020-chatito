@@ -1,12 +1,14 @@
 import { getCustomRepository } from 'typeorm';
 
 import WorkspaceRepository from '../data/repositories/workspaceRepository';
-import { ICreateWorkspace } from '../common/models/workspace/ICreateWorkspace';
+import { IClientCreateWorkspace } from '../common/models/workspace/IClientCreateWorkspace';
 import { IWorkspaceResponse } from '../common/models/workspace/IWorkspaceResponse';
-import { fromCreatedWorkspaceToClient } from '../common/mappers/workspace';
+import { fromCreatedWorkspaceToClient, fromClientCreateWorkspaceToCreateWorkspace } from '../common/mappers/workspace';
 
-export const createWorkspace = async (data: ICreateWorkspace): Promise<IWorkspaceResponse> => {
-  const newWorkspace = await getCustomRepository(WorkspaceRepository).addWorkspace(data);
+export const createWorkspace = async (data: IClientCreateWorkspace): Promise<IWorkspaceResponse> => {
+  const workspaceData = fromClientCreateWorkspaceToCreateWorkspace(data);
+
+  const newWorkspace = await getCustomRepository(WorkspaceRepository).addWorkspace(workspaceData);
 
   return fromCreatedWorkspaceToClient(newWorkspace);
 };
