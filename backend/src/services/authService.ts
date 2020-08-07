@@ -1,10 +1,10 @@
 import { getCustomRepository } from 'typeorm';
-
 import UserRepository from '../data/repositories/userRepository';
 import RefreshTokenRepository from '../data/repositories/refreshTokenRepository';
 
 import { IRegisterUser } from '../common/models/user/IRegisterUser';
-import { hash, encrypt, decrypt } from '../common/utils/encryptHelper';
+import { hash, compare, encrypt, decrypt } from '../common/utils/encryptHelper';
+import { ILoginUser } from '../common/models/user/ILoginUser';
 import { fromUserToUserClient, fromRegisterUserToCreateUser } from '../common/mappers/user';
 import { createToken } from '../common/utils/tokenHelper';
 import { IRefreshToken } from '../common/models/refreshToken/IRefreshToken';
@@ -44,6 +44,29 @@ export const register = async ({ password, ...userData }: IRegisterUser) => {
     accessToken: createToken({ id: newUser.id }),
     refreshToken: encrypt(refreshToken.id)
   };
+};
+
+export const login = async ({ email, password }: ILoginUser) => {
+  try {
+    const logUser = await getCustomRepository(UserRepository).getByEmail(email);
+
+    if (logUser) {
+      const pwdLogg = await compare(password, logUser.password);
+
+      if (pwdLogg) {
+        const refreshToken = await createRefreshToken(logUser);
+
+        return {
+          user: fromUserToUserClient(logUser),
+          accessToken: createToken({ id: logUser.id }),
+          refreshToken: encrypt(refreshToken.id)
+        };
+      }
+    }
+    throw new Error('User not found !');
+  } catch (err) {
+    throw new Error('User not found !');
+  }
 };
 
 export const refreshTokens = async (encryptedId: string) => {
