@@ -6,7 +6,17 @@ import RefreshTokenRepository from '../data/repositories/refreshTokenRepository'
 import { IRegisterUser } from '../common/models/user/IRegisterUser';
 import { hash, encrypt, decrypt } from '../common/utils/encryptHelper';
 import { fromUserToUserClient, fromRegisterUserToCreateUser } from '../common/mappers/user';
-import { createToken, createRefreshTokenData } from '../common/utils/tokenHelper';
+import { createToken } from '../common/utils/tokenHelper';
+
+const createRefreshTokenData = (userId: string) => {
+  const cur = new Date();
+  const after30days = cur.setDate(cur.getDate() + 30);
+
+  return {
+    userId,
+    expiresAt: after30days
+  };
+};
 
 export const register = async ({ password, ...userData }: IRegisterUser) => {
   const passwordHash = await hash(password);
