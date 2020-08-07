@@ -5,6 +5,5 @@ export default (err: CustomError, _req: Request, res: Response, next: NextFuncti
   if (res.headersSent) {
     next(err);
   }
-  console.log(err);
   res.status(err.status || 500).send(err);
 };

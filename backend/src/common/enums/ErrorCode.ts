@@ -1,4 +1,5 @@
 export enum ErrorCode {
-  userNotExists,
-  badRequest
+  UserNotFound,
+  InvalidAccessToken,
+  InvalidRefreshToken
 }
