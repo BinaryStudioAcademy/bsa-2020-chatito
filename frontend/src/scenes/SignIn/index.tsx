@@ -29,7 +29,7 @@ const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
 
   return (
     <div className={styles.signIn}>
-      <h1 className="text-center p-5">Sign in</h1>
+      <h1 className={`text-center ${styles['signIn-header']}`}>Sign in</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

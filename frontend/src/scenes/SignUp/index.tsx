@@ -16,10 +16,8 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
   const onSubmit = async (values: IUserInput,
     { setSubmitting }: { setSubmitting: CallableFunction }) => {
     const { email, password, fullName } = values;
-    const payload = {
-      payload: { email, password, fullName }
-    };
-    addNewUser(payload);
+    const user = { email, password, fullName };
+    addNewUser(user);
     setSubmitting(false);
   };
 
@@ -32,7 +30,7 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
 
   return (
     <div className={styles.signUp}>
-      <h1 className="text-center p-5">Sign up</h1>
+      <h1 className={`text-center ${styles['signUp-header']}`}>Sign up</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

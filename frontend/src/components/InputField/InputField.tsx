@@ -13,17 +13,23 @@ const InputField = ({ label, ...props }: IProps) => {
   const style = {
     width: '300px'
   };
+  const errorStyle = {
+    fontSize: '12px',
+    padding: '2px .5rem'
+  };
   const [field, meta] = useField(props);
   return (
-    <InputGroup size="sm" className="mb-3" style={style}>
-      <InputGroup.Prepend>
-        <InputGroup.Text id="inputGroup-sizing-sm">{label}</InputGroup.Text>
-      </InputGroup.Prepend>
-      <FormControl aria-label={label} {...field} {...props} />
+    <div className="mb-3">
+      <InputGroup size="sm" style={style}>
+        <InputGroup.Prepend>
+          <InputGroup.Text id="inputGroup-sizing-sm">{label}</InputGroup.Text>
+        </InputGroup.Prepend>
+        <FormControl aria-label={label} {...field} {...props} />
+      </InputGroup>
       {meta.touched && meta.error ? (
-        <div className="text-danger">{meta.error}</div>
+        <div className="text-danger" style={errorStyle}>{meta.error}</div>
       ) : null}
-    </InputGroup>
+    </div>
   );
 };
 

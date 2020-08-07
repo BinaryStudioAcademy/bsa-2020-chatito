@@ -6,7 +6,7 @@ import { ISignInFields } from '../common/models/auth/ISignInFIelds';
 
 export const login = async (userInput: ISignInFields) => {
   const userData = {
-    userData: JSON.stringify(userInput)
+    user: { ...userInput }
   };
   const response: ISignServerResponse & Response = await api.post('/api/auth/login', userData);
 
@@ -15,7 +15,7 @@ export const login = async (userInput: ISignInFields) => {
 
 export const registration = async (userInput: ISignUpFields): Promise<IUser> => {
   const userData = {
-    userData: JSON.stringify(userInput)
+    user: { ...userInput }
   };
   const response: ISignServerResponse & Response = await api.post('/api/auth/register', userData);
 
