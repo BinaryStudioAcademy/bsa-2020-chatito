@@ -12,7 +12,7 @@ const CreateChannel = ({ createChannel }: IProps) => {
   const [channelName, setChannelName] = useState<string>('');
   const [channelDescription, setChannelDescription] = useState<string>('');
   const [privateChannel, setPrivateChannel] = useState<boolean>(false);
-  const NAME_MAX_CHARACTERS = 80;
+  const nameMaxCharacters = 80;
 
   const isNameEmpty = () => !channelName.length;
 
@@ -62,7 +62,7 @@ const CreateChannel = ({ createChannel }: IProps) => {
           placeholder="e.g. plan-budget"
           onChange={event => setChannelName(event.target.value)}
           required
-          maxLength={NAME_MAX_CHARACTERS}
+          maxLength={nameMaxCharacters}
         />
       </InputGroup>
     </Form.Group>
