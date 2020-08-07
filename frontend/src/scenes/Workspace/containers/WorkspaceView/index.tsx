@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.sass';
 
-import ChatScene from '../Chat';
+import ChatScene from '../../../Chat';
 
 const WorkspaceView = () => (
   <div className={styles.workspaceViewContainer}>

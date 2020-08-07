@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { addWorkspaceRoutine } from '../routines';
+import { addWorkspaceRoutine } from './routines';
 
 interface IWorkspaceState {
   name: string;
