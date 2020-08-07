@@ -1,6 +1,9 @@
 import React, { FunctionComponent, useState, SyntheticEvent } from 'react';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styles from './styles.module.sass';
 
 interface IProps {
   onSearch: (query: string) => void;
@@ -20,14 +23,13 @@ const SearchInput: FunctionComponent<IProps> = ({ onSearch, stylesClassName }) =
   };
 
   return (
-    <InputGroup className={stylesClassName}>
+    <div className={`${stylesClassName} ${styles.wrapper}`}>
       <FormControl
-        placeholder="Find smth..."
         aria-label="header search"
         onChange={onChange}
       />
-      {/* <Button variant="secondary" onClick={onSubmit}>Button</Button> */}
-    </InputGroup>
+      <FontAwesomeIcon icon={faSearch} className={styles.searchIcon} onClick={onSubmit} />
+    </div>
   );
 };
 
