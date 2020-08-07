@@ -1,15 +1,21 @@
 .headerContainer
-  background-color: rgb(118, 68, 184)
   width: 100%
   padding: 10px
   padding-left: 15px
   padding-right: 15px
-  color: white
+  color: black
 
   display: flex
   align-items: center
   justify-content: space-between
 
+  border-bottom: 1px solid black
+
+  .rightAlignContainer
+    display: flex
+    width: 40%
+    justify-content: space-around
+    align-items: center
 
 .popUpWrapper
   position: relative
@@ -33,4 +39,11 @@
   height: 40px
 
 .searchInput
-  width: 50%
+  width: 300px
+
+  input
+
+    background-color: var(--chat-background-primary)
+
+    border-radius: 20px
+    position: relative

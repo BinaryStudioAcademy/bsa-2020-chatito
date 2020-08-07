@@ -48,23 +48,25 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
         <img className={styles.logo} src={logo} alt="logo" />
       </div>
 
-      <SearchInput
-        onSearch={t => console.log('Search for ', t)}
-        stylesClassName={styles.searchInput}
-      />
-
-      {user.isAuthorized ? (
-        <UserPopUp
-          user={user}
-          trigger={getAvatar}
-          id="mainHeaderPopUp"
-          placement="bottom"
-          onEditProfileClick={showEditModal}
+      <div className={styles.rightAlignContainer}>
+        <SearchInput
+          onSearch={t => console.log('Search for ', t)}
+          stylesClassName={styles.searchInput}
         />
-      ) : (
-        <div>You need to sign in</div>
-      )}
-      <EditProfile />
+
+        {user.isAuthorized ? (
+          <UserPopUp
+            user={user}
+            trigger={getAvatar}
+            id="mainHeaderPopUp"
+            placement="bottom"
+            onEditProfileClick={showEditModal}
+          />
+        ) : (
+          <div>You need to sign in</div>
+        )}
+        <EditProfile />
+      </div>
     </header>
   );
 };

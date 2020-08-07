@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useState, SyntheticEvent } from 'react';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
-import Button from 'react-bootstrap/Button';
 
 interface IProps {
   onSearch: (query: string) => void;
@@ -27,9 +26,7 @@ const SearchInput: FunctionComponent<IProps> = ({ onSearch, stylesClassName }) =
         aria-label="header search"
         onChange={onChange}
       />
-      <InputGroup.Append>
-        <Button variant="secondary" onClick={onSubmit}>Button</Button>
-      </InputGroup.Append>
+      {/* <Button variant="secondary" onClick={onSubmit}>Button</Button> */}
     </InputGroup>
   );
 };
