@@ -2,7 +2,7 @@ import { getCustomRepository } from 'typeorm';
 import UserRepository from '../data/repositories/userRepository';
 import { IRegisterUser } from '../common/models/user/IRegisterUser';
 import { ILoginUser } from '../common/models/user/ILoginUser';
-import { encrypt } from '../common/utils/encryptHelper';
+import { encrypt, compare } from '../common/utils/encryptHelper';
 import { fromUserToUserClient, fromRegisterUserToCreateUser } from '../common/mappers/user';
 import { createToken } from '../common/utils/tokenHelper';
 
@@ -18,16 +18,20 @@ export const register = async ({ password, ...userData }: IRegisterUser) => {
   };
 };
 
-export const login = async ({ id }: ILoginUser) => {
-  if (id) {
-    const logUser = await getCustomRepository(UserRepository).getById(id);
-    return {
-      user: fromUserToUserClient(logUser),
-      token: createToken({ id: logUser.id })
-    };
-  };
-  return {
-    user: {},
-    token: ''
-  };
+export const login = async ({ email, password }: ILoginUser) => {
+  try {
+    const logUser = await getCustomRepository(UserRepository).getByEmail(email);
+    if (logUser) {
+      const pwdLogg = await compare(password, logUser.password);
+      if (pwdLogg) {
+        return {
+          user: fromUserToUserClient(logUser),
+          token: createToken({ id: logUser.id })
+        };
+      }
+    }
+    throw new Error('User not found !');
+  } catch (err) {
+    throw new Error('User not found !');
+  }
 };

@@ -20,6 +20,10 @@ class UserRepository extends Repository<User> {
     return this.findOne(id);
   }
 
+  getByEmail(email: string): Promise<User> {
+    return this.findOne({ where: { email } });
+  }
+
   async editUser(id:string, data: IUserClient): Promise<User> {
     await this.update(
       id,
