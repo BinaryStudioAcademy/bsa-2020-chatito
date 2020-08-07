@@ -1,12 +1,21 @@
-.workspaceViewContainer
+.mainContainer
   display: flex
-  height: 100vh // remove when WorkspaceLayout done
+  flex-direction: column
+  min-height: 100vh
 
-  .LeftPanelWrapper
-    flex-basis: 15%
-
-  .ChatWrapper
+  .contentContainer
+    display: flex
     flex: 1
 
-  .RightPanelWrapper
-    flex-basis: 20%
+    .workspaceViewContainer
+      display: flex
+      flex: 1
+
+      .LeftPanelWrapper
+        flex-basis: 15%
+
+      .ChatWrapper
+        flex: 1
+
+      .RightPanelWrapper
+        flex-basis: 20%
