@@ -11,6 +11,7 @@ import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from '../../routines/user';
 import AddWorkspace from '../../scenes/Workspace/Workspace';
+import Thread from '../../scenes/Chat/containers/Thread';
 
 interface IProps {
   isLoading: boolean;
@@ -37,11 +38,12 @@ const Routing: React.FC<IProps> = ({
   return (
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <Header />
-      <Switch>
+      <Thread width="50%" />
+      {/* <Switch>
         <PublicRoute exact path={Routes.SignIn} component={signInMock} />
         <PrivateRoute exact path="/" component={mainMock} />
         <PrivateRoute exact path="/add-workspace" component={AddWorkspace} />
-      </Switch>
+      </Switch> */}
     </LoaderWrapper>
   );
 };
