@@ -8,9 +8,9 @@ export class RefreshToken extends AbstractEntity {
   expiresAt: Date;
 
   @ManyToOne(() => User, user => user.refreshToken)
-  @JoinColumn({ name: 'userOwnerId' })
+  @JoinColumn({ name: 'userId' })
   user: User;
 
   @RelationId((token: RefreshToken) => token.user)
-  readonly userOwnerId: string;
+  readonly userId: string;
 }

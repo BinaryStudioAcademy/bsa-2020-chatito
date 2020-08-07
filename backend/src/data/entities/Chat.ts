@@ -27,11 +27,11 @@ export class Chat extends AbstractEntity {
   readonly createdByUserId: string;
 
   @ManyToOne(() => Workspace, wp => wp.chats)
-  @JoinColumn({ name: 'relatedWorkspaceId' })
+  @JoinColumn({ name: 'workspaceId' })
   workspace: Workspace;
 
   @RelationId((chat: Chat) => chat.workspace)
-  readonly relatedWorkspaceId: string;
+  readonly workspaceId: string;
 
   @ManyToMany(() => User, user => user.chats)
   users: User[];

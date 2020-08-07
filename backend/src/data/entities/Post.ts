@@ -20,9 +20,9 @@ export class Post extends AbstractEntity {
   readonly createdByUserId: string;
 
   @ManyToOne(() => Chat, chat => chat.posts)
-  @JoinColumn({ name: 'relatedChatId' })
+  @JoinColumn({ name: 'chatId' })
   chat: Chat;
 
   @RelationId((post: Post) => post.chat)
-  readonly relatedChatId: string;
+  readonly chatId: string;
 }

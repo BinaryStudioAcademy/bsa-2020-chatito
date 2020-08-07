@@ -16,9 +16,9 @@ export class Comment extends AbstractEntity {
   readonly createdByUserId: string;
 
   @ManyToOne(() => Post, post => post.comments)
-  @JoinColumn({ name: 'relaterPosId' })
+  @JoinColumn({ name: 'posId' })
   post: Post;
 
   @RelationId((comment: Comment) => comment.post)
-  readonly relaterPosId: string;
+  readonly posId: string;
 }
