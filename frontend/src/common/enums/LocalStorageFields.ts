@@ -1,3 +1,4 @@
 export enum LocalStorageFields {
-  Token = 'token'
+  AccessToken = 'AccessToken',
+  RefreshToken = 'RefreshToken'
 }
