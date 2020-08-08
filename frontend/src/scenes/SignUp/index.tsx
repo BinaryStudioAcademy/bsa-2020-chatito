@@ -7,12 +7,16 @@ import { addNewUserRoutine } from '../../routines/user';
 import InputField from '../../components/InputField/InputField';
 import { Routine } from 'redux-saga-routines';
 import { IUserInput } from '../../common/models/auth/auth';
+import { Button } from 'react-bootstrap';
+import { push } from 'connected-react-router';
+import { Routes } from '../../common/enums/Routes';
 
 interface IProps {
   addNewUser: Routine;
+  router: (route: string) => void;
 }
 
-export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
+const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
   const onSubmit = async (values: IUserInput,
     { setSubmitting }: { setSubmitting: CallableFunction }) => {
     const { email, password, fullName } = values;
@@ -28,6 +32,10 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
     email: '',
     password: '',
     confirmPassword: ''
+  };
+
+  const onAlreadySignIn = () => {
+    router(Routes.SignIn);
   };
 
   return (
@@ -63,9 +71,12 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
           />
 
           <div className="form-group">
-            <button type="submit" className="btn btn-primary mr-2">
+            <Button type="submit" variant="primary">
               Sign Up
-            </button>
+            </Button>
+            <Button variant="link" onClick={onAlreadySignIn}>
+              Already Signed up?
+            </Button>
           </div>
         </Form>
       </Formik>
@@ -74,7 +85,8 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
 };
 
 const mapDispatchToProps = {
-  addNewUser: addNewUserRoutine
+  addNewUser: addNewUserRoutine,
+  router: push
 };
 
 export default connect(

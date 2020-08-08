@@ -1,6 +1,19 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchUserRoutine, editProfileRoutine, deleteAccountRoutine, addNewUserRoutine } from '../routines/user';
-import { IUserState } from '../common/models/user/user';
+import {
+  fetchUserRoutine,
+  editProfileRoutine,
+  addNewUserRoutine,
+  deleteAccountRoutine,
+  forgotPasswordRoutine,
+  resetPasswordRoutine
+} from '../routines/user';
+import { IUser } from '../common/models/user/user';
+
+export interface IUserState {
+  isLoading: boolean;
+  isAuthorized: boolean;
+  data: IUser | null;
+}
 
 const initialState: IUserState = {
   isLoading: false,
@@ -50,7 +63,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
       return { ...state, loading: true };
     }
     case editProfileRoutine.SUCCESS: {
-      return { ...state, loading: false };
+      return { ...state, loading: false, data: { ...payload } };
     }
     case editProfileRoutine.FAILURE: {
       return { ...state, loading: false };
@@ -63,6 +76,24 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     }
     case deleteAccountRoutine.FAILURE: {
       return { ...state, isLoading: false };
+    }
+    case forgotPasswordRoutine.SUCCESS: {
+      return { ...state, loading: false };
+    }
+    case forgotPasswordRoutine.FAILURE: {
+      return { ...state, loading: false };
+    }
+    case forgotPasswordRoutine.TRIGGER: {
+      return { ...state, loading: true };
+    }
+    case resetPasswordRoutine.TRIGGER: {
+      return { ...state, loading: true };
+    }
+    case resetPasswordRoutine.SUCCESS: {
+      return { ...state, loading: false };
+    }
+    case resetPasswordRoutine.FAILURE: {
+      return { ...state, loading: false };
     }
     default:
       return state;
