@@ -3,8 +3,8 @@ interface IUser {
   email: string;
   fullName: string;
   displayName: string;
-  imageUrl: string | null | undefined;
-  title: string | null | undefined;
+  imageUrl?: string | null;
+  title?: string | null;
 }
 
 interface IUserState {

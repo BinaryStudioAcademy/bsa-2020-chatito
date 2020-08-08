@@ -1,36 +1,55 @@
 .headerContainer
-  background-color: rgb(118, 68, 184)
   width: 100%
   padding: 10px
   padding-left: 15px
   padding-right: 15px
-  color: white
+  color: black
 
   display: flex
   align-items: center
   justify-content: space-between
 
+  border-bottom: 1px solid black
 
-.popUpWrapper
-  position: relative
-  width: 30px
-  height: 30px
-  cursor: pointer
-  border-radius: 50%
+  .rightAlignContainer
+    display: flex
+    width: 35%
+    justify-content: space-between
+    padding-right: 70px
+    align-items: center
 
-  &:focus
-    outline: none
+    .userLogoWrapper
+      display: flex
+      align-items: center
+      justify-content: space-between
+
+      .popUpWrapper
+        position: relative
+        cursor: pointer
+        margin-left: 10px
+
+        .profileText
+          margin-right: 10px
+          font-weight: 500
+
+.logoWrapper
+  height: 40px
+  display: flex
 
 
-.mainLogo
-  font-weight: bolder
-  cursor: pointer
-  box-shadow: 1px
-  font-size: 1.5em
-  text-shadow: 1px 0 0 black, -1px 0 0 black, 0 1px 0 black, 0 -1px 0 black, 0.5px 0.5px black, -0.5px -0.5px 0 black, 0.5px -0.5px 0 black, -0.5px 0.5px 0 black
-
-.logo
+.logoImg
   height: 40px
 
+.logoText
+  font-weight: 600
+  font-size: 25px
+  margin: auto 5px
+
 .searchInput
-  width: 50%
+  width: 400px
+
+  input
+    background-color: var(--chat-background-primary)
+    padding-left: 40px
+    border-radius: 20px
+    border: none

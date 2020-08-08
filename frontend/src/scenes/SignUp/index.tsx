@@ -6,20 +6,22 @@ import styles from './styles.module.sass';
 import { addNewUserRoutine } from '../../routines/user';
 import InputField from '../../components/InputField/InputField';
 import { Routine } from 'redux-saga-routines';
-import { IUserInput } from '../../common/models/auth/auth';
+import { IRegisterUser } from '../../common/models/auth/IRegisterUser';
+import { Button } from 'react-bootstrap';
+import { push } from 'connected-react-router';
+import { Routes } from '../../common/enums/Routes';
 
 interface IProps {
   addNewUser: Routine;
+  router: (route: string) => void;
 }
 
-export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
-  const onSubmit = async (values: IUserInput,
+export const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
+  const onSubmit = async (values: IRegisterUser,
     { setSubmitting }: { setSubmitting: CallableFunction }) => {
     const { email, password, fullName } = values;
-    const payload = {
-      payload: { email, password, fullName }
-    };
-    addNewUser(payload);
+    const user = { email, password, fullName };
+    addNewUser(user);
     setSubmitting(false);
   };
 
@@ -30,9 +32,13 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
     confirmPassword: ''
   };
 
+  const onAlreadySignIn = () => {
+    router(Routes.SignIn);
+  };
+
   return (
     <div className={styles.signUp}>
-      <h1 className="text-center p-5">Sign up</h1>
+      <h1 className={`text-center ${styles['signUp-header']}`}>Sign up</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -63,9 +69,12 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
           />
 
           <div className="form-group">
-            <button type="submit" className="btn btn-primary mr-2">
+            <Button type="submit" variant="primary">
               Sign Up
-            </button>
+            </Button>
+            <Button variant="link" onClick={onAlreadySignIn}>
+              Already Signed up?
+            </Button>
           </div>
         </Form>
       </Formik>
@@ -74,7 +83,8 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
 };
 
 const mapDispatchToProps = {
-  addNewUser: addNewUserRoutine
+  addNewUser: addNewUserRoutine,
+  router: push
 };
 
 export default connect(

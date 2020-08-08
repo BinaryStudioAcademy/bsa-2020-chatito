@@ -3,17 +3,21 @@ import { Formik, Form } from 'formik';
 import styles from './styles.module.sass';
 import InputField from '../../components/InputField/InputField';
 import { signInValSchema as validationSchema } from '../../common/models/formik/ValidationSchemas';
-import { IUserInput } from '../../common/models/auth/auth';
 import { fetchUserRoutine } from '../../routines/user';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
+import { ILoginUser } from '../../common/models/auth/ILoginUser';
+import { Button } from 'react-bootstrap';
+import { push } from 'connected-react-router';
+import { Routes } from '../../common/enums/Routes';
 
 interface IProps {
   fetchUser: Routine;
+  router: (route: string) => void;
 }
 
-const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
-  const onSubmit = async (values: IUserInput,
+const SignIn: FunctionComponent<IProps> = ({ fetchUser, router }) => {
+  const onSubmit = async (values: ILoginUser,
     { setSubmitting }: { setSubmitting: CallableFunction }) => {
     const { email, password } = values;
     const payload = {
@@ -27,9 +31,13 @@ const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
     password: ''
   };
 
+  const onForgotPassword = () => {
+    router(Routes.ForgotPassword);
+  };
+
   return (
     <div className={styles.signIn}>
-      <h1 className="text-center p-5">Sign in</h1>
+      <h1 className={`text-center ${styles.signInHeader}`}>Sign in</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -47,11 +55,14 @@ const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
             name="password"
             type="password"
           />
+          <Button variant="link" size="sm" onClick={onForgotPassword}>
+            Forgot password
+          </Button>
 
           <div className="form-group">
-            <button type="submit" className="btn btn-primary mr-2">
+            <Button type="submit" variant="primary">
               Sign In
-            </button>
+            </Button>
           </div>
         </Form>
       </Formik>
@@ -60,7 +71,8 @@ const SignIn: FunctionComponent<IProps> = ({ fetchUser }) => {
 };
 
 const mapDispatchToProps = {
-  fetchUser: fetchUserRoutine
+  fetchUser: fetchUserRoutine,
+  router: push
 };
 
 export default connect(
