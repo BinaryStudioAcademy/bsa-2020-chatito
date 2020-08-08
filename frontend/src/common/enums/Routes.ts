@@ -1,8 +1,9 @@
 export enum Routes {
-  SignUp = '/signup',
-  SignIn = '/signin',
-  ForgotPassword = '/forgotpassword',
-  ResetPassword = '/resetpassword/:token',
+  Auth = '/auth/:page',
+  SignUp = '/auth/signup',
+  SignIn = '/auth/signin',
+  ForgotPassword = '/auth/forgotpassword',
+  ResetPassword = '/auth/resetpassword/:token',
   Profile = '/profile',
   Workspace = '/workspace',
   Room = '/room',
