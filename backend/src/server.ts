@@ -1,8 +1,8 @@
 import express from 'express';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import { createConnection } from 'typeorm';
-import cors from 'cors';
 import { env } from './env';
 import routes from './api/routes';
 import authorizationMiddleware from './api/middlewares/authorizationMiddleware';
