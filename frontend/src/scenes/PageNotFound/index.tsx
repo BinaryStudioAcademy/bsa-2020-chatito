@@ -7,7 +7,7 @@ const PageNotFound: FunctionComponent = () => (
       <h1 className={`text-center ${styles.title}`}>404: Page Not Found</h1>
       <span className="text-center">
         Go to
-        <a className={styles.homeRef} href="/signup">  Home page</a>
+        <a className={styles.homeRef} href="/">  Home page</a>
       </span>
     </div>
   </div>
