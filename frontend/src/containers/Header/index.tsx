@@ -11,10 +11,10 @@ import EditProfile from '../EditProfile';
 import { showModalRoutine } from '../../routines/modal';
 import { ModalTypes } from '../../common/enums/ModalTypes';
 import { IModalRoutine } from '../../common/models/modal/IShowModalRoutine';
-import { IUser } from '../../common/models/user/user';
+import { IUser } from '../../common/models/user/IUser';
 
 interface IProps {
-  user: IUser | null;
+  user: IUser | undefined;
   showModal: ({ modalType, show }: IModalRoutine) => void;
 }
 
@@ -80,7 +80,7 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
   );
 };
 
-const mapStateToProps = (state: IAppState) => ({ user: state.user.data });
+const mapStateToProps = (state: IAppState) => ({ user: state.user.user });
 
 const mapDispatchToProps = {
   showModal: showModalRoutine
