@@ -1,6 +1,20 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
+<<<<<<< HEAD
 import { fetchUserRoutine, editProfileRoutine, addNewUserRoutine, loginUserRoutine } from '../routines/user';
 import { IAuthServerResponse } from '../common/models/auth/IAuthServerResponse';
+=======
+import {
+  fetchUserRoutine,
+  editProfileRoutine,
+  addNewUserRoutine,
+  forgotPasswordRoutine,
+  resetPasswordRoutine
+} from '../routines/user';
+import { Routine } from 'redux-saga-routines';
+import { registration, login } from '../services/authService';
+import { setAccessToken } from '../common/helpers/storageHelper';
+import { ISignServerResponse } from '../common/models/auth/auth';
+>>>>>>> 2d40902638f6ffb2cd4d520712246d735d105b9c
 import { showModalRoutine } from '../routines/modal';
 import { ModalTypes } from '../common/enums/ModalTypes';
 import api from '../common/helpers/apiHelper';
@@ -67,11 +81,46 @@ function* watchAddNewUserRequest() {
   yield takeEvery(addNewUserRoutine.TRIGGER, addNewUserRequest);
 }
 
+function* forgotPasswordRequest({ payload }: Routine<any>) {
+  try {
+    const response = yield call(api.put, '/api/auth/forgotpass', payload);
+    yield put(forgotPasswordRoutine.success());
+  } catch (error) {
+    yield put(forgotPasswordRoutine.failure(error.message));
+  }
+}
+
+function* watchForgotPasswordRequest() {
+  yield takeEvery(forgotPasswordRoutine.TRIGGER, forgotPasswordRequest);
+}
+
+function* resetPasswordRequest({ payload }: Routine<any>) {
+  try {
+    const { token, password } = payload;
+    setAccessToken(token);
+    const response = yield call(api.put, '/api/auth/resetpass', { password });
+    yield put(resetPasswordRoutine.success());
+  } catch (error) {
+    yield put(resetPasswordRoutine.failure(error.message));
+  }
+}
+
+function* watchResetPasswordRequest() {
+  yield takeEvery(resetPasswordRoutine.TRIGGER, resetPasswordRequest);
+}
+
 export default function* userSaga() {
   yield all([
     watchAddNewUserRequest(),
     watchUserRequest(),
+<<<<<<< HEAD
     watchLoginUserRequest(),
     watchUpdateProfile()
+=======
+    watchUpdateProfile(),
+    watchAddNewUserRequest(),
+    watchForgotPasswordRequest(),
+    watchResetPasswordRequest()
+>>>>>>> 2d40902638f6ffb2cd4d520712246d735d105b9c
   ]);
 }

@@ -1,5 +1,12 @@
 import { Routine } from 'redux-saga-routines';
-import { addNewUserRoutine, fetchUserRoutine, editProfileRoutine, loginUserRoutine } from '../routines/user';
+import {
+  fetchUserRoutine,
+  editProfileRoutine,
+  addNewUserRoutine,
+  loginUserRoutine,
+  forgotPasswordRoutine,
+  resetPasswordRoutine
+} from '../routines/user';
 import { IUser } from '../common/models/user/IUser';
 
 export interface IUserState {
@@ -27,6 +34,12 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
       };
+    case addNewUserRoutine.FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        isAuthorized: false
+      };
     case fetchUserRoutine.TRIGGER:
       return {
         ...state,
@@ -39,11 +52,17 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
       };
+    case fetchUserRoutine.FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        isAuthorized: false
+      };
     case editProfileRoutine.TRIGGER: {
       return { ...state, loading: true };
     }
     case editProfileRoutine.SUCCESS: {
-      return { ...state, loading: false };
+      return { ...state, loading: false, data: { ...payload } };
     }
     case editProfileRoutine.FAILURE: {
       return { ...state, loading: false };
@@ -60,14 +79,30 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
       };
-    case fetchUserRoutine.FAILURE:
-    case addNewUserRoutine.FAILURE:
     case loginUserRoutine.FAILURE:
       return {
         ...state,
         isLoading: false,
         isAuthorized: false
       };
+    case forgotPasswordRoutine.SUCCESS: {
+      return { ...state, loading: false };
+    }
+    case forgotPasswordRoutine.FAILURE: {
+      return { ...state, loading: false };
+    }
+    case forgotPasswordRoutine.TRIGGER: {
+      return { ...state, loading: true };
+    }
+    case resetPasswordRoutine.TRIGGER: {
+      return { ...state, loading: true };
+    }
+    case resetPasswordRoutine.SUCCESS: {
+      return { ...state, loading: false };
+    }
+    case resetPasswordRoutine.FAILURE: {
+      return { ...state, loading: false };
+    }
     default:
       return state;
   }

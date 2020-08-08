@@ -6,6 +6,7 @@ import { createConnection } from 'typeorm';
 import { env } from './env';
 import routes from './api/routes';
 import authorizationMiddleware from './api/middlewares/authorizationMiddleware';
+import errorHandlerMiddleware from './api/middlewares/errorHandlerMiddleware';
 import routesWhiteList from './config/routesWhiteListConfig';
 import './config/passportConfig';
 import './config/sendgridConfig';
@@ -23,6 +24,7 @@ routes(app);
 
 const { port } = env.app;
 
+app.use(errorHandlerMiddleware);
 app.listen(port, async () => {
   try {
     await createConnection();
