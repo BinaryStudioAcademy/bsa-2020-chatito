@@ -1,16 +1,52 @@
-.arrowIcon
-  transform: rotate(45deg)
-  color: #ffffff
-  font-size: 30px
-  transition: all .3s
+.smileIcon
+  color: var(--offline)
+  font-size: 23px
+.crossIcon
+  color: var(--offline)
+  font-size: 18px
 
-.arrowButton
-  width: 40px
+.smileButton, .crossButton
   height: 38px
+  width: 38px
+  box-sizing: border-box
   cursor: pointer
-  margin: 0 5px 0 5px
   display: flex
   justify-content: center
   align-items: center
   outline: none
   background-color: transparent
+  &_reset
+    border: none
+    padding: 0
+    width: auto
+    overflow: visible
+    background: transparent
+    color: inherit
+    font: inherit
+    line-height: normal
+    -webkit-font-smoothing: inherit
+    -moz-osx-font-smoothing: inherit
+    -webkit-appearance: none
+    &::-moz-focus-inner
+        border: 0
+        padding: 0
+    &:focus
+      outline: none
+
+.emoji, .cross
+  background-color: transparent
+  padding: 0
+  display: flex
+  justify-content: center
+  align-items: center
+  height: 38px
+  width: 38px
+
+.emoji
+  border-right: none
+
+.cross
+  border-left: none
+
+.inputBlock
+  width: 300px
