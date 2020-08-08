@@ -1,7 +1,7 @@
 import { createRoutine } from 'redux-saga-routines';
 
-const addNewUserRoutine = createRoutine('ADD_NEW_USER');
-const fetchUserRoutine = createRoutine('FETCH_USER');
-const editProfileRoutine = createRoutine('EDIT_PROFILE');
-
-export { addNewUserRoutine, fetchUserRoutine, editProfileRoutine };
+export const addNewUserRoutine = createRoutine('ADD_NEW_USER');
+export const fetchUserRoutine = createRoutine('FETCH_USER');
+export const editProfileRoutine = createRoutine('EDIT_PROFILE');
+export const forgotPasswordRoutine = createRoutine('FORGOT_PASSWORD');
+export const resetPasswordRoutine = createRoutine('RESET_PASSWORD');
