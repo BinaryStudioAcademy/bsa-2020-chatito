@@ -15,6 +15,7 @@ import ResetPassword from '../../scenes/ResetPassword';
 import SignIn from '../../scenes/SignIn';
 import SignUp from '../../scenes/SignUp';
 import PageNotFound from '../../scenes/PageNotFound/index';
+import Workspace from '../../scenes/Workspace/containers/Workspace';
 
 interface IProps {
   isLoading: boolean;
@@ -45,6 +46,7 @@ const Routing: React.FC<IProps> = ({
         <PublicRoute exact path={Routes.SignUp} component={SignUp} />
         <PublicRoute exact path={Routes.ForgotPassword} component={ForgotPassword} />
         <PublicRoute exact path={Routes.ResetPassword} component={ResetPassword} />
+        <PrivateRoute exact path={Routes.Workspace} component={Workspace} />
         <PrivateRoute exact path="/" component={mainMock} />
         <PrivateRoute exact path="/add-workspace" component={AddWorkspace} />
         <PublicRoute path={Routes.NotExistingPath} component={PageNotFound} />
