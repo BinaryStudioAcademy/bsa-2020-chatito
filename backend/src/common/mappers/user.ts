@@ -4,7 +4,7 @@ import { IRegisterUser } from '../models/user/IRegisterUser';
 import { ICreateUser } from '../models/user/ICreateUser';
 
 export const fromUserToUserClient = (user: IUser): IUserClient => {
-  const { id, fullName, displayName, email, imageUrl, title } = user;
+  const { id, fullName, displayName, email, imageUrl, title, status } = user;
 
   return {
     id,
@@ -12,7 +12,8 @@ export const fromUserToUserClient = (user: IUser): IUserClient => {
     email,
     displayName,
     imageUrl,
-    title
+    title,
+    status
   };
 };
 
