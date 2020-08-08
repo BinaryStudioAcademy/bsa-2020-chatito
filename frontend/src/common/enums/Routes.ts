@@ -7,5 +7,6 @@ export enum Routes {
   Workspace = '/workspace',
   Room = '/room',
   Channel = '/channel',
-  Direct = '/direct'
+  Direct = '/direct',
+  NotExistingPath = '/*'
 }

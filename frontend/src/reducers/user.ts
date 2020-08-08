@@ -3,10 +3,7 @@ import {
   fetchUserRoutine,
   editProfileRoutine,
   addNewUserRoutine,
-<<<<<<< HEAD
   deleteAccountRoutine,
-=======
->>>>>>> 2d40902638f6ffb2cd4d520712246d735d105b9c
   forgotPasswordRoutine,
   resetPasswordRoutine
 } from '../routines/user';
@@ -71,7 +68,6 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case editProfileRoutine.FAILURE: {
       return { ...state, loading: false };
     }
-<<<<<<< HEAD
     case deleteAccountRoutine.TRIGGER: {
       return { ...state, isLoading: true };
     }
@@ -81,8 +77,6 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case deleteAccountRoutine.FAILURE: {
       return { ...state, isLoading: false };
     }
-=======
->>>>>>> 2d40902638f6ffb2cd4d520712246d735d105b9c
     case forgotPasswordRoutine.SUCCESS: {
       return { ...state, loading: false };
     }
@@ -101,16 +95,6 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case resetPasswordRoutine.FAILURE: {
       return { ...state, loading: false };
     }
-<<<<<<< HEAD
-=======
-    case fetchUserRoutine.FAILURE:
-    case addNewUserRoutine.FAILURE:
-      return {
-        ...state,
-        isLoading: false,
-        isAuthorized: false
-      };
->>>>>>> 2d40902638f6ffb2cd4d520712246d735d105b9c
     default:
       return state;
   }

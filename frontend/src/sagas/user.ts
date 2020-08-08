@@ -1,13 +1,10 @@
-import { ModalTypes } from './../common/enums/ModalTypes';
+import { ModalTypes } from '../common/enums/ModalTypes';
 import { all, put, call, takeEvery } from 'redux-saga/effects';
 import {
   fetchUserRoutine,
   editProfileRoutine,
   addNewUserRoutine,
-<<<<<<< HEAD
   deleteAccountRoutine as delAccount,
-=======
->>>>>>> 2d40902638f6ffb2cd4d520712246d735d105b9c
   forgotPasswordRoutine,
   resetPasswordRoutine
 } from '../routines/user';
@@ -114,10 +111,7 @@ export default function* userSaga() {
     watchUserRequest(),
     watchUpdateProfile(),
     watchAddNewUserRequest(),
-<<<<<<< HEAD
     watchDeleteAccount(),
-=======
->>>>>>> 2d40902638f6ffb2cd4d520712246d735d105b9c
     watchForgotPasswordRequest(),
     watchResetPasswordRequest()
   ]);

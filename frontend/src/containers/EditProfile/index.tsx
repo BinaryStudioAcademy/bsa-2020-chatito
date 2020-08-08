@@ -40,7 +40,7 @@ const EditProfile: FunctionComponent<IProps> = ({
 
   const handleDeleteAccount = () => {
     deleteAccount();
-  }
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, id } = event.currentTarget;
