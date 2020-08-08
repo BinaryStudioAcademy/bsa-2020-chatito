@@ -3,21 +3,22 @@ import {
   fetchUserRoutine,
   editProfileRoutine,
   addNewUserRoutine,
+  deleteAccountRoutine,
+  loginUserRoutine,
   forgotPasswordRoutine,
   resetPasswordRoutine
 } from '../routines/user';
-import { Routine } from 'redux-saga-routines';
-import { registration, login } from '../services/authService';
-import { setAccessToken } from '../common/helpers/storageHelper';
-import { ISignServerResponse } from '../common/models/auth/auth';
+import { IAuthServerResponse } from '../common/models/auth/IAuthServerResponse';
 import { showModalRoutine } from '../routines/modal';
 import { ModalTypes } from '../common/enums/ModalTypes';
-
 import api from '../common/helpers/apiHelper';
+import { Routine } from 'redux-saga-routines';
+import { registration, login, fetchUser } from '../services/authService';
+import { setAccessToken } from '../common/helpers/storageHelper';
 
-function* fetchUserRequest({ payload }: any): Routine<any> {
+function* fetchUserRequest(): Routine<any> {
   try {
-    const { token, user }: ISignServerResponse = yield call(login, payload);
+    const { token, user }: IAuthServerResponse = yield call(fetchUser);
     yield put(fetchUserRoutine.success({ payload: user }));
     setAccessToken(token);
   } catch (error) {
@@ -27,6 +28,20 @@ function* fetchUserRequest({ payload }: any): Routine<any> {
 
 function* watchUserRequest() {
   yield takeEvery(fetchUserRoutine.TRIGGER, fetchUserRequest);
+}
+
+function* loginUserRequest({ payload }: any): Routine<any> {
+  try {
+    const { token, user }: IAuthServerResponse = yield call(login, payload);
+    yield put(loginUserRoutine.success({ payload: user }));
+    setAccessToken(token);
+  } catch (error) {
+    yield put(loginUserRoutine.failure(error.message));
+  }
+}
+
+function* watchLoginUserRequest() {
+  yield takeEvery(loginUserRoutine.TRIGGER, loginUserRequest);
 }
 
 function* updateProfile({ payload }: Routine<any>) {
@@ -46,9 +61,27 @@ function* watchUpdateProfile() {
   yield takeEvery(editProfileRoutine.TRIGGER, updateProfile);
 }
 
+function* deleteAccount() {
+  try {
+    const response = yield call(api.delete, '/api/users/');
+    const data = {
+      ...response
+    };
+    yield put(deleteAccountRoutine.success(data));
+  } catch (error) {
+    yield put(deleteAccountRoutine.failure(error.message));
+  } finally {
+    yield put(showModalRoutine.trigger({ modalType: ModalTypes.EditProfile, show: false }));
+  }
+}
+
+function* watchDeleteAccount() {
+  yield takeEvery(deleteAccountRoutine.TRIGGER, deleteAccount);
+}
+
 function* addNewUserRequest({ payload }: any): Routine<any> {
   try {
-    const { token, user }: ISignServerResponse = yield call(registration, payload);
+    const { token, user }: IAuthServerResponse = yield call(registration, payload);
     yield put(addNewUserRoutine.success({ payload: user }));
     setAccessToken(token);
   } catch (error) {
@@ -90,10 +123,13 @@ function* watchResetPasswordRequest() {
 
 export default function* userSaga() {
   yield all([
+    watchAddNewUserRequest(),
     watchUserRequest(),
     watchUpdateProfile(),
     watchAddNewUserRequest(),
     watchForgotPasswordRequest(),
+    watchLoginUserRequest(),
+    watchDeleteAccount(),
     watchResetPasswordRequest()
   ]);
 }
