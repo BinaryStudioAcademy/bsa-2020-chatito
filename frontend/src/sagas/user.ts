@@ -21,9 +21,9 @@ import { toastr } from 'react-redux-toastr';
 
 function* fetchUserRequest(): Routine<any> {
   try {
-    const { token, user }: IAuthServerResponse = yield call(fetchUser);
+    const { accessToken, user }: IAuthServerResponse = yield call(fetchUser);
     yield put(fetchUserRoutine.success({ payload: user }));
-    setAccessToken(token);
+    setAccessToken(accessToken);
   } catch (error) {
     yield call(toastr.error, 'Error', 'An Error accurred while you tried to log in, try again.');
     yield put(fetchUserRoutine.failure(error.message));
@@ -36,9 +36,9 @@ function* watchUserRequest() {
 
 function* loginUserRequest({ payload }: any): Routine<any> {
   try {
-    const { token, user }: IAuthServerResponse = yield call(login, payload);
+    const { accessToken, user }: IAuthServerResponse = yield call(login, payload);
     yield put(loginUserRoutine.success({ payload: user }));
-    setAccessToken(token);
+    setAccessToken(accessToken);
   } catch (error) {
     yield call(toastr.error, 'Error', 'An Error accurred while you tried to log in, try again.');
     yield put(loginUserRoutine.failure(error.message));
@@ -88,9 +88,9 @@ function* watchDeleteAccount() {
 
 function* addNewUserRequest({ payload }: any): Routine<any> {
   try {
-    const { token, user }: IAuthServerResponse = yield call(registration, payload);
+    const { accessToken, user }: IAuthServerResponse = yield call(registration, payload);
     yield put(addNewUserRoutine.success({ payload: user }));
-    setAccessToken(token);
+    setAccessToken(accessToken);
   } catch (error) {
     yield call(toastr.error, 'Error', 'While we were registering your account, something went wrong.');
     yield put(addNewUserRoutine.failure(error.message));
@@ -150,8 +150,6 @@ export default function* userSaga() {
     watchAddNewUserRequest(),
     watchUserRequest(),
     watchUpdateProfile(),
-    watchAddNewUserRequest(),
-    watchDeleteAccount(),
     watchForgotPasswordRequest(),
     watchLoginUserRequest(),
     watchDeleteAccount(),
