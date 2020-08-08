@@ -9,7 +9,7 @@ import LoaderWrapper from '../../components/LoaderWrapper';
 import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from '../../routines/user';
-import AddWorkspace from '../../scenes/Workspace/Workspace';
+import AddWorkspace from '../../scenes/Workspace/containers/AddWorkspace';
 import ForgotPassword from '../../scenes/ForgotPassword';
 import ResetPassword from '../../scenes/ResetPassword';
 import SignIn from '../../scenes/SignIn';
