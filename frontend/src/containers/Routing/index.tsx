@@ -15,7 +15,7 @@ import ForgotPassword from '../../scenes/ForgotPassword';
 import ResetPassword from '../../scenes/ResetPassword';
 import SignIn from '../../scenes/SignIn';
 import SignUp from '../../scenes/SignUp';
-import ProfilePreview from '../../components/ProfilePreview';
+import ChangeStatus from '../../components/ChangeStatus';
 
 interface IProps {
   isLoading: boolean;
@@ -42,7 +42,7 @@ const Routing: React.FC<IProps> = ({
   return (
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <Header />
-      <ProfilePreview />
+      <ChangeStatus />
       <Switch>
         <PublicRoute exact path={Routes.SignIn} component={SignIn} />
         <PublicRoute exact path={Routes.SignUp} component={SignUp} />
