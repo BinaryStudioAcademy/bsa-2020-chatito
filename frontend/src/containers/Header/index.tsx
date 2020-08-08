@@ -6,15 +6,15 @@ import UserPopUp from '../../components/UserPopUp';
 import SearchInput from '../../components/SearchInput';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IUserState } from '../../reducers/user';
 import { IAppState } from '../../common/models/store';
 import EditProfile from '../EditProfile';
 import { showModalRoutine } from '../../routines/modal';
 import { ModalTypes } from '../../common/enums/ModalTypes';
 import { IModalRoutine } from '../../common/models/modal/IShowModalRoutine';
+import { IUser } from '../../common/models/user/user';
 
 interface IProps {
-  user: IUserState;
+  user: IUser | null;
   showModal: ({ modalType, show }: IModalRoutine) => void;
 }
 
@@ -44,6 +44,10 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
   const showEditModal = () => {
     showModalRoutine({ modalType: ModalTypes.EditProfile, show: true });
   };
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <header className={styles.headerContainer}>
@@ -76,7 +80,7 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
   );
 };
 
-const mapStateToProps = (state: IAppState) => ({ user: state.user });
+const mapStateToProps = (state: IAppState) => ({ user: state.user.data });
 
 const mapDispatchToProps = {
   showModal: showModalRoutine

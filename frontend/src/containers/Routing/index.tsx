@@ -6,7 +6,6 @@ import { IAppState } from '../../common/models/store';
 import { Routes } from '../../common/enums/Routes';
 import { getAccessToken } from '../../common/helpers/storageHelper';
 import LoaderWrapper from '../../components/LoaderWrapper';
-import Header from '../Header';
 import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from '../../routines/user';
@@ -40,7 +39,6 @@ const Routing: React.FC<IProps> = ({
 
   return (
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
-      <Header />
       <Switch>
         <PublicRoute exact path={Routes.SignIn} component={SignIn} />
         <PublicRoute exact path={Routes.SignUp} component={SignUp} />
