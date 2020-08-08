@@ -23,12 +23,6 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
     // @todo decide which button to trigger
   };
 
-  const testUser = {
-    imgUrl:
-      'https://img.favpng.com/25/13/19/samsung-galaxy-a8-a8-user-login-telephone-avatar-png-favpng-dqKEPfX7hPbc6SMVUCteANKwj.jpg', // eslint-disable-line max-len
-    isAuthorized: true
-  };
-
   const getPopUpTrigger = () => (
     <div
       className={`${styles.popUpWrapper} noselect`}
@@ -63,7 +57,7 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
         />
 
         <div className={styles.userLogoWrapper}>
-          <UserAvatar imgUrl={testUser.imgUrl} isOnline />
+          <UserAvatar imgUrl={user.imageUrl || ''} isOnline />
 
           <UserPopUp
             user={user}
