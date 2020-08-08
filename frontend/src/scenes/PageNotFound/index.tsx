@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import styles from './styles.module.sass';
 
 const PagenotFound: FunctionComponent = () => (
-  <div className={styles.resetPassword}>
+  <div className={styles.notFoundPage}>
     <h1 className="text-center p-5">404: Page Not Found</h1>
     <svg width="132" height="190" viewBox="0 0 132 190" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0)">
