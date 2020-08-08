@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import UserAvatar from '../../components/UserLogo';
 import UserPopUp from '../../components/UserPopUp';
 import SearchInput from '../../components/SearchInput';
-import { IAppState } from '../../common/models/store';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IUserState } from '../../reducers/user';
-import logo from '../../img/chatitoTemp.png';
+import { IAppState } from '../../common/models/store';
 import EditProfile from '../EditProfile';
 import { showModalRoutine } from '../../routines/modal';
 import { ModalTypes } from '../../common/enums/ModalTypes';
@@ -24,17 +25,19 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
 
   const testUser = {
     imgUrl:
-      'https://img.favpng.com/25/13/19/samsung-galaxy-a8-a8-user-login-telephone-avatar-png-favpng-dqKEPfX7hPbc6SMVUCteANKwj.jpg' // eslint-disable-line max-len
+      'https://img.favpng.com/25/13/19/samsung-galaxy-a8-a8-user-login-telephone-avatar-png-favpng-dqKEPfX7hPbc6SMVUCteANKwj.jpg', // eslint-disable-line max-len
+    isAuthorized: true
   };
 
-  const getAvatar = () => (
+  const getPopUpTrigger = () => (
     <div
-      className={styles.popUpWrapper}
+      className={`${styles.popUpWrapper} noselect`}
       role="button"
       tabIndex={0}
       onKeyDown={toggleButtonClick}
     >
-      <UserAvatar imgUrl={testUser.imgUrl} isOnline />
+      <span className={styles.profileText}>Profile</span>
+      <FontAwesomeIcon icon={faCaretDown} />
     </div>
   );
 
@@ -44,27 +47,31 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
 
   return (
     <header className={styles.headerContainer}>
-      <div className={styles.mainLogo}>
-        <img className={styles.logo} src={logo} alt="logo" />
+      <div className={styles.logoWrapper}>
+        <img className={styles.logoImg} src="./logo.svg" alt="logo" />
+        <h1 className={styles.logoText}>Chatito</h1>
       </div>
 
-      <SearchInput
-        onSearch={t => console.log('Search for ', t)}
-        stylesClassName={styles.searchInput}
-      />
-
-      {user.isAuthorized ? (
-        <UserPopUp
-          user={user}
-          trigger={getAvatar}
-          id="mainHeaderPopUp"
-          placement="bottom"
-          onEditProfileClick={showEditModal}
+      <div className={styles.rightAlignContainer}>
+        <SearchInput
+          onSearch={t => console.log('Search for ', t)}
+          stylesClassName={styles.searchInput}
         />
-      ) : (
-        <div>You need to sign in</div>
-      )}
-      <EditProfile />
+
+        <div className={styles.userLogoWrapper}>
+          <UserAvatar imgUrl={testUser.imgUrl} isOnline />
+
+          <UserPopUp
+            user={user}
+            trigger={getPopUpTrigger}
+            id="mainHeaderPopUp"
+            placement="bottom"
+            onEditProfileClick={showEditModal}
+          />
+        </div>
+
+        <EditProfile />
+      </div>
     </header>
   );
 };
