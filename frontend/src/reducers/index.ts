@@ -4,12 +4,14 @@ import { history } from '../common/helpers/historyHelper';
 import workspace from '../scenes/Workspace/reducers/reducer';
 import user from './user';
 import modal from './modal';
+import errorBoundary from './errorBoundary';
 
 const rootReducer = () => combineReducers({
   router: connectRouter(history),
   user,
   workspace,
-  modal
+  modal,
+  errorBoundary
 });
 
 export default rootReducer;
