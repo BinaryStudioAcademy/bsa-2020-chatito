@@ -4,11 +4,14 @@ import { Provider } from 'react-redux';
 import { store } from '../../store';
 import { ConnectedRouter } from 'connected-react-router';
 import { history } from '../../common/helpers/historyHelper';
+import ErrorBoundary from '../ErrorBoundary';
 
 const App = () => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <Routing />
+      <ErrorBoundary>
+        <Routing />
+      </ErrorBoundary>
     </ConnectedRouter>
   </Provider>
 );
