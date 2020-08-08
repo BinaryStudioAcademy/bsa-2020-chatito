@@ -1,20 +1,13 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
-<<<<<<< HEAD
-import { fetchUserRoutine, editProfileRoutine, addNewUserRoutine, loginUserRoutine } from '../routines/user';
-import { IAuthServerResponse } from '../common/models/auth/IAuthServerResponse';
-=======
 import {
   fetchUserRoutine,
   editProfileRoutine,
   addNewUserRoutine,
+  loginUserRoutine,
   forgotPasswordRoutine,
   resetPasswordRoutine
 } from '../routines/user';
-import { Routine } from 'redux-saga-routines';
-import { registration, login } from '../services/authService';
-import { setAccessToken } from '../common/helpers/storageHelper';
-import { ISignServerResponse } from '../common/models/auth/auth';
->>>>>>> 2d40902638f6ffb2cd4d520712246d735d105b9c
+import { IAuthServerResponse } from '../common/models/auth/IAuthServerResponse';
 import { showModalRoutine } from '../routines/modal';
 import { ModalTypes } from '../common/enums/ModalTypes';
 import api from '../common/helpers/apiHelper';
@@ -113,14 +106,10 @@ export default function* userSaga() {
   yield all([
     watchAddNewUserRequest(),
     watchUserRequest(),
-<<<<<<< HEAD
-    watchLoginUserRequest(),
-    watchUpdateProfile()
-=======
     watchUpdateProfile(),
     watchAddNewUserRequest(),
     watchForgotPasswordRequest(),
+    watchLoginUserRequest(),
     watchResetPasswordRequest()
->>>>>>> 2d40902638f6ffb2cd4d520712246d735d105b9c
   ]);
 }
