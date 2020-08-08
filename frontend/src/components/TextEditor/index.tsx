@@ -3,6 +3,8 @@ import React, { FunctionComponent, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { env } from '../../env';
 import Button from 'react-bootstrap/Button';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface IProps {
   placeholder: string;
@@ -26,26 +28,40 @@ const TextEditor: FunctionComponent<IProps> = ({ placeholder, height, onSend, on
     onSend(message);
   };
 
+  const stylesObject = {
+
+  };
+
   return (
     <div className={styles.wrapper} style={{ height }}>
       <Editor
         apiKey={env.apiKeys.textEditor}
         init={{
           placeholder,
-          menubar: 'false',
+          menubar: false,
           width: '100%',
           height: '100%',
+          statusbar: false,
+          contextmenu: false,
           plugins: [
             'paste wordcount emoticons'
           ],
           toolbar:
-            'undo redo | bold italic | bullist numlist | emoticons |'
+            'undo redo | bold italic | bullist numlist | emoticons | myCustomToolbarButton',
+          skin: 'naked',
+          toolbar_location: 'bottom', // eslint-disable-line @typescript-eslint/camelcase
+          setup: (editor: any) => {
+            editor.ui.registry.addButton('myCustomToolbarButton', {
+              icon: 'arrow-right',
+              text: 'Send message',
+              onAction: () => onSendMessage()
+            });
+          }
+
         }}
 
         onEditorChange={onEditorChange}
       />
-
-      <Button variant="secondary" onClick={onSendMessage}>Send</Button>
     </div>
 
   );
