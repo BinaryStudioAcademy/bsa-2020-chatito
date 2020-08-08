@@ -4,6 +4,7 @@ import {
   editProfileRoutine,
   addNewUserRoutine,
   loginUserRoutine,
+  deleteAccountRoutine,
   forgotPasswordRoutine,
   resetPasswordRoutine
 } from '../routines/user';
@@ -67,6 +68,12 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case editProfileRoutine.FAILURE: {
       return { ...state, loading: false };
     }
+    case deleteAccountRoutine.TRIGGER:
+      return { ...state, isLoading: true };
+    case deleteAccountRoutine.SUCCESS:
+      return { isAuthorized: false, isLoading: false };
+    case deleteAccountRoutine.FAILURE:
+      return { ...state, isLoading: false };
     case loginUserRoutine.TRIGGER:
       return {
         ...state,

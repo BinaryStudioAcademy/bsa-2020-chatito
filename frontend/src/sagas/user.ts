@@ -3,6 +3,7 @@ import {
   fetchUserRoutine,
   editProfileRoutine,
   addNewUserRoutine,
+  deleteAccountRoutine,
   loginUserRoutine,
   forgotPasswordRoutine,
   resetPasswordRoutine
@@ -60,6 +61,24 @@ function* watchUpdateProfile() {
   yield takeEvery(editProfileRoutine.TRIGGER, updateProfile);
 }
 
+function* deleteAccount() {
+  try {
+    const response = yield call(api.delete, '/api/users/');
+    const data = {
+      ...response
+    };
+    yield put(deleteAccountRoutine.success(data));
+  } catch (error) {
+    yield put(deleteAccountRoutine.failure(error.message));
+  } finally {
+    yield put(showModalRoutine.trigger({ modalType: ModalTypes.EditProfile, show: false }));
+  }
+}
+
+function* watchDeleteAccount() {
+  yield takeEvery(deleteAccountRoutine.TRIGGER, deleteAccount);
+}
+
 function* addNewUserRequest({ payload }: any): Routine<any> {
   try {
     const { token, user }: IAuthServerResponse = yield call(registration, payload);
@@ -110,6 +129,7 @@ export default function* userSaga() {
     watchAddNewUserRequest(),
     watchForgotPasswordRequest(),
     watchLoginUserRequest(),
+    watchDeleteAccount(),
     watchResetPasswordRequest()
   ]);
 }

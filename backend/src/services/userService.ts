@@ -1,6 +1,6 @@
 import { getCustomRepository } from 'typeorm';
-import { IUserClient } from '../common/models/user/IUserClient';
 import UserRepository from '../data/repositories/userRepository';
+import { IUserClient } from '../common/models/user/IUserClient';
 import { fromUserToUserClient } from '../common/mappers/user';
 
 export const getUsers = async () => {
@@ -11,6 +11,10 @@ export const getUsers = async () => {
 export const getUserById = async (id: string) => {
   const user = await getCustomRepository(UserRepository).getById(id);
   return user;
+};
+
+export const deleteUser = (id: string) => {
+  getCustomRepository(UserRepository).deleteUser(id);
 };
 
 export const editProfile = async (user: IUserClient) => {

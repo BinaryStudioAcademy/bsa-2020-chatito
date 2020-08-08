@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Button, Modal, Form, Image } from 'react-bootstrap';
 import { IAppState } from '../../common/models/store';
 import { showModalRoutine } from '../../routines/modal';
-import { editProfileRoutine } from '../../routines/user';
+import { editProfileRoutine, deleteAccountRoutine } from '../../routines/user';
 import styles from './styles.module.sass';
 import { IUser } from '../../common/models/user/IUser';
 import { ModalTypes } from '../../common/enums/ModalTypes';
@@ -12,6 +12,7 @@ import { IModalRoutine } from '../../common/models/modal/IShowModalRoutine';
 interface IProps {
   showModal: ({ modalType, show }: IModalRoutine) => void;
   editProfile: (userProps: IUser) => void;
+  deleteAccount: () => void;
   isShown: boolean;
   user?: IUser | null;
 }
@@ -19,6 +20,7 @@ interface IProps {
 const EditProfile: FunctionComponent<IProps> = ({
   showModal,
   editProfile,
+  deleteAccount,
   isShown,
   user = undefined
 }: IProps) => {
@@ -34,6 +36,10 @@ const EditProfile: FunctionComponent<IProps> = ({
   const handleSubmit = () => {
     const editUserProps = { ...user, fullName, displayName, title };
     editProfile(editUserProps);
+  };
+
+  const handleDeleteAccount = () => {
+    deleteAccount();
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,6 +127,9 @@ const EditProfile: FunctionComponent<IProps> = ({
                 Remove photo
               </Button>
             ) : null}
+            <Button variant="light" className={styles.deleteAccountButton} onClick={handleDeleteAccount}>
+              Delete account
+            </Button>
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -143,7 +152,8 @@ const mapStateToProps = (state: IAppState) => ({
 
 const mapDispatchToProps = {
   showModal: showModalRoutine,
-  editProfile: editProfileRoutine
+  editProfile: editProfileRoutine,
+  deleteAccount: deleteAccountRoutine
 };
 
 EditProfile.defaultProps = {
