@@ -1,10 +1,11 @@
-import { IUser } from '../models/user/IUser';
 import { IUserClient } from '../models/user/IUserClient';
 import { IRegisterUser } from '../models/user/IRegisterUser';
 import { ICreateUser } from '../models/user/ICreateUser';
+import { User } from '../../data/entities/User';
+import { fromCreatedWorkspaceToClient } from './workspace';
 
-export const fromUserToUserClient = (user: IUser): IUserClient => {
-  const { id, fullName, displayName, email, imageUrl, title } = user;
+export const fromUserToUserClient = (user: User): IUserClient => {
+  const { id, fullName, displayName, email, imageUrl, title, workspaces } = user;
 
   return {
     id,
@@ -12,7 +13,8 @@ export const fromUserToUserClient = (user: IUser): IUserClient => {
     email,
     displayName,
     imageUrl,
-    title
+    title,
+    workspaces: workspaces.map(workspace => fromCreatedWorkspaceToClient(workspace))
   };
 };
 

@@ -1,3 +1,5 @@
+import { IWorkspaceResponse } from '../workspace/IWorkspaceResponse';
+
 export interface IUserClient {
   id: string;
   fullName: string;
@@ -5,4 +7,5 @@ export interface IUserClient {
   displayName: string;
   imageUrl?: string;
   title?: string;
+  workspaces: IWorkspaceResponse[];
 }

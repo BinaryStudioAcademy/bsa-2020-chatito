@@ -8,6 +8,7 @@ class WorkspaceRepository extends Repository<Workspace> {
   addWorkspace(data: ICreateWorkspace, user: User): Promise<Workspace> {
     const workspace = this.create(data);
     workspace.createdByUser = user;
+    workspace.users = [user];
 
     return workspace.save();
   }
