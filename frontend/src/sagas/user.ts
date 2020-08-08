@@ -3,7 +3,7 @@ import {
   fetchUserRoutine,
   editProfileRoutine,
   addNewUserRoutine,
-  deleteAccountRoutine as delAccount,
+  deleteAccountRoutine,
   loginUserRoutine,
   forgotPasswordRoutine,
   resetPasswordRoutine
@@ -67,16 +67,16 @@ function* deleteAccount() {
     const data = {
       ...response
     };
-    yield put(delAccount.success(data));
+    yield put(deleteAccountRoutine.success(data));
   } catch (error) {
-    yield put(delAccount.failure(error.message));
+    yield put(deleteAccountRoutine.failure(error.message));
   } finally {
     yield put(showModalRoutine.trigger({ modalType: ModalTypes.EditProfile, show: false }));
   }
 }
 
 function* watchDeleteAccount() {
-  yield takeEvery(delAccount.TRIGGER, deleteAccount);
+  yield takeEvery(deleteAccountRoutine.TRIGGER, deleteAccount);
 }
 
 function* addNewUserRequest({ payload }: any): Routine<any> {
