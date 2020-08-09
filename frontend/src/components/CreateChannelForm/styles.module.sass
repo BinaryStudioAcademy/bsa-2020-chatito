@@ -1,0 +1,53 @@
+.header
+  padding: 0 1rem
+
+.formBody
+  padding: 0 1rem
+
+  .formDescription
+    color: rgb(97, 96, 97)
+
+.footer
+  display: flex
+  flex-wrap: wrap
+  align-items: center
+  justify-content: flex-end
+  padding: .75rem
+
+.inputLabel
+  font-weight: 600
+
+  span
+    font-weight: 400
+
+.makePrivateLabel
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+.makePrivateDescription
+  width: 75%
+
+$switchWidth: 2.75rem
+
+.makePrivateSwitch
+  width: calc(#{$switchWidth} + 0.25rem)
+
+.makePrivateSwitch :global(.custom-control-label)
+  &::before
+    height: 1.5rem
+    width: $switchWidth
+    border-radius: .75rem
+
+  &::after
+    width: calc(1.5rem - 4px)
+    height: calc(1.5rem - 4px)
+    border-radius: .75rem
+
+.makePrivateSwitch :global(.custom-control-input:checked~.custom-control-label)
+  &::before
+    background-color: #28a745
+    border-color: #28a745
+
+  &::after
+    transform: translateX(1.25rem)

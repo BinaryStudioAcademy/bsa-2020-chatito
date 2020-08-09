@@ -6,7 +6,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faEdit, faEllipsisH, faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { IUser } from '../../common/models/user/user';
+import { IUser } from '../../common/models/user/IUser';
 import { push, goBack } from 'connected-react-router';
 
 const { user, currentUserId, isOnline } = {
