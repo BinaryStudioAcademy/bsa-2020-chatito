@@ -1,12 +1,91 @@
-import React from 'react';
-import { history } from '../../../../common/helpers/historyHelper';
+import React, { FunctionComponent } from 'react';
+import { connect } from 'react-redux';
+import { Formik, Form } from 'formik';
 import { Button } from 'react-bootstrap';
+import { push } from 'connected-react-router';
+import styles from './styles.module.sass';
+import { signUpValSchema as validationSchema } from '../../../../common/models/formik/ValidationSchemas';
+import { IRegisterUser } from '../../../../common/models/auth/IRegisterUser';
+import { Routes } from '../../../../common/enums/Routes';
+import { IBindingCallback1 } from '../../../../common/models/callback/IBindingCallback1';
+import InputField from '../../../../components/InputField/InputField';
 
-const SignUp = () => (
-  <div>
-    Sign Up
-    <Button onClick={() => history.push('/auth/signin')}>sign up</Button>
-  </div>
-);
+interface IProps {
+  addNewUser: IBindingCallback1<IRegisterUser>;
+  router: (route: string) => void;
+}
 
-export default SignUp;
+export const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
+  const onSubmit = async (values: IRegisterUser,
+    { setSubmitting }: { setSubmitting: CallableFunction }) => {
+    const { email, password, fullName } = values;
+    const user = { email, password, fullName };
+    addNewUser(user);
+    setSubmitting(false);
+  };
+
+  const initialValues = {
+    fullName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  };
+
+  const onAlreadySignIn = () => {
+    router(Routes.SignIn);
+  };
+
+  return (
+    <div className={styles.signUp}>
+      <h1 className={styles.signUpHeader}>Sign up</h1>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        <Form className="signUp-form d-flex flex-column justify-content-center align-items-center">
+          <InputField
+            label="Full Name"
+            name="fullName"
+            type="text"
+            placeholder="John Brown"
+          />
+          <InputField
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="example@gmail.com"
+          />
+          <InputField
+            label="Password"
+            name="password"
+            type="password"
+          />
+          <InputField
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+          />
+
+          <div className="form-group">
+            <Button type="submit" variant="primary">
+              Sign Up
+            </Button>
+            <Button variant="link" onClick={onAlreadySignIn}>
+              Already Signed up?
+            </Button>
+          </div>
+        </Form>
+      </Formik>
+    </div>
+  );
+};
+
+const mapDispatchToProps = {
+  router: push
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(SignUp);

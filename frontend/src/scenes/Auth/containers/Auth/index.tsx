@@ -2,26 +2,26 @@
 import React from 'react';
 import SignIn from '../../components/SignIn';
 import SignUp from '../../components/SignUp';
+import ForgotPassword from "../../components/ForgotPassword";
+import ResetPassword from "../../components/ResetPassword";
 import styles from './styles.module.sass';
 import { Routes } from '../../../../common/enums/Routes';
 import { Route } from 'react-router';
-import Switch from 'react-bootstrap/esm/Switch';
 import { connect } from 'react-redux';
-import { loginUserRoutine } from '../../../../routines/user';
+import { loginUserRoutine, addNewUserRoutine } from '../../../../routines/user';
 import { IBindingCallback1 } from '../../../../common/models/callback/IBindingCallback1';
 import { ILoginUser } from '../../../../common/models/auth/ILoginUser';
+import { IRegisterUser } from '../../../../common/models/auth/IRegisterUser';
 import { ReactComponent as Mascot} from './chatito-mascot.svg';
 import { ReactComponent as Logo } from './logo.svg';
 
 interface IProps {
   loginUser: IBindingCallback1<ILoginUser>;
+  addNewUser: IBindingCallback1<IRegisterUser>;
 }
 
-const Auth = ({ loginUser }: IProps) => {
-  // const { url } = match;
-  // const toRender = routes.find(route => route.route === url)
+const Auth = ({ loginUser, addNewUser }: IProps) => {
 
-  // const cb = (payload: any) => console.log(payload);
 
   return (
     <div className={styles.pageLayout}>
@@ -30,7 +30,6 @@ const Auth = ({ loginUser }: IProps) => {
         <Logo className={styles.logo}/>
       </div>
       <div className={styles.rightSide}>
-        {/* <Switch> */}
           <Route
             exact
             path={Routes.SignIn}
@@ -40,17 +39,29 @@ const Auth = ({ loginUser }: IProps) => {
           <Route
             exact
             path={Routes.SignUp}
-            component={SignUp}
+            render={props => <SignUp {...props} addNewUser={addNewUser} />}
             key={Routes.SignUp}
           />
-        {/* </Switch> */}
+          <Route
+            exact
+            path={Routes.ForgotPassword}
+            component={ForgotPassword}
+            key={Routes.ForgotPassword}
+          />
+          <Route
+            exact
+            path={Routes.ResetPassword}
+            component={ResetPassword}
+            key={Routes.ResetPassword}
+          />
       </div>
     </div>
   );
 };
 
 const mapDispatchToProps = {
-  loginUser: loginUserRoutine
+  loginUser: loginUserRoutine,
+  addNewUser: addNewUserRoutine
 }
 
 export default connect(null, mapDispatchToProps)(Auth);
