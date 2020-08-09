@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import { Button } from 'react-bootstrap';
 import { push } from 'connected-react-router';
+import { Link } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { signUpValSchema as validationSchema } from '../../../../common/models/formik/ValidationSchemas';
 import { IRegisterUser } from '../../../../common/models/auth/IRegisterUser';
@@ -67,13 +68,13 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
             type="password"
           />
 
-          <div className="form-group">
-            <Button type="submit" variant="primary">
+          <div className={`${styles.formFooter} mt-4 w-100`}>
+            <Button className={styles.primaryBtn} type="submit" variant="primary">
               Sign Up
             </Button>
-            <Button variant="link" onClick={onAlreadySignIn}>
+            <Link className={styles.signInLink} to={Routes.SignIn}>
               Already Signed up?
-            </Button>
+            </Link>
           </div>
         </Form>
       </Formik>

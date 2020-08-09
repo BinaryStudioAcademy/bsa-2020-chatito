@@ -33,7 +33,7 @@ const SignIn: FunctionComponent<IProps> = ({ loginUser }) => {
   return (
     <div className={styles.signIn}>
       <h1 className={styles.header}>Welcome</h1>
-      <p className={styles.signUp}>
+      <p className={styles.signUpLink}>
         {'New here? '}
         <Link className={styles.authLink} to={Routes.SignUp}>Create an account</Link>
       </p>
