@@ -1,19 +1,38 @@
 .signIn
-  // display: flex
-  // flex-direction:
-  // height: 100vh
-  // background-color: var(--auth-form-background)
+  width: 350px
 
 .header
   font-weight: 900
   text-align: left
 
-.secondaryText
+.signUp
   color: var(--auth-scene-text-secondary-color)
   font-family: var(--secondary-font-family), sans-serif
   font-size: 13px
   font-weight: 500
+  margin-bottom: 30px
 
-  .authLink
-    color: var(--auth-scene-link-color)
+.authLink
+  color: var(--auth-scene-link-color)
 
+.forgotPasswordLink
+  font-size: 11px
+  color: var(--auth-scene-link-color)
+  align-self: center
+
+.formFooter
+  display: flex
+  justify-content: flex-start
+  align-items: center
+
+.primaryBtn
+  width: 145px
+  height: 50px
+  background-color: var(--auth-scene-btn-background)
+  border-color: var(--auth-scene-btn-background)
+
+  &:hover
+    // error, search solution
+    // background-color: scale-color(var(--auth-scene-btn-background), $lightness: 5%)
+    background-color: var(--auth-scene-btn-background)
+    border-color: var(--auth-scene-btn-background)
