@@ -89,7 +89,7 @@ const ProfilePreview: FunctionComponent = () => {
   );
 
   return (
-    <OverlayTrigger trigger="click" placement="right" overlay={popOver}>
+    <OverlayTrigger trigger="click" rootClose placement="right" overlay={popOver}>
       {trigger()}
     </OverlayTrigger>
   );

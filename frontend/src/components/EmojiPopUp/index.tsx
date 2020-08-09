@@ -14,14 +14,14 @@ interface IProps {
 const EmojiPopUp: FunctionComponent<IProps> = ({ onEmojiClick, trigger }) => {
   const showEmoji = (
     <Popover id="emojiPopUp" className={styles.popUpContainer}>
-      <div>
+      <div className={styles.emojiContainer}>
         <Picker onEmojiClick={onEmojiClick} />
       </div>
     </Popover>
   );
 
   return (
-    <OverlayTrigger trigger="click" placement="bottom" overlay={showEmoji}>
+    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={showEmoji}>
       {trigger()}
     </OverlayTrigger>
   );

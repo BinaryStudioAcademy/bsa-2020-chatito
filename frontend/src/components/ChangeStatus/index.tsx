@@ -5,12 +5,17 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './styles.module.sass';
 import EmojiPopUp from '../EmojiPopUp';
-import { InputGroup, FormControl } from 'react-bootstrap';
+import { InputGroup, FormControl, Button } from 'react-bootstrap';
+import ModalWindow from '../ModalWindow';
 
 const ChangeStatus: FunctionComponent = () => {
   const [chosenEmoji, setChosenEmoji] = useState({ emoji: '' });
   const [crossStatus, setCrossStatus] = useState(false);
   const [status, setStatus] = useState('');
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const hideCloseBtn = true;
   const onEmojiClick = (event: MouseEvent, emojiObject: IEmojiData) => {
     setChosenEmoji(emojiObject);
     setCrossStatus(true);
@@ -24,6 +29,16 @@ const ChangeStatus: FunctionComponent = () => {
     setStatus(e.target.value);
     console.log(status);
   };
+  interface IStatus {
+    [key: string]: string;
+  }
+  const suggestedStatuses = [
+    { icon: '🗓️', text: 'In a meeting' },
+    { icon: '🚌', text: 'Commuting' },
+    { icon: '🤒', text: 'Out sick' },
+    { icon: '🌴', text: 'Vacationing' },
+    { icon: '🏡', text: 'Working remotely' }
+  ];
   useEffect(() => {
     console.log(chosenEmoji.emoji);
   }, [chosenEmoji]);
@@ -42,39 +57,71 @@ const ChangeStatus: FunctionComponent = () => {
       )}
     </button>
   );
-  return (
-    <InputGroup className={styles.inputBlock}>
-      <InputGroup.Prepend className={styles.emojiContainer}>
-        <InputGroup.Text className={styles.emoji}>
-          <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />
-        </InputGroup.Text>
-      </InputGroup.Prepend>
-      <FormControl
-        placeholder="What is your status?"
-        className={styles.input}
-        type="text"
-        value={status}
-        onChange={onChange}
-      />
-      <InputGroup.Prepend className={styles.emojiContainer}>
-        <InputGroup.Text className={styles.cross}>
-          {crossStatus || status ? (
+  const childrenForModal = (
+    <div className={styles.childrenContainer}>
+      <header className={styles.modalHeader}>Set a status</header>
+      <InputGroup className={styles.inputBlock}>
+        <InputGroup.Prepend className={styles.emojiContainer}>
+          <InputGroup.Text className={styles.emoji}>
+            <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />
+          </InputGroup.Text>
+        </InputGroup.Prepend>
+        <FormControl
+          placeholder="What is your status?"
+          className={styles.input}
+          type="text"
+          value={status}
+          onChange={onChange}
+        />
+        <InputGroup.Prepend className={styles.emojiContainer}>
+          <InputGroup.Text className={styles.cross}>
+            {crossStatus || status ? (
+              <button
+                type="button"
+                className={`${styles.crossButton} ${styles.crossButton_reset}`}
+                onClick={() => reset()}
+              >
+                <FontAwesomeIcon
+                  className={styles.crossIcon}
+                  icon={faTimesCircle}
+                />
+              </button>
+            ) : (
+              ''
+            )}
+          </InputGroup.Text>
+        </InputGroup.Prepend>
+      </InputGroup>
+      {crossStatus || status ? (
+        ''
+      ) : (
+        <div className={styles.suggestedStatusesContainer}>
+          {suggestedStatuses.map((item, index) => (
             <button
               type="button"
-              className={`${styles.crossButton} ${styles.crossButton_reset}`}
-              onClick={() => reset()}
+              id={`${index}`}
+              className={styles.statusButton}
             >
-              <FontAwesomeIcon
-                className={styles.crossIcon}
-                icon={faTimesCircle}
-              />
+              {item.icon}
+              <p className={styles.statusText}>{item.text}</p>
             </button>
-          ) : (
-            ''
-          )}
-        </InputGroup.Text>
-      </InputGroup.Prepend>
-    </InputGroup>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+  return (
+    <div>
+      <Button variant="primary" onClick={handleShow}>Launch demo modal</Button>
+      <ModalWindow
+        isShown={show}
+        onHide={handleClose}
+        hideCloseBtn={hideCloseBtn}
+        modalBody={styles.modalBody}
+      >
+        {childrenForModal}
+      </ModalWindow>
+    </div>
   );
 };
 
