@@ -3,7 +3,7 @@ import { Formik, Form } from 'formik';
 import styles from './styles.module.sass';
 import InputField from '../../../../components/InputField/InputField';
 import { signInValSchema as validationSchema } from '../../../../common/models/formik/ValidationSchemas';
-import { IUserInput } from '../../../../common/models/auth/auth';
+import { ILoginUser } from '../../../../common/models/auth/ILoginUser';
 import { fetchUserRoutine } from '../../../../routines/user';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
@@ -13,12 +13,12 @@ import { Routes } from '../../../../common/enums/Routes';
 import { Link } from 'react-router-dom';
 
 interface IProps {
-  loginUser: (payload: IUserInput) => void;
+  loginUser: (payload: ILoginUser) => void;
 }
 
 const SignIn: FunctionComponent<IProps> = ({ loginUser }) => {
   const onSubmit = async (
-    values: IUserInput,
+    values: ILoginUser,
     { setSubmitting }: { setSubmitting: CallableFunction }
   ) => {
     const { email, password } = values;

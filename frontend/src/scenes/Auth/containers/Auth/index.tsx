@@ -9,12 +9,12 @@ import Switch from 'react-bootstrap/esm/Switch';
 import { connect } from 'react-redux';
 import { loginUserRoutine } from '../../../../routines/user';
 import { IBindingCallback1 } from '../../../../common/models/callback/IBindingCallback1';
-import { IUserInput } from '../../../../common/models/auth/auth';
+import { ILoginUser } from '../../../../common/models/auth/ILoginUser';
 import { ReactComponent as Mascot} from './chatito-mascot.svg';
 import { ReactComponent as Logo } from './logo.svg';
 
 interface IProps {
-  loginUser: IBindingCallback1<IUserInput>;
+  loginUser: IBindingCallback1<ILoginUser>;
 }
 
 const Auth = ({ loginUser }: IProps) => {
