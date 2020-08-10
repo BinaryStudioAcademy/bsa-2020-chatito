@@ -1,10 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import styles from './styles.module.sass';
-<<<<<<< HEAD
-import { Routes } from '@enums/Routes';
-=======
 import { Routes } from 'common/enums/Routes';
->>>>>>> 19207a7
 
 const PageNotFound: FunctionComponent = () => (
   <div className={`${styles.notFoundPage} ${styles.textColor}`}>
