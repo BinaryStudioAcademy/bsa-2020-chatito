@@ -15,6 +15,7 @@ import api from '../common/helpers/apiHelper';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser } from '../services/authService';
 import { setAccessToken } from '../common/helpers/storageHelper';
+import { toastr } from 'react-redux-toastr';
 
 function* fetchUserRequest(): Routine<any> {
   try {
@@ -22,6 +23,7 @@ function* fetchUserRequest(): Routine<any> {
     yield put(fetchUserRoutine.success({ payload: user }));
     setAccessToken(token);
   } catch (error) {
+    yield call(toastr.error, 'Error', 'An Error accurred while you tried to log in, try again.');
     yield put(fetchUserRoutine.failure(error.message));
   }
 }
@@ -36,6 +38,7 @@ function* loginUserRequest({ payload }: any): Routine<any> {
     yield put(loginUserRoutine.success({ payload: user }));
     setAccessToken(token);
   } catch (error) {
+    yield call(toastr.error, 'Error', 'An Error accurred while you tried to log in, try again.');
     yield put(loginUserRoutine.failure(error.message));
   }
 }
@@ -53,6 +56,7 @@ function* updateProfile({ payload }: Routine<any>) {
     yield put(editProfileRoutine.success(data));
     yield put(showModalRoutine({ modalType: ModalTypes.EditProfile, show: false }));
   } catch (error) {
+    yield call(toastr.error, 'Error', 'Editing profile failed.');
     yield put(editProfileRoutine.failure(error.message));
   }
 }
@@ -69,6 +73,7 @@ function* deleteAccount() {
     };
     yield put(deleteAccountRoutine.success(data));
   } catch (error) {
+    yield call(toastr.error, 'Error', 'Oops, something went wrong, try again. Are you sure want to delete account?');
     yield put(deleteAccountRoutine.failure(error.message));
   } finally {
     yield put(showModalRoutine.trigger({ modalType: ModalTypes.EditProfile, show: false }));
@@ -85,6 +90,7 @@ function* addNewUserRequest({ payload }: any): Routine<any> {
     yield put(addNewUserRoutine.success({ payload: user }));
     setAccessToken(token);
   } catch (error) {
+    yield call(toastr.error, 'Error', 'While we were registering your account, something went wrong.');
     yield put(addNewUserRoutine.failure(error.message));
   }
 }
@@ -98,6 +104,7 @@ function* forgotPasswordRequest({ payload }: Routine<any>) {
     const response = yield call(api.put, '/api/auth/forgotpass', payload);
     yield put(forgotPasswordRoutine.success());
   } catch (error) {
+    yield call(toastr.error, 'Error', 'Something went wrong, you may have entered wrong email.');
     yield put(forgotPasswordRoutine.failure(error.message));
   }
 }
@@ -113,6 +120,7 @@ function* resetPasswordRequest({ payload }: Routine<any>) {
     const response = yield call(api.put, '/api/auth/resetpass', { password });
     yield put(resetPasswordRoutine.success());
   } catch (error) {
+    yield call(toastr.error, 'Error', 'Oops, try again reset your password.');
     yield put(resetPasswordRoutine.failure(error.message));
   }
 }
@@ -127,6 +135,7 @@ export default function* userSaga() {
     watchUserRequest(),
     watchUpdateProfile(),
     watchAddNewUserRequest(),
+    watchDeleteAccount(),
     watchForgotPasswordRequest(),
     watchLoginUserRequest(),
     watchDeleteAccount(),

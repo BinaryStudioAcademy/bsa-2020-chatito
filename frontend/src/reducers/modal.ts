@@ -4,10 +4,12 @@ import { ModalTypes } from '../common/enums/ModalTypes';
 
 export interface IModalState {
   editProfile: boolean;
+  createChannel: boolean;
 }
 
 const initialState: IModalState = {
-  editProfile: false
+  editProfile: false,
+  createChannel: false
 };
 
 export default (state = initialState, action: Routine<any>) => {
@@ -17,6 +19,9 @@ export default (state = initialState, action: Routine<any>) => {
       switch (modalType) {
         case ModalTypes.EditProfile: {
           return { ...state, editProfile: show };
+        }
+        case ModalTypes.CreateChannel: {
+          return { ...state, createChannel: show };
         }
         default:
           return state;
