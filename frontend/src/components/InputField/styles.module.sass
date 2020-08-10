@@ -1,6 +1,26 @@
 .inputGroup
-  width: 300px
+
+  input:
+    background-color: var(--auth-form-background)
+
+  input:focus
+    border-color: var(--auth-scene-btn-background)
+    box-shadow: 0 0 0 0.05rem var(--auth-scene-btn-background)
 
 .error
   font-size: 12px
   padding: 2px .5rem
+
+.labelRow
+  display: flex
+  justify-content: flex-start
+  align-items: flex-end
+
+.inputLabel
+  margin-bottom: 0
+  font-size: 0.8rem
+  font-weight: 600
+  font-family: var(--secondary-font-family), sans-serif
+
+.navLink
+  margin-left: auto

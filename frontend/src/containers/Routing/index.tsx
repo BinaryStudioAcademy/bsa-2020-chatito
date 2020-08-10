@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { IBindingAction } from '../../common/models/callback';
+import { IBindingAction } from '../../common/models/callback/IBindingActions';
 import { IAppState } from '../../common/models/store';
 import { Routes } from '../../common/enums/Routes';
 import { getAccessToken } from '../../common/helpers/storageHelper';
@@ -10,13 +10,10 @@ import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from '../../routines/user';
 import AddWorkspace from '../../scenes/Workspace/containers/AddWorkspace';
-import ForgotPassword from '../../scenes/ForgotPassword';
-import ResetPassword from '../../scenes/ResetPassword';
-import SignIn from '../../scenes/SignIn';
-import SignUp from '../../scenes/SignUp';
 import PageNotFound from '../../scenes/PageNotFound/index';
 import Workspace from '../../scenes/Workspace/containers/Workspace';
-import ChangeStatus from '../ChangeStatus';
+import Auth from '../../scenes/Auth/containers/Auth';
+import ChangeStatus from '../ChangeStatus/index';
 
 interface IProps {
   isLoading: boolean;
@@ -41,12 +38,9 @@ const Routing: React.FC<IProps> = ({
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <ChangeStatus />
       <Switch>
-        <PublicRoute exact path={Routes.SignIn} component={SignIn} />
-        <PublicRoute exact path={Routes.SignUp} component={SignUp} />
-        <PublicRoute exact path={Routes.ForgotPassword} component={ForgotPassword} />
-        <PublicRoute exact path={Routes.ResetPassword} component={ResetPassword} />
+        <PublicRoute path={Routes.Auth} component={Auth} />
         <PrivateRoute exact path={Routes.Workspace} component={Workspace} />
-        <PrivateRoute exact path="/add-workspace" component={AddWorkspace} />
+        <PrivateRoute exact path={Routes.AddWorkSpace} component={AddWorkspace} />
         <PublicRoute path={Routes.NotExistingPath} component={PageNotFound} />
       </Switch>
     </LoaderWrapper>

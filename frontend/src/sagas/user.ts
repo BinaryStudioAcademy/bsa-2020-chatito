@@ -20,7 +20,11 @@ import { registration, login, fetchUser } from '../services/authService';
 import { setAccessToken } from '../common/helpers/storageHelper';
 import { toastr } from 'react-redux-toastr';
 import { IUser } from '../common/models/user/IUser';
+<<<<<<< HEAD
 import { editStatus } from '../services/statusService';
+=======
+import { history } from '../common/helpers/historyHelper';
+>>>>>>> 0ed2ea1e5d972c70e099039cef91a16da8557d81
 
 function* fetchUserRequest(): Routine<any> {
   try {
@@ -93,6 +97,7 @@ function* addNewUserRequest({ payload }: any): Routine<any> {
     const { accessToken, user }: IAuthServerResponse = yield call(registration, payload);
     yield put(addNewUserRoutine.success(user));
     setAccessToken(accessToken);
+    history.push('/add-workspace');
   } catch (error) {
     yield call(toastr.error, 'Error', error.message);
     yield put(addNewUserRoutine.failure(error.message));

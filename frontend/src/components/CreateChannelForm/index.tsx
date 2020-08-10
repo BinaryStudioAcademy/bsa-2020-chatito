@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
-import { IBindingCallback1 } from 'common/models/callback';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { ICreateChannel } from 'common/models/channel/ICreateChannel';
 import styles from './styles.module.sass';
 

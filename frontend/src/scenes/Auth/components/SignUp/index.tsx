@@ -1,28 +1,23 @@
 import React, { FunctionComponent } from 'react';
-import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
-import { signUpValSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
-import styles from './styles.module.sass';
-import { addNewUserRoutine } from 'routines/user';
-import InputField from 'components/InputField/InputField';
-import { Routine } from 'redux-saga-routines';
-import { IRegisterUser } from 'common/models/auth/IRegisterUser';
 import { Button } from 'react-bootstrap';
-import { push } from 'connected-react-router';
+import { Link } from 'react-router-dom';
+import styles from './styles.module.sass';
+import { signUpValSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
+import { IRegisterUser } from 'common/models/auth/IRegisterUser';
 import { Routes } from 'common/enums/Routes';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import InputField from 'components/InputField/InputField';
 
 interface IProps {
-  addNewUser: Routine;
-  router: (route: string) => void;
+  addNewUser: IBindingCallback1<IRegisterUser>;
 }
 
-export const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
-  const onSubmit = async (values: IRegisterUser,
-    { setSubmitting }: { setSubmitting: CallableFunction }) => {
+export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
+  const onSubmit = (values: IRegisterUser) => {
     const { email, password, fullName } = values;
     const user = { email, password, fullName };
     addNewUser(user);
-    setSubmitting(false);
   };
 
   const initialValues = {
@@ -31,14 +26,9 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
     password: '',
     confirmPassword: ''
   };
-
-  const onAlreadySignIn = () => {
-    router(Routes.SignIn);
-  };
-
   return (
     <div className={styles.signUp}>
-      <h1 className={`text-center ${styles['signUp-header']}`}>Sign up</h1>
+      <h1 className={styles.header}>Sign up</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -46,35 +36,35 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
       >
         <Form className="signUp-form d-flex flex-column justify-content-center align-items-center">
           <InputField
-            label="Full Name:"
+            label="Full Name"
             name="fullName"
             type="text"
             placeholder="John Brown"
           />
           <InputField
-            label="Email:"
+            label="Email"
             name="email"
             type="email"
             placeholder="example@gmail.com"
           />
           <InputField
-            label="Password:"
+            label="Password"
             name="password"
             type="password"
           />
           <InputField
-            label="Confirm Password:"
+            label="Confirm Password"
             name="confirmPassword"
             type="password"
           />
 
-          <div className="form-group">
-            <Button type="submit" variant="primary">
+          <div className={`${styles.formFooter} mt-4 w-100`}>
+            <Button className={styles.primaryBtn} type="submit" variant="primary">
               Sign Up
             </Button>
-            <Button variant="link" onClick={onAlreadySignIn}>
+            <Link className={styles.signInLink} to={Routes.SignIn}>
               Already Signed up?
-            </Button>
+            </Link>
           </div>
         </Form>
       </Formik>
@@ -82,12 +72,4 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
   );
 };
 
-const mapDispatchToProps = {
-  addNewUser: addNewUserRoutine,
-  router: push
-};
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(SignUp);
+export default SignUp;
