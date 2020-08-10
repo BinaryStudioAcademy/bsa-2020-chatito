@@ -5,4 +5,5 @@ export interface IUser {
   displayName: string;
   imageUrl?: string | null;
   title?: string | null;
+  status?: string | null;
 }

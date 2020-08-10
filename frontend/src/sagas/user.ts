@@ -6,7 +6,8 @@ import {
   deleteAccountRoutine,
   loginUserRoutine,
   forgotPasswordRoutine,
-  resetPasswordRoutine
+  resetPasswordRoutine,
+  editStatusRoutine
 } from '../routines/user';
 import { IAuthServerResponse } from '../common/models/auth/IAuthServerResponse';
 import { showModalRoutine } from '../routines/modal';
@@ -14,6 +15,7 @@ import { ModalTypes } from '../common/enums/ModalTypes';
 import api from '../common/helpers/apiHelper';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser } from '../services/authService';
+import { editStatus } from '../services/statusService';
 import { setAccessToken } from '../common/helpers/storageHelper';
 
 function* fetchUserRequest(): Routine<any> {
@@ -121,6 +123,20 @@ function* watchResetPasswordRequest() {
   yield takeEvery(resetPasswordRoutine.TRIGGER, resetPasswordRequest);
 }
 
+function* editStatusRequest({ payload }: Routine<any>) {
+  try {
+    const { id, status } = payload;
+    const response = yield call(editStatus, { id, status });
+    yield put(editStatusRoutine.success(response));
+  } catch (error) {
+    yield put(editStatusRoutine.failure(error.message));
+  }
+}
+
+function* watchEditStatusRequest() {
+  yield takeEvery(editStatusRoutine.TRIGGER, editStatusRequest);
+}
+
 export default function* userSaga() {
   yield all([
     watchAddNewUserRequest(),
@@ -130,6 +146,7 @@ export default function* userSaga() {
     watchForgotPasswordRequest(),
     watchLoginUserRequest(),
     watchDeleteAccount(),
-    watchResetPasswordRequest()
+    watchResetPasswordRequest(),
+    watchEditStatusRequest()
   ]);
 }

@@ -2,7 +2,7 @@ import styles from './styles.module.sass';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchThreadsRoutine } from './routines';
-import { IThreadsState } from './reducer';
+import { IThreadsState } from './reducers/reducer';
 import Thread from '../Thread';
 
 interface IThread {

@@ -1,15 +1,26 @@
 import Picker, { IEmojiData } from 'emoji-picker-react';
-import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
+import React, { FunctionComponent, useState } from 'react';
+import { connect } from 'react-redux';
 import { faGrin } from '@fortawesome/free-regular-svg-icons';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './styles.module.sass';
-import EmojiPopUp from '../EmojiPopUp';
+import EmojiPopUp from '../../components/EmojiPopUp';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
-import ModalWindow from '../ModalWindow';
+import ModalWindow from '../../components/ModalWindow';
+import { editStatusRoutine } from '../../routines/user';
+import { IAppState } from '../../common/models/store';
+import { IEditStatusData } from '../../services/statusService';
 
-const ChangeStatus: FunctionComponent = () => {
-  const [chosenEmoji, setChosenEmoji] = useState({ emoji: '' });
+interface IProps {
+  state: IAppState;
+  id: string;
+  editStatus: (obj: IEditStatusData) => void;
+}
+
+const ChangeStatus: FunctionComponent<IProps> = ({ state, id, editStatus }) => {
+  console.log(state);
+  const [chosenEmoji, setChosenEmoji] = useState('');
   const [crossStatus, setCrossStatus] = useState(false);
   const [status, setStatus] = useState('');
   const [show, setShow] = useState(false);
@@ -17,21 +28,24 @@ const ChangeStatus: FunctionComponent = () => {
   const handleShow = () => setShow(true);
   const hideCloseBtn = true;
   const onEmojiClick = (event: MouseEvent, emojiObject: IEmojiData) => {
-    setChosenEmoji(emojiObject);
+    setChosenEmoji(emojiObject.emoji);
     setCrossStatus(true);
+    const emojiButton = document.getElementById('openSmilePopUp');
+    emojiButton!.click();
   };
   const reset = () => {
-    setChosenEmoji({ emoji: '' });
+    setChosenEmoji('');
     setCrossStatus(false);
     setStatus('');
   };
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setStatus(e.target.value);
-    console.log(status);
+    if (e.target.value) {
+      setCrossStatus(true);
+    } else {
+      setCrossStatus(false);
+    }
   };
-  interface IStatus {
-    [key: string]: string;
-  }
   const suggestedStatuses = [
     { icon: '🗓️', text: 'In a meeting' },
     { icon: '🚌', text: 'Commuting' },
@@ -39,21 +53,19 @@ const ChangeStatus: FunctionComponent = () => {
     { icon: '🌴', text: 'Vacationing' },
     { icon: '🏡', text: 'Working remotely' }
   ];
-  useEffect(() => {
-    console.log(chosenEmoji.emoji);
-  }, [chosenEmoji]);
   const trigger = () => (
     <button
+      id="openSmilePopUp"
       type="button"
       className={`${styles.smileButton} ${styles.smileButton_reset}`}
     >
-      {!chosenEmoji.emoji ? (
+      {!chosenEmoji ? (
         <FontAwesomeIcon
           className={styles.smileIcon}
           icon={faGrin}
         />
       ) : (
-        <p>{chosenEmoji.emoji}</p>
+        <p>{chosenEmoji}</p>
       )}
     </button>
   );
@@ -72,6 +84,7 @@ const ChangeStatus: FunctionComponent = () => {
           type="text"
           value={status}
           onChange={onChange}
+          maxLength={100}
         />
         <InputGroup.Prepend className={styles.emojiContainer}>
           <InputGroup.Text className={styles.cross}>
@@ -101,6 +114,11 @@ const ChangeStatus: FunctionComponent = () => {
               type="button"
               id={`${index}`}
               className={styles.statusButton}
+              onClick={() => {
+                setChosenEmoji(suggestedStatuses[index].icon);
+                setStatus(suggestedStatuses[index].text);
+                setCrossStatus(true);
+              }}
             >
               {item.icon}
               <p className={styles.statusText}>{item.text}</p>
@@ -108,11 +126,33 @@ const ChangeStatus: FunctionComponent = () => {
           ))}
         </div>
       )}
+      <div className={styles.buttonsContainer}>
+        <Button
+          className={`${styles.setStatusButton} ${styles.cancel}`}
+          variant="outline-secondary"
+          onClick={() => {
+            setShow(!show);
+            setTimeout(() => { reset(); }, 200);
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          className={`${styles.setStatusButton} ${styles.save}`}
+          variant="secondary"
+          disabled={!crossStatus}
+          onClick={() => {
+            editStatus({ id, status: `${chosenEmoji} ${status}` });
+          }}
+        >
+          Save
+        </Button>
+      </div>
     </div>
   );
   return (
     <div>
-      <Button variant="primary" onClick={handleShow}>Launch demo modal</Button>
+      <Button variant="primary" onClick={handleShow}>Button to change</Button>
       <ModalWindow
         isShown={show}
         onHide={handleClose}
@@ -125,5 +165,10 @@ const ChangeStatus: FunctionComponent = () => {
   );
 };
 
-export default ChangeStatus;
-// eslint-disable-line max-len
+const mapStateToProps = (state: IAppState) => ({ state, id: state.user.user!.id });
+
+const mapDispatchToProps = {
+  editStatus: editStatusRoutine
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChangeStatus);

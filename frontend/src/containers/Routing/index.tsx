@@ -15,7 +15,7 @@ import ForgotPassword from '../../scenes/ForgotPassword';
 import ResetPassword from '../../scenes/ResetPassword';
 import SignIn from '../../scenes/SignIn';
 import SignUp from '../../scenes/SignUp';
-import ChangeStatus from '../../components/ChangeStatus';
+import ChangeStatus from '../ChangeStatus';
 
 interface IProps {
   isLoading: boolean;

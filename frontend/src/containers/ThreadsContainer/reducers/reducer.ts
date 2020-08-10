@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchThreadsRoutine } from './routines';
+import { fetchThreadsRoutine } from '../routines';
 
 interface IThread {
   [key: string]: string;

@@ -19,7 +19,6 @@ const EmojiPopUp: FunctionComponent<IProps> = ({ onEmojiClick, trigger }) => {
       </div>
     </Popover>
   );
-
   return (
     <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={showEmoji}>
       {trigger()}

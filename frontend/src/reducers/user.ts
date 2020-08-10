@@ -6,7 +6,8 @@ import {
   loginUserRoutine,
   deleteAccountRoutine,
   forgotPasswordRoutine,
-  resetPasswordRoutine
+  resetPasswordRoutine,
+  editStatusRoutine
 } from '../routines/user';
 import { IUser } from '../common/models/user/IUser';
 
@@ -18,7 +19,16 @@ export interface IUserState {
 
 const initialState: IUserState = {
   isLoading: false,
-  isAuthorized: false
+  isAuthorized: false,
+  user: {
+    id: '1',
+    email: 'email@email.com',
+    fullName: 'TestFullName',
+    displayName: 'name',
+    imageUrl: '',
+    title: '',
+    status: ''
+  }
 };
 
 const reducer = (state = initialState, { type, payload }: Routine<any>) => {
@@ -31,7 +41,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case addNewUserRoutine.SUCCESS:
       return {
         ...state,
-        data: { ...payload },
+        user: { ...payload },
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
       };
@@ -49,7 +59,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case fetchUserRoutine.SUCCESS:
       return {
         ...state,
-        data: { ...payload },
+        user: { ...payload },
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
       };
@@ -63,7 +73,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
       return { ...state, loading: true };
     }
     case editProfileRoutine.SUCCESS: {
-      return { ...state, loading: false, data: { ...payload } };
+      return { ...state, loading: false, user: { ...payload } };
     }
     case editProfileRoutine.FAILURE: {
       return { ...state, loading: false };
@@ -82,7 +92,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case loginUserRoutine.SUCCESS:
       return {
         ...state,
-        data: { ...payload },
+        user: { ...payload },
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
       };
@@ -108,6 +118,16 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
       return { ...state, loading: false };
     }
     case resetPasswordRoutine.FAILURE: {
+      return { ...state, loading: false };
+    }
+    case editStatusRoutine.TRIGGER: {
+      return { ...state, loading: true };
+    }
+    case editStatusRoutine.SUCCESS: {
+      console.log(payload.response);
+      return { ...state, loading: false, user: { ...state.user, status: payload } };
+    }
+    case editStatusRoutine.FAILURE: {
       return { ...state, loading: false };
     }
     default:

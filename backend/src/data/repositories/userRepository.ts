@@ -48,6 +48,15 @@ class UserRepository extends Repository<User> {
 
     return user;
   }
+
+  async editStatus(id: string, status: string): Promise<string> {
+    await this.update(
+      id,
+      { status }
+    );
+
+    return status;
+  }
 }
 
 export default UserRepository;
