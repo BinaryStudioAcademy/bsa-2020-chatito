@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import styles from './styles.module.sass';
 import bgImg from 'img/bg-img.png';
 import { connect } from 'react-redux';
-import { addWorkspaceRoutine } from '../../routines/routines';
+import { addWorkspaceRoutine } from 'scenes/Workspace/routines/routines';
 
 type IFetchWorkspace<T, S> = (name: T) => S;
 
