@@ -1,5 +1,6 @@
 export interface IWorkspaceResponse {
-  workspaceId: string;
+  id: string;
   name: string;
-  createdByUserId: string;
+  hash: string;
+  imageUrl: string;
 }

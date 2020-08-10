@@ -1,5 +1,4 @@
 import { EntityRepository, Repository } from 'typeorm';
-
 import { User } from '../entities/User';
 import { ICreateUser } from '../../common/models/user/ICreateUser';
 import { IUserClient } from '../../common/models/user/IUserClient';
@@ -20,8 +19,14 @@ class UserRepository extends Repository<User> {
     return this.findOne(id);
   }
 
+  deleteUser(id: string) {
+    const data = { id };
+    this.getById(id).then(user => user.remove({ data }));
+  }
+
   getByEmail(email: string): Promise<User> {
-    return this.findOne({ where: { email } });
+    const user = this.findOne({ where: { email }, relations: ['workspaces'] });
+    return user;
   }
 
   async editUser(id:string, data: IUserClient): Promise<User> {
@@ -31,7 +36,6 @@ class UserRepository extends Repository<User> {
     );
 
     const user = await this.findOne(id);
-
     return user;
   }
 
