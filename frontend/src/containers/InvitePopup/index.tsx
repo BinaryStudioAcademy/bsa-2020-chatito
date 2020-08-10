@@ -5,15 +5,15 @@ import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './styles.module.sass';
 
-import { IAppState } from '../../common/models/store';
-import { IBindingCallback1 } from '../../common/models/callback';
-import { IModalRoutine } from '../../common/models/modal/IShowModalRoutine';
-import { ISendInviteLink } from '../../common/models/inviteLink/ISendInviteLink';
-import { showModalRoutine } from '../../routines/modal';
+import { IAppState } from 'common/models/store';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
+import { ISendInviteLink } from 'common/models/inviteLink/ISendInviteLink';
+import { showModalRoutine } from 'routines/modal';
 import { sendInviteLinkRoutine } from './routines';
 
-import { ModalTypes } from '../../common/enums/ModalTypes';
-import ModalWindow from '../../components/ModalWindow';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import ModalWindow from 'components/ModalWindow';
 
 interface IProps {
   isShown: boolean;

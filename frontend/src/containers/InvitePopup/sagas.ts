@@ -2,10 +2,10 @@ import { Routine } from 'redux-saga-routines';
 import { all, put, call, takeEvery } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 
-import { showModalRoutine } from '../../routines/modal';
+import { showModalRoutine } from 'routines/modal';
 import { sendInviteLinkRoutine } from './routines';
-import { sendInviteLink } from '../../services/inviteLinkService';
-import { ModalTypes } from '../../common/enums/ModalTypes';
+import { sendInviteLink } from 'services/inviteLinkService';
+import { ModalTypes } from 'common/enums/ModalTypes';
 
 function* sendInviteLinkRequest({ payload }: Routine<any>) {
   try {
