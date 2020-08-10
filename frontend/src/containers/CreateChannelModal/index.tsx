@@ -1,7 +1,7 @@
 import React from 'react';
 import CreateChannelForm from 'components/CreateChannelForm';
 import { connect } from 'react-redux';
-import { IBindingCallback1 } from 'common/models/callback';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { ICreateChannel } from 'common/models/channel/ICreateChannel';
 import { IAppState } from 'common/models/store';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
