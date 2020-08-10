@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
 import styles from './styles.module.sass';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
@@ -7,48 +6,39 @@ import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faEdit, faEllipsisH, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { IUser } from '../../common/models/user/IUser';
-import { push, goBack } from 'connected-react-router';
 
-const { user, currentUserId, isOnline } = {
-  user: {
-    id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
-    imgUrl: 'https://cdn.boldomatic.com/resource/web/v2/images/profile-dummy-2x.png?width=34&height=34&format=jpg&quality=90', // eslint-disable-line max-len
-    fullName: 'Test Name',
-    whatIDo: 'coding',
-    status: 'In a meeting',
-    displayName: 'Test',
-    email: 'test@mail.com'
-  },
-  currentUserId: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
-  isOnline: true
-};
+interface IProps {
+  user: IUser;
+  currentUserId: string;
+  setShowProfileHandler: () => void;
+  setUserDataHandler: (user: IUser | {}) => void;
+}
 
-// interface IProps {
-//   user: IUser;
-//   currentUserId: string;
-//   isOnline: boolean;
-//   goBack: Function
-//   push: Function
-// }
-
-// const ProfileOverview: React.FC<IProps> = ({ user, currentUserId, isOnline }: IProps) => {
-const ProfileOverview: React.FC = () => {
+const ProfileOverview: React.FC<IProps> = ({ user, currentUserId,
+  setShowProfileHandler, setUserDataHandler }: IProps) => {
   const [showAbout, setShowAbout] = useState(false);
   const [message, setMessage] = useState('');
 
+  const isOnline = true; // mock data
+  const status = 'In a meeting'; // mock data
+  const imgUrl = 'https://cdn.boldomatic.com/resource/web/v2/images/profile-dummy-2x.png?width=34&height=34&format=jpg&quality=90'; // eslint-disable-line max-len
+
   const onClose = () => {
-    // goBack()
+    setShowProfileHandler();
+    setUserDataHandler({});
   };
 
   const onSend = () => {
     // if (!message.trim()) return;
 
     // send message
-    // push to dialogue
+
+    setShowProfileHandler();
+    setUserDataHandler({});
   };
 
   const onEdit = () => {
-    // push to edit page
+    // show edit modal
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -81,14 +71,14 @@ const ProfileOverview: React.FC = () => {
       </div>
 
       <div className={styles.avatar}>
-        <Image src={user.imgUrl} alt="avatar" roundedCircle />
+        <Image src={user.imageUrl || imgUrl} alt="avatar" roundedCircle />
       </div>
       <div className={styles.nameWrp}>
         <i className={isOnline ? styles.online : styles.offline} />
         <span className={styles.fullName}>{user.fullName}</span>
       </div>
-      {user.whatIDo && <div className={styles.whatIDo}>{user.whatIDo}</div>}
-      {user.status && <div className={styles.status}>{user.status}</div>}
+      {user.title && <div className={styles.title}>{user.title}</div>}
+      {status && <div className={styles.status}>{status}</div>}
 
       <InputGroup className={styles.inputWrp}>
         <FormControl
@@ -119,7 +109,11 @@ const ProfileOverview: React.FC = () => {
         </button>
       </div>
 
-      <button className={`${styles.aboutBtn} button-unstyled`} type="button" onClick={() => setShowAbout(!showAbout)}>
+      <button
+        className={`${styles.aboutBtn} button-unstyled`}
+        type="button"
+        onClick={() => setShowAbout(!showAbout)}
+      >
         <div>About</div>
         <FontAwesomeIcon icon={faChevronDown} />
       </button>
@@ -128,4 +122,4 @@ const ProfileOverview: React.FC = () => {
   );
 };
 
-export default connect(null, { push, goBack })(ProfileOverview);
+export default ProfileOverview;
