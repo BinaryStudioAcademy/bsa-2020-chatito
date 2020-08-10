@@ -17,6 +17,8 @@ import SignUp from '../../scenes/SignUp';
 import PageNotFound from '../../scenes/PageNotFound/index';
 import Workspace from '../../scenes/Workspace/containers/Workspace';
 
+import ToolBar from '../ChatToolbar';
+
 interface IProps {
   isLoading: boolean;
   isAuthorized: boolean;
@@ -42,6 +44,7 @@ const Routing: React.FC<IProps> = ({
   return (
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <Switch>
+        <PublicRoute exact path={Routes.SignIn} component={ToolBar} />
         <PublicRoute exact path={Routes.SignIn} component={SignIn} />
         <PublicRoute exact path={Routes.SignUp} component={SignUp} />
         <PublicRoute exact path={Routes.ForgotPassword} component={ForgotPassword} />
