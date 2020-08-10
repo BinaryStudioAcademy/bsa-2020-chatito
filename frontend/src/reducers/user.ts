@@ -8,7 +8,7 @@ import {
   forgotPasswordRoutine,
   resetPasswordRoutine
 } from '../routines/user';
-import { IUser } from '../common/models/user/IUser';
+import { IUser } from '@models/user/IUser';
 
 export interface IUserState {
   user?: IUser;

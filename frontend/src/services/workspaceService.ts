@@ -1,4 +1,4 @@
-import api from '../common/helpers/apiHelper';
+import api from '@helpers/apiHelper';
 
 export async function addWorkspace(name: string) {
   const response = await api.post('/', { name });

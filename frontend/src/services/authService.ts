@@ -1,8 +1,8 @@
-import api from '../common/helpers/apiHelper';
-import { IUser } from '../common/models/user/IUser';
-import { IAuthServerResponse } from '../common/models/auth/IAuthServerResponse';
-import { IRegisterUser } from '../common/models/auth/IRegisterUser';
-import { ILoginUser } from '../common/models/auth/ILoginUser';
+import api from '@helpers/apiHelper';
+import { IUser } from '@models/user/IUser';
+import { IAuthServerResponse } from '@models/auth/IAuthServerResponse';
+import { IRegisterUser } from '@models/auth/IRegisterUser';
+import { ILoginUser } from '@models/auth/ILoginUser';
 
 type ServerResponse = IAuthServerResponse & Response;
 

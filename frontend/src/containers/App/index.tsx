@@ -3,7 +3,7 @@ import Routing from '../Routing';
 import { Provider } from 'react-redux';
 import { store } from '../../store';
 import { ConnectedRouter } from 'connected-react-router';
-import { history } from '../../common/helpers/historyHelper';
+import { history } from '@helpers/historyHelper';
 import ErrorBoundary from '../ErrorBoundary';
 import ReduxToastr from 'react-redux-toastr';
 

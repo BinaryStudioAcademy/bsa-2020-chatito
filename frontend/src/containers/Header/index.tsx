@@ -7,11 +7,11 @@ import SearchInput from '../../components/SearchInput';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IUserState } from '../../reducers/user';
-import { IAppState } from '../../common/models/store';
+import { IAppState } from '@models/store';
 import EditProfile from '../EditProfile';
 import { showModalRoutine } from '../../routines/modal';
-import { ModalTypes } from '../../common/enums/ModalTypes';
-import { IModalRoutine } from '../../common/models/modal/IShowModalRoutine';
+import { ModalTypes } from '@enums/ModalTypes';
+import { IModalRoutine } from '@models/modal/IShowModalRoutine';
 
 interface IProps {
   user: IUserState;
