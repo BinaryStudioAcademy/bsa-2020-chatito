@@ -14,7 +14,7 @@ function* createChannelRequest({ payload }: Routine<any>) {
 
     yield put(fetchUserChannelsRoutine.trigger());
   } catch (error) {
-    yield call(toastr.error, 'Error', 'We couldn\'t create a channel, please try again.');
+    yield call(toastr.error, 'Error', error.message);
     yield put(createChannelRoutine.failure());
   }
 }
@@ -28,7 +28,7 @@ function* fetchUserChannelsRequest() {
     const response = yield call(fetchUserChannels);
     yield put(fetchUserChannelsRoutine.success(response));
   } catch (error) {
-    yield call(toastr.error, 'Error', 'While we were collected your channels, an error occured. Refresh your page.');
+    yield call(toastr.error, 'Error', error.message);
     yield put(fetchUserChannelsRoutine.failure(error.message));
   }
 }
