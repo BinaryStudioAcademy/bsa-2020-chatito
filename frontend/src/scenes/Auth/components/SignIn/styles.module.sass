@@ -31,8 +31,30 @@
     background-color: var(--auth-scene-btn-background)
     border-color: var(--auth-scene-btn-background)
 
-    &:hover, &:active,
-      // error, search solution
-      // background-color: scale-color(var(--auth-scene-btn-background), $lightness: 5%)
+    &:hover, &:active
       background-color: var(--auth-scene-btn-background)
       border-color: var(--auth-scene-btn-background)
+
+.socialSignInWrapper
+  margin-left: auto
+  display: flex
+  flex-wrap: nowrap
+  align-items: center
+
+  span
+    font-size: 13px
+    color: var(--auth-scene-text-secondary-color)
+
+.socialSignIn
+  width: 48px
+  height: 48px
+  margin-left: 5px
+  border-radius: 50%
+  background-color: #EFEDE1
+  border: none
+  cursor: pointer
+
+  &:active, &:focus
+    outline: none
+    border: none
+

@@ -1,8 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import { Button } from 'react-bootstrap';
-import { push } from 'connected-react-router';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { signUpValSchema as validationSchema } from '../../../../common/models/formik/ValidationSchemas';
@@ -13,10 +11,9 @@ import InputField from '../../../../components/InputField/InputField';
 
 interface IProps {
   addNewUser: IBindingCallback1<IRegisterUser>;
-  router: (route: string) => void;
 }
 
-export const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
+export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
   const onSubmit = async (values: IRegisterUser,
     { setSubmitting }: { setSubmitting: CallableFunction }) => {
     const { email, password, fullName } = values;
@@ -31,11 +28,6 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
     password: '',
     confirmPassword: ''
   };
-
-  const onAlreadySignIn = () => {
-    router(Routes.SignIn);
-  };
-
   return (
     <div className={styles.signUp}>
       <h1 className={styles.signUpHeader}>Sign up</h1>
@@ -82,11 +74,4 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
   );
 };
 
-const mapDispatchToProps = {
-  router: push
-};
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(SignUp);
+export default SignUp;

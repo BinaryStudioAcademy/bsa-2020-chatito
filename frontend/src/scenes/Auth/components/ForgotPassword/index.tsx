@@ -1,16 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import { Formik, Form } from 'formik';
+import { Button } from 'react-bootstrap';
 import styles from './styles.module.sass';
 import InputField from '../../../../components/InputField/InputField';
 import { forgotPasswordSchema as validationSchema } from '../../../../common/models/formik/ValidationSchemas';
-import { forgotPasswordRoutine } from '../../../../routines/user';
-import { connect } from 'react-redux';
-import { Routine } from 'redux-saga-routines';
 import { IForgotPasswordInput } from '../../../../common/models/auth/IForgotPasswordInput';
-import { Button } from 'react-bootstrap';
+import { IBindingCallback1 } from '../../../../common/models/callback/IBindingCallback1';
 
 interface IProps {
-  forgotPassword: Routine;
+  forgotPassword: IBindingCallback1<IForgotPasswordInput>;
 }
 
 const ForgotPassword: FunctionComponent<IProps> = ({ forgotPassword }) => {
@@ -51,11 +49,4 @@ const ForgotPassword: FunctionComponent<IProps> = ({ forgotPassword }) => {
   );
 };
 
-const mapDispatchToProps = {
-  forgotPassword: forgotPasswordRoutine
-};
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(ForgotPassword);
+export default ForgotPassword;

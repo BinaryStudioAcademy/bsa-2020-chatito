@@ -3,10 +3,12 @@ import { Formik, Form } from 'formik';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import styles from './styles.module.sass';
+import InputField from '../../../../components/InputField/InputField';
 import { signInValSchema as validationSchema } from '../../../../common/models/formik/ValidationSchemas';
 import { ILoginUser } from '../../../../common/models/auth/ILoginUser';
 import { Routes } from '../../../../common/enums/Routes';
-import InputField from '../../../../components/InputField/InputField';
+import { ReactComponent as SignInGoogle } from '../../../../img/signInGoogle.svg';
+import { ReactComponent as SignInFacebook } from '../../../../img/signInFacebook.svg';
 
 interface IProps {
   loginUser: (payload: ILoginUser) => void;
@@ -61,6 +63,15 @@ const SignIn: FunctionComponent<IProps> = ({ loginUser }) => {
             <Button type="submit" variant="primary" className={styles.primaryBtn}>
               Sign In
             </Button>
+            <div className={styles.socialSignInWrapper}>
+              <span>Or Log in with</span>
+              <button className={styles.socialSignIn} type="button">
+                <SignInGoogle />
+              </button>
+              <button className={styles.socialSignIn} type="button">
+                <SignInFacebook />
+              </button>
+            </div>
           </div>
         </Form>
       </Formik>

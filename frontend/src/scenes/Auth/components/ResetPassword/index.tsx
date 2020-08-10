@@ -1,16 +1,15 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Formik, Form } from 'formik';
+import { Button } from 'react-bootstrap';
 import styles from './styles.module.sass';
 import InputField from '../../../../components/InputField/InputField';
 import { resetPasswordSchema as validationSchema } from '../../../../common/models/formik/ValidationSchemas';
-import { resetPasswordRoutine } from '../../../../routines/user';
-import { connect } from 'react-redux';
-import { Routine } from 'redux-saga-routines';
 import { IResetPasswordInput } from '../../../../common/models/auth/IResetPasswordInput';
-import { Button } from 'react-bootstrap';
+import { IResetPasswordCallback } from '../../../../common/models/auth/IResetPasswordCallback';
+import { IBindingCallback1 } from '../../../../common/models/callback/IBindingCallback1';
 
 interface IProps {
-  resetPassword: Routine;
+  resetPassword: IBindingCallback1<IResetPasswordCallback>;
   match: {
     params: {
       token: string;
@@ -59,8 +58,4 @@ const ForgotPassword: FunctionComponent<IProps> = ({ resetPassword, match }) => 
   );
 };
 
-const mapDispatchToProps = {
-  resetPassword: resetPasswordRoutine
-};
-
-export default connect(null, mapDispatchToProps)(ForgotPassword);
+export default ForgotPassword;
