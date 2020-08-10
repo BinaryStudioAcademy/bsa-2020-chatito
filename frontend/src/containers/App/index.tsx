@@ -7,7 +7,6 @@ import { history } from '../../common/helpers/historyHelper';
 import ErrorBoundary from '../ErrorBoundary';
 import ReduxToastr from 'react-redux-toastr';
 
-
 const App = () => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
