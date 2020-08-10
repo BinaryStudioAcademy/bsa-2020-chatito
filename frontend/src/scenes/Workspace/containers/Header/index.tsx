@@ -1,9 +1,9 @@
 import styles from './styles.module.sass';
 import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
-import UserAvatar from '../../components/UserLogo';
-import UserPopUp from '../../components/UserPopUp';
-import SearchInput from '../../components/SearchInput';
+import UserAvatar from '../../../../components/UserLogo';
+import UserPopUp from '../../../../components/UserPopUp';
+import SearchInput from '../../../../components/SearchInput';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IAppState } from '../../common/models/store';

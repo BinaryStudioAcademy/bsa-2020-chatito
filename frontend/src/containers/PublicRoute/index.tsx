@@ -18,7 +18,7 @@ const PublicRoute: React.FC<IProps> = ({
     {...rest}
     render={props => (
       isAuthorized
-        ? <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+        ? <Redirect to={{ pathname: '/workspace', state: { from: props.location } }} />
         : <Component {...props} />
     )}
   />
