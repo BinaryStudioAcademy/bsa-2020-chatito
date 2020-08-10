@@ -1,4 +1,4 @@
-import { fetchWorkspacesRoutine } from './routines';
+import { fetchWorkspacesRoutine } from '../../../../routines/user';
 import { takeEvery, put, call, all } from 'redux-saga/effects';
 import { getWorkspaces } from '../../../../services/workspaceService';
 
