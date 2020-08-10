@@ -1,8 +1,8 @@
 import React from 'react';
 import { useField } from 'formik';
 import { InputGroup, FormControl } from 'react-bootstrap';
-import styles from './styles.module.sass';
 import { Link } from 'react-router-dom';
+import styles from './styles.module.sass';
 
 interface IProps {
   label: string;
@@ -39,7 +39,6 @@ const InputField = ({
       <InputGroup size="sm" className={styles.inputGroup}>
         <FormControl id={label} aria-label={label} {...field} {...props} />
       </InputGroup>
-
       {meta.touched && meta.error ? (
         <div className={`text-danger ${styles.error}`}>{meta.error}</div>
       ) : null}
