@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@src/": ["src"],
+      "@enums/": ["src/common/enums/"],
+      "@helpers/": ["src/common/helpers/"],
+      "@models/": ["src/common/models/"],
+      "@types/": ["src/common/types/"]
+    }
+  }
+}
