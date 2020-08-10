@@ -8,23 +8,32 @@ import styles from './styles.module.sass';
 import { IAppState } from '../../common/models/store';
 import { IBindingCallback1 } from '../../common/models/callback';
 import { IModalRoutine } from '../../common/models/modal/IShowModalRoutine';
+import { ISendInviteLink } from '../../common/models/inviteLink/ISendInviteLink';
 import { showModalRoutine } from '../../routines/modal';
+import { sendInviteLinkRoutine } from './routines';
+
 import { ModalTypes } from '../../common/enums/ModalTypes';
 import ModalWindow from '../../components/ModalWindow';
 
 interface IProps {
   isShown: boolean;
-  // sendInviteLink: IBindingCallback1<ISendInviteLink>;
+  sendInviteLink: IBindingCallback1<ISendInviteLink>;
   showModal: IBindingCallback1<IModalRoutine>;
 }
 
-const InvitePopup = ({ isShown, showModal }: IProps) => {
+const InvitePopup = ({ isShown, sendInviteLink, showModal }: IProps) => {
   const [inviteEmail, setInviteEmail] = useState<string>('');
 
   const isEmailEmpty = () => !inviteEmail.length;
 
   const handleCloseModal = () => {
     showModal({ modalType: ModalTypes.InvitePopup, show: false });
+  };
+
+  const handleSend = () => {
+    sendInviteLink({
+      email: inviteEmail
+    });
   };
 
   const modalHeader = (
@@ -35,7 +44,11 @@ const InvitePopup = ({ isShown, showModal }: IProps) => {
     <Form className={styles.modalBody}>
       <Form.Group>
         <Form.Label>To:</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" />
+        <Form.Control
+          type="email"
+          placeholder="Enter email"
+          onChange={event => setInviteEmail(event.target.value)}
+        />
       </Form.Group>
     </Form>
   );
@@ -50,7 +63,7 @@ const InvitePopup = ({ isShown, showModal }: IProps) => {
       <Button
         disabled={isEmailEmpty()}
         variant="secondary"
-        // onClick={handleSubmit}
+        onClick={handleSend}
       >
         Send
       </Button>
@@ -71,7 +84,8 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  showModal: showModalRoutine
+  showModal: showModalRoutine,
+  sendInviteLink: sendInviteLinkRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InvitePopup);

@@ -25,6 +25,9 @@ export default (state = initialState, action: Routine<any>) => {
         case ModalTypes.CreateChannel: {
           return { ...state, createChannel: show };
         }
+        case ModalTypes.InvitePopup: {
+          return { ...state, invitePopup: show };
+        }
         default:
           return state;
       }
