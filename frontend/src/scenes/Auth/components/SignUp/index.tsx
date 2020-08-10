@@ -28,7 +28,7 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
   };
   return (
     <div className={styles.signUp}>
-      <h1 className={styles.signUpHeader}>Sign up</h1>
+      <h1 className={styles.header}>Sign up</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
