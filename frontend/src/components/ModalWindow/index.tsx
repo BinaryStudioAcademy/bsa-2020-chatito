@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
-import { IBindingAction } from '../../common/models/callback';
+import { IBindingAction } from '../../common/models/callback/IBindingActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import styles from './styles.module.sass';
