@@ -20,6 +20,7 @@ import { setAccessToken } from 'common/helpers/storageHelper';
 import { toastr } from 'react-redux-toastr';
 import { IUser } from '../common/models/user/IUser';
 import { history } from '../common/helpers/historyHelper';
+import { push } from 'connected-react-router';
 
 function* fetchUserRequest(): Routine<any> {
   try {
@@ -120,8 +121,8 @@ function* watchForgotPasswordRequest() {
 function* resetPasswordRequest({ payload }: Routine<any>) {
   try {
     const { token, password } = payload;
-    setAccessToken(token);
-    yield call(api.put, '/api/auth/resetpass', { password });
+    yield call(api.put, '/api/auth/resetpass', { password, token });
+    yield put(push('/signin'));
     yield put(resetPasswordRoutine.success());
   } catch (error) {
     yield call(toastr.error, 'Error', error.message);
