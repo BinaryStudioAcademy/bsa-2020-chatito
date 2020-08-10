@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 import { addWorkspaceRoutine, userChannelRoutine } from '../routines';
+=======
+import { addWorkspaceRoutine } from '../routines/routines';
+>>>>>>> f7b9ce56ca6bfc53823261c076674fdb50d1d6cd
 import { Routine } from 'redux-saga-routines';
 import { takeEvery, put, call } from 'redux-saga/effects';
-import { addWorkspace } from '../../../services/workspaceService';
 import { toastr } from 'react-redux-toastr'
+import { addWorkspace } from '../../../services/workspaceService';
 
 function* addWorkspaceReq({ payload }: Routine<any>) {
   try {

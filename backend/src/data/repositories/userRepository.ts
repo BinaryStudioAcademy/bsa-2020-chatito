@@ -25,7 +25,8 @@ class UserRepository extends Repository<User> {
   }
 
   getByEmail(email: string): Promise<User> {
-    return this.findOne({ where: { email } });
+    const user = this.findOne({ where: { email }, relations: ['workspaces'] });
+    return user;
   }
 
   async editUser(id:string, data: IUserClient): Promise<User> {
@@ -35,17 +36,6 @@ class UserRepository extends Repository<User> {
     );
 
     const user = await this.findOne(id);
-    return user;
-  }
-
-  async editPassword(id:string, password: string): Promise<User> {
-    await this.update(
-      id,
-      { password }
-    );
-
-    const user = await this.findOne(id);
-
     return user;
   }
 
