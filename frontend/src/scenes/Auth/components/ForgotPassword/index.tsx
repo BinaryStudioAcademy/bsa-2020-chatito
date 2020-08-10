@@ -7,6 +7,7 @@ import { forgotPasswordRoutine } from '../../../../routines/user';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
 import { IForgotPasswordInput } from '../../../../common/models/auth/IForgotPasswordInput';
+import { Button } from 'react-bootstrap';
 
 interface IProps {
   forgotPassword: Routine;
@@ -25,7 +26,7 @@ const ForgotPassword: FunctionComponent<IProps> = ({ forgotPassword }) => {
 
   return (
     <div className={styles.forgotPassword}>
-      <h1 className="text-center p-5">Recover your password</h1>
+      <h1 className={styles.header}>Recover your password</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -39,10 +40,10 @@ const ForgotPassword: FunctionComponent<IProps> = ({ forgotPassword }) => {
             placeholder="Your email address"
           />
 
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary mr-2">
+          <div className={`${styles.formFooter} w-100 mt-4`}>
+            <Button type="submit" className={styles.primaryBtn}>
               Recover
-            </button>
+            </Button>
           </div>
         </Form>
       </Formik>
