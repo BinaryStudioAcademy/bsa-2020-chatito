@@ -26,7 +26,7 @@ export class User extends AbstractEntity {
   @Column({ nullable: true, length: 300 })
   title: string;
 
-  @Column({ nullable: true, length: 300 })
+  @Column({ nullable: true, length: 100 })
   status: string;
 
   @OneToMany(() => Post, post => post.createdByUser)
