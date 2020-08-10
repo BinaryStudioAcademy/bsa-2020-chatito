@@ -36,9 +36,6 @@ const Routing: React.FC<IProps> = ({
     }
   });
 
-  const signInMock = () => <div>Sign In</div>;
-  const mainMock = () => <div>Main</div>;
-
   return (
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <Switch>
@@ -47,7 +44,6 @@ const Routing: React.FC<IProps> = ({
         <PublicRoute exact path={Routes.ForgotPassword} component={ForgotPassword} />
         <PublicRoute exact path={Routes.ResetPassword} component={ResetPassword} />
         <PrivateRoute exact path={Routes.Workspace} component={Workspace} />
-        <PrivateRoute exact path="/" component={mainMock} />
         <PrivateRoute exact path="/add-workspace" component={AddWorkspace} />
         <PublicRoute path={Routes.NotExistingPath} component={PageNotFound} />
       </Switch>
