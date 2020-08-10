@@ -25,7 +25,6 @@ function* fetchUserRequest(): Routine<any> {
     yield put(fetchUserRoutine.success({ payload: user }));
     setAccessToken(accessToken);
   } catch (error) {
-    const { errorCode, message } = error;
     yield call(toastr.error, 'Error', error.message);
     yield put(fetchUserRoutine.failure(error.message));
   }
@@ -76,7 +75,6 @@ function* deleteAccount() {
     };
     yield put(deleteAccountRoutine.success(data));
   } catch (error) {
-    const { errorCode, message } = error;
     yield call(toastr.error, 'Error', error.message);
     yield put(deleteAccountRoutine.failure(error.message));
   } finally {
@@ -94,7 +92,6 @@ function* addNewUserRequest({ payload }: any): Routine<any> {
     yield put(addNewUserRoutine.success({ payload: user }));
     setAccessToken(accessToken);
   } catch (error) {
-    const { errorCode, message } = error;
     yield call(toastr.error, 'Error', error.message);
     yield put(addNewUserRoutine.failure(error.message));
   }
@@ -109,7 +106,6 @@ function* forgotPasswordRequest({ payload }: Routine<any>) {
     yield call(api.put, '/api/auth/forgotpass', payload);
     yield put(forgotPasswordRoutine.success());
   } catch (error) {
-    const { errorCode, message } = error;
     yield call(toastr.error, 'Error', error.message);
     yield put(forgotPasswordRoutine.failure(error.message));
   }
@@ -126,7 +122,6 @@ function* resetPasswordRequest({ payload }: Routine<any>) {
     const response = yield call(api.put, '/api/auth/resetpass', { password });
     yield put(resetPasswordRoutine.success());
   } catch (error) {
-    const { errorCode, message } = error;
     yield call(toastr.error, 'Error', error.message);
     yield put(resetPasswordRoutine.failure(error.message));
   }
@@ -142,7 +137,6 @@ function* fetchWorkspaces() {
 
     yield put(fetchWorkspacesRoutine.success(workspaces));
   } catch (error) {
-    const { errorCode, message } = error;
     yield call(toastr.error, 'Error', error.message);
     yield put(fetchWorkspacesRoutine.failure(error));
   }
