@@ -1,4 +1,4 @@
-import { ErrorCode } from '../../enums/ErrorCode';
+import { ErrorCode } from 'common/enums/ErrorCode';
 
 export interface IResponseError {
   status: number;

@@ -3,11 +3,11 @@ import { Formik, Form } from 'formik';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.sass';
-import InputField from '../../../../components/InputField/InputField';
-import { forgotPasswordSchema as validationSchema } from '../../../../common/models/formik/ValidationSchemas';
-import { IForgotPasswordInput } from '../../../../common/models/auth/IForgotPasswordInput';
-import { IBindingCallback1 } from '../../../../common/models/callback/IBindingCallback1';
-import { Routes } from '../../../../common/enums/Routes';
+import InputField from 'components/InputField/InputField';
+import { forgotPasswordSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
+import { IForgotPasswordInput } from 'common/models/auth/IForgotPasswordInput';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { Routes } from 'common/enums/Routes';
 
 interface IProps {
   forgotPassword: IBindingCallback1<IForgotPasswordInput>;

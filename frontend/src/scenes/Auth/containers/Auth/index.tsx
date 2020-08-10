@@ -6,20 +6,20 @@ import SignIn from '../../components/SignIn';
 import SignUp from '../../components/SignUp';
 import ForgotPassword from '../../components/ForgotPassword';
 import ResetPassword from '../../components/ResetPassword';
-import { ReactComponent as Mascot } from '../../../../img/chatitoMascot.svg';
-import { ReactComponent as Logo } from '../../../../img/logo.svg';
-import { Routes } from '../../../../common/enums/Routes';
-import { IBindingCallback1 } from '../../../../common/models/callback/IBindingCallback1';
-import { ILoginUser } from '../../../../common/models/auth/ILoginUser';
-import { IRegisterUser } from '../../../../common/models/auth/IRegisterUser';
-import { IForgotPasswordInput } from '../../../../common/models/auth/IForgotPasswordInput';
-import { IResetPasswordInput } from '../../../../common/models/auth/IResetPasswordInput';
+import { ReactComponent as Mascot } from 'img/chatitoMascot.svg';
+import { ReactComponent as Logo } from 'img/logo.svg';
+import { Routes } from 'common/enums/Routes';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { ILoginUser } from 'common/models/auth/ILoginUser';
+import { IRegisterUser } from 'common/models/auth/IRegisterUser';
+import { IForgotPasswordInput } from 'common/models/auth/IForgotPasswordInput';
+import { IResetPasswordInput } from 'common/models/auth/IResetPasswordInput';
 import {
   loginUserRoutine,
   addNewUserRoutine,
   forgotPasswordRoutine,
   resetPasswordRoutine
-} from '../../../../routines/user';
+} from 'routines/user';
 
 interface IProps {
   loginUser: IBindingCallback1<ILoginUser>;

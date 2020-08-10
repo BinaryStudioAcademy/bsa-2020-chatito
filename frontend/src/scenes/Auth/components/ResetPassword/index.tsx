@@ -2,11 +2,11 @@ import React, { FunctionComponent } from 'react';
 import { Formik, Form } from 'formik';
 import { Button } from 'react-bootstrap';
 import styles from './styles.module.sass';
-import InputField from '../../../../components/InputField/InputField';
-import { resetPasswordSchema as validationSchema } from '../../../../common/models/formik/ValidationSchemas';
-import { IResetPasswordInput } from '../../../../common/models/auth/IResetPasswordInput';
-import { IResetPasswordCallback } from '../../../../common/models/auth/IResetPasswordCallback';
-import { IBindingCallback1 } from '../../../../common/models/callback/IBindingCallback1';
+import InputField from 'components/InputField/InputField';
+import { resetPasswordSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
+import { IResetPasswordInput } from 'common/models/auth/IResetPasswordInput';
+import { IResetPasswordCallback } from 'common/models/auth/IResetPasswordCallback';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 
 interface IProps {
   resetPassword: IBindingCallback1<IResetPasswordCallback>;

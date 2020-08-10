@@ -3,11 +3,11 @@ import { Formik, Form } from 'formik';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.sass';
-import { signUpValSchema as validationSchema } from '../../../../common/models/formik/ValidationSchemas';
-import { IRegisterUser } from '../../../../common/models/auth/IRegisterUser';
-import { Routes } from '../../../../common/enums/Routes';
-import { IBindingCallback1 } from '../../../../common/models/callback/IBindingCallback1';
-import InputField from '../../../../components/InputField/InputField';
+import { signUpValSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
+import { IRegisterUser } from 'common/models/auth/IRegisterUser';
+import { Routes } from 'common/enums/Routes';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import InputField from 'components/InputField/InputField';
 
 interface IProps {
   addNewUser: IBindingCallback1<IRegisterUser>;
