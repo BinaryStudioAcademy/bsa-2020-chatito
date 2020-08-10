@@ -77,12 +77,11 @@ export const login = async ({ email, password }: ILoginUser) => {
 export const removeToken = async (token: string) => {
   try {
     const id = decrypt(token);
-    console.log(id);
     const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
     await refreshTokenRepository.deleteToken(id);
     return { result: true };
   } catch (err) {
-    throw new Error('Error refresh Token remove !');
+    throw new CustomError(501, 'Refresh Token Invalid !', ErrorCode.InvalidRefreshToken, err);
   }
 };
 

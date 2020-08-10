@@ -6,12 +6,10 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { removeToken } from '../../services/authService';
 
 export const Logout: FunctionComponent = () => {
-  const onLogout = async () => {
-    alert(getRefreshToken());
-    await removeToken(getRefreshToken());
-    alert('S');
+  const onLogout = () => {
+    removeToken(getRefreshToken());
     localStorage.clear();
-    window.location.href = '/';
+    window.location.href = '/signin';
   };
   return (
     <Button variant="light" onClick={onLogout}>
