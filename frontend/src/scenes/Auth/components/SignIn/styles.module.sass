@@ -1,0 +1,60 @@
+.signIn
+  width: 350px
+
+.header
+  font-weight: 900
+  text-align: left
+
+.signUpLink
+  color: var(--auth-scene-text-secondary-color)
+  font-family: var(--secondary-font-family), sans-serif
+  font-size: 13px
+  font-weight: 500
+  margin-bottom: 30px
+
+.authLink
+  color: var(--auth-scene-link-color)
+
+.forgotPasswordLink
+  font-size: 11px
+  color: var(--auth-scene-link-color)
+  align-self: center
+
+.formFooter
+  display: flex
+  justify-content: flex-start
+  align-items: center
+
+  .primaryBtn:global(.btn-primary)
+    width: 145px
+    height: 50px
+    background-color: var(--auth-scene-btn-background)
+    border-color: var(--auth-scene-btn-background)
+
+    &:hover, &:active
+      background-color: var(--auth-scene-btn-background)
+      border-color: var(--auth-scene-btn-background)
+
+.socialSignInWrapper
+  margin-left: auto
+  display: flex
+  flex-wrap: nowrap
+  align-items: center
+
+  span
+    font-size: 13px
+    color: var(--auth-scene-text-secondary-color)
+
+.socialSignIn
+  width: 48px
+  height: 48px
+  margin-left: 5px
+  border-radius: 50%
+  background-color: #EFEDE1
+  border: none
+  cursor: pointer
+
+  &:active, &:focus
+    outline: none
+    border: none
+

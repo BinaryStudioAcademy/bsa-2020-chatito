@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { IBindingAction } from '../models/callback';
+import { IBindingAction } from '../models/callback/IBindingActions';
 import { areEqualStrings } from '../helpers/globalHelpers';
 
 interface IParams {

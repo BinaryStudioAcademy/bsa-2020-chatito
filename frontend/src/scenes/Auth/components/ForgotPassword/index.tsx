@@ -1,23 +1,22 @@
 import React, { FunctionComponent } from 'react';
 import { Formik, Form } from 'formik';
+import { Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import styles from './styles.module.sass';
 import InputField from 'components/InputField/InputField';
 import { forgotPasswordSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
-import { forgotPasswordRoutine } from 'routines/user';
-import { connect } from 'react-redux';
-import { Routine } from 'redux-saga-routines';
 import { IForgotPasswordInput } from 'common/models/auth/IForgotPasswordInput';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { Routes } from 'common/enums/Routes';
 
 interface IProps {
-  forgotPassword: Routine;
+  forgotPassword: IBindingCallback1<IForgotPasswordInput>;
 }
 
 const ForgotPassword: FunctionComponent<IProps> = ({ forgotPassword }) => {
-  const onSubmit = async (values: IForgotPasswordInput,
-    { setSubmitting }: { setSubmitting: CallableFunction }) => {
+  const onSubmit = (values: IForgotPasswordInput) => {
     const { email } = values;
     forgotPassword({ email });
-    setSubmitting(false);
   };
   const initialValues = {
     email: ''
@@ -25,7 +24,7 @@ const ForgotPassword: FunctionComponent<IProps> = ({ forgotPassword }) => {
 
   return (
     <div className={styles.forgotPassword}>
-      <h1 className="text-center p-5">Recover your password</h1>
+      <h1 className={styles.header}>Recover your password</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -33,16 +32,20 @@ const ForgotPassword: FunctionComponent<IProps> = ({ forgotPassword }) => {
       >
         <Form className="d-flex flex-column justify-content-center align-items-center">
           <InputField
-            label="Email:"
+            label="Email"
             name="email"
             type="email"
             placeholder="Your email address"
           />
 
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary mr-2">
+          <div className={`${styles.formFooter} w-100 mt-4`}>
+            <Button type="submit" className={styles.primaryBtn}>
               Recover
-            </button>
+            </Button>
+            <div className={styles.linkWrapper}>
+              <span>{'Remembered? '}</span>
+              <Link className={styles.signInLink} to={Routes.SignIn}>Sign in</Link>
+            </div>
           </div>
         </Form>
       </Formik>
@@ -50,11 +53,4 @@ const ForgotPassword: FunctionComponent<IProps> = ({ forgotPassword }) => {
   );
 };
 
-const mapDispatchToProps = {
-  forgotPassword: forgotPasswordRoutine
-};
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(ForgotPassword);
+export default ForgotPassword;
