@@ -1,21 +1,25 @@
-// Usage: create ref on your input with useRef, pass key code as string
-
 import React, { useEffect } from 'react';
+import { IBindingAction } from '../models/callback';
+import { eventKeyMatch } from '../helpers/eventHelper';
 
-export const useKey = (key: string, callback: () => void, ref: React.RefObject<HTMLElement>) => {
-  const match = (event: KeyboardEvent) => key.toLowerCase() === event.key.toLowerCase();
+interface IParams {
+  key: string;
+  ref: React.RefObject<HTMLElement>;
+  callback: IBindingAction;
+}
+
+// Usage: create ref on your input with useRef, pass key code as string
+export const useKey = ({ key, callback, ref }: IParams) => {
 
   const onUp = (event: KeyboardEvent) => {
-    console.log(event.key);
-
-    if (match(event)) {
+    if (eventKeyMatch(key, event)) {
       callback();
     }
   };
 
   useEffect(() => {
     if (ref && ref.current) {
-      const current = ref.current;
+      const { current } = ref;
 
       current.addEventListener('keyup', onUp, true);
 
@@ -23,8 +27,5 @@ export const useKey = (key: string, callback: () => void, ref: React.RefObject<H
         current.removeEventListener('keyup', onUp);
       };
     }
-    return undefined;
   }, [key, ref]);
-
-  return key;
 };
