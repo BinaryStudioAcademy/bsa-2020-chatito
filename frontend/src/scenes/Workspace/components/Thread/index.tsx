@@ -1,21 +1,19 @@
 import React, { FunctionComponent, CSSProperties } from 'react';
 import PartisipantsList from '../ParticipantsList';
-import TextEditor from '../TextEditor';
+import TextEditor from '../../../../components/TextEditor';
 import styles from './styles.module.sass';
-import { IUser } from '../../common/models/user';
+import { IUser } from '../../../../common/models/user/IUser';
 
 interface IProps {
-  width: number | string;
+  width?: number | string;
   participants: IUser[];
   // comments;
 }
 
 const createMessage = (text = '') => <div className={styles.mockMessage}>{text}</div>;
 
-const Thread: FunctionComponent<IProps> = ({ width, participants }) => {
-  const usNamesList = participants.map(us => us.fullname);
+const Thread: FunctionComponent<IProps> = ({ width = 'auto', participants }) => {
   // MOCK
-  const testUsNamesList = ['yarek1', 'yarek2', 'yarek3', 'yarek4'];
   const testMessages = [{ text: 'asdasdasdasdads' }, { text: 'Lorem lorem lorem' }, { text: 'I dont now' }];
 
   return (
@@ -25,7 +23,7 @@ const Thread: FunctionComponent<IProps> = ({ width, participants }) => {
           Thread name
         </p>
         <p>
-          <PartisipantsList userNamesList={testUsNamesList} />
+          <PartisipantsList participants={participants} />
         </p>
       </header>
 
