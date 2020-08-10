@@ -6,19 +6,23 @@ import {
   loginUserRoutine,
   deleteAccountRoutine,
   forgotPasswordRoutine,
-  resetPasswordRoutine
+  resetPasswordRoutine,
+  fetchWorkspacesRoutine
 } from '../routines/user';
 import { IUser } from '../common/models/user/IUser';
+import { IWorkspace } from '../common/models/workspace/IWorkspace';
 
 export interface IUserState {
   user?: IUser;
   isLoading: boolean;
   isAuthorized: boolean;
+  workspaceList: IWorkspace[];
 }
 
 const initialState: IUserState = {
   isLoading: false,
-  isAuthorized: false
+  isAuthorized: false,
+  workspaceList: []
 };
 
 const reducer = (state = initialState, { type, payload }: Routine<any>) => {
@@ -29,11 +33,14 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         isLoading: true
       };
     case addNewUserRoutine.SUCCESS:
+      const { id, fullName, email, imageUrl, title, workspaces } = payload.payload;
+
       return {
         ...state,
-        data: { ...payload },
+        user: { id, fullName, email, imageUrl, title },
+        workspaceList: workspaces,
         isLoading: false,
-        isAuthorized: Boolean(payload?.id)
+        isAuthorized: Boolean(payload?.payload.id)
       };
     case addNewUserRoutine.FAILURE:
       return {
@@ -110,6 +117,23 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case resetPasswordRoutine.FAILURE: {
       return { ...state, loading: false };
     }
+
+    case fetchWorkspacesRoutine.TRIGGER:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case fetchWorkspacesRoutine.FAILURE:
+      return {
+        ...state,
+        isLoading: false
+      };
+    case fetchWorkspacesRoutine.SUCCESS:
+      return {
+        ...state,
+        workspaceList: payload,
+        isLoading: false
+      };
     default:
       return state;
   }
