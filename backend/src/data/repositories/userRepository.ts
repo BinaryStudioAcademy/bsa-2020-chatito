@@ -19,9 +19,10 @@ class UserRepository extends Repository<User> {
     return this.findOne(id);
   }
 
-  deleteUser(id: string) {
+  async deleteUser(id: string): Promise<void> {
     const data = { id };
-    this.getById(id).then(user => user.remove({ data }));
+    const user = await this.getById(id);
+    user.remove({ data });
   }
 
   getByEmail(email: string): Promise<User> {
