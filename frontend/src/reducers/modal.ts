@@ -5,11 +5,13 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 export interface IModalState {
   editProfile: boolean;
   createChannel: boolean;
+  invitePopup: boolean;
 }
 
 const initialState: IModalState = {
   editProfile: false,
-  createChannel: false
+  createChannel: false,
+  invitePopup: true
 };
 
 export default (state = initialState, action: Routine<any>) => {
