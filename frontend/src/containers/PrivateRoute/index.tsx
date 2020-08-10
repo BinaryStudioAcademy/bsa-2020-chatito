@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 import { IAppState } from '../../common/models/store';
 import { Routes } from '../../common/enums/Routes';
-import Header from '../Header';
 
 interface IProps {
   component: React.FC<any>;
@@ -23,7 +22,6 @@ const PrivateRoute: React.FC<IProps> = ({
         ? <Redirect to={{ pathname: Routes.SignIn, state: { from: props.location } }} />
         : (
           <>
-            <Header />
             <Component {...props} />
           </>
         )

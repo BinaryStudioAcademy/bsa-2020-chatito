@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.sass';
 
-import Header from '../Header';
+import Header from '../Header/index';
 import WorkspaceToolbar from '../WorkspaceToolbar';
 import ChatScene from '../../../Chat';
 

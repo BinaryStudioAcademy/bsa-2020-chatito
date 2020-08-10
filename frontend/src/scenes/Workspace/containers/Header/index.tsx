@@ -6,12 +6,13 @@ import UserPopUp from '../../../../components/UserPopUp';
 import SearchInput from '../../../../components/SearchInput';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IAppState } from '../../common/models/store';
-import EditProfile from '../EditProfile';
-import { showModalRoutine } from '../../routines/modal';
-import { ModalTypes } from '../../common/enums/ModalTypes';
-import { IModalRoutine } from '../../common/models/modal/IShowModalRoutine';
-import { IUser } from '../../common/models/user/IUser';
+import { IUserState } from '../../../../reducers/user';
+import { IAppState } from '../../../../common/models/store';
+import EditProfile from '../../../../containers/EditProfile';
+import { showModalRoutine } from '../../../../routines/modal';
+import { ModalTypes } from '../../../../common/enums/ModalTypes';
+import { IModalRoutine } from '../../../../common/models/modal/IShowModalRoutine';
+import { IUser } from '../../../../common/models/user/IUser';
 
 interface IProps {
   user?: IUser;
