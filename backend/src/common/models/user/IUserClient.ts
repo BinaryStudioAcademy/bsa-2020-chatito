@@ -3,6 +3,6 @@ export interface IUserClient {
   fullName: string;
   email: string;
   displayName: string;
-  imageUrl?: string;
-  title?: string;
+  imageUrl: string;
+  title: string;
 }

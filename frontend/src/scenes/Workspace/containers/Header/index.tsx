@@ -1,15 +1,15 @@
 import styles from './styles.module.sass';
 import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
-import UserAvatar from '../../components/UserLogo';
-import UserPopUp from '../../components/UserPopUp';
-import SearchInput from '../../components/SearchInput';
+import UserAvatar from 'components/UserLogo';
+import UserPopUp from 'components/UserPopUp';
+import SearchInput from 'components/SearchInput';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IUserState } from '../../reducers/user';
+import { IUserState } from 'reducers/user';
 import { IAppState } from 'common/models/store';
-import EditProfile from '../EditProfile';
-import { showModalRoutine } from '../../routines/modal';
+import EditProfile from 'containers/EditProfile';
+import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 

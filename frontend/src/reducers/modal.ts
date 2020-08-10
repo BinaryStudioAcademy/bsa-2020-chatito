@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { showModalRoutine } from '../routines/modal';
+import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 
 export interface IModalState {
