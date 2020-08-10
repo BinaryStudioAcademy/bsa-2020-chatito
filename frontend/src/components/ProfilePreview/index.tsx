@@ -2,11 +2,10 @@ import styles from './styles.module.sass';
 import React, { FunctionComponent, useState } from 'react';
 import { OverlayTrigger, Button, Image, Popover, Form } from 'react-bootstrap';
 import { IUser } from '../../common/models/user/IUser';
-import { Link, Route, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IBindingCallback1 } from '../../common/models/callback';
-import { userInfo } from 'os';
+import { IBindingCallback1 } from '../../common/models/callback/IBindingCallback1';
 import { ISendMessage } from '../../common/models/message/ISendMessage';
 
 interface IProps {

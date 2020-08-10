@@ -10,21 +10,18 @@ import {
   fetchWorkspacesRoutine,
   editStatusRoutine
 } from '../routines/user';
-import { IAuthServerResponse } from '../common/models/auth/IAuthServerResponse';
+import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
 import { getWorkspaces } from '../services/workspaceService';
 import { showModalRoutine } from '../routines/modal';
-import { ModalTypes } from '../common/enums/ModalTypes';
-import api from '../common/helpers/apiHelper';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import api from 'common/helpers/apiHelper';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser } from '../services/authService';
-import { setAccessToken } from '../common/helpers/storageHelper';
+import { setAccessToken } from 'common/helpers/storageHelper';
 import { toastr } from 'react-redux-toastr';
-import { IUser } from '../common/models/user/IUser';
-<<<<<<< HEAD
+import { IUser } from 'common/models/user/IUser';
 import { editStatus } from '../services/statusService';
-=======
-import { history } from '../common/helpers/historyHelper';
->>>>>>> 0ed2ea1e5d972c70e099039cef91a16da8557d81
+import { history } from 'common/helpers/historyHelper';
 
 function* fetchUserRequest(): Routine<any> {
   try {

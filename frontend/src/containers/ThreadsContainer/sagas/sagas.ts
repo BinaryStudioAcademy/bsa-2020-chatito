@@ -1,6 +1,6 @@
 import { fetchThreadsRoutine } from '../routines';
 import { takeEvery, put, call, all } from 'redux-saga/effects';
-import { getThreads } from '../../../services/threadsService';
+import { getThreads } from 'services/threadsService';
 
 function* fetchThreads() {
   try {

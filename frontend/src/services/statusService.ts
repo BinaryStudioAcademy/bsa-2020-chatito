@@ -1,4 +1,4 @@
-import api from '../common/helpers/apiHelper';
+// import api from '../common/helpers/apiHelper';
 
 export interface IEditStatusData {
   [key: string]: string;

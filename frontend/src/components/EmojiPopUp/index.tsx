@@ -1,9 +1,6 @@
-import { OverlayTrigger, Popover, Button, Image, Overlay, Form } from 'react-bootstrap';
-import { IUser } from '../../common/models/user/IUser';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import Picker, { IEmojiData } from 'emoji-picker-react';
-import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
-import { IBindingCallback1 } from '../../common/models/callback';
-import { ISendMessage } from '../../common/models/message/ISendMessage';
+import React, { FunctionComponent } from 'react';
 import styles from './styles.module.sass';
 
 interface IProps {

@@ -1,6 +1,6 @@
 import { stringifyUrl, ParsedQuery } from 'query-string';
 import { FetchMethod } from '../enums/FetchMethod';
-import { env } from 'env';
+import { env } from '../../env';
 import { pipe, anyPass, map, mergeRight, pickBy, is } from 'ramda';
 import { ErrorCode } from '../enums/ErrorCode';
 import { IFetchParams } from '../models/fetch/IFetchParams';

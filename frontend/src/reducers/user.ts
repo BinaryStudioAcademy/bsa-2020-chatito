@@ -23,7 +23,16 @@ export interface IUserState {
 const initialState: IUserState = {
   isLoading: false,
   isAuthorized: false,
-  workspaceList: []
+  workspaceList: [],
+  user: {
+    id: 'sth',
+    email: 'sth',
+    fullName: 'sth',
+    displayName: 'sth',
+    imageUrl: 'sth',
+    title: 'sth',
+    status: 'sth'
+  }
 };
 
 const reducer = (state = initialState, { type, payload }: Routine<any>) => {
@@ -110,7 +119,6 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
       return { ...state, loading: true };
     }
     case editStatusRoutine.SUCCESS: {
-      console.log(payload.response);
       return { ...state, loading: false, user: { ...state.user, status: payload } };
     }
     case editStatusRoutine.FAILURE: {

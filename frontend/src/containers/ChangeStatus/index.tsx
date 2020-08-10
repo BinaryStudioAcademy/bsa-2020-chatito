@@ -1,4 +1,4 @@
-import Picker, { IEmojiData } from 'emoji-picker-react';
+import { IEmojiData } from 'emoji-picker-react';
 import React, { FunctionComponent, useState } from 'react';
 import { connect } from 'react-redux';
 import { faGrin } from '@fortawesome/free-regular-svg-icons';
@@ -13,13 +13,11 @@ import { IAppState } from '../../common/models/store';
 import { IEditStatusData } from '../../services/statusService';
 
 interface IProps {
-  state: IAppState;
   id: string;
   editStatus: (obj: IEditStatusData) => void;
 }
 
-const ChangeStatus: FunctionComponent<IProps> = ({ state, id, editStatus }) => {
-  console.log(state);
+const ChangeStatus: FunctionComponent<IProps> = ({ id, editStatus }) => {
   const [chosenEmoji, setChosenEmoji] = useState('');
   const [crossStatus, setCrossStatus] = useState(false);
   const [status, setStatus] = useState('');
@@ -47,11 +45,11 @@ const ChangeStatus: FunctionComponent<IProps> = ({ state, id, editStatus }) => {
     }
   };
   const suggestedStatuses = [
-    { icon: '🗓️', text: 'In a meeting' },
-    { icon: '🚌', text: 'Commuting' },
-    { icon: '🤒', text: 'Out sick' },
-    { icon: '🌴', text: 'Vacationing' },
-    { icon: '🏡', text: 'Working remotely' }
+    { icon: '🗓️', text: 'In a meeting', id: '1' },
+    { icon: '🚌', text: 'Commuting', id: '2' },
+    { icon: '🤒', text: 'Out sick', id: '3' },
+    { icon: '🌴', text: 'Vacationing', id: '4' },
+    { icon: '🏡', text: 'Working remotely', id: '5' }
   ];
   const trigger = () => (
     <button
@@ -111,6 +109,7 @@ const ChangeStatus: FunctionComponent<IProps> = ({ state, id, editStatus }) => {
         <div className={styles.suggestedStatusesContainer}>
           {suggestedStatuses.map((item, index) => (
             <button
+              key={item.id}
               type="button"
               id={`${index}`}
               className={styles.statusButton}
@@ -143,6 +142,7 @@ const ChangeStatus: FunctionComponent<IProps> = ({ state, id, editStatus }) => {
           disabled={!crossStatus}
           onClick={() => {
             editStatus({ id, status: `${chosenEmoji} ${status}` });
+            setShow(!show);
           }}
         >
           Save
@@ -165,7 +165,7 @@ const ChangeStatus: FunctionComponent<IProps> = ({ state, id, editStatus }) => {
   );
 };
 
-const mapStateToProps = (state: IAppState) => ({ state, id: state.user.user!.id });
+const mapStateToProps = (state: IAppState) => ({ id: state.user.user!.id });
 
 const mapDispatchToProps = {
   editStatus: editStatusRoutine
