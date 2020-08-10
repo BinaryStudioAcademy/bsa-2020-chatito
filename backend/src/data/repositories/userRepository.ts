@@ -48,6 +48,17 @@ class UserRepository extends Repository<User> {
 
     return user;
   }
+
+  async editPassword(id:string, password: string): Promise<User> {
+    await this.update(
+      id,
+      { password }
+    );
+
+    const user = await this.findOne(id);
+
+    return user;
+  }
 }
 
 export default UserRepository;
