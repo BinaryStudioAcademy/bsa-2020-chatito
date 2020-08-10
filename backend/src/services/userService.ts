@@ -13,11 +13,8 @@ export const getUserById = async (id: string) => {
   return user;
 };
 
-export const deleteUser = async (id: string) => {
-  const deletedUser = await getCustomRepository(UserRepository).deleteUser(id);
-  return {
-    user: fromUserToUserClient(deletedUser)
-  };
+export const deleteUser = (id: string) => {
+  getCustomRepository(UserRepository).deleteUser(id);
 };
 
 export const editProfile = async (user: IUserClient) => {

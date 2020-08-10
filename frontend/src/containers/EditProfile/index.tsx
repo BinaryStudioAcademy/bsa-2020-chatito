@@ -5,7 +5,7 @@ import { IAppState } from '../../common/models/store';
 import { showModalRoutine } from '../../routines/modal';
 import { editProfileRoutine, deleteAccountRoutine } from '../../routines/user';
 import styles from './styles.module.sass';
-import { IUser } from '../../common/models/user/user';
+import { IUser } from '../../common/models/user/IUser';
 import { ModalTypes } from '../../common/enums/ModalTypes';
 import { IModalRoutine } from '../../common/models/modal/IShowModalRoutine';
 
@@ -40,7 +40,7 @@ const EditProfile: FunctionComponent<IProps> = ({
 
   const handleDeleteAccount = () => {
     deleteAccount();
-  }
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, id } = event.currentTarget;
@@ -147,7 +147,7 @@ const EditProfile: FunctionComponent<IProps> = ({
 
 const mapStateToProps = (state: IAppState) => ({
   isShown: state.modal.editProfile,
-  user: state.user.data
+  user: state.user.user
 });
 
 const mapDispatchToProps = {
