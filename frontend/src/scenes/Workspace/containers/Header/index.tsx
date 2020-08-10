@@ -18,6 +18,7 @@ interface IProps {
   showModal: ({ modalType, show }: IModalRoutine) => void;
 }
 
+// eslint-disable-next-line
 const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
   const toggleButtonClick = () => {
     // @todo decide which button to trigger
@@ -52,7 +53,10 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
 
       <div className={styles.rightAlignContainer}>
         <SearchInput
-          onSearch={t => console.log('Search for ', t)}
+          onSearch={t => {
+            // eslint-disable-next-line
+            console.log('Search for ', t)
+          }}
           stylesClassName={styles.searchInput}
         />
 

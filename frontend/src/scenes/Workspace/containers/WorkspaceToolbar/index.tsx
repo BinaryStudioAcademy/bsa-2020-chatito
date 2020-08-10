@@ -21,9 +21,11 @@ const WorkspaceToolbar: FunctionComponent<IProps> = (props: IProps) => {
   const tempUrl = 'https://miro.medium.com/max/1200/1*PmenN7tXUwWN019qGJQ_SQ.jpeg';
 
   useEffect(() => {
-    const fetched = [{ name: 'first', id: '1', imgUrl: tempUrl }, { name: 'first', id: '2', imgUrl: tempUrl }];
-    // const fetched = props.fetchWorkspaces();
-    setWorkspaces(fetched);
+    // eslint-disable-next-line
+    const fetched = props.fetchWorkspaces();
+    // MOCK
+    const fetchedTest = [{ name: 'first', id: '1', imgUrl: tempUrl }, { name: 'first', id: '2', imgUrl: tempUrl }];
+    setWorkspaces(fetchedTest);
   }, []);
 
   return (

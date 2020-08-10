@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Formik, Form } from 'formik';
 import styles from './styles.module.sass';
 import InputField from 'components/InputField/InputField';

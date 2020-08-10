@@ -1,5 +1,5 @@
 import styles from './styles.module.sass';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { env } from 'env';
 
