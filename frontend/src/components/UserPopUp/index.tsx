@@ -1,7 +1,5 @@
 import styles from './styles.module.sass';
 import React, { FunctionComponent } from 'react';
-import { IUser } from '../../common/models/user/IUser';
-
 import { blockPosition } from '../../common/types/types';
 import Image from 'react-bootstrap/Image';
 import Popover from 'react-bootstrap/Popover';

@@ -6,12 +6,13 @@ import { IAppState } from '../../common/models/store';
 import { Routes } from '../../common/enums/Routes';
 import { getAccessToken } from '../../common/helpers/storageHelper';
 import LoaderWrapper from '../../components/LoaderWrapper';
-import Header from '../Header';
 import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from '../../routines/user';
-import AddWorkspace from '../../scenes/Workspace/Workspace';
 import Auth from '../../scenes/Auth/containers/Auth';
+import AddWorkspace from '../../scenes/Workspace/containers/AddWorkspace';
+import PageNotFound from '../../scenes/PageNotFound/index';
+import Workspace from '../../scenes/Workspace/containers/Workspace';
 
 interface IProps {
   isLoading: boolean;
@@ -36,13 +37,12 @@ const Routing: React.FC<IProps> = ({
 
   return (
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
-      {isAuthorized
-        ? <Header />
-        : null}
       <Switch>
         <PublicRoute path={Routes.Auth} component={Auth} />
+        <PrivateRoute exact path={Routes.Workspace} component={Workspace} />
         <PrivateRoute exact path="/" component={mainMock} />
         <PrivateRoute exact path="/add-workspace" component={AddWorkspace} />
+        <PublicRoute path={Routes.NotExistingPath} component={PageNotFound} />
       </Switch>
     </LoaderWrapper>
   );

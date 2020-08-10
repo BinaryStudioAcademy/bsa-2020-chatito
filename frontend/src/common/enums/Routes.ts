@@ -1,4 +1,5 @@
 export enum Routes {
+  BaseUrl = '/',
   Auth = '/auth/:page',
   SignUp = '/auth/signup',
   SignIn = '/auth/signin',
@@ -8,5 +9,6 @@ export enum Routes {
   Workspace = '/workspace',
   Room = '/room',
   Channel = '/channel',
-  Direct = '/direct'
+  Direct = '/direct',
+  NotExistingPath = '/*'
 }
