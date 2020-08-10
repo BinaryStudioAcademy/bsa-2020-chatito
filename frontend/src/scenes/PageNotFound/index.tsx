@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import styles from './styles.module.sass';
+import { Routes } from '../../common/enums/Routes';
 
 const PageNotFound: FunctionComponent = () => (
   <div className={`${styles.notFoundPage} ${styles.textColor}`}>
@@ -7,7 +8,7 @@ const PageNotFound: FunctionComponent = () => (
       <h1 className={`text-center ${styles.title}`}>404: Page Not Found</h1>
       <span className="text-center">
         Go to
-        <a className={styles.homeRef} href="/">  Home page</a>
+        <a className={styles.homeRef} href={Routes.BaseUrl}>  Home page</a>
       </span>
     </div>
   </div>
