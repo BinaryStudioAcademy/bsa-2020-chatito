@@ -3,9 +3,9 @@ import styles from './styles.module.sass';
 
 import {
   faLock,
-  faHashtag,
-  faPhone,
-  faCircle,
+  // faHashtag,
+  // faPhone,
+  // faCircle,
   faStar,
   faUserPlus,
   faInfoCircle
@@ -17,17 +17,17 @@ const privateChannelIcon = (
   <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
 );
 
-const publicChannelIcon = (
-  <FontAwesomeIcon icon={faHashtag} className={styles.iconChatType} />
-);
+// const publicChannelIcon = (
+//   <FontAwesomeIcon icon={faHashtag} className={styles.iconChatType} />
+// );
 
-const directMessageIcon = (
-  <FontAwesomeIcon icon={faCircle} className={`${styles.iconChatType} ${styles.active}`} />
-);
+// const directMessageIcon = (
+//   <FontAwesomeIcon icon={faCircle} className={`${styles.iconChatType} ${styles.active}`} />
+// );
 
-const callIcon = (
-  <FontAwesomeIcon icon={faPhone} className={styles.icon} />
-);
+// const callIcon = (
+//   <FontAwesomeIcon icon={faPhone} className={styles.icon} />
+// );
 
 const ChatHeader = () => {
   const memberAvatar = (

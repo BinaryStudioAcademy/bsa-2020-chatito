@@ -5,7 +5,10 @@ import RefreshTokenRepository from '../data/repositories/refreshTokenRepository'
 import { IRegisterUser } from '../common/models/user/IRegisterUser';
 import { hash, compare, encrypt, decrypt } from '../common/utils/encryptHelper';
 import { ILoginUser } from '../common/models/user/ILoginUser';
-import { fromUserToUserClient, fromRegisterUserToCreateUser } from '../common/mappers/user';
+import {
+  fromRegisterUserToCreateUser,
+  fromUserToUserWithWorkspaces
+} from '../common/mappers/user';
 import { createToken } from '../common/utils/tokenHelper';
 import { IRefreshToken } from '../common/models/refreshToken/IRefreshToken';
 import { User } from '../data/entities/User';
@@ -45,7 +48,7 @@ export const register = async ({ password, ...userData }: IRegisterUser) => {
   const refreshToken = await createRefreshToken(newUser);
 
   return {
-    user: fromUserToUserClient(newUser),
+    user: fromUserToUserWithWorkspaces(newUser),
     accessToken: createToken({ id: newUser.id }),
     refreshToken: encrypt(refreshToken.id)
   };
@@ -62,7 +65,7 @@ export const login = async ({ email, password }: ILoginUser) => {
         const refreshToken = await createRefreshToken(logUser);
 
         return {
-          user: fromUserToUserClient(logUser),
+          user: fromUserToUserWithWorkspaces(logUser),
           accessToken: createToken({ id: logUser.id }),
           refreshToken: encrypt(refreshToken.id)
         };
