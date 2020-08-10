@@ -6,19 +6,23 @@ import {
   loginUserRoutine,
   deleteAccountRoutine,
   forgotPasswordRoutine,
-  resetPasswordRoutine
-} from '../routines/user';
-import { IUser } from '../common/models/user/IUser';
+  resetPasswordRoutine,
+  fetchWorkspacesRoutine
+} from 'routines/user';
+import { IUser } from 'common/models/user/IUser';
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 export interface IUserState {
   user?: IUser;
   isLoading: boolean;
   isAuthorized: boolean;
+  workspaceList: IWorkspace[];
 }
 
 const initialState: IUserState = {
   isLoading: false,
-  isAuthorized: false
+  isAuthorized: false,
+  workspaceList: []
 };
 
 const reducer = (state = initialState, { type, payload }: Routine<any>) => {
@@ -29,9 +33,14 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         isLoading: true
       };
     case addNewUserRoutine.SUCCESS:
+    case fetchUserRoutine.SUCCESS:
+    case loginUserRoutine.SUCCESS:
+      const { id, fullName, email, imageUrl, title, workspaces } = payload;
+
       return {
         ...state,
-        data: { ...payload },
+        user: { id, fullName, email, imageUrl, title },
+        workspaceList: workspaces,
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
       };
@@ -45,13 +54,6 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
       return {
         ...state,
         isLoading: true
-      };
-    case fetchUserRoutine.SUCCESS:
-      return {
-        ...state,
-        data: { ...payload },
-        isLoading: false,
-        isAuthorized: Boolean(payload?.id)
       };
     case fetchUserRoutine.FAILURE:
       return {
@@ -79,13 +81,6 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         ...state,
         isLoading: true
       };
-    case loginUserRoutine.SUCCESS:
-      return {
-        ...state,
-        data: { ...payload },
-        isLoading: false,
-        isAuthorized: Boolean(payload?.id)
-      };
     case loginUserRoutine.FAILURE:
       return {
         ...state,
@@ -110,6 +105,23 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case resetPasswordRoutine.FAILURE: {
       return { ...state, loading: false };
     }
+
+    case fetchWorkspacesRoutine.TRIGGER:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case fetchWorkspacesRoutine.FAILURE:
+      return {
+        ...state,
+        isLoading: false
+      };
+    case fetchWorkspacesRoutine.SUCCESS:
+      return {
+        ...state,
+        workspaceList: payload,
+        isLoading: false
+      };
     default:
       return state;
   }

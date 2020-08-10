@@ -11,7 +11,7 @@ import { history } from '../../common/helpers/historyHelper';
 
 const testUser: IUser = {
   fullname: 'Jhonn Smitt',
-  imgUrl: 'https://img.favpng.com/25/13/19/samsung-galaxy-a8-a8-user-login-telephone-avatar-png-favpng-dqKEPfX7hPbc6SMVUCteANKwj.jpg', // eslint-disable-line max-len
+  imgUrl: 'https://my.throtl.com/assets/icons/user-default-gray',
   isOnline: true
 };
 

@@ -1,13 +1,13 @@
 import React, { useState, FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal, Form, Image } from 'react-bootstrap';
-import { IAppState } from '../../common/models/store';
-import { showModalRoutine } from '../../routines/modal';
-import { editProfileRoutine, deleteAccountRoutine } from '../../routines/user';
+import { IAppState } from 'common/models/store';
+import { showModalRoutine } from 'routines/modal';
+import { editProfileRoutine, deleteAccountRoutine } from 'routines/user';
 import styles from './styles.module.sass';
-import { IUser } from '../../common/models/user/IUser';
-import { ModalTypes } from '../../common/enums/ModalTypes';
-import { IModalRoutine } from '../../common/models/modal/IShowModalRoutine';
+import { IUser } from 'common/models/user/IUser';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 
 interface IProps {
   showModal: ({ modalType, show }: IModalRoutine) => void;

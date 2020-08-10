@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { setErrorRoutine } from '../routines/error';
+import { setErrorRoutine } from 'routines/error';
 import { ErrorInfo } from 'react';
 
 export interface IErrorBoundaryState {
