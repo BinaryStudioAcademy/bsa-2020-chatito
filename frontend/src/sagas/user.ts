@@ -23,7 +23,7 @@ import { IUser } from '../common/models/user/IUser';
 function* fetchUserRequest(): Routine<any> {
   try {
     const user: IUser = yield call(fetchUser);
-    yield put(fetchUserRoutine.success({ payload: user }));
+    yield put(fetchUserRoutine.success(user));
   } catch (error) {
     yield call(toastr.error, 'Error', error.message);
     yield put(fetchUserRoutine.failure(error.message));
@@ -37,7 +37,7 @@ function* watchUserRequest() {
 function* loginUserRequest({ payload }: Routine<any>) {
   try {
     const { accessToken, user }: IAuthServerResponse = yield call(login, payload);
-    yield put(loginUserRoutine.success({ payload: user }));
+    yield put(loginUserRoutine.success(user));
     setAccessToken(accessToken);
   } catch (error) {
     yield call(toastr.error, 'Error', error.message);
@@ -89,7 +89,7 @@ function* watchDeleteAccount() {
 function* addNewUserRequest({ payload }: any): Routine<any> {
   try {
     const { accessToken, user }: IAuthServerResponse = yield call(registration, payload);
-    yield put(addNewUserRoutine.success({ payload: user }));
+    yield put(addNewUserRoutine.success(user));
     setAccessToken(accessToken);
   } catch (error) {
     yield call(toastr.error, 'Error', error.message);

@@ -6,7 +6,7 @@ import { getUserById } from '../../services/userService';
 const router = Router();
 
 router
-  .get('/me', run((req: Request) => getUserById(req.body.id)))
+  .get('/me', run((req: Request) => getUserById(req.user.id)))
   .post('/register', run((req: Request) => register(req.body.user)))
   .post('/login', run((req: Request) => login(req.body)))
   .post('/tokens', run((req: Request) => refreshTokens(req.body.refreshToken)))
