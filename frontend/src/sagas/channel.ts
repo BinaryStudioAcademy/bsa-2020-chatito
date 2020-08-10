@@ -5,7 +5,6 @@ import { showModalRoutine } from '../routines/modal';
 import { ModalTypes } from '../common/enums/ModalTypes';
 import { createChannel, fetchUserChannels } from '../services/channelService';
 import { toastr } from 'react-redux-toastr';
-import { ErrorCode } from '../common/enums/ErrorCode';
 
 function* createChannelRequest({ payload }: Routine<any>) {
   try {
