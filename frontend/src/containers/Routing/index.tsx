@@ -13,7 +13,6 @@ import AddWorkspace from '../../scenes/Workspace/containers/AddWorkspace';
 import PageNotFound from '../../scenes/PageNotFound/index';
 import Workspace from '../../scenes/Workspace/containers/Workspace';
 import Auth from '../../scenes/Auth/containers/Auth';
-import ChangeStatus from '../ChangeStatus/index';
 
 interface IProps {
   isLoading: boolean;
@@ -36,7 +35,6 @@ const Routing: React.FC<IProps> = ({
 
   return (
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
-      <ChangeStatus />
       <Switch>
         <PublicRoute path={Routes.Auth} component={Auth} />
         <PrivateRoute exact path={Routes.Workspace} component={Workspace} />

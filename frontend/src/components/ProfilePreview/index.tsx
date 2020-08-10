@@ -1,18 +1,17 @@
-import styles from './styles.module.sass';
 import React, { FunctionComponent, useState } from 'react';
 import { OverlayTrigger, Button, Image, Popover, Form } from 'react-bootstrap';
-import { IUser } from '../../common/models/user/IUser';
+import { IUser } from 'common/models/user/IUser';
 import { Link } from 'react-router-dom';
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IBindingCallback1 } from '../../common/models/callback/IBindingCallback1';
-import { ISendMessage } from '../../common/models/message/ISendMessage';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import styles from 'styles.module.sass';
 
 interface IProps {
   user: IUser;
   trigger: () => React.ReactElement;
   id: string;
-  onSend: IBindingCallback1<ISendMessage>;
+  onSend: IBindingCallback1<string>;
 }
 
 // Mocked data: testData and trigger function
