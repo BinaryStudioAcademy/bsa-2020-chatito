@@ -103,7 +103,7 @@ function* watchAddNewUserRequest() {
 
 function* forgotPasswordRequest({ payload }: Routine<any>) {
   try {
-    const response = yield call(api.put, '/api/auth/forgotpass', payload);
+    yield call(api.put, '/api/auth/forgotpass', payload);
     yield put(forgotPasswordRoutine.success());
   } catch (error) {
     yield call(toastr.error, 'Error', error.message);
@@ -119,7 +119,7 @@ function* resetPasswordRequest({ payload }: Routine<any>) {
   try {
     const { token, password } = payload;
     setAccessToken(token);
-    const response = yield call(api.put, '/api/auth/resetpass', { password });
+    yield call(api.put, '/api/auth/resetpass', { password });
     yield put(resetPasswordRoutine.success());
   } catch (error) {
     yield call(toastr.error, 'Error', error.message);
