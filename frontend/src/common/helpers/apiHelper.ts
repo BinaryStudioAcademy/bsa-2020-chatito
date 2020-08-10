@@ -90,7 +90,6 @@ const makeRequest = (
     : [domainUrl, params];
 
   const fetchOptions = getFetchOptions(method, body);
-
   let res = await fetch(fetchUrl, fetchOptions);
   if (res.status === 401 && getRefreshToken()) {
     await refreshToken();

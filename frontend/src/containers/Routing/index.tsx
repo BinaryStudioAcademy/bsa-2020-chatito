@@ -15,7 +15,6 @@ import ForgotPassword from '../../scenes/ForgotPassword';
 import ResetPassword from '../../scenes/ResetPassword';
 import SignIn from '../../scenes/SignIn';
 import SignUp from '../../scenes/SignUp';
-import LogoutBar from '../../components/Logout';
 
 interface IProps {
   isLoading: boolean;
@@ -50,7 +49,6 @@ const Routing: React.FC<IProps> = ({
         <PrivateRoute exact path="/" component={mainMock} />
         <PrivateRoute exact path="/add-workspace" component={AddWorkspace} />
       </Switch>
-      <LogoutBar />
     </LoaderWrapper>
   );
 };

@@ -74,6 +74,17 @@ export const login = async ({ email, password }: ILoginUser) => {
   }
 };
 
+export const logout = async (token: string) => {
+  try {
+    const id = decrypt(token);
+    const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
+    await refreshTokenRepository.deleteToken(id);
+    return { result: true };
+  } catch (err) {
+    throw new Error('Error refresh Token remove !');
+  }
+};
+
 export const refreshTokens = async (encryptedId: string) => {
   try {
     const id = decrypt(encryptedId);

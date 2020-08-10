@@ -112,8 +112,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
       return { ...state, loading: false };
     }
     case logoutUserRoutine.TRIGGER: {
-      alert('user');
-      return { initialState };
+      return { ...initialState };
     }
     default:
       return state;

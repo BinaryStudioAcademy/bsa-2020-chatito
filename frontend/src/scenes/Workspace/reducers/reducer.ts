@@ -29,8 +29,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state, loading: false
       };
     case logoutUserRoutine.TRIGGER: {
-      alert('workspace');
-      return { initialState };
+      return { ...initialState };
     }
     default:
       return state;

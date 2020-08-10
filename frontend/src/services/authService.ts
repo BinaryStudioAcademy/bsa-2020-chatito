@@ -15,6 +15,11 @@ export const login = async (userInput: ILoginUser) => {
   return response.json();
 };
 
+export const logout = async (token: string | null) => {
+  const response = await api.post<ServerResponse>('/api/auth/logout', { token });
+  return response.json();
+};
+
 export const registration = async (userInput: IRegisterUser): Promise<IUser> => {
   const userData = {
     user: { ...userInput }
