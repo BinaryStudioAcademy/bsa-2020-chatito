@@ -10,7 +10,6 @@ interface IParams {
 
 // Usage: create ref on your input with useRef, pass key code as string
 export const useKey = ({ key, callback, ref }: IParams) => {
-
   const onUp = (event: KeyboardEvent) => {
     if (eventKeyMatch(key, event)) {
       callback();
