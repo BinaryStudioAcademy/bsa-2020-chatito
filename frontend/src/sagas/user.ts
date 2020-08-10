@@ -18,14 +18,14 @@ import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser } from '../services/authService';
 import { setAccessToken } from '../common/helpers/storageHelper';
 import { toastr } from 'react-redux-toastr';
+import { IUser } from '../common/models/user/IUser';
 
 function* fetchUserRequest(): Routine<any> {
   try {
-    const { accessToken, user }: IAuthServerResponse = yield call(fetchUser);
+    const user: IUser = yield call(fetchUser);
     yield put(fetchUserRoutine.success({ payload: user }));
-    setAccessToken(accessToken);
   } catch (error) {
-    yield call(toastr.error, 'Error', 'An Error accurred while you tried to log in, try again.');
+    yield call(toastr.error, 'Error', 'An Error occurred while you tried to log in, try again.');
     yield put(fetchUserRoutine.failure(error.message));
   }
 }
@@ -34,13 +34,13 @@ function* watchUserRequest() {
   yield takeEvery(fetchUserRoutine.TRIGGER, fetchUserRequest);
 }
 
-function* loginUserRequest({ payload }: any): Routine<any> {
+function* loginUserRequest({ payload }: Routine<any>) {
   try {
     const { accessToken, user }: IAuthServerResponse = yield call(login, payload);
     yield put(loginUserRoutine.success({ payload: user }));
     setAccessToken(accessToken);
   } catch (error) {
-    yield call(toastr.error, 'Error', 'An Error accurred while you tried to log in, try again.');
+    yield call(toastr.error, 'Error', 'An Error occurred while you tried to log in, try again.');
     yield put(loginUserRoutine.failure(error.message));
   }
 }

@@ -32,7 +32,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         ...state,
         isLoading: true
       };
-    case addNewUserRoutine.SUCCESS:
+    case addNewUserRoutine.SUCCESS: {
       const { id, fullName, email, imageUrl, title, workspaces } = payload.payload;
 
       return {
@@ -42,6 +42,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         isLoading: false,
         isAuthorized: Boolean(payload?.payload.id)
       };
+    }
     case addNewUserRoutine.FAILURE:
       return {
         ...state,
@@ -53,13 +54,17 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         ...state,
         isLoading: true
       };
-    case fetchUserRoutine.SUCCESS:
+    case fetchUserRoutine.SUCCESS: {
+      const { id, fullName, email, imageUrl, title, workspaces } = payload.payload;
+
       return {
         ...state,
-        data: { ...payload },
+        user: { id, fullName, email, imageUrl, title },
+        workspaceList: workspaces,
         isLoading: false,
-        isAuthorized: Boolean(payload?.id)
+        isAuthorized: Boolean(payload?.payload.id)
       };
+    }
     case fetchUserRoutine.FAILURE:
       return {
         ...state,
@@ -86,13 +91,17 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         ...state,
         isLoading: true
       };
-    case loginUserRoutine.SUCCESS:
+    case loginUserRoutine.SUCCESS: {
+      const { id, fullName, email, imageUrl, title, workspaces } = payload.payload;
+
       return {
         ...state,
-        data: { ...payload },
+        user: { id, fullName, email, imageUrl, title },
+        workspaceList: workspaces,
         isLoading: false,
-        isAuthorized: Boolean(payload?.id)
+        isAuthorized: Boolean(payload?.payload.id)
       };
+    }
     case loginUserRoutine.FAILURE:
       return {
         ...state,
