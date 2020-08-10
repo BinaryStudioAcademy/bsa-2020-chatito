@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { IBindingAction } from '../models/callback/IBindingActions';
-import { eventKeyMatch } from '../helpers/eventHelper';
+import { areEqualStrings } from '../helpers/globalHelpers';
 
 interface IParams {
   key: string;
@@ -11,7 +11,7 @@ interface IParams {
 // Usage: create ref on your input with useRef, pass key code as string
 export const useKey = ({ key, callback, ref }: IParams) => {
   const onUp = (event: KeyboardEvent) => {
-    if (eventKeyMatch(key, event)) {
+    if (areEqualStrings(key, event.key)) {
       callback();
     }
   };
