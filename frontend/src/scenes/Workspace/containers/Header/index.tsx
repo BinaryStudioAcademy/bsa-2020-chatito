@@ -6,7 +6,7 @@ import UserPopUp from 'components/UserPopUp';
 import SearchInput from 'components/SearchInput';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IUserState } from 'reducers/user';
+import { IUser } from 'common/models/user/IUser';
 import { IAppState } from 'common/models/store';
 import EditProfile from 'containers/EditProfile';
 import { showModalRoutine } from 'routines/modal';
@@ -14,19 +14,14 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 
 interface IProps {
-  user: IUserState;
+  user?: IUser;
   showModal: ({ modalType, show }: IModalRoutine) => void;
 }
 
+// eslint-disable-next-line
 const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
   const toggleButtonClick = () => {
     // @todo decide which button to trigger
-  };
-
-  const testUser = {
-    imgUrl:
-      'https://img.favpng.com/25/13/19/samsung-galaxy-a8-a8-user-login-telephone-avatar-png-favpng-dqKEPfX7hPbc6SMVUCteANKwj.jpg', // eslint-disable-line max-len
-    isAuthorized: true
   };
 
   const getPopUpTrigger = () => (
@@ -45,6 +40,10 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
     showModalRoutine({ modalType: ModalTypes.EditProfile, show: true });
   };
 
+  if (!user) {
+    return null;
+  }
+
   return (
     <header className={styles.headerContainer}>
       <div className={styles.logoWrapper}>
@@ -54,12 +53,15 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
 
       <div className={styles.rightAlignContainer}>
         <SearchInput
-          onSearch={t => console.log('Search for ', t)}
+          onSearch={t => {
+            // eslint-disable-next-line
+            console.log('Search for ', t)
+          }}
           stylesClassName={styles.searchInput}
         />
 
         <div className={styles.userLogoWrapper}>
-          <UserAvatar imgUrl={testUser.imgUrl} isOnline />
+          <UserAvatar imgUrl={user.imageUrl || ''} isOnline />
 
           <UserPopUp
             user={user}
@@ -76,7 +78,7 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
   );
 };
 
-const mapStateToProps = (state: IAppState) => ({ user: state.user });
+const mapStateToProps = (state: IAppState) => ({ user: state.user.user });
 
 const mapDispatchToProps = {
   showModal: showModalRoutine
