@@ -1,4 +1,5 @@
 export enum ModalTypes {
-  EditProfile,
   EditPost,
+  EditProfile,
+  CreateChannel
 }

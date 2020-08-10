@@ -3,21 +3,22 @@ import {
   fetchUserRoutine,
   editProfileRoutine,
   addNewUserRoutine,
+  loginUserRoutine,
+  deleteAccountRoutine,
   forgotPasswordRoutine,
   resetPasswordRoutine
 } from '../routines/user';
-import { IUser } from '../common/models/user/user';
+import { IUser } from '../common/models/user/IUser';
 
 export interface IUserState {
+  user?: IUser;
   isLoading: boolean;
   isAuthorized: boolean;
-  data: IUser | null;
 }
 
 const initialState: IUserState = {
   isLoading: false,
-  isAuthorized: false,
-  data: null
+  isAuthorized: false
 };
 
 const reducer = (state = initialState, { type, payload }: Routine<any>) => {
@@ -34,6 +35,12 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
       };
+    case addNewUserRoutine.FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        isAuthorized: false
+      };
     case fetchUserRoutine.TRIGGER:
       return {
         ...state,
@@ -46,6 +53,12 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
       };
+    case fetchUserRoutine.FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        isAuthorized: false
+      };
     case editProfileRoutine.TRIGGER: {
       return { ...state, loading: true };
     }
@@ -55,6 +68,30 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case editProfileRoutine.FAILURE: {
       return { ...state, loading: false };
     }
+    case deleteAccountRoutine.TRIGGER:
+      return { ...state, isLoading: true };
+    case deleteAccountRoutine.SUCCESS:
+      return { isAuthorized: false, isLoading: false };
+    case deleteAccountRoutine.FAILURE:
+      return { ...state, isLoading: false };
+    case loginUserRoutine.TRIGGER:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case loginUserRoutine.SUCCESS:
+      return {
+        ...state,
+        data: { ...payload },
+        isLoading: false,
+        isAuthorized: Boolean(payload?.id)
+      };
+    case loginUserRoutine.FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        isAuthorized: false
+      };
     case forgotPasswordRoutine.SUCCESS: {
       return { ...state, loading: false };
     }
@@ -73,13 +110,6 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case resetPasswordRoutine.FAILURE: {
       return { ...state, loading: false };
     }
-    case fetchUserRoutine.FAILURE:
-    case addNewUserRoutine.FAILURE:
-      return {
-        ...state,
-        isLoading: false,
-        isAuthorized: false
-      };
     default:
       return state;
   }

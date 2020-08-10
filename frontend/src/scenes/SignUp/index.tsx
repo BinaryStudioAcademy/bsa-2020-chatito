@@ -6,7 +6,7 @@ import styles from './styles.module.sass';
 import { addNewUserRoutine } from '../../routines/user';
 import InputField from '../../components/InputField/InputField';
 import { Routine } from 'redux-saga-routines';
-import { IUserInput } from '../../common/models/auth/auth';
+import { IRegisterUser } from '../../common/models/auth/IRegisterUser';
 import { Button } from 'react-bootstrap';
 import { push } from 'connected-react-router';
 import { Routes } from '../../common/enums/Routes';
@@ -16,14 +16,12 @@ interface IProps {
   router: (route: string) => void;
 }
 
-const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
-  const onSubmit = async (values: IUserInput,
+export const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
+  const onSubmit = async (values: IRegisterUser,
     { setSubmitting }: { setSubmitting: CallableFunction }) => {
     const { email, password, fullName } = values;
-    const payload = {
-      payload: { email, password, fullName }
-    };
-    addNewUser(payload);
+    const user = { email, password, fullName };
+    addNewUser(user);
     setSubmitting(false);
   };
 
@@ -40,7 +38,7 @@ const SignUp: FunctionComponent<IProps> = ({ addNewUser, router }) => {
 
   return (
     <div className={styles.signUp}>
-      <h1 className="text-center p-5">Sign up</h1>
+      <h1 className={`text-center ${styles['signUp-header']}`}>Sign up</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

@@ -1,11 +1,13 @@
 import React from 'react';
-import Routing from '../Routing';
 import { Provider } from 'react-redux';
-import { store } from '../../store';
+import ReduxToastr from 'react-redux-toastr';
 import { ConnectedRouter } from 'connected-react-router';
-import { history } from '../../common/helpers/historyHelper';
+import Routing from '../Routing';
+import ErrorBoundary from '../ErrorBoundary';
 import Post from '../../components/Post';
+import { store } from '../../store';
 import { IUser } from '../../common/models/user';
+import { history } from '../../common/helpers/historyHelper';
 
 const testUser: IUser = {
   fullname: 'Jhonn Smitt',
@@ -24,5 +26,21 @@ const App = () => (
     </ConnectedRouter>
   </Provider>
 );
+
+// const App = () => (
+//   <Provider store={store}>
+//     <ConnectedRouter history={history}>
+//       <ErrorBoundary>
+//         <Routing />
+//         <ReduxToastr
+//           timeOut={3000}
+//           position="bottom-right"
+//           transitionIn="fadeIn"
+//           transitionOut="fadeOut"
+//         />
+//       </ErrorBoundary>
+//     </ConnectedRouter>
+//   </Provider>
+// );
 
 export default App;
