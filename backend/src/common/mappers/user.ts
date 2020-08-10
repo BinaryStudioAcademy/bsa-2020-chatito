@@ -20,7 +20,7 @@ export const fromUserToUserClient = (user: User): IUserClient => {
 };
 
 export const fromUserToUserWithWorkspaces = (user: User): IUserWithWorkspaces => {
-  const { id, fullName, displayName, email, imageUrl, title, workspaces = [] } = user;
+  const { id, fullName, displayName, email, imageUrl, title, status, workspaces = [] } = user;
   return {
     id,
     fullName,
@@ -28,6 +28,7 @@ export const fromUserToUserWithWorkspaces = (user: User): IUserWithWorkspaces =>
     displayName,
     imageUrl,
     title,
+    status,
     workspaces: workspaces.map(workspace => fromCreatedWorkspaceToClient(workspace))
   };
 };

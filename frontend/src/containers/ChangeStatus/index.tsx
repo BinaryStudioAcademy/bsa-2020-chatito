@@ -10,7 +10,7 @@ import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import ModalWindow from '../../components/ModalWindow';
 import { editStatusRoutine } from '../../routines/user';
 import { IAppState } from '../../common/models/store';
-import { IEditStatusData } from '../../services/statusService';
+import { IEditStatusData } from '../../services/userService';
 
 interface IProps {
   id: string;

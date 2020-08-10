@@ -23,16 +23,7 @@ export interface IUserState {
 const initialState: IUserState = {
   isLoading: false,
   isAuthorized: false,
-  workspaceList: [],
-  user: {
-    id: 'sth',
-    email: 'sth',
-    fullName: 'sth',
-    displayName: 'sth',
-    imageUrl: 'sth',
-    title: 'sth',
-    status: 'sth'
-  }
+  workspaceList: []
 };
 
 const reducer = (state = initialState, { type, payload }: Routine<any>) => {
