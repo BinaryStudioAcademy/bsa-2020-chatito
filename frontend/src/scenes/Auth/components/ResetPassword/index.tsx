@@ -40,9 +40,9 @@ const ForgotPassword: FunctionComponent<IProps> = ({ resetPassword, match }) => 
         onSubmit={onSubmit}
       >
         <Form className="d-flex flex-column justify-content-center align-items-center">
-          <InputField label="Password:" name="password" type="password" />
+          <InputField label="Password" name="password" type="password" />
           <InputField
-            label="Confirm Password:"
+            label="Confirm Password"
             name="confirmPassword"
             type="password"
           />
