@@ -4,9 +4,9 @@ import styles from './styles.module.sass';
 
 import Header from '../Header';
 import WorkspaceToolbar from '../WorkspaceToolbar';
-import ProfileOverview from '../../../../components/ProfileOverview';
-import { IUser } from '../../../../common/models/user/IUser';
-import { IAppState } from '../../../../common/models/store';
+import ProfileOverview from 'components/ProfileOverview';
+import { IUser } from 'common/models/user/IUser';
+import { IAppState } from 'common/models/store';
 import ChatScene from 'scenes/Chat';
 import ChatToolbar from '../ChatToolbar';
 

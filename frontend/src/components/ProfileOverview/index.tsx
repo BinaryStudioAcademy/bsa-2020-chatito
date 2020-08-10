@@ -5,7 +5,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faEdit, faEllipsisH, faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { IUser } from '../../common/models/user/IUser';
+import { IUser } from 'common/models/user/IUser';
 
 interface IProps {
   user: IUser;
