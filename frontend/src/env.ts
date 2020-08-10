@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { getOsEnv } from '@helpers/pathHelper';
+=======
+import { getOsEnv } from 'common/helpers/pathHelper';
+>>>>>>> 19207a7
 
 export const env = {
   urls: {

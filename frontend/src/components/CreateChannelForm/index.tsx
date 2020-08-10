@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
-import { IBindingCallback1 } from '@models/callback';
-import { ICreateChannel } from '@models/channel/ICreateChannel';
+import { IBindingCallback1 } from 'common/models/callback';
+import { ICreateChannel } from 'common/models/channel/ICreateChannel';
 import styles from './styles.module.sass';
 
 interface IProps {

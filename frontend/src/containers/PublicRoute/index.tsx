@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
-import { IAppState } from '@models/store';
+import { IAppState } from 'common/models/store';
 
 interface IProps {
   component: React.FC<any>;
@@ -18,7 +18,7 @@ const PublicRoute: React.FC<IProps> = ({
     {...rest}
     render={props => (
       isAuthorized
-        ? <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+        ? <Redirect to={{ pathname: '/workspace', state: { from: props.location } }} />
         : <Component {...props} />
     )}
   />

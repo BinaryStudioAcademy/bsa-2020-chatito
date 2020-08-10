@@ -1,9 +1,9 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
 import { Routine } from 'redux-saga-routines';
-import { createChannelRoutine, fetchUserChannelsRoutine } from '../routines/channel';
-import { showModalRoutine } from '../routines/modal';
-import { ModalTypes } from '@enums/ModalTypes';
-import { createChannel, fetchUserChannels } from '../services/channelService';
+import { createChannelRoutine, fetchUserChannelsRoutine } from 'routines/channel';
+import { showModalRoutine } from 'routines/modal';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import { createChannel, fetchUserChannels } from 'services/channelService';
 import { toastr } from 'react-redux-toastr';
 
 function* createChannelRequest({ payload }: Routine<any>) {

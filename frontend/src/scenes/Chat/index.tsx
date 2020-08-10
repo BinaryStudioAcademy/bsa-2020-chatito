@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ChatContainer from './containers/Chat';
+import ChatContainer from '/Chat';
 
 const ChatScene = () => (
   <ChatContainer />

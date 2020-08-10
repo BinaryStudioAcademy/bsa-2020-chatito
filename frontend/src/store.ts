@@ -1,9 +1,9 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
-import { history } from '@helpers/historyHelper';
+import { history } from 'common/helpers/historyHelper';
 import createSagaMiddleware from 'redux-saga';
-import rootSaga from './sagas/index';
-import rootReducer from './reducers';
+import rootSaga from 'sagas/index';
+import rootReducer from 'reducers';
 
 declare global {
   interface Window { // eslint-disable-line

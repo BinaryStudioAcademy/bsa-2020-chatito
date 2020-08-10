@@ -1,6 +1,6 @@
 // eslint-disable-next-line
-import api from '@helpers/apiHelper';
-import { ICreateChannel } from '@models/channel/ICreateChannel';
+import api from 'common/helpers/apiHelper';
+import { ICreateChannel } from 'common/models/channel/ICreateChannel';
 
 // eslint-disable-next-line
 export async function createChannel(payload: ICreateChannel) {
