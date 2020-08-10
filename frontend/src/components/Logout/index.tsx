@@ -1,27 +1,17 @@
 import React, { FunctionComponent } from 'react';
-import { connect } from 'react-redux';
-import { Routine } from 'redux-saga-routines';
 import { Button } from 'react-bootstrap';
-import { history } from '../../common/helpers/historyHelper';
-import { Routes } from '../../common/enums/Routes';
-import { logoutUserRoutine } from '../../routines/user';
-import { ITokens } from '../../common/models/ITokens';
-import { setTokens, getRefreshToken } from '../../common/helpers/storageHelper';
+import { getRefreshToken } from '../../common/helpers/storageHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { logout } from '../../services/authService';
+import { removeToken } from '../../services/authService';
 
-interface IProps {
-  logoutUser: Routine;
-}
-
-export const Logout: FunctionComponent<IProps> = ({ logoutUser }) => {
-  const onLogout = () => {
-    logout(getRefreshToken());
-    const tokens: ITokens = { accessToken: '', refreshToken: '' };
-    setTokens(tokens);
-    logoutUser();
-    history.push(Routes.SignIn);
+export const Logout: FunctionComponent = () => {
+  const onLogout = async () => {
+    alert(getRefreshToken());
+    await removeToken(getRefreshToken());
+    alert('S');
+    localStorage.clear();
+    window.location.href = '/';
   };
   return (
     <Button variant="light" onClick={onLogout}>
@@ -30,8 +20,4 @@ export const Logout: FunctionComponent<IProps> = ({ logoutUser }) => {
   );
 };
 
-const mapDispatchToProps = {
-  logoutUser: logoutUserRoutine
-};
-
-export default connect(null, mapDispatchToProps)(Logout);
+export default Logout;

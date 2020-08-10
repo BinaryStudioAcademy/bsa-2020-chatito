@@ -13,8 +13,8 @@ export const getUserById = async (id: string) => {
   return user;
 };
 
-export const deleteUser = async (id: string): Promise<void> => {
-  await getCustomRepository(UserRepository).deleteUser(id);
+export const deleteUser = (id: string) => {
+  getCustomRepository(UserRepository).deleteUser(id);
 };
 
 export const editProfile = async (user: IUserClient) => {

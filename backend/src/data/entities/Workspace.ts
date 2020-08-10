@@ -8,11 +8,8 @@ export class Workspace extends AbstractEntity {
   @Column({ unique: true, length: 150 })
   name: string;
 
-  @Column({ nullable: true })
+  @Column()
   imageUrl: string;
-
-  @Column({ unique: true, length: 7 })
-  hash: string;
 
   @OneToMany(() => Chat, chat => chat.workspace)
   chats: Chat[];

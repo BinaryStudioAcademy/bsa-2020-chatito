@@ -19,15 +19,13 @@ class UserRepository extends Repository<User> {
     return this.findOne(id);
   }
 
-  async deleteUser(id: string): Promise<void> {
+  deleteUser(id: string) {
     const data = { id };
-    const user = await this.getById(id);
-    user.remove({ data });
+    this.getById(id).then(user => user.remove({ data }));
   }
 
   getByEmail(email: string): Promise<User> {
-    const user = this.findOne({ where: { email }, relations: ['workspaces'] });
-    return user;
+    return this.findOne({ where: { email } });
   }
 
   async editUser(id:string, data: IUserClient): Promise<User> {

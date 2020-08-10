@@ -10,6 +10,7 @@ import { ILoginUser } from '../../common/models/auth/ILoginUser';
 import { Button } from 'react-bootstrap';
 import { push } from 'connected-react-router';
 import { Routes } from '../../common/enums/Routes';
+import Logout from '../../components/Logout';
 
 interface IProps {
   loginUser: Routine;
@@ -60,6 +61,7 @@ const SignIn: FunctionComponent<IProps> = ({ loginUser, router }) => {
               Sign In
             </Button>
           </div>
+          <Logout />
         </Form>
       </Formik>
     </div>

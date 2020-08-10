@@ -16,12 +16,3 @@ Content-Type: application/json
         "fullName": "Name Surname"
     }
 }
-###
-
-POST http://localhost:3001/api/auth/login
-Content-Type: application/json
-
-{
-    "email": "test@gmail.com",
-    "password": "password"
-}
