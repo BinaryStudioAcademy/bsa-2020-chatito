@@ -1,9 +1,9 @@
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
-import { IAppState } from '../../../../common/models/store';
-import { fetchWorkspacesRoutine } from '../../../../routines/user';
-import { IWorkspace } from '../../../../common/models/workspace/IWorkspace';
+import { IAppState } from 'common/models/store';
+import { fetchWorkspacesRoutine } from 'routines/user';
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

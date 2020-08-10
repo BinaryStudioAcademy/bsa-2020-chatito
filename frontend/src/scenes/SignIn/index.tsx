@@ -1,15 +1,15 @@
 import React, { FunctionComponent } from 'react';
 import { Formik, Form } from 'formik';
 import styles from './styles.module.sass';
-import InputField from '../../components/InputField/InputField';
-import { signInValSchema as validationSchema } from '../../common/models/formik/ValidationSchemas';
-import { loginUserRoutine } from '../../routines/user';
+import InputField from 'components/InputField/InputField';
+import { signInValSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
+import { loginUserRoutine } from 'routines/user';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
-import { ILoginUser } from '../../common/models/auth/ILoginUser';
+import { ILoginUser } from 'common/models/auth/ILoginUser';
 import { Button } from 'react-bootstrap';
 import { push } from 'connected-react-router';
-import { Routes } from '../../common/enums/Routes';
+import { Routes } from 'common/enums/Routes';
 
 interface IProps {
   loginUser: Routine;

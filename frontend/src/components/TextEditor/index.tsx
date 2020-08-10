@@ -1,7 +1,7 @@
 import styles from './styles.module.sass';
 import React, { FunctionComponent, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import { env } from '../../env';
+import { env } from 'env';
 
 interface IProps {
   placeholder: string;

@@ -17,10 +17,10 @@ import {
   faPlus,
   faPlay
 } from '@fortawesome/free-solid-svg-icons';
-import { IAppState } from '../../../../common/models/store';
-import { IChat } from '../../../../common/models/workstate/chat';
+import { IAppState } from 'common/models/store';
+import { IChat } from 'common/models/workstate/chat';
 import styles from './styles.module.sass';
-import { selectChatRoutine } from '../../routines/routines';
+import { selectChatRoutine } from 'scenes/Workspace/routines/routines';
 
 interface IProps {
   channels: IChat[];
