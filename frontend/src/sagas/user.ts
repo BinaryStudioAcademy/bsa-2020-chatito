@@ -135,6 +135,7 @@ export default function* userSaga() {
     watchUserRequest(),
     watchUpdateProfile(),
     watchAddNewUserRequest(),
+    watchDeleteAccount(),
     watchForgotPasswordRequest(),
     watchLoginUserRequest(),
     watchDeleteAccount(),
