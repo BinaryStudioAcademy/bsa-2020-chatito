@@ -1,11 +1,11 @@
 import styles from './styles.module.sass';
 import React, { FunctionComponent } from 'react';
-import { blockPosition } from '../../common/types/types';
+import { blockPosition } from 'common/types/types';
 import Image from 'react-bootstrap/Image';
 import Popover from 'react-bootstrap/Popover';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Button from 'react-bootstrap/Button';
-import { IUserState } from '../../reducers/user';
+import { IUserState } from 'reducers/user';
 
 interface IProps {
   user: IUserState;

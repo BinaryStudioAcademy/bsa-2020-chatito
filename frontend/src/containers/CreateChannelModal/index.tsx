@@ -1,14 +1,14 @@
 import React from 'react';
-import CreateChannelForm from '../../components/CreateChannelForm';
+import CreateChannelForm from 'components/CreateChannelForm';
 import { connect } from 'react-redux';
-import { IBindingCallback1 } from '../../common/models/callback';
-import { ICreateChannel } from '../../common/models/channel/ICreateChannel';
-import { IAppState } from '../../common/models/store';
-import { IModalRoutine } from '../../common/models/modal/IShowModalRoutine';
-import { ModalTypes } from '../../common/enums/ModalTypes';
-import { createChannelRoutine } from '../../routines/channel';
-import { showModalRoutine } from '../../routines/modal';
-import ModalWindow from '../../components/ModalWindow';
+import { IBindingCallback1 } from 'common/models/callback';
+import { ICreateChannel } from 'common/models/channel/ICreateChannel';
+import { IAppState } from 'common/models/store';
+import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import { createChannelRoutine } from 'routines/channel';
+import { showModalRoutine } from 'routines/modal';
+import ModalWindow from 'components/ModalWindow';
 
 interface IProps {
   isShown: boolean;

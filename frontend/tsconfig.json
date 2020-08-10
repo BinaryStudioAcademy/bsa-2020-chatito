@@ -6,6 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "baseUrl": "./src/",
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -18,7 +19,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "types": ["node"]
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "src"
