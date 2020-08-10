@@ -6,7 +6,6 @@ import UserPopUp from '../../../../components/UserPopUp';
 import SearchInput from '../../../../components/SearchInput';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IUserState } from '../../../../reducers/user';
 import { IAppState } from '../../../../common/models/store';
 import EditProfile from '../../../../containers/EditProfile';
 import { showModalRoutine } from '../../../../routines/modal';
