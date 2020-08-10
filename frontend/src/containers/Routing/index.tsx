@@ -11,10 +11,6 @@ import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from '../../routines/user';
 import AddWorkspace from '../../scenes/Workspace/Workspace';
-import ForgotPassword from '../../scenes/ForgotPassword';
-import ResetPassword from '../../scenes/ResetPassword';
-import SignIn from '../../scenes/SignIn';
-import SignUp from '../../scenes/SignUp';
 import Auth from '../../scenes/Auth/containers/Auth';
 
 interface IProps {
@@ -36,7 +32,6 @@ const Routing: React.FC<IProps> = ({
     }
   });
 
-  const signInMock = () => <div>Sign In</div>;
   const mainMock = () => <div>Main</div>;
 
   return (
@@ -46,10 +41,6 @@ const Routing: React.FC<IProps> = ({
         : null}
       <Switch>
         <PublicRoute path={Routes.Auth} component={Auth} />
-        {/* <PublicRoute exact path={Routes.SignIn} component={Auth} />
-        <PublicRoute exact path={Routes.SignUp} component={Auth} /> */}
-        <PublicRoute exact path={Routes.ForgotPassword} component={ForgotPassword} />
-        <PublicRoute exact path={Routes.ResetPassword} component={ResetPassword} />
         <PrivateRoute exact path="/" component={mainMock} />
         <PrivateRoute exact path="/add-workspace" component={AddWorkspace} />
       </Switch>

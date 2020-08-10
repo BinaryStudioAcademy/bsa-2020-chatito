@@ -11,12 +11,12 @@
   justify-content: flex-start
   align-items: center
 
-.primaryBtn
-  width: 145px
-  height: 50px
-  background-color: var(--auth-scene-btn-background)
-  border-color: var(--auth-scene-btn-background)
-
-  &:hover
+  .primaryBtn:global(.btn-primary)
+    width: 145px
+    height: 50px
     background-color: var(--auth-scene-btn-background)
     border-color: var(--auth-scene-btn-background)
+
+    &:hover, &:active,
+      background-color: var(--auth-scene-btn-background)
+      border-color: var(--auth-scene-btn-background)

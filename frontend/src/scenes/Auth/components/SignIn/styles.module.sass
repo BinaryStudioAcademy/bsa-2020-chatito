@@ -25,14 +25,14 @@
   justify-content: flex-start
   align-items: center
 
-.primaryBtn
-  width: 145px
-  height: 50px
-  background-color: var(--auth-scene-btn-background)
-  border-color: var(--auth-scene-btn-background)
-
-  &:hover
-    // error, search solution
-    // background-color: scale-color(var(--auth-scene-btn-background), $lightness: 5%)
+  .primaryBtn:global(.btn-primary)
+    width: 145px
+    height: 50px
     background-color: var(--auth-scene-btn-background)
     border-color: var(--auth-scene-btn-background)
+
+    &:hover, &:active,
+      // error, search solution
+      // background-color: scale-color(var(--auth-scene-btn-background), $lightness: 5%)
+      background-color: var(--auth-scene-btn-background)
+      border-color: var(--auth-scene-btn-background)

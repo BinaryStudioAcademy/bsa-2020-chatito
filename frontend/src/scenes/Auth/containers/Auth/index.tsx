@@ -12,8 +12,8 @@ import { loginUserRoutine, addNewUserRoutine } from '../../../../routines/user';
 import { IBindingCallback1 } from '../../../../common/models/callback/IBindingCallback1';
 import { ILoginUser } from '../../../../common/models/auth/ILoginUser';
 import { IRegisterUser } from '../../../../common/models/auth/IRegisterUser';
-import { ReactComponent as Mascot} from './chatito-mascot.svg';
-import { ReactComponent as Logo } from './logo.svg';
+import { ReactComponent as Mascot} from '../../../../img/chatito-mascot.svg';
+import { ReactComponent as Logo } from '../../../../img/logo.svg';
 
 interface IProps {
   loginUser: IBindingCallback1<ILoginUser>;
