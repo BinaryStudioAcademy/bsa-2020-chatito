@@ -8,6 +8,7 @@ import ChatScene from '../../../Chat';
 import ProfileOverview from '../../../../components/ProfileOverview';
 import { IUser } from '../../../../common/models/user/IUser';
 import { IAppState } from '../../../../common/models/store';
+import ChatToolbar from '../ChatToolbar';
 
 export interface IContext {
   setShowProfileHandler: () => void;
@@ -50,7 +51,7 @@ const Workspace: React.FC<IProps> = ({ currentUserId }) => {
         <div className={styles.workspaceViewContainer}>
 
           <div className={styles.LeftPanelWrapper}>
-            <div style={{ background: '#cbcbdc', height: '100%' }}>Left side chats toolbar</div>
+            <ChatToolbar />
           </div>
 
           <div className={styles.ChatWrapper}>
