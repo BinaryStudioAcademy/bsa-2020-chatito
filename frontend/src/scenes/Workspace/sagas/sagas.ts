@@ -9,8 +9,8 @@ function* addWorkspaceReq({ payload }: Routine<any>) {
     const workspace = yield call(addWorkspace, payload);
     yield put(addWorkspaceRoutine.success(workspace));
   } catch (error) {
+    yield call(toastr.error, 'Error', error.message);
     yield put(addWorkspaceRoutine.failure(error));
-    yield call(toastr.error, 'Error', 'Failed while adding workspace. Try again.')
   }
 }
 

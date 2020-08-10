@@ -18,11 +18,9 @@ interface IProps {
 }
 
 const ForgotPassword: FunctionComponent<IProps> = ({ resetPassword, match }) => {
-  const onSubmit = async (
-    values: IResetPasswordInput
-  ) => {
+  const onSubmit = (values: IResetPasswordInput) => {
     const { token } = match.params;
-    await resetPassword({ token, ...values });
+    resetPassword({ token, ...values });
   };
   const initialValues = {
     password: '',

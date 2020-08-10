@@ -1,8 +1,8 @@
 import { Routine } from 'redux-saga-routines';
-import { addWorkspaceRoutine } from '../routines/routines';
+import { addWorkspaceRoutine, selectChatRoutine } from '../routines/routines';
 import { IWorkspace } from '../../../common/models/workspace/IWorkspace';
 
-interface IWorkspaceState {
+export interface IWorkspaceState {
   workspace: IWorkspace;
   loading: boolean;
   error: any;
@@ -33,6 +33,11 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
     case addWorkspaceRoutine.SUCCESS:
       return {
         ...state, loading: false
+      };
+    case selectChatRoutine.TRIGGER:
+      return {
+        ...state,
+        selectedChat: payload
       };
     default:
       return state;

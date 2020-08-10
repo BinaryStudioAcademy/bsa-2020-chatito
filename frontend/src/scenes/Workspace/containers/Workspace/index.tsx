@@ -4,6 +4,7 @@ import styles from './styles.module.sass';
 import Header from '../Header';
 import WorkspaceToolbar from '../WorkspaceToolbar';
 import ChatScene from '../../../Chat';
+import ChatToolbar from '../ChatToolbar';
 
 const Workspace = () => (
   <div className={styles.mainContainer}>
@@ -14,7 +15,7 @@ const Workspace = () => (
       <div className={styles.workspaceViewContainer}>
 
         <div className={styles.LeftPanelWrapper}>
-          <div style={{ background: '#cbcbdc', height: '100%' }}>Left side chats toolbar</div>
+          <ChatToolbar />
         </div>
 
         <div className={styles.ChatWrapper}>

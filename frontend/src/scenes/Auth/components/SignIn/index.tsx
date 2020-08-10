@@ -7,23 +7,22 @@ import InputField from '../../../../components/InputField/InputField';
 import { signInValSchema as validationSchema } from '../../../../common/models/formik/ValidationSchemas';
 import { ILoginUser } from '../../../../common/models/auth/ILoginUser';
 import { Routes } from '../../../../common/enums/Routes';
+import { IBindingCallback1 } from '../../../../common/models/callback/IBindingCallback1';
 import { ReactComponent as SignInGoogle } from '../../../../img/signInGoogle.svg';
 import { ReactComponent as SignInFacebook } from '../../../../img/signInFacebook.svg';
 
 interface IProps {
-  loginUser: (payload: ILoginUser) => void;
+  loginUser: IBindingCallback1<ILoginUser>;
 }
 
 const SignIn: FunctionComponent<IProps> = ({ loginUser }) => {
-  const onSubmit = async (
-    values: ILoginUser
-  ) => {
+  const onSubmit = (values: ILoginUser) => {
     const { email, password } = values;
     const payload = {
       email,
       password
     };
-    await loginUser(payload);
+    loginUser(payload);
   };
   const initialValues = {
     email: '',

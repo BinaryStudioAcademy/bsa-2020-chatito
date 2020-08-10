@@ -33,14 +33,11 @@ const Routing: React.FC<IProps> = ({
     }
   });
 
-  const mainMock = () => <div>Main</div>;
-
   return (
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <Switch>
         <PublicRoute path={Routes.Auth} component={Auth} />
         <PrivateRoute exact path={Routes.Workspace} component={Workspace} />
-        <PrivateRoute exact path="/" component={mainMock} />
         <PrivateRoute exact path="/add-workspace" component={AddWorkspace} />
         <PublicRoute path={Routes.NotExistingPath} component={PageNotFound} />
       </Switch>
