@@ -151,29 +151,10 @@ $coloractive: rgb(120, 21, 145) // цвет активной строки
   z-index: 3
   opacity: 1;
 
-@keyframes listShow
-  0%  { height: 0 }
-  100%  { height: 100px }
-    
-@keyframes listHide
-  0%  { height: 100px }
-  100%  { height: 0 }
-    
 .listBox
   overflow: hidden
   height: auto
-  animation: listShow 1s linear
 
 .listBoxHidden
   overflow: hidden
   height: 0
-  animation: listHide 1s linear
-
-.listBoxDeff
-  overflow: hidden
-  height: auto
-
-.listBoxHiddenDeff
-  overflow: hidden
-  height: 0
-  
