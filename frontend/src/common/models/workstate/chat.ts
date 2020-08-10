@@ -1,5 +1,5 @@
 export interface IChat {
   id: string;
-  channelName: string;
+  name: string;
   isPrivate: boolean;
 }

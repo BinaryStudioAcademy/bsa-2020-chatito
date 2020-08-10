@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { addWorkspaceRoutine, userChannelRoutine } from '../routines/routines';
+import { addWorkspaceRoutine, selectChatRoutine } from '../routines/routines';
 import { IWorkspace } from '../../../common/models/workspace/IWorkspace';
 
 export interface IWorkspaceState {
@@ -34,7 +34,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return {
         ...state, loading: false
       };
-    case userChannelRoutine.TRIGGER:
+    case selectChatRoutine.TRIGGER:
       return {
         ...state,
         selectedChat: payload
