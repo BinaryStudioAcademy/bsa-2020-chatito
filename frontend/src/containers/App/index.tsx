@@ -6,13 +6,12 @@ import Routing from '../Routing';
 import ErrorBoundary from '../ErrorBoundary';
 import Post from '../../components/Post';
 import { store } from '../../store';
-import { IUser } from '../../common/models/user';
+import { IUser } from '../../common/models/user/IUser';
 import { history } from '../../common/helpers/historyHelper';
 
-const testUser: IUser = {
-  fullname: 'Jhonn Smitt',
-  imgUrl: 'https://my.throtl.com/assets/icons/user-default-gray',
-  isOnline: true
+const testUser: Partial<IUser> = {
+  fullName: 'Jhonn Smitt',
+  imageUrl: 'https://my.throtl.com/assets/icons/user-default-gray'
 };
 
 const App = () => (
