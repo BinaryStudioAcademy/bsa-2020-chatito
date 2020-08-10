@@ -3,7 +3,7 @@ import { Formik, Form } from 'formik';
 import styles from './styles.module.sass';
 import InputField from 'components/InputField/InputField';
 import { signInValSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
-import { fetchUserRoutine } from 'routines/user';
+import { loginUserRoutine } from 'routines/user';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
 import { ILoginUser } from 'common/models/auth/ILoginUser';
@@ -12,19 +12,15 @@ import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
 
 interface IProps {
-  fetchUser: Routine;
+  loginUser: Routine;
   router: (route: string) => void;
 }
 
-const SignIn: FunctionComponent<IProps> = ({ fetchUser, router }) => {
-  const onSubmit = async (values: ILoginUser,
-    { setSubmitting }: { setSubmitting: CallableFunction }) => {
+const SignIn: FunctionComponent<IProps> = ({ loginUser, router }) => {
+  const onSubmit = async (values: ILoginUser) => {
     const { email, password } = values;
-    const payload = {
-      payload: { email, password }
-    };
-    fetchUser(payload);
-    setSubmitting(false);
+    const payload = { email, password };
+    loginUser(payload);
   };
   const initialValues = {
     email: '',
@@ -71,7 +67,7 @@ const SignIn: FunctionComponent<IProps> = ({ fetchUser, router }) => {
 };
 
 const mapDispatchToProps = {
-  fetchUser: fetchUserRoutine,
+  loginUser: loginUserRoutine,
   router: push
 };
 
