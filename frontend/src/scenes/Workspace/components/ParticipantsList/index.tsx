@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import styles from './styles.module.sass';
-import { listToString } from '../../../../common/helpers/globalHelpers';
-import { IUser } from '../../../../common/models/user/IUser';
+import { listToString } from 'common/helpers/globalHelpers';
+import { IUser } from 'common/models/user/IUser';
 
 interface IProps {
   participants: IUser[];

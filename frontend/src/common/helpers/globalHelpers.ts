@@ -14,3 +14,5 @@ export const listToString = (namesList: string[], maxUsers = 3) => {
 
   return retString;
 };
+
+export const areEqualStrings = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
