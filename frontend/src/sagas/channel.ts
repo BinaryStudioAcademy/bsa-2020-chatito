@@ -15,8 +15,7 @@ function* createChannelRequest({ payload }: Routine<any>) {
 
     yield put(fetchUserChannelsRoutine.trigger());
   } catch (error) {
-    const { errorCode, message } = error;
-    yield call(toastr.error, ErrorCode[errorCode], message);
+    yield call(toastr.error, 'Error', error.message);
     yield put(createChannelRoutine.failure());
   }
 }
@@ -30,8 +29,7 @@ function* fetchUserChannelsRequest() {
     const response = yield call(fetchUserChannels);
     yield put(fetchUserChannelsRoutine.success(response));
   } catch (error) {
-    const { errorCode, message } = error;
-    yield call(toastr.error, ErrorCode[errorCode], message);
+    yield call(toastr.error, 'Error', error.message);
     yield put(fetchUserChannelsRoutine.failure(error.message));
   }
 }
