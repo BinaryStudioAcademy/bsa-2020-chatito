@@ -2,11 +2,11 @@ import React, { FunctionComponent, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import styles from './styles.module.sass';
 import InputField from '../../components/InputField/InputField';
-import { resetPasswordSchema as validationSchema } from '../../common/models/formik/ValidationSchemas';
+import { resetPasswordSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
 import { resetPasswordRoutine } from '../../routines/user';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
-import { IResetPasswordInput } from '../../common/models/auth/IResetPasswordInput';
+import { IResetPasswordInput } from 'common/models/auth/IResetPasswordInput';
 
 interface IProps {
   resetPassword: Routine;

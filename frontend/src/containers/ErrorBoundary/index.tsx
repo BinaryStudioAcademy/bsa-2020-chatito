@@ -1,8 +1,8 @@
 import React, { ErrorInfo, ReactNode } from 'react';
 import { connect } from 'react-redux';
-import { IErrorBoundaryFormat } from '../../common/models/error/IErrorBoundaryFormat';
+import { IErrorBoundaryFormat } from 'common/models/error/IErrorBoundaryFormat';
 import { setErrorRoutine } from '../../routines/error';
-import { IAppState } from '../../common/models/store';
+import { IAppState } from 'common/models/store';
 
 interface IProps {
   error?: Error;

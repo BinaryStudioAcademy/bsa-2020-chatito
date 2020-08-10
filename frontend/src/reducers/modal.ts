@@ -1,6 +1,6 @@
 import { Routine } from 'redux-saga-routines';
 import { showModalRoutine } from '../routines/modal';
-import { ModalTypes } from '../common/enums/ModalTypes';
+import { ModalTypes } from 'common/enums/ModalTypes';
 
 export interface IModalState {
   editProfile: boolean;

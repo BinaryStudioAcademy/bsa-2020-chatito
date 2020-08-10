@@ -8,13 +8,13 @@ import {
   forgotPasswordRoutine,
   resetPasswordRoutine
 } from '../routines/user';
-import { IAuthServerResponse } from '../common/models/auth/IAuthServerResponse';
+import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
 import { showModalRoutine } from '../routines/modal';
-import { ModalTypes } from '../common/enums/ModalTypes';
-import api from '../common/helpers/apiHelper';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import api from 'common/helpers/apiHelper';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser } from '../services/authService';
-import { setAccessToken } from '../common/helpers/storageHelper';
+import { setAccessToken } from 'common/helpers/storageHelper';
 import { toastr } from 'react-redux-toastr';
 
 function* fetchUserRequest(): Routine<any> {
