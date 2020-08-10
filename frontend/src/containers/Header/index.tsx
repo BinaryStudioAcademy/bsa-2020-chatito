@@ -14,7 +14,7 @@ import { IModalRoutine } from '../../common/models/modal/IShowModalRoutine';
 import { IUser } from '../../common/models/user/IUser';
 
 interface IProps {
-  user: IUser | undefined;
+  user?: IUser;
   showModal: ({ modalType, show }: IModalRoutine) => void;
 }
 
