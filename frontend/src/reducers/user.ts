@@ -6,7 +6,8 @@ import {
   loginUserRoutine,
   deleteAccountRoutine,
   forgotPasswordRoutine,
-  resetPasswordRoutine
+  resetPasswordRoutine,
+  logoutUserRoutine
 } from '../routines/user';
 import { IUser } from '../common/models/user/IUser';
 
@@ -109,6 +110,10 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     }
     case resetPasswordRoutine.FAILURE: {
       return { ...state, loading: false };
+    }
+    case logoutUserRoutine.TRIGGER: {
+      alert('user');
+      return { initialState };
     }
     default:
       return state;

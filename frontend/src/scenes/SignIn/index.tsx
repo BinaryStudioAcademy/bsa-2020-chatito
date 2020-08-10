@@ -9,7 +9,9 @@ import { Routine } from 'redux-saga-routines';
 import { ILoginUser } from '../../common/models/auth/ILoginUser';
 import { Button } from 'react-bootstrap';
 import { push } from 'connected-react-router';
-import { Routes } from '../../common/enums/Routes';
+// import { Routes } from '../../common/enums/Routes';
+
+import { logOut } from '../../components/Logout';
 
 interface IProps {
   fetchUser: Routine;
@@ -31,8 +33,9 @@ const SignIn: FunctionComponent<IProps> = ({ fetchUser, router }) => {
     password: ''
   };
 
-  const onForgotPassword = () => {
-    router(Routes.ForgotPassword);
+  const onForgotPassword = async () => {
+    // router(Routes.ForgotPassword);
+    logOut();
   };
 
   return (

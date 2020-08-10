@@ -1,5 +1,6 @@
 import { Routine } from 'redux-saga-routines';
 import { addWorkspaceRoutine } from '../routines';
+import { logoutUserRoutine } from '../../../routines/user';
 
 interface IWorkspaceState {
   name: string;
@@ -27,6 +28,10 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return {
         ...state, loading: false
       };
+    case logoutUserRoutine.TRIGGER: {
+      alert('workspace');
+      return { initialState };
+    }
     default:
       return state;
   }

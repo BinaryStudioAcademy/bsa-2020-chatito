@@ -7,3 +7,4 @@ export const deleteAccountRoutine = createRoutine('DELETE_ACCOUNT');
 export const loginUserRoutine = createRoutine('LOGIN_USER');
 export const forgotPasswordRoutine = createRoutine('FORGOT_PASSWORD');
 export const resetPasswordRoutine = createRoutine('RESET_PASSWORD');
+export const logoutUserRoutine = createRoutine('LOGOUT_USER_USER');
