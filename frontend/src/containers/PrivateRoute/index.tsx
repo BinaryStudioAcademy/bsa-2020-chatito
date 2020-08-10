@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
-import { IAppState } from '../../common/models/store';
+import { IAppState } from '@models/store';
 import { Routes } from '@enums/Routes';
 
 interface IProps {

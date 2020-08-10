@@ -13,7 +13,7 @@ import { IForgotPasswordUser } from '../common/models/user/IForgotPasswordUser';
 import { IResetPasswordUser } from '../common/models/user/IResetPasswordUser';
 import CustomError from '../common/models/CustomError';
 import { sendResetPasswordMail } from './mailService';
-import { ErrorCode } from '@enums/ErrorCode';
+import { ErrorCode } from '../common/enums/ErrorCode';
 
 const createRefreshTokenData = (user: User) => {
   const cur = new Date();
