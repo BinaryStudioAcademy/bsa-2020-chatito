@@ -14,11 +14,9 @@ interface IProps {
 }
 
 const ForgotPassword: FunctionComponent<IProps> = ({ forgotPassword }) => {
-  const onSubmit = async (values: IForgotPasswordInput,
-    { setSubmitting }: { setSubmitting: CallableFunction }) => {
+  const onSubmit = async (values: IForgotPasswordInput) => {
     const { email } = values;
-    forgotPassword({ email });
-    setSubmitting(false);
+    await forgotPassword({ email });
   };
   const initialValues = {
     email: ''

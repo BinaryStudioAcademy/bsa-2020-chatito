@@ -16,16 +16,14 @@ interface IProps {
 
 const SignIn: FunctionComponent<IProps> = ({ loginUser }) => {
   const onSubmit = async (
-    values: ILoginUser,
-    { setSubmitting }: { setSubmitting: CallableFunction }
+    values: ILoginUser
   ) => {
     const { email, password } = values;
     const payload = {
       email,
       password
     };
-    loginUser(payload);
-    setSubmitting(false);
+    await loginUser(payload);
   };
   const initialValues = {
     email: '',

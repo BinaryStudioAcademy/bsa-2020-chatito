@@ -14,12 +14,10 @@ interface IProps {
 }
 
 export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
-  const onSubmit = async (values: IRegisterUser,
-    { setSubmitting }: { setSubmitting: CallableFunction }) => {
+  const onSubmit = async (values: IRegisterUser) => {
     const { email, password, fullName } = values;
     const user = { email, password, fullName };
-    addNewUser(user);
-    setSubmitting(false);
+    await addNewUser(user);
   };
 
   const initialValues = {
