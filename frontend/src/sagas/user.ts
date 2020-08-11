@@ -7,11 +7,9 @@ import {
   loginUserRoutine,
   forgotPasswordRoutine,
   resetPasswordRoutine,
-  fetchWorkspacesRoutine,
   editStatusRoutine
 } from '../routines/user';
 import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
-import { getWorkspaces } from 'services/workspaceService';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { Routine } from 'redux-saga-routines';
@@ -146,21 +144,6 @@ function* watchEditStatusRequest() {
   yield takeEvery(editStatusRoutine.TRIGGER, editStatusRequest);
 }
 
-function* fetchWorkspaces() {
-  try {
-    const workspaces = yield call(getWorkspaces);
-
-    yield put(fetchWorkspacesRoutine.success(workspaces));
-  } catch (error) {
-    yield call(toastrError, error.message);
-    yield put(fetchWorkspacesRoutine.failure(error));
-  }
-}
-
-function* watchFetchWorkspaces() {
-  yield takeEvery(fetchWorkspacesRoutine.TRIGGER, fetchWorkspaces);
-}
-
 export default function* userSaga() {
   yield all([
     watchAddNewUserRequest(),
@@ -170,7 +153,6 @@ export default function* userSaga() {
     watchLoginUserRequest(),
     watchDeleteAccount(),
     watchResetPasswordRequest(),
-    watchEditStatusRequest(),
-    watchFetchWorkspaces()
+    watchEditStatusRequest()
   ]);
 }
