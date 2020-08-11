@@ -25,3 +25,11 @@ Content-Type: application/json
     "email": "test@gmail.com",
     "password": "password"
 }
+###
+
+POST http://localhost:3001/api/users/is-registered
+Content-Type: application/json
+
+{
+    "token": "token"
+}

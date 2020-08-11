@@ -29,6 +29,8 @@ export const sendInviteLinkMail = async ({ to, token }: IInviteLinkMessage) => {
     text: `Hi, buddy! You are invited to join the workspace in Chatito.
           Follow the link and quickly join us: ${client}/invite/${token}`
   };
+  // eslint-disable-next-line
+  console.log(message);
 
   await sendMail(message);
 };
