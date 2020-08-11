@@ -1,7 +1,7 @@
-import { IUser } from '../user/IUser';
+import { IUserServer } from '../user/IUserServer';
 
 export interface IAuthServerResponse {
   accessToken: string;
   refreshToken: string;
-  user?: IUser
+  user?: IUserServer
 }
