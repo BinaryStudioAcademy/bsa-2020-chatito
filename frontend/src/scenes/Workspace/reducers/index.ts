@@ -29,10 +29,9 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         selectedChat: payload
       };
     case selectWorkspaceRoutine.TRIGGER: {
-      const selectedWorkspace = { ...payload.workspace };
       return {
         ...state,
-        workspace: selectedWorkspace
+        workspace: payload
       };
     }
     case addWorkspaceRoutine.SUCCESS: {

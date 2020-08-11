@@ -36,7 +36,7 @@ const WorkspaceToolbar: FunctionComponent<IProps> = ({
         workspace => workspace.id === id
       );
       if (selectedWorkspace) {
-        selectWorkspace({ workspace: selectedWorkspace });
+        selectWorkspace({ ...selectedWorkspace });
       }
     }
   };
