@@ -7,7 +7,8 @@ import {
   deleteAccountRoutine,
   forgotPasswordRoutine,
   resetPasswordRoutine,
-  fetchWorkspacesRoutine
+  fetchWorkspacesRoutine,
+  editStatusRoutine
 } from 'routines/user';
 import { IUser } from 'common/models/user/IUser';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
@@ -65,7 +66,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
       return { ...state, loading: true };
     }
     case editProfileRoutine.SUCCESS: {
-      return { ...state, loading: false, data: { ...payload } };
+      return { ...state, loading: false, user: { ...payload } };
     }
     case editProfileRoutine.FAILURE: {
       return { ...state, loading: false };
@@ -103,6 +104,15 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
       return { ...state, loading: false };
     }
     case resetPasswordRoutine.FAILURE: {
+      return { ...state, loading: false };
+    }
+    case editStatusRoutine.TRIGGER: {
+      return { ...state, loading: true };
+    }
+    case editStatusRoutine.SUCCESS: {
+      return { ...state, loading: false, user: { ...state.user, status: payload } };
+    }
+    case editStatusRoutine.FAILURE: {
       return { ...state, loading: false };
     }
 

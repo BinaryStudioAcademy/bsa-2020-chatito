@@ -1,0 +1,110 @@
+@mixin buttonReset
+  border: none
+  padding: 0
+  width: auto
+  overflow: visible
+  background: transparent
+  color: inherit
+  font: inherit
+  line-height: normal
+  -webkit-font-smoothing: inherit
+  -moz-osx-font-smoothing: inherit
+  -webkit-appearance: none
+.smileIcon
+  color: var(--offline)
+  font-size: 23px
+.crossIcon
+  color: var(--offline)
+  font-size: 18px
+
+.smileButton, .crossButton
+  height: 38px
+  width: 38px
+  box-sizing: border-box
+  cursor: pointer
+  display: flex
+  justify-content: center
+  align-items: center
+  outline: none
+  background-color: transparent
+  &_reset
+    @include buttonReset
+    &::-moz-focus-inner
+        border: 0
+        padding: 0
+    &:focus
+      outline: none
+
+.emoji, .cross
+  background-color: transparent
+  padding: 0
+  display: flex
+  justify-content: center
+  align-items: center
+  height: 38px
+  width: 38px
+
+.emoji
+  border-right: none
+
+.cross
+  border-left: none
+
+.inputBlock
+  width: 100%
+  padding: 0 20px 20px
+  box-sizing: border-box
+
+.modalHeader
+  font-size: 22px
+  font-weight: 900
+  min-height: 70px
+  width: 100%
+  margin-left: 20px
+  display: flex
+  align-items: center
+
+.modalBody
+  padding: 0
+
+.suggestedStatusesContainer
+  display: flex
+  flex-direction: column
+  margin-bottom: 20px
+
+.statusButton
+  @include buttonReset
+  display: flex
+  height: 28px
+  align-items: center
+  padding: 0 25px
+  &:hover
+    background-color: var(--workspace-background-color)
+  &:hover .statusText
+    color: #ffffff
+  &:focus
+    outline: none
+
+.statusText
+  margin-left: 10px
+  font-weight: 700
+
+.buttonsContainer
+  padding: 0 20px
+  width: 100%
+  display: flex
+  justify-content: flex-end
+  margin-bottom: 20px
+
+.setStatusButton
+  height: 36px
+  width: 76px
+  font-weight: 800
+  &:first-child
+    margin-right: 12px
+
+.save
+  border: none
+  &:hover
+    background-color: var(--workspace-background-color)
+

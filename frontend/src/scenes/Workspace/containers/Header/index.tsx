@@ -13,6 +13,8 @@ import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 
+import Logout from 'components/Logout';
+
 interface IProps {
   user?: IUser;
   showModal: ({ modalType, show }: IModalRoutine) => void;
@@ -71,7 +73,7 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
             onEditProfileClick={showEditModal}
           />
         </div>
-
+        <Logout />
         <EditProfile />
       </div>
     </header>
