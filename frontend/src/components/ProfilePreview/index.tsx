@@ -7,44 +7,24 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
 import { ProfileContext, IContext } from 'scenes/Workspace/containers/Workspace/index';
 
-const {
-  setShowProfileHandler,
-  setUserDataHandler
-} = useContext(ProfileContext) as IContext; // eslint-disable @typescript-eslint/no-unused-vars
+// const {
+//   setShowProfileHandler,
+//   setUserDataHandler
+// } = useContext(ProfileContext) as IContext; // eslint-disable @typescript-eslint/no-unused-vars
 interface IProps {
   user: IUser;
-  trigger: () => React.ReactElement;
-  id: string;
   onSend: IBindingCallback1<string>;
 }
 
-// Mocked data: testData and trigger function
-const testData = {
-  user: {
-    id: '1',
-    email: 'string',
-    fullName: 'Test Fullname',
-    displayName: 'string',
-    title: 'string',
-    imgUrl: 'https://images.unsplash.com/photo-1555445091-5a8b655e8a4a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80', // eslint-disable-line max-len
-    whatIDo: 'coding',
-    status: 'online'
-  },
-  onSend: (message: string) => console.log(message),
-  redirectTo: '/profile'
-};
-const trigger = () => <Button variant="success">Show</Button>;
-
-// const ProfilePreview: FunctionComponent<IProps> = ({ user, trigger, onSend }) => {
-const ProfilePreview: FunctionComponent = () => {
+const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend }) => {
   const [text, setText] = useState('');
-  const onViewProfile = () => {
-    setUserDataHandler(testData.user);
-    setShowProfileHandler();
-  };
+  // const onViewProfile = () => {
+  //   setUserDataHandler(user);
+  //   setShowProfileHandler();
+  // };
   const onSendMessage = (message: string) => {
     if (text.trim()) {
-      testData.onSend(message);
+      onSend(message);
     }
     setText('');
   };
@@ -57,20 +37,20 @@ const ProfilePreview: FunctionComponent = () => {
     setText(e.target.value);
   };
   const popOver = (
-    <Popover id={testData.user.id} className={styles.popOverWindow}>
+    <Popover id={user.id} className={styles.popOverWindow}>
       <div className={styles.avatarContainer}>
-        <Image className={styles.userAvatar} src={testData.user.imgUrl} alt="User avatar" thumbnail />
+        <Image className={styles.userAvatar} src={user.imageUrl} alt="User avatar" thumbnail />
       </div>
       <Popover.Content>
-        {testData.user.status === 'online' ? (
-          <p className={`${styles.fullname} ${styles.online}`}>{testData.user.fullName}</p>
+        {user.status === 'online' ? (
+          <p className={`${styles.fullname} ${styles.online}`}>{user.fullName}</p>
         ) : (
-          <p className={`${styles.fullname} ${styles.offline}`}>{testData.user.fullName}</p>
+          <p className={`${styles.fullname} ${styles.offline}`}>{user.fullName}</p>
         )}
-        <p className={styles.whatIDo}>{testData.user.whatIDo}</p>
+        <p className={styles.title}>{user.title}</p>
         <button
           type="button"
-          onClick={onViewProfile}
+          // onClick={onViewProfile}
           className={styles.link}
         >
           View full profile
@@ -103,7 +83,18 @@ const ProfilePreview: FunctionComponent = () => {
 
   return (
     <OverlayTrigger trigger="click" rootClose placement="right" overlay={popOver}>
-      {trigger()}
+      <button
+        type="button"
+        className={styles.link}
+      >
+        <img
+          width={64}
+          height={64}
+          className="mr-3 rounded"
+          src={user.imageUrl ? user.imageUrl : 'https://my.throtl.com/assets/icons/user-default-gray'}
+          alt={user.fullName}
+        />
+      </button>
     </OverlayTrigger>
   );
 };
