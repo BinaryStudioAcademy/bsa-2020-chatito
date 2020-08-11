@@ -21,17 +21,8 @@ function* watchPostWorkspaceName() {
 }
 
 function* fetchUserChannelsRequest() {
-  console.log('FETCHING SAGA');
   try {
-    let response = yield call(fetchUserChannels);
-
-    // eslint-disable-next-line
-    response = [
-      { id: '1', name: 'Channel', isPrivate: true, type: ChatType.Channel },
-      { id: '2', name: 'Direct', isPrivate: true, type: ChatType.DirectMessage }
-    ];
-    console.log(response);
-
+    const response = yield call(fetchUserChannels);
     yield put(fetchChannelsRoutine.success(response));
   } catch (error) {
     yield call(toastrError, error.message);

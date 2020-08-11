@@ -12,8 +12,7 @@ interface IProps {
 
 const TextEditor: FunctionComponent<IProps> = ({ placeholder, height, onSend }) => {
   const onSendMessage = (editor: any) => {
-    console.log('IN Editor');
-    console.log(onSend(editor.getContent()));
+    onSend(editor.getContent());
   };
 
   return (

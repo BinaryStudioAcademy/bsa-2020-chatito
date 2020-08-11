@@ -5,26 +5,19 @@ import { ICreatePost } from 'common/models/post/ICreatePost';
 
 // eslint-disable-next-line
 export async function createChannel(payload: ICreateChannel) {
-  // const response = await api.post('/', payload);
-  // return response;
   return new Promise(resolve => resolve(true));
 }
 
 export async function fetchUserChannels() {
-  // const response = await api.get('/');
-  // return response;
-  return new Promise(resolve => resolve(true));
+  const response = await api.get('/api/chats');
+  return response;
 }
 
 export async function fetchCnannelPosts(channelId: string) {
-  // const response = await api.get('/');
-  // return response;
   return new Promise(resolve => resolve(true));
 }
 
 export async function addPost({ chatId, text }: ICreatePost) {
-  // const response = await api.get('/');
-  // return response;
-
+  const response = await api.post(`/api/chats/${chatId}/posts`, { text });
   return new Promise(resolve => resolve(true));
 }

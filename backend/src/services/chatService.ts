@@ -6,3 +6,8 @@ export const getAllChatPosts = async (chatId: string) => {
   const chatPosts: IPost[] = await getCustomRepository(PostRepository).getAllChatPosts(chatId);
   return chatPosts;
 };
+
+export const getAll = async () => {
+  const chatList = await getCustomRepository(PostRepository).getAll();
+  return chatList;
+};
