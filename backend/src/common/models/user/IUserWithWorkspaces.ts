@@ -7,5 +7,6 @@ export interface IUserWithWorkspaces {
   displayName: string;
   imageUrl: string;
   title: string;
+  status: string;
   workspaces: IWorkspaceResponse[];
 }

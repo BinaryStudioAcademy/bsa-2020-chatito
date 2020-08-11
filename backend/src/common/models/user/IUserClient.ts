@@ -5,4 +5,5 @@ export interface IUserClient {
   displayName: string;
   imageUrl: string;
   title: string;
+  status?: string;
 }

@@ -20,7 +20,7 @@ import {
 import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/workstate/chat';
 import styles from './styles.module.sass';
-import { selectChatRoutine } from 'scenes/Workspace/routines/routines';
+import { selectChatRoutine } from 'scenes/Workspace/routines';
 import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';

@@ -7,10 +7,11 @@ import {
   deleteAccountRoutine,
   forgotPasswordRoutine,
   resetPasswordRoutine,
-  fetchWorkspacesRoutine
+  editStatusRoutine
 } from 'routines/user';
 import { IUser } from 'common/models/user/IUser';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
+import { addWorkspaceRoutine } from 'scenes/Workspace/routines';
 
 export interface IUserState {
   user?: IUser;
@@ -34,7 +35,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
       };
     case addNewUserRoutine.SUCCESS:
     case fetchUserRoutine.SUCCESS:
-    case loginUserRoutine.SUCCESS:
+    case loginUserRoutine.SUCCESS: {
       const { id, fullName, email, imageUrl, title, workspaces } = payload;
 
       return {
@@ -44,6 +45,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
       };
+    }
     case addNewUserRoutine.FAILURE:
       return {
         ...state,
@@ -65,7 +67,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
       return { ...state, loading: true };
     }
     case editProfileRoutine.SUCCESS: {
-      return { ...state, loading: false, data: { ...payload } };
+      return { ...state, loading: false, user: { ...payload } };
     }
     case editProfileRoutine.FAILURE: {
       return { ...state, loading: false };
@@ -105,23 +107,23 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case resetPasswordRoutine.FAILURE: {
       return { ...state, loading: false };
     }
-
-    case fetchWorkspacesRoutine.TRIGGER:
-      return {
-        ...state,
-        isLoading: true
-      };
-    case fetchWorkspacesRoutine.FAILURE:
-      return {
-        ...state,
-        isLoading: false
-      };
-    case fetchWorkspacesRoutine.SUCCESS:
-      return {
-        ...state,
-        workspaceList: payload,
-        isLoading: false
-      };
+    case editStatusRoutine.TRIGGER: {
+      return { ...state, loading: true };
+    }
+    case editStatusRoutine.SUCCESS: {
+      return { ...state, loading: false, user: { ...state.user, status: payload } };
+    }
+    case editStatusRoutine.FAILURE: {
+      return { ...state, loading: false };
+    }
+    case addWorkspaceRoutine.SUCCESS: {
+      const workspaces = [...state.workspaceList];
+      workspaces.push(payload);
+      return { ...state, loading: false, workspaceList: workspaces };
+    }
+    case addWorkspaceRoutine.FAILURE: {
+      return { ...state, loading: false };
+    }
     default:
       return state;
   }
