@@ -8,19 +8,17 @@ export interface IWorkspaceState {
   loading: boolean;
   error: string;
   selectedChat: IChat;
-  selectedWorkspace: IChat;
+  selectedWorkspace: IWorkspace;
   channels: Array<IChat>;
   directMessages: Array<IChat>;
 }
-
-const emptyChat = { id: '', name: '', isPrivate: false };
 
 const initialState: IWorkspaceState = {
   workspace: { id: '', name: '', hash: '', imageUrl: '' },
   loading: false,
   error: '',
-  selectedChat: emptyChat,
-  selectedWorkspace: emptyChat,
+  selectedChat: { id: '', name: '', isPrivate: false },
+  selectedWorkspace: { id: '', name: '', hash: '', imageUrl: '' },
   channels: [],
   directMessages: []
 };
