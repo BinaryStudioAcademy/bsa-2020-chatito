@@ -1,7 +1,7 @@
 import styles from './styles.module.sass';
 import React, { FunctionComponent } from 'react';
-import { IUser } from 'common/models/user/IUser';
-import { blockPosition } from 'common/types/types';
+import { IUser } from '../../common/models/user/IUser';
+import { blockPosition } from '../../common/types/types';
 import Image from 'react-bootstrap/Image';
 import Popover from 'react-bootstrap/Popover';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
@@ -15,10 +15,12 @@ interface IProps {
   onEditProfileClick: () => void;
 }
 
+const defaultLogo = 'https://w0.pngwave.com/png/527/663/logo-person-user-person-icon-png-clip-art.png';
+
 const UserPopUp: FunctionComponent<IProps> = ({ user, trigger, id, placement, onEditProfileClick }) => {
   const popOver = (
     <Popover id={id}>
-      <Image className={styles.userAvatarBig} src={user.imageUrl || ''} alt="User avatar big" thumbnail />
+      <Image className={styles.userAvatarBig} src={user.imageUrl || defaultLogo} alt="User avatar big" thumbnail />
 
       <Popover.Content>
         <p className={styles.usernameHeader}>{user.fullName}</p>

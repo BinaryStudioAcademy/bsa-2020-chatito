@@ -2,7 +2,8 @@ import { RouterState } from 'connected-react-router';
 import { IModalState } from 'reducers/modal';
 import { IErrorBoundaryState } from 'reducers/errorBoundary';
 import { IUserState } from 'reducers/user';
-import { IWorkspaceState } from 'scenes/Workspace/reducers/reducer';
+import { IWorkspaceState } from 'scenes/Workspace/reducers';
+import { IChatState } from 'scenes/Chat/reducers';
 
 export interface IAppState {
   router: RouterState;
@@ -10,4 +11,5 @@ export interface IAppState {
   modal: IModalState;
   workspace: IWorkspaceState;
   errorBoundary: IErrorBoundaryState;
+  chat: IChatState;
 }

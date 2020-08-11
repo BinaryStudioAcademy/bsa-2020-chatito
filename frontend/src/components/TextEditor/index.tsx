@@ -1,17 +1,19 @@
-import styles from './styles.module.sass';
 import React, { FunctionComponent } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { env } from 'env';
+import styles from './styles.module.sass';
 
 interface IProps {
   placeholder: string;
   height: number | 'auto';
-  onSend: (message: string) => void;
+  onSend: (text: string) => void;
+  chatId?: string;
 }
 
 const TextEditor: FunctionComponent<IProps> = ({ placeholder, height, onSend }) => {
   const onSendMessage = (editor: any) => {
-    onSend(editor.getContent());
+    console.log('IN Editor');
+    console.log(onSend(editor.getContent()));
   };
 
   return (

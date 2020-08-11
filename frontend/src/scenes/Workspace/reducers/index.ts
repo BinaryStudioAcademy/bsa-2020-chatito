@@ -1,6 +1,8 @@
 import { Routine } from 'redux-saga-routines';
-import { addWorkspaceRoutine, selectChatRoutine } from '../routines/routines';
+import { addWorkspaceRoutine, selectChatRoutine, fetchChannelsRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
+import { ChatType } from 'common/enums/ChatType';
+import { IChat } from 'common/models/chat/IChat';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
@@ -34,6 +36,14 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return {
         ...state, loading: false
       };
+
+    case fetchChannelsRoutine.SUCCESS:
+      return {
+        ...state,
+        channels: payload.filter((chat: IChat) => chat.type === ChatType.Channel),
+        directMessages: payload.filter((chat: IChat) => chat.type === ChatType.DirectMessage)
+      };
+
     case selectChatRoutine.TRIGGER:
       return {
         ...state,

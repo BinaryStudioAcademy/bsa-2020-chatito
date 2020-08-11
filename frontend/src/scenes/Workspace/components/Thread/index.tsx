@@ -1,8 +1,8 @@
 import React, { FunctionComponent, CSSProperties } from 'react';
 import PartisipantsList from '../ParticipantsList';
-import TextEditor from '../../../../components/TextEditor';
-import styles from './styles.module.sass';
-import { IUser } from '../../../../common/models/user/IUser';
+import TextEditor from 'components/TextEditor';
+import styles from 'styles.module.sass';
+import { IUser } from 'common/models/user/IUser';
 
 interface IProps {
   width?: number | string;

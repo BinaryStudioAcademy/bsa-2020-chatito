@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,41 +18,31 @@ import {
   faPlay
 } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
-import { IChat } from 'common/models/workstate/chat';
+import { IChat } from 'common/models/chat/IChat';
 import styles from './styles.module.sass';
-import { selectChatRoutine } from 'scenes/Workspace/routines/routines';
+import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 
 interface IProps {
   channels: IChat[];
   directMessages: IChat[];
   selectedChat: IChat;
-  selectChatRoutine: Routine;
+  selectChat: Routine;
 }
 
-const ChatToolbar = ({
+const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
   selectedChat,
-  selectChatRoutine: selectRoutine
-}: IProps) => {
+  selectChat
+}) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
-  // Обработчики событий
-  const doSelectChannel = (channel: IChat) => {
-    selectRoutine(channel);
-  };
 
-  const getClassNameDiv = (state: boolean) => (
-    state
-      ? styles.listBoxHidden
-      : styles.listBox
-  );
+  const doSelectChannel = (channel: IChat) => selectChat(channel);
 
-  const getClassNameImg = (state: boolean) => (
-    state
-      ? styles.chanelsImgRotate
-      : styles.chanelsImg
-  );
+  const getClassNameDiv = (state: boolean) => (state ? styles.listBoxHidden : styles.listBox);
+
+  const getClassNameImg = (state: boolean) => (state ? styles.chanelsImgRotate : styles.chanelsImg);
 
   const getChannelSelect = (chat: IChat) => {
     if (selectedChat && selectedChat.id === chat.id) {
@@ -69,9 +59,9 @@ const ChatToolbar = ({
   );
 
   const userChannel = (channel: IChat) => {
-    const { name, isPrivate } = channel;
+    const { name, isPrivate, id } = channel;
     return (
-      <a href="#0" className={getChannelSelect(channel)} onClick={() => doSelectChannel(channel)}>
+      <a href="#0" key={id} className={getChannelSelect(channel)} onClick={() => doSelectChannel(channel)}>
         <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} color="white" />
         <span className={styles.buttonText}>{name}</span>
       </a>
@@ -79,9 +69,9 @@ const ChatToolbar = ({
   };
 
   const directChannel = (directMessage: IChat) => {
-    const { name } = directMessage;
+    const { name, id } = directMessage;
     return (
-      <a href="#0" className={getChannelSelect(directMessage)} onClick={() => doSelectChannel(directMessage)}>
+      <a href="#0" key={id} className={getChannelSelect(directMessage)} onClick={() => doSelectChannel(directMessage)}>
         <div className={styles.metkaOnLine} />
         <span className={styles.buttonText}>{name}</span>
       </a>
@@ -99,6 +89,7 @@ const ChatToolbar = ({
       {channelSelector('File Browser', faDatabase)}
       {channelSelector('Show less', faReply)}
       <hr className={styles.hrr} />
+
       <div className={styles.buttonChanel}>
         <button type="button" className={styles.buttonSelect} onClick={() => setChatPanel(!chatPanel)}>
           <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(chatPanel)} />
@@ -112,18 +103,20 @@ const ChatToolbar = ({
         </div>
       </div>
       <div className={getClassNameDiv(chatPanel)}>
-        {channels.map(channel => (
-          userChannel(channel)))}
+        {channels.map(channel => userChannel(channel))}
       </div>
       <hr className={styles.hrr} />
+
       <div className={styles.buttonChanel}>
         <button type="button" className={styles.buttonSelect} onClick={() => setDirectPanel(!directPanel)}>
           <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(directPanel)} />
           <span className={styles.buttonText}>Direct Messages</span>
         </button>
+
         <div className={styles.buttonPlus}>
           <FontAwesomeIcon icon={faPlus} color="white" />
         </div>
+
         <div className={styles.directInfo}>
           Open a direct message
           <br />
@@ -131,8 +124,7 @@ const ChatToolbar = ({
         </div>
       </div>
       <div className={getClassNameDiv(directPanel)}>
-        {directMessages.map(directMessage => (
-          directChannel(directMessage)))}
+        {directMessages.map(directMessage => directChannel(directMessage))}
       </div>
       <hr className={styles.hrr} />
     </div>
@@ -142,11 +134,11 @@ const ChatToolbar = ({
 const mapStateToProps = (state: IAppState) => ({
   channels: state.workspace.channels,
   directMessages: state.workspace.directMessages,
-  selectedChat: state.workspace.selectedChat
+  selectedChat: state.chat.chat!
 });
 
 const mapDispatchToProps = {
-  selectChatRoutine
+  selectChat: setCurrentChatRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatToolbar);
