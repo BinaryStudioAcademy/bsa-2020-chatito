@@ -14,6 +14,7 @@ import { ILoginUser } from 'common/models/auth/ILoginUser';
 import { IRegisterUser } from 'common/models/auth/IRegisterUser';
 import { IForgotPasswordInput } from 'common/models/auth/IForgotPasswordInput';
 import { IResetPasswordInput } from 'common/models/auth/IResetPasswordInput';
+import { IAppState } from 'common/models/store';
 import {
   loginUserRoutine,
   addNewUserRoutine,
@@ -26,13 +27,15 @@ interface IProps {
   addNewUser: IBindingCallback1<IRegisterUser>;
   forgotPassword: IBindingCallback1<IForgotPasswordInput>;
   resetPassword: IBindingCallback1<IResetPasswordInput>;
+  workspaceId: string;
 }
 
 const Auth = ({
   loginUser,
   addNewUser,
   forgotPassword,
-  resetPassword }: IProps) => (
+  resetPassword,
+  workspaceId }: IProps) => (
     <div className={styles.pageLayout}>
       <div className={styles.leftSide}>
         <Mascot className={styles.mascot} />
@@ -42,13 +45,13 @@ const Auth = ({
         <Route
           exact
           path={Routes.SignIn}
-          render={props => <SignIn {...props} loginUser={loginUser} />}
+          render={props => <SignIn {...props} loginUser={loginUser} workspaceId={workspaceId} />}
           key={Routes.SignIn}
         />
         <Route
           exact
           path={Routes.SignUp}
-          render={props => <SignUp {...props} addNewUser={addNewUser} />}
+          render={props => <SignUp {...props} addNewUser={addNewUser} workspaceId={workspaceId} />}
           key={Routes.SignUp}
         />
         <Route
@@ -67,6 +70,10 @@ const Auth = ({
     </div>
 );
 
+const mapStateToProps = (state: IAppState) => ({
+  workspaceId: state.workspace.workspace.id
+});
+
 const mapDispatchToProps = {
   loginUser: loginUserRoutine,
   addNewUser: addNewUserRoutine,
@@ -74,4 +81,4 @@ const mapDispatchToProps = {
   resetPassword: resetPasswordRoutine
 };
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

@@ -13,20 +13,23 @@ import { ReactComponent as SignInFacebook } from 'img/signInFacebook.svg';
 
 interface IProps {
   loginUser: IBindingCallback1<ILoginUser>;
+  workspaceId: string;
 }
 
-const SignIn: FunctionComponent<IProps> = ({ loginUser }) => {
+const SignIn: FunctionComponent<IProps> = ({ loginUser, workspaceId }) => {
   const onSubmit = (values: ILoginUser) => {
     const { email, password } = values;
     const payload = {
       email,
-      password
+      password,
+      workspaceId
     };
     loginUser(payload);
   };
   const initialValues = {
     email: '',
-    password: ''
+    password: '',
+    workspaceId
   };
 
   return (

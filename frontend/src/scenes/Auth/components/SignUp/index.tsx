@@ -11,12 +11,13 @@ import InputField from 'components/InputField/InputField';
 
 interface IProps {
   addNewUser: IBindingCallback1<IRegisterUser>;
+  workspaceId: string;
 }
 
-export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
+export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspaceId }) => {
   const onSubmit = (values: IRegisterUser) => {
     const { email, password, fullName } = values;
-    const user = { email, password, fullName };
+    const user = { email, password, fullName, workspaceId };
     addNewUser(user);
   };
 
@@ -24,7 +25,8 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser }) => {
     fullName: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    workspaceId
   };
   return (
     <div className={styles.signUp}>
