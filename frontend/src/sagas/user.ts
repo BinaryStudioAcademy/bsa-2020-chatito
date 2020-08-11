@@ -7,26 +7,26 @@ import {
   loginUserRoutine,
   forgotPasswordRoutine,
   resetPasswordRoutine,
-  fetchWorkspacesRoutine,
   editStatusRoutine
 } from '../routines/user';
 import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
-import { getWorkspaces } from 'services/workspaceService';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
-import api from 'common/helpers/apiHelper';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser } from 'services/authService';
 import { setTokens } from 'common/helpers/storageHelper';
-import { IUser } from 'common/models/user/IUser';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
 import { toastrError } from 'services/toastrService';
 import { history } from 'common/helpers/historyHelper';
 import { push } from 'connected-react-router';
+import { selectWorkspaceRoutine } from '../scenes/Workspace/routines';
+import { IUserWithWorkspaces } from 'common/models/user/IUserWithWorkspaces';
 
 function* fetchUserRequest(): Routine<any> {
   try {
-    const user: IUser = yield call(fetchUser);
+    const user: IUserWithWorkspaces = yield call(fetchUser);
+    const workspace = (user && user.workspaces.length > 0) ? user.workspaces[0] : null;
+    yield put(selectWorkspaceRoutine(workspace));
     yield put(fetchUserRoutine.success(user));
   } catch (error) {
     yield call(toastrError, error.message);
@@ -42,6 +42,8 @@ function* loginUserRequest({ payload }: Routine<any>) {
   try {
     const { accessToken, refreshToken, user }: IAuthServerResponse = yield call(login, payload);
     setTokens({ accessToken, refreshToken });
+    const workspace = (user && user.workspaces.length > 0) ? user.workspaces[0] : null;
+    yield put(selectWorkspaceRoutine(workspace));
     yield put(loginUserRoutine.success(user));
   } catch (error) {
     yield call(toastrError, error.message);
@@ -73,7 +75,7 @@ function* watchUpdateProfile() {
 
 function* deleteAccount() {
   try {
-    const response = yield call(deleteUser);
+    yield call(deleteUser);
     yield put(deleteAccountRoutine.success());
   } catch (error) {
     yield call(toastrError, error.message);
@@ -91,6 +93,8 @@ function* addNewUserRequest({ payload }: any): Routine<any> {
   try {
     const { accessToken, refreshToken, user }: IAuthServerResponse = yield call(registration, payload);
     setTokens({ accessToken, refreshToken });
+    const workspace = (user && user.workspaces.length > 0) ? user.workspaces[0] : null;
+    yield put(selectWorkspaceRoutine(workspace));
     yield put(addNewUserRoutine.success(user));
     history.push('/add-workspace');
   } catch (error) {
@@ -147,21 +151,6 @@ function* watchEditStatusRequest() {
   yield takeEvery(editStatusRoutine.TRIGGER, editStatusRequest);
 }
 
-function* fetchWorkspaces() {
-  try {
-    const workspaces = yield call(getWorkspaces);
-
-    yield put(fetchWorkspacesRoutine.success(workspaces));
-  } catch (error) {
-    yield call(toastrError, error.message);
-    yield put(fetchWorkspacesRoutine.failure(error));
-  }
-}
-
-function* watchFetchWorkspaces() {
-  yield takeEvery(fetchWorkspacesRoutine.TRIGGER, fetchWorkspaces);
-}
-
 export default function* userSaga() {
   yield all([
     watchAddNewUserRequest(),
@@ -171,7 +160,6 @@ export default function* userSaga() {
     watchLoginUserRequest(),
     watchDeleteAccount(),
     watchResetPasswordRequest(),
-    watchEditStatusRequest(),
-    watchFetchWorkspaces()
+    watchEditStatusRequest()
   ]);
 }

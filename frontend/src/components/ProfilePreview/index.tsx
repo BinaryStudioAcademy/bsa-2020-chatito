@@ -40,19 +40,10 @@ const trigger = () => <Button variant="success">Show</Button>;
 // const ProfilePreview: FunctionComponent<IProps> = ({ user, trigger, onSend }) => {
 const ProfilePreview: FunctionComponent = () => {
   const [text, setText] = useState('');
-  const [showProfile, setShowProfile] = useState(false);
   const onViewProfile = () => {
     setUserDataHandler(testData.user);
     setShowProfileHandler();
   };
-  // const renderProfile = () => (
-  //   <ProfileOverview
-  //     user={testData.user}
-  //     currentUserId={testData.user.id}
-  //     setShowProfileHandler={setShowProfileHandler}
-  //     setUserDataHandler={setUserDataHandler}
-  //   />
-  // );
   const onSendMessage = (message: string) => {
     if (text.trim()) {
       testData.onSend(message);
