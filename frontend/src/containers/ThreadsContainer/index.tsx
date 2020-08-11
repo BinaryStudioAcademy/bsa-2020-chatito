@@ -5,8 +5,9 @@ import { fetchThreadsRoutine } from './routines';
 import { IThreadsState } from './reducers/reducer';
 import Thread from '../Thread';
 import { IThread } from 'common/models/thread/IThread';
-import { IFetchThreads, ISetThreads } from 'common/models/threads/IFetchThreads';
 
+export type IFetchThreads = () => IThread[];
+export type ISetThreads<T> = (arg: T) => void;
 interface IProps {
   // fetchThreads: IFetchThreads;
   loading: boolean;
