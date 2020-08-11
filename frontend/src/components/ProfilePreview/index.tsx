@@ -7,11 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
 import ProfileOverview from 'components/ProfileOverview';
+import { ProfileContext, IContext } from 'scenes/Workspace/containers/Workspace/index';
 
-export interface IContext {
-  setShowProfileHandler: () => void;
-  setUserDataHandler: (user: IUser | {}) => void;
-}
+const {
+  setShowProfileHandler,
+  setUserDataHandler
+} = useContext(ProfileContext) as IContext; // eslint-disable @typescript-eslint/no-unused-vars
 interface IProps {
   user: IUser;
   trigger: () => React.ReactElement;
@@ -37,17 +38,21 @@ const testData = {
 const trigger = () => <Button variant="success">Show</Button>;
 
 // const ProfilePreview: FunctionComponent<IProps> = ({ user, trigger, onSend }) => {
-const ProfilePreview: FunctionComponent<IContext> = ({ setShowProfileHandler, setUserDataHandler }) => {
+const ProfilePreview: FunctionComponent = () => {
   const [text, setText] = useState('');
   const [showProfile, setShowProfile] = useState(false);
-  const renderProfile = () => (
-    <ProfileOverview
-      user={testData.user}
-      currentUserId={testData.user.id}
-      setShowProfileHandler={setShowProfileHandler}
-      setUserDataHandler={setUserDataHandler}
-    />
-  );
+  const onViewProfile = () => {
+    setUserDataHandler(testData.user);
+    setShowProfileHandler();
+  };
+  // const renderProfile = () => (
+  //   <ProfileOverview
+  //     user={testData.user}
+  //     currentUserId={testData.user.id}
+  //     setShowProfileHandler={setShowProfileHandler}
+  //     setUserDataHandler={setUserDataHandler}
+  //   />
+  // );
   const onSendMessage = (message: string) => {
     if (text.trim()) {
       testData.onSend(message);
@@ -76,9 +81,7 @@ const ProfilePreview: FunctionComponent<IContext> = ({ setShowProfileHandler, se
         <p className={styles.whatIDo}>{testData.user.whatIDo}</p>
         <button
           type="button"
-          onClick={() => {
-            setShowProfile(!showProfile);
-          }}
+          onClick={onViewProfile}
           className={styles.link}
         >
           View full profile
@@ -109,13 +112,9 @@ const ProfilePreview: FunctionComponent<IContext> = ({ setShowProfileHandler, se
   );
 
   return (
-    <div>
-      {showProfile ? renderProfile() : (
-        <OverlayTrigger trigger="click" rootClose placement="right" overlay={popOver}>
-          {trigger()}
-        </OverlayTrigger>
-      )}
-    </div>
+    <OverlayTrigger trigger="click" rootClose placement="right" overlay={popOver}>
+      {trigger()}
+    </OverlayTrigger>
   );
 };
 export default ProfilePreview;
