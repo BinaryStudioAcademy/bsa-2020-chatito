@@ -1,18 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styles from './styles.module.sass';
-import { ProfileContext, IContext } from 'scenes/Workspace/containers/Workspace/index';
 
-const ChatBody = () => {
-  const {
-    setShowProfileHandler,
-    setUserDataHandler
-  } = useContext(ProfileContext) as IContext; // eslint-disable @typescript-eslint/no-unused-vars
-
-  return (
-    <div className={styles.chatBody}>
-      <div />
-    </div>
-  );
-};
+const ChatBody = () => (
+  <div className={styles.chatBody}>
+    <div />
+  </div>
+);
 
 export default ChatBody;

@@ -5,12 +5,12 @@ import { faGrin } from '@fortawesome/free-regular-svg-icons';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './styles.module.sass';
-import EmojiPopUp from '../../components/EmojiPopUp';
+import EmojiPopUp from 'components/EmojiPopUp';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
-import ModalWindow from '../../components/ModalWindow';
-import { editStatusRoutine } from '../../routines/user';
-import { IAppState } from '../../common/models/store';
-import { IEditStatusData } from '../../services/userService';
+import ModalWindow from 'components/ModalWindow';
+import { editStatusRoutine } from 'routines/user';
+import { IAppState } from 'common/models/store';
+import { IEditStatusData } from 'common/models/status/IEditStatusData';
 
 interface IProps {
   id: string;

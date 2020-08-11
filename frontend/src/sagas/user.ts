@@ -14,13 +14,12 @@ import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
 import { getWorkspaces } from 'services/workspaceService';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
-import api from 'common/helpers/apiHelper';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser } from 'services/authService';
 import { setTokens } from 'common/helpers/storageHelper';
-import { IUser } from 'common/models/user/IUser';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
-import { toastrError } from 'services/toastrService'
+import { toastrError } from 'services/toastrService';
+import { IUser } from 'common/models/user/IUser';
 import { history } from 'common/helpers/historyHelper';
 import { push } from 'connected-react-router';
 
@@ -73,7 +72,7 @@ function* watchUpdateProfile() {
 
 function* deleteAccount() {
   try {
-    const response = yield call(deleteUser);
+    yield call(deleteUser);
     yield put(deleteAccountRoutine.success());
   } catch (error) {
     yield call(toastrError, error.message);
@@ -120,7 +119,7 @@ function* watchForgotPasswordRequest() {
 function* resetPasswordRequest({ payload }: Routine<any>) {
   try {
     const { token, password } = payload;
-    yield call(api.put, '/api/auth/resetpass', { password, token });
+    yield call(resetPassword, password, token);
     yield put(push('/signin'));
     yield put(resetPasswordRoutine.success());
   } catch (error) {
