@@ -1,6 +1,7 @@
 import api from '../common/helpers/apiHelper';
-import { IUser } from 'common/models/user/IUser'
-import { IForgotPasswordInput } from 'common/models/auth/IForgotPasswordInput'
+import { IUser } from 'common/models/user/IUser';
+import { IForgotPasswordInput } from 'common/models/auth/IForgotPasswordInput';
+
 export interface IEditStatusData {
   [key: string]: string;
 }

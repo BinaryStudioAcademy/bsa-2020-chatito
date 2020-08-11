@@ -4,7 +4,7 @@ import { createChannelRoutine, fetchUserChannelsRoutine } from 'routines/channel
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { createChannel, fetchUserChannels } from 'services/channelService';
-import { toastrError } from 'services/toastrService'
+import { toastrError } from 'services/toastrService';
 
 function* createChannelRequest({ payload }: Routine<any>) {
   try {

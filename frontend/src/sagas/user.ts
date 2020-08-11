@@ -22,7 +22,8 @@ import { toastr } from 'react-redux-toastr';
 import { IUser } from 'common/models/user/IUser';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
 import { history } from 'common/helpers/historyHelper';
-import { toastrError } from 'services/toastrService'
+import { toastrError } from 'services/toastrService';
+
 function* fetchUserRequest(): Routine<any> {
   try {
     const user: IUser = yield call(fetchUser);

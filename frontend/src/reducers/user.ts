@@ -9,9 +9,9 @@ import {
   resetPasswordRoutine,
   fetchWorkspacesRoutine,
   editStatusRoutine
-} from '../routines/user';
-import { IUser } from '../common/models/user/IUser';
-import { IWorkspace } from '../common/models/workspace/IWorkspace';
+} from 'routines/user';
+import { IUser } from 'common/models/user/IUser';
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 export interface IUserState {
   user?: IUser;

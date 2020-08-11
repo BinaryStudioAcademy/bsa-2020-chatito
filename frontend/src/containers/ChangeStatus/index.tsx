@@ -143,6 +143,7 @@ const ChangeStatus: FunctionComponent<IProps> = ({ id, editStatus }) => {
           onClick={() => {
             editStatus({ id, status: `${chosenEmoji} ${status}` });
             setShow(!show);
+            setTimeout(() => { reset(); }, 200);
           }}
         >
           Save
