@@ -1,11 +1,11 @@
 import React, { FunctionComponent, useState, useContext } from 'react';
-import { OverlayTrigger, Button, Image, Popover, Form } from 'react-bootstrap';
+import { OverlayTrigger, Image, Popover, Form } from 'react-bootstrap';
 import { IUser } from 'common/models/user/IUser';
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
-import { ProfileContext, IContext } from 'scenes/Workspace/containers/Workspace/index';
+// import { ProfileContext, IContext } from 'scenes/Workspace/containers/Workspace/index';
 
 // const {
 //   setShowProfileHandler,
