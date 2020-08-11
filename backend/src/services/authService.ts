@@ -118,3 +118,14 @@ export const resetPassword = async (id: string, password: string) => {
   const user = await getCustomRepository(UserRepository).editPassword(id, passwordHash);
   return user;
 };
+
+export const removeToken = async (token: string) => {
+  try {
+    const id = decrypt(token);
+    const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
+    await refreshTokenRepository.deleteToken(id);
+    return { result: true };
+  } catch (err) {
+    throw new CustomError(501, 'Refresh Token Invalid !', ErrorCode.InvalidRefreshToken, err);
+  }
+};
