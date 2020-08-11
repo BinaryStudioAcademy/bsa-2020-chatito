@@ -45,9 +45,13 @@ function* loginUserRequest({ payload }: Routine<any>) {
   try {
     const { accessToken, refreshToken, user }: IAuthServerResponse = yield call(login, payload);
     setTokens({ accessToken, refreshToken });
-    const workspace = (user && user.workspaces.length > 0) ? user.workspaces[0] : null;
-    if (workspace) {
-      yield put(push(Routes.Workspace.replace(':hash', workspace.hash)));
+
+    // TODO: rewrite if else
+
+    if (payload.workspace.id) { // selected workspace exists (when login throw invite link)
+      yield put(push(Routes.Workspace.replace(':hash', payload.workspace.hash)));
+    } else if (user && user.workspaces.length > 0) {
+      yield put(push(Routes.Workspace.replace(':hash', user.workspaces[0].hash)));
     } else {
       yield put(push(Routes.AddWorkspace));
     }

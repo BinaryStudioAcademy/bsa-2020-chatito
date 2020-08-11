@@ -8,16 +8,17 @@ import { IRegisterUser } from 'common/models/auth/IRegisterUser';
 import { Routes } from 'common/enums/Routes';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import InputField from 'components/InputField/InputField';
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 interface IProps {
   addNewUser: IBindingCallback1<IRegisterUser>;
-  workspaceId: string;
+  workspace: IWorkspace;
 }
 
-export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspaceId }) => {
+export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspace }) => {
   const onSubmit = (values: IRegisterUser) => {
     const { email, password, fullName } = values;
-    const user = { email, password, fullName, workspaceId };
+    const user = { email, password, fullName, workspace };
     addNewUser(user);
   };
 
@@ -26,7 +27,7 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspaceId }) =
     email: '',
     password: '',
     confirmPassword: '',
-    workspaceId
+    workspace
   };
   return (
     <div className={styles.signUp}>

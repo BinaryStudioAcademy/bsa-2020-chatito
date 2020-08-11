@@ -10,26 +10,27 @@ import { Routes } from 'common/enums/Routes';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { ReactComponent as SignInGoogle } from 'img/signInGoogle.svg';
 import { ReactComponent as SignInFacebook } from 'img/signInFacebook.svg';
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 interface IProps {
   loginUser: IBindingCallback1<ILoginUser>;
-  workspaceId: string;
+  workspace: IWorkspace;
 }
 
-const SignIn: FunctionComponent<IProps> = ({ loginUser, workspaceId }) => {
+const SignIn: FunctionComponent<IProps> = ({ loginUser, workspace }) => {
   const onSubmit = (values: ILoginUser) => {
     const { email, password } = values;
     const payload = {
       email,
       password,
-      workspaceId
+      workspace
     };
     loginUser(payload);
   };
   const initialValues = {
     email: '',
     password: '',
-    workspaceId
+    workspace
   };
 
   return (

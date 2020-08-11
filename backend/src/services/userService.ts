@@ -41,7 +41,8 @@ export const checkInvitedUserRegistered = async ({ token }: ICheckInvitedUserReg
   const workspace = await getCustomRepository(WorkspaceRepository).getById(workspaceId);
 
   return {
-    invitedUserEmail: user ? user.email : null,
+    isRegistered: Boolean(user),
+    invitedUserEmail: email,
     workspace: fromCreatedWorkspaceToClient(workspace)
   };
 };

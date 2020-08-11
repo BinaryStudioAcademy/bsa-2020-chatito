@@ -21,19 +21,26 @@ import { inviteLinkSchema as validationSchema } from 'common/models/formik/Valid
 
 interface IProps {
   isShown: boolean;
+  workspaceId: string;
   sendInviteLink: IBindingCallback1<ISendInviteLink>;
   showModal: IBindingCallback1<IModalRoutine>;
 }
 
-const InvitePopup = ({ isShown, sendInviteLink, showModal }: IProps) => {
+const InvitePopup = ({ isShown, workspaceId, sendInviteLink, showModal }: IProps) => {
   const handleCloseModal = () => {
     showModal({ modalType: ModalTypes.InvitePopup, show: false });
   };
 
   const onSubmit = (values: ISendInviteLink) => {
     sendInviteLink({
-      email: values.email
+      email: values.email,
+      workspaceId
     });
+  };
+
+  const initialValues = {
+    email: '',
+    workspaceId
   };
 
   const modalHeader = (
@@ -57,10 +64,6 @@ const InvitePopup = ({ isShown, sendInviteLink, showModal }: IProps) => {
     </div>
   );
 
-  const initialValues = {
-    email: ''
-  };
-
   return (
     <ModalWindow isShown={isShown} onHide={handleCloseModal}>
       {modalHeader}
@@ -79,7 +82,8 @@ const InvitePopup = ({ isShown, sendInviteLink, showModal }: IProps) => {
 };
 
 const mapStateToProps = (state: IAppState) => ({
-  isShown: state.modal.invitePopup
+  isShown: state.modal.invitePopup,
+  workspaceId: state.workspace.workspace.id
 });
 
 const mapDispatchToProps = {
