@@ -4,21 +4,20 @@ import { connect } from 'react-redux';
 import { fetchThreadsRoutine } from './routines';
 import { IThreadsState } from './reducers/reducer';
 import Thread from '../Thread';
+import { IThread } from 'common/models/thread/IThread';
 
-interface IThread {
-  [key: string]: string;
-}
-
+export type IFetchThreads = () => IThread[];
+export type ISetThreads<T> = (arg: T) => void;
 interface IProps {
-  fetchThreads: Function;
+  // fetchThreads: IFetchThreads;
   loading: boolean;
 }
 
-const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, loading }) => {
-  const [threads, setThreads]: [IThread[], Function] = useState([]);
+const ThreadsContainer: FunctionComponent<IProps> = ({ loading }) => {
+  const [threads, setThreads]:[IThread[], ISetThreads<IThread[]>] = useState<IThread[]>([]);
   useEffect(() => {
     const fetched = [{ name: 'first', id: '1' }, { name: 'second', id: '2' }];
-    // const fetched = props.fetchThreads();
+    // const fetched = fetchThreads();
     setThreads(fetched);
   }, []);
   return (
@@ -33,7 +32,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, loading }) 
   );
 };
 
-const mapStateToProps = (loading: IThreadsState) => (loading);
+const mapStateToProps = (state: IThreadsState) => ({ loading: state.loading});
 
 const mapDispatchToProps = {
   fetchThreads: fetchThreadsRoutine

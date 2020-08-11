@@ -20,7 +20,7 @@ import { registration, login, fetchUser } from 'services/authService';
 import { setTokens } from 'common/helpers/storageHelper';
 import { IUser } from 'common/models/user/IUser';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
-import { toastrError } from 'services/toastrService'
+import { toastrError } from 'services/toastrService';
 import { history } from 'common/helpers/historyHelper';
 import { push } from 'connected-react-router';
 
@@ -120,7 +120,7 @@ function* watchForgotPasswordRequest() {
 function* resetPasswordRequest({ payload }: Routine<any>) {
   try {
     const { token, password } = payload;
-    yield call(api.put, '/api/auth/resetpass', { password, token });
+    yield call(resetPassword, password, token);
     yield put(push('/signin'));
     yield put(resetPasswordRoutine.success());
   } catch (error) {
