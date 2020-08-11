@@ -1,30 +1,26 @@
 import api from '../common/helpers/apiHelper';
 import { IUser } from 'common/models/user/IUser'
-import { IForgotPasswordInput } from 'common/models/auth/IForgotPasswordInput'
-export interface IEditStatusData {
-  [key: string]: string;
-}
-type ServerResponse = string;
+import { IForgotPasswordInput } from 'common/models/auth/IForgotPasswordInput';
+import { IEditStatusData } from 'common/models/status/IEditStatusData';
 
-export async function editStatus(editStatusData: IEditStatusData) {
-  // const response = await api.put<ServerResponse>('/edit-status', { editStatusData });
-  const response = editStatusData.status; // mocked
+export const editStatus = async (editStatusData: IEditStatusData) => {
+  const response = await api.put<string>('/edit-status', { editStatusData });
   return response;
 }
 
-export async function deleteUser() {
-  await api.delete('/api/users/');
+export const deleteUser = async () => {
+  await api.delete('/api/users');
 }
 
-export async function editUser(data: IUser) {
-  const response = await api.put<IUser>('/api/users/', { data });
+export const editUser = async (data: IUser) => {
+  const response = await api.put<IUser>('/api/users', { data });
   return response;
 }
 
-export async function forgotPassword(forgotpassword: IForgotPasswordInput) {
+export const forgotPassword = async (forgotpassword: IForgotPasswordInput) => {
   await api.put('/api/auth/forgotpass', { forgotpassword });
 }
 
-export async function resetPassword(password: string) {
+export const resetPassword = async (password: string) => {
   await api.put('/api/auth/resetpass', { password });
 }

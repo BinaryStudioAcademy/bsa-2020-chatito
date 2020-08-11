@@ -17,8 +17,7 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import api from 'common/helpers/apiHelper';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser } from 'services/authService';
-import { setAccessToken, setTokens } from 'common/helpers/storageHelper';
-import { toastr } from 'react-redux-toastr';
+import { setTokens } from 'common/helpers/storageHelper';
 import { IUser } from 'common/models/user/IUser';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
 import { toastrError } from 'services/toastrService'
