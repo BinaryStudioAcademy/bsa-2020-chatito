@@ -15,7 +15,7 @@ interface IProps {
   workspaces: IWorkspace[];
   loading: boolean;
 }
-
+/* eslint-disable-next-line */
 const WorkspaceToolbar: FunctionComponent<IProps> = (props: IProps) => {
   const [workspaces, setWorkspaces]: [IWorkspace[], Function] = useState([]);
   const tempUrl = 'https://miro.medium.com/max/1200/1*PmenN7tXUwWN019qGJQ_SQ.jpeg';
