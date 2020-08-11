@@ -14,7 +14,7 @@ import { selectWorkspaceRoutine } from 'scenes/Workspace/routines';
 import { ListGroup } from 'react-bootstrap';
 
 interface IProps {
-  selectWorkspace: ({ workspace }: { workspace: IWorkspace }) => void;
+  selectWorkspace: (workspace: IWorkspace) => void;
   workspaces?: IWorkspace[];
   selectedWorkspaceId: string;
   router: (route: string) => void;
