@@ -1,4 +1,4 @@
-import { IWorkspaceResponse } from '../workspace/IWorkspaceResponse';
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 export interface IUserWithWorkspaces {
   id: string;
@@ -8,5 +8,5 @@ export interface IUserWithWorkspaces {
   imageUrl: string;
   title: string;
   status: string;
-  workspaces: IWorkspaceResponse[];
+  workspaces: IWorkspace[];
 }

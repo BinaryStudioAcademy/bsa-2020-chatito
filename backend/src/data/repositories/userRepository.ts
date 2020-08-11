@@ -16,7 +16,7 @@ class UserRepository extends Repository<User> {
   }
 
   getById(id: string): Promise<User> {
-    return this.findOne(id);
+    return this.findOne({ where: { id }, relations: ['workspaces'] });
   }
 
   async deleteUser(id: string): Promise<void> {
@@ -49,6 +49,15 @@ class UserRepository extends Repository<User> {
     const user = await this.findOne(id);
 
     return user;
+  }
+
+  async editStatus(id: string, status: string): Promise<string> {
+    await this.update(
+      id,
+      { status }
+    );
+
+    return status;
   }
 }
 

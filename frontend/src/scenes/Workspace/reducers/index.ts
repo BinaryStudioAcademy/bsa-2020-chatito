@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { addWorkspaceRoutine, selectChatRoutine, fetchChannelsRoutine } from '../routines';
+import { addWorkspaceRoutine, selectChatRoutine, fetchChannelsRoutine, selectWorkspaceRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { ChatType } from 'common/enums/ChatType';
 import { IChat } from 'common/models/chat/IChat';
@@ -7,36 +7,31 @@ import { IChat } from 'common/models/chat/IChat';
 export interface IWorkspaceState {
   workspace: IWorkspace;
   loading: boolean;
-  error: any;
-  selectedChat: any;
-  channels: Array<any>;
-  directMessages: Array<any>;
+  error: string;
+  channels: Array<IChat>;
+  directMessages: Array<IChat>;
 }
 
 const initialState: IWorkspaceState = {
-  workspace: {},
+  workspace: { id: '', name: '', hash: '', imageUrl: '' },
   loading: false,
   error: '',
-  selectedChat: null,
   channels: [],
   directMessages: []
 };
 
 const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>) => {
   switch (type) {
-    case addWorkspaceRoutine.TRIGGER:
+    case selectChatRoutine.TRIGGER:
       return {
-        ...state, workspace: payload, loading: true
+        ...state,
+        selectedChat: payload
       };
-    case addWorkspaceRoutine.FAILURE:
+    case selectWorkspaceRoutine.TRIGGER:
       return {
-        ...state, loading: false
+        ...state,
+        workspace: payload
       };
-    case addWorkspaceRoutine.SUCCESS:
-      return {
-        ...state, loading: false
-      };
-
     case fetchChannelsRoutine.SUCCESS:
       return {
         ...state,
@@ -44,11 +39,14 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         directMessages: payload.filter((chat: IChat) => chat.type === ChatType.DirectMessage)
       };
 
-    case selectChatRoutine.TRIGGER:
+    case addWorkspaceRoutine.SUCCESS: {
+      const addWorkspace = { ...payload };
+
       return {
         ...state,
-        selectedChat: payload
+        workspace: addWorkspace
       };
+    }
     default:
       return state;
   }

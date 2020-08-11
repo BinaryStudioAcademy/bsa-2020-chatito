@@ -3,7 +3,7 @@ import { Routine } from 'redux-saga-routines';
 import { createChannelRoutine, fetchUserChannelsRoutine } from 'routines/channel';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
-import { createChannel } from 'services/channelService';
+import { createChannel, fetchUserChannels } from 'services/channelService';
 import { toastrError } from 'services/toastrService';
 
 function* createChannelRequest({ payload }: Routine<any>) {
@@ -21,6 +21,20 @@ function* createChannelRequest({ payload }: Routine<any>) {
 
 function* watchCreateChannelRequest() {
   yield takeEvery(createChannelRoutine.TRIGGER, createChannelRequest);
+}
+
+function* fetchUserChannelsRequest() {
+  try {
+    const response = yield call(fetchUserChannels);
+    yield put(fetchUserChannelsRoutine.success(response));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(fetchUserChannelsRoutine.failure(error.message));
+  }
+}
+
+function* watchFetchUserChannelsRequest() {
+  yield takeEvery(fetchUserChannelsRoutine.TRIGGER, fetchUserChannelsRequest);
 }
 
 function* toggleCreateChannelModal({ payload }: Routine<any>) {

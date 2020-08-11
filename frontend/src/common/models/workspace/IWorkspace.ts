@@ -1,3 +1,6 @@
 export interface IWorkspace {
-  [key: string]: string;
+  id: string;
+  name: string;
+  hash: string;
+  imageUrl: string;
 }
