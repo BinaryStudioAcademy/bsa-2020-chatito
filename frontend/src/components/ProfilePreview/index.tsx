@@ -1,12 +1,10 @@
 import React, { FunctionComponent, useState, useContext } from 'react';
 import { OverlayTrigger, Button, Image, Popover, Form } from 'react-bootstrap';
 import { IUser } from 'common/models/user/IUser';
-import { Link, Redirect } from 'react-router-dom';
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
-import ProfileOverview from 'components/ProfileOverview';
 import { ProfileContext, IContext } from 'scenes/Workspace/containers/Workspace/index';
 
 const {
@@ -91,6 +89,7 @@ const ProfilePreview: FunctionComponent = () => {
             type="button"
             className={`${styles.arrowButton} ${styles.arrowButton_reset}`}
             onClick={() => onSendMessage(text)}
+            // need to realise logic to go to the chat with user
           >
             <FontAwesomeIcon
               className={styles.arrowIcon}
