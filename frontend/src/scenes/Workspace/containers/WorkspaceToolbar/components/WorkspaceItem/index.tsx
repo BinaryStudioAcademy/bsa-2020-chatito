@@ -1,9 +1,6 @@
 import React from 'react';
 import styles from './styles.module.sass';
-
-interface IWorkspace {
-  [key: string]: string;
-}
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 interface IProps {
   workspace: IWorkspace;
@@ -16,11 +13,11 @@ export default function WorkspaceItem({ workspace }: IProps) {
     <div className={styles.workspaceItemBlock}>
       {currentId === workspace.id ? (
         <div className={`${styles.imageContainer} ${styles.activeWorkspace}`}>
-          <img className={styles.item} src={workspace.imgUrl} alt="workspaceItem" />
+          <img className={styles.item} src={workspace.imageUrl} alt="workspaceItem" />
         </div>
       ) : (
         <div className={styles.imageContainer}>
-          <img className={styles.item} src={workspace.imgUrl} alt="workspaceItem" />
+          <img className={styles.item} src={workspace.imageUrl} alt="workspaceItem" />
         </div>
       )}
     </div>
