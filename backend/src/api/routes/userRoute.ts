@@ -17,6 +17,6 @@ router
   .delete('/', run((req: Request) => deleteUser(req.user.id)))
   .put('/', run((req: Request) => editProfile(req.body)))
   .put('/edit-status', run((req: Request) => editStatus({ id: req.body.id, status: req.body.status })))
-  .post('/is-registered', run((req: Request) => checkInvitedUserRegistered(req.body)));
+  .post('/invite', run((req: Request) => checkInvitedUserRegistered(req.body)));
 
 export default router;
