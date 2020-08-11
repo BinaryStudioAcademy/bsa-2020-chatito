@@ -6,7 +6,7 @@ export enum Routes {
   ForgotPassword = '/auth/forgot',
   ResetPassword = '/auth/reset/:token',
   Profile = '/profile',
-  Workspace = '/workspace',
+  Workspace = '/w/:hash',
   AddWorkspace = '/add-workspace',
   Room = '/room',
   Channel = '/channel',
