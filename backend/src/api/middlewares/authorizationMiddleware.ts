@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import jwtMiddleware from './jwtMiddleware';
+import { jwtHeaderMiddleware } from './jwtMiddleware';
 
 export default (routesWhiteList: string[] = []) => (
   (req: Request, res: Response, next: NextFunction) => (
     routesWhiteList.some(route => route === req.path)
       ? next()
-      : jwtMiddleware(req, res, next)
+      : jwtHeaderMiddleware(req, res, next)
   )
 );
