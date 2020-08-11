@@ -1,3 +1,5 @@
 import passport from 'passport';
 
-export default passport.authenticate('jwt', { session: false });
+export const jwtHeaderMiddleware = passport.authenticate('jwt-header', { session: false });
+
+export const jwtBodyMiddleware = passport.authenticate('jwt-body', { session: false });

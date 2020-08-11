@@ -24,8 +24,3 @@ export const fetchUser = async () => {
 
   return response;
 };
-
-export const removeToken = async (token: string | null) => {
-  const response = await api.delete<ServerResponse>('/api/auth/tokens', { token });
-  return response.json();
-};
