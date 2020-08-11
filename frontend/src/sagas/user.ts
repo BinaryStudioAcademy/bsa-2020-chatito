@@ -16,15 +16,18 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import api from 'common/helpers/apiHelper';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser } from 'services/authService';
-import { setAccessToken, setTokens } from 'common/helpers/storageHelper';
+import { setTokens } from 'common/helpers/storageHelper';
 import { toastr } from 'react-redux-toastr';
 import { IUser } from '../common/models/user/IUser';
 import { history } from '../common/helpers/historyHelper';
 import { push } from 'connected-react-router';
+import { selectWorkspaceRoutine } from '../scenes/Workspace/routines/routines';
 
 function* fetchUserRequest(): Routine<any> {
   try {
     const user: IUser = yield call(fetchUser);
+    const workspace = (user && user.workspaces.length > 0) ? user.workspaces[0] : null;
+    yield put(selectWorkspaceRoutine.success(workspace));
     yield put(fetchUserRoutine.success(user));
   } catch (error) {
     yield call(toastr.error, 'Error', error.message);
@@ -40,6 +43,8 @@ function* loginUserRequest({ payload }: Routine<any>) {
   try {
     const { accessToken, refreshToken, user }: IAuthServerResponse = yield call(login, payload);
     setTokens({ accessToken, refreshToken });
+    const workspace = (user && user.workspaces.length > 0) ? user.workspaces[0] : null;
+    yield put(selectWorkspaceRoutine.success(workspace));
     yield put(loginUserRoutine.success(user));
   } catch (error) {
     yield call(toastr.error, 'Error', error.message);
@@ -92,6 +97,8 @@ function* addNewUserRequest({ payload }: any): Routine<any> {
   try {
     const { accessToken, refreshToken, user }: IAuthServerResponse = yield call(registration, payload);
     setTokens({ accessToken, refreshToken });
+    const workspace = (user && user.workspaces.length > 0) ? user.workspaces[0] : null;
+    yield put(selectWorkspaceRoutine.success(workspace));
     yield put(addNewUserRoutine.success(user));
     history.push('/add-workspace');
   } catch (error) {
