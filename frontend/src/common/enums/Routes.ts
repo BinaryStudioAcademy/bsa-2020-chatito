@@ -11,5 +11,5 @@ export enum Routes {
   Room = '/room',
   Channel = '/channel',
   Direct = '/direct',
-  NotExistingPath = '/*'
+  NotExistingPath = '*'
 }
