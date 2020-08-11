@@ -37,7 +37,7 @@ const testData = {
 const trigger = () => <Button variant="success">Show</Button>;
 
 // const ProfilePreview: FunctionComponent<IProps> = ({ user, trigger, onSend }) => {
-const ProfilePreview: FunctionComponent<IContext> = (setShowProfileHandler, setUserDataHandler) => {
+const ProfilePreview: FunctionComponent<IContext> = ({ setShowProfileHandler, setUserDataHandler }) => {
   const [text, setText] = useState('');
   const [showProfile, setShowProfile] = useState(false);
   const renderProfile = () => (
@@ -109,9 +109,13 @@ const ProfilePreview: FunctionComponent<IContext> = (setShowProfileHandler, setU
   );
 
   return (
-    <OverlayTrigger trigger="click" rootClose placement="right" overlay={popOver}>
-      {trigger()}
-    </OverlayTrigger>
+    <div>
+      {showProfile ? renderProfile() : (
+        <OverlayTrigger trigger="click" rootClose placement="right" overlay={popOver}>
+          {trigger()}
+        </OverlayTrigger>
+      )}
+    </div>
   );
 };
 export default ProfilePreview;
