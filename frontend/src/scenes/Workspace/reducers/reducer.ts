@@ -1,6 +1,5 @@
-import { addChatRoutine } from './../routines/routines';
 import { Routine } from 'redux-saga-routines';
-import { addWorkspaceRoutine, selectChatRoutine } from '../routines/routines';
+import { addWorkspaceRoutine, selectChatRoutine, addChatRoutine } from '../routines/routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 export interface IWorkspaceState {
