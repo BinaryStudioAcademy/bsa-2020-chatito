@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { Button, Form } from 'react-bootstrap';
+import { Formik, Form } from 'formik';
+import { Button } from 'react-bootstrap';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './styles.module.sass';
@@ -15,6 +16,9 @@ import { sendInviteLinkRoutine } from './routines';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import ModalWindow from 'components/ModalWindow';
 
+import InputField from 'components/InputField/InputField';
+import { inviteLinkSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
+
 interface IProps {
   isShown: boolean;
   sendInviteLink: IBindingCallback1<ISendInviteLink>;
@@ -22,17 +26,13 @@ interface IProps {
 }
 
 const InvitePopup = ({ isShown, sendInviteLink, showModal }: IProps) => {
-  const [inviteEmail, setInviteEmail] = useState<string>('');
-
-  const isEmailEmpty = () => !inviteEmail.length;
-
   const handleCloseModal = () => {
     showModal({ modalType: ModalTypes.InvitePopup, show: false });
   };
 
-  const handleSend = () => {
+  const onSubmit = (values: ISendInviteLink) => {
     sendInviteLink({
-      email: inviteEmail
+      email: values.email
     });
   };
 
@@ -41,16 +41,7 @@ const InvitePopup = ({ isShown, sendInviteLink, showModal }: IProps) => {
   );
 
   const modalBody = (
-    <Form className={styles.modalBody}>
-      <Form.Group>
-        <Form.Label>To:</Form.Label>
-        <Form.Control
-          type="email"
-          placeholder="Enter email"
-          onChange={event => setInviteEmail(event.target.value)}
-        />
-      </Form.Group>
-    </Form>
+    <InputField label="To:" name="email" type="email" placeholder="Enter email" />
   );
 
   const modalFooter = (
@@ -60,21 +51,29 @@ const InvitePopup = ({ isShown, sendInviteLink, showModal }: IProps) => {
         <span>Copy invite link</span>
       </div>
 
-      <Button
-        disabled={isEmailEmpty()}
-        variant="secondary"
-        onClick={handleSend}
-      >
+      <Button type="submit" variant="secondary">
         Send
       </Button>
     </div>
   );
 
+  const initialValues = {
+    email: ''
+  };
+
   return (
     <ModalWindow isShown={isShown} onHide={handleCloseModal}>
       {modalHeader}
-      {modalBody}
-      {modalFooter}
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        <Form className={styles.modalBody}>
+          {modalBody}
+          {modalFooter}
+        </Form>
+      </Formik>
     </ModalWindow>
   );
 };
