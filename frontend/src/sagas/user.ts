@@ -14,7 +14,6 @@ import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
 import { getWorkspaces } from 'services/workspaceService';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
-import api from 'common/helpers/apiHelper';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser } from 'services/authService';
 import { setTokens } from 'common/helpers/storageHelper';
@@ -22,7 +21,6 @@ import { IUser } from 'common/models/user/IUser';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
 import { toastrError } from 'services/toastrService';
 import { history } from 'common/helpers/historyHelper';
-import { toastr } from 'react-redux-toastr';
 import { push } from 'connected-react-router';
 import { selectWorkspaceRoutine } from '../scenes/Workspace/routines/routines';
 

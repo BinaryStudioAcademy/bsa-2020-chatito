@@ -3,21 +3,24 @@ import { connect } from 'react-redux';
 import styles from './styles.module.sass';
 import { IAppState } from 'common/models/store';
 import { fetchWorkspacesRoutine } from 'routines/user';
-import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import WorkspaceItem from './components/WorkspaceItem';
 
+export interface IWorkspaceString {
+  [key: string]: string;
+}
+
 interface IProps {
   fetchWorkspaces: Function;
-  workspaces: IWorkspace[];
+  workspaces: IWorkspaceString[];
   loading: boolean;
 }
 /* eslint-disable-next-line */
 const WorkspaceToolbar: FunctionComponent<IProps> = (props: IProps) => {
-  const [workspaces, setWorkspaces]: [IWorkspace[], Function] = useState([]);
+  const [workspaces, setWorkspaces]: [IWorkspaceString[], Function] = useState([]);
   const tempUrl = 'https://miro.medium.com/max/1200/1*PmenN7tXUwWN019qGJQ_SQ.jpeg';
 
   useEffect(() => {
