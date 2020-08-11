@@ -22,5 +22,5 @@ export const forgotPassword = async (forgotpassword: IForgotPasswordInput) => {
 };
 
 export const resetPassword = async (password: string, token: string) => {
-  await api.put('/api/auth/resetpass', { password });
+  await api.put('/api/auth/resetpass', { password, token });
 };
