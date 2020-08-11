@@ -17,18 +17,12 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import api from 'common/helpers/apiHelper';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser } from 'services/authService';
-import { setAccessToken, setTokens } from 'common/helpers/storageHelper';
-import { toastr } from 'react-redux-toastr';
+import { setTokens } from 'common/helpers/storageHelper';
 import { IUser } from 'common/models/user/IUser';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
-<<<<<<< HEAD
-import { history } from 'common/helpers/historyHelper';
-import { toastrError } from 'services/toastrService';
-=======
 import { toastrError } from 'services/toastrService'
 import { history } from 'common/helpers/historyHelper';
 import { push } from 'connected-react-router';
->>>>>>> dev
 
 function* fetchUserRequest(): Routine<any> {
   try {
