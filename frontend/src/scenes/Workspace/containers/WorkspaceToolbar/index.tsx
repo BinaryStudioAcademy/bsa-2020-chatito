@@ -16,13 +16,13 @@ import { ListGroup } from 'react-bootstrap';
 interface IProps {
   selectWorkspace: (workspace: IWorkspace) => void;
   workspaces?: IWorkspace[];
-  selectedWorkspaceId: string;
+  selectedWorkspace: IWorkspace;
   router: (route: string) => void;
 }
 
 const WorkspaceToolbar: FunctionComponent<IProps> = ({
   workspaces,
-  selectedWorkspaceId,
+  selectedWorkspace,
   router,
   selectWorkspace
 }: IProps) => {
@@ -32,11 +32,11 @@ const WorkspaceToolbar: FunctionComponent<IProps> = ({
 
   const onWorkspaceClick = (id: string) => {
     if (workspaces) {
-      const selectedWorkspace = workspaces.find(
+      const newSelectedWorkspace = workspaces.find(
         workspace => workspace.id === id
       );
-      if (selectedWorkspace) {
-        selectWorkspace({ ...selectedWorkspace });
+      if (newSelectedWorkspace) {
+        selectWorkspace({ ...newSelectedWorkspace });
       }
     }
   };
@@ -44,13 +44,13 @@ const WorkspaceToolbar: FunctionComponent<IProps> = ({
   return (
     <div className={styles.workspaceToolbarContainer}>
       <ListGroup variant="flush">
-        {workspaces
+        {workspaces && selectedWorkspace
           ? workspaces.map(workspace => (
             <WorkspaceItem
               key={workspace.id}
               onItemClick={() => onWorkspaceClick(workspace.id)}
               workspace={workspace}
-              isSelected={workspace.id === selectedWorkspaceId}
+              isSelected={workspace.id === selectedWorkspace.id}
             />
           ))
           : null}
@@ -70,7 +70,7 @@ const WorkspaceToolbar: FunctionComponent<IProps> = ({
 
 const mapStateToProps = (state: IAppState) => ({
   workspaces: state.user.workspaceList,
-  selectedWorkspaceId: state.workspace.workspace.id
+  selectedWorkspace: state.workspace.workspace
 });
 
 const mapDispatchToProps = {
