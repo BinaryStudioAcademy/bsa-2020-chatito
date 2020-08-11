@@ -17,7 +17,7 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser } from 'services/authService';
 import { setTokens } from 'common/helpers/storageHelper';
-import { IUser } from 'common/models/user/IUser';
+import { IUserWithWorkspaces } from 'common/models/user/IUserWithWorkspaces';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
 import { toastrError } from 'services/toastrService';
 import { history } from 'common/helpers/historyHelper';
@@ -26,7 +26,7 @@ import { selectWorkspaceRoutine } from '../scenes/Workspace/routines/routines';
 
 function* fetchUserRequest(): Routine<any> {
   try {
-    const user: IUser = yield call(fetchUser);
+    const user: IUserWithWorkspaces = yield call(fetchUser);
     const workspace = (user && user.workspaces.length > 0) ? user.workspaces[0] : null;
     yield put(selectWorkspaceRoutine.success(workspace));
     yield put(fetchUserRoutine.success(user));
