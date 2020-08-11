@@ -17,13 +17,16 @@ import { registration, login, fetchUser } from 'services/authService';
 import { setTokens } from 'common/helpers/storageHelper';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
 import { toastrError } from 'services/toastrService';
-import { IUser } from 'common/models/user/IUser';
 import { history } from 'common/helpers/historyHelper';
 import { push } from 'connected-react-router';
+import { selectWorkspaceRoutine } from '../scenes/Workspace/routines';
+import { IUserWithWorkspaces } from 'common/models/user/IUserWithWorkspaces';
 
 function* fetchUserRequest(): Routine<any> {
   try {
-    const user: IUser = yield call(fetchUser);
+    const user: IUserWithWorkspaces = yield call(fetchUser);
+    const workspace = (user && user.workspaces.length > 0) ? user.workspaces[0] : null;
+    yield put(selectWorkspaceRoutine(workspace));
     yield put(fetchUserRoutine.success(user));
   } catch (error) {
     yield call(toastrError, error.message);
@@ -39,6 +42,8 @@ function* loginUserRequest({ payload }: Routine<any>) {
   try {
     const { accessToken, refreshToken, user }: IAuthServerResponse = yield call(login, payload);
     setTokens({ accessToken, refreshToken });
+    const workspace = (user && user.workspaces.length > 0) ? user.workspaces[0] : null;
+    yield put(selectWorkspaceRoutine(workspace));
     yield put(loginUserRoutine.success(user));
   } catch (error) {
     yield call(toastrError, error.message);
@@ -88,6 +93,8 @@ function* addNewUserRequest({ payload }: any): Routine<any> {
   try {
     const { accessToken, refreshToken, user }: IAuthServerResponse = yield call(registration, payload);
     setTokens({ accessToken, refreshToken });
+    const workspace = (user && user.workspaces.length > 0) ? user.workspaces[0] : null;
+    yield put(selectWorkspaceRoutine(workspace));
     yield put(addNewUserRoutine.success(user));
     history.push('/add-workspace');
   } catch (error) {

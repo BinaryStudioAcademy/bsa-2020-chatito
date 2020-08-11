@@ -1,10 +1,7 @@
 import React from 'react';
 import styles from './styles.module.sass';
 import { ListGroup } from 'react-bootstrap';
-
-interface IWorkspace {
-  [key: string]: string;
-}
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 interface IProps {
   workspace: IWorkspace;
