@@ -13,6 +13,7 @@ import AddWorkspace from 'scenes/Workspace/containers/AddWorkspace';
 import PageNotFound from 'scenes/PageNotFound/index';
 import Workspace from 'scenes/Workspace/containers/Workspace';
 import Auth from 'scenes/Auth/containers/Auth';
+import JoinInvitedWorkspace from 'containers/JoinInvitedWorkspace';
 
 interface IProps {
   isLoading: boolean;
@@ -37,6 +38,7 @@ const Routing: React.FC<IProps> = ({
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <Switch>
         <PublicRoute path={Routes.Auth} component={Auth} />
+        <PublicRoute path={Routes.JoinInvitedWorkspace} component={JoinInvitedWorkspace} />
         <PrivateRoute exact path={Routes.Workspace} component={Workspace} />
         <PrivateRoute exact path={Routes.AddWorkspace} component={AddWorkspace} />
         <PrivateRoute path={Routes.NotExistingPath} component={PageNotFound} />
