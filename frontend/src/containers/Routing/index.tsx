@@ -39,7 +39,7 @@ const Routing: React.FC<IProps> = ({
         <PublicRoute path={Routes.Auth} component={Auth} />
         <PrivateRoute exact path={Routes.Workspace} component={Workspace} />
         <PrivateRoute exact path={Routes.AddWorkSpace} component={AddWorkspace} />
-        <PublicRoute path={Routes.NotExistingPath} component={PageNotFound} />
+        <PrivateRoute path={Routes.NotExistingPath} component={PageNotFound} />
       </Switch>
     </LoaderWrapper>
   );

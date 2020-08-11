@@ -13,7 +13,6 @@ import { createToken } from '../common/utils/tokenHelper';
 import { IRefreshToken } from '../common/models/refreshToken/IRefreshToken';
 import { User } from '../data/entities/User';
 import { IForgotPasswordUser } from '../common/models/user/IForgotPasswordUser';
-import { IResetPasswordUser } from '../common/models/user/IResetPasswordUser';
 import CustomError from '../common/models/CustomError';
 import { sendResetPasswordMail } from './mailService';
 import { ErrorCode } from '../common/enums/ErrorCode';
@@ -110,13 +109,23 @@ export const forgotPassword = async ({ email }: IForgotPasswordUser) => {
   if (!user) {
     throw new CustomError(404, 'Wrong email', ErrorCode.UserNotFound);
   }
-
   await sendResetPasswordMail({ to: email, token: createToken({ id: user.id }) });
   return user;
 };
 
-export const resetPassword = async ({ id, password }: IResetPasswordUser) => {
+export const resetPassword = async (id: string, password: string) => {
   const passwordHash = await encrypt(password);
   const user = await getCustomRepository(UserRepository).editPassword(id, passwordHash);
   return user;
+};
+
+export const removeToken = async (token: string) => {
+  try {
+    const id = decrypt(token);
+    const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
+    await refreshTokenRepository.deleteToken(id);
+    return { result: true };
+  } catch (err) {
+    throw new CustomError(501, 'Refresh Token Invalid !', ErrorCode.InvalidRefreshToken, err);
+  }
 };

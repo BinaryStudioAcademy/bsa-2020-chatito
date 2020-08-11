@@ -17,12 +17,14 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import api from 'common/helpers/apiHelper';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser } from 'services/authService';
-import { setAccessToken } from 'common/helpers/storageHelper';
+import { setAccessToken, setTokens } from 'common/helpers/storageHelper';
 import { toastr } from 'react-redux-toastr';
 import { IUser } from 'common/models/user/IUser';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
-import { history } from 'common/helpers/historyHelper';
 import { toastrError } from 'services/toastrService'
+import { history } from 'common/helpers/historyHelper';
+import { push } from 'connected-react-router';
+
 function* fetchUserRequest(): Routine<any> {
   try {
     const user: IUser = yield call(fetchUser);
@@ -39,9 +41,9 @@ function* watchUserRequest() {
 
 function* loginUserRequest({ payload }: Routine<any>) {
   try {
-    const { accessToken, user }: IAuthServerResponse = yield call(login, payload);
+    const { accessToken, refreshToken, user }: IAuthServerResponse = yield call(login, payload);
+    setTokens({ accessToken, refreshToken });
     yield put(loginUserRoutine.success(user));
-    setAccessToken(accessToken);
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(loginUserRoutine.failure(error.message));
@@ -88,9 +90,9 @@ function* watchDeleteAccount() {
 
 function* addNewUserRequest({ payload }: any): Routine<any> {
   try {
-    const { accessToken, user }: IAuthServerResponse = yield call(registration, payload);
+    const { accessToken, refreshToken, user }: IAuthServerResponse = yield call(registration, payload);
+    setTokens({ accessToken, refreshToken });
     yield put(addNewUserRoutine.success(user));
-    setAccessToken(accessToken);
     history.push('/add-workspace');
   } catch (error) {
     yield call(toastrError, error.message);
@@ -119,8 +121,8 @@ function* watchForgotPasswordRequest() {
 function* resetPasswordRequest({ payload }: Routine<any>) {
   try {
     const { token, password } = payload;
-    setAccessToken(token);
-    yield call(resetPassword, password);
+    yield call(api.put, '/api/auth/resetpass', { password, token });
+    yield put(push('/signin'));
     yield put(resetPasswordRoutine.success());
   } catch (error) {
     yield call(toastrError, error.message);
