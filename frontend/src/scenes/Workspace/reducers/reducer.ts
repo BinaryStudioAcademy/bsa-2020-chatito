@@ -1,21 +1,24 @@
 import { Routine } from 'redux-saga-routines';
-import { addWorkspaceRoutine, selectChatRoutine } from '../routines/routines';
+import { addWorkspaceRoutine, selectChatRoutine, selectWorkspaceRoutine } from '../routines/routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
+import { IChat } from 'common/models/workstate/chat';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
   loading: boolean;
-  error: any;
-  selectedChat: any;
-  channels: Array<any>;
-  directMessages: Array<any>;
+  error: string;
+  selectedChat: IChat;
+  selectedWorkspace: IWorkspace;
+  channels: Array<IChat>;
+  directMessages: Array<IChat>;
 }
 
 const initialState: IWorkspaceState = {
-  workspace: {},
+  workspace: { id: '', name: '', hash: '', imageUrl: '' },
   loading: false,
   error: '',
-  selectedChat: null,
+  selectedChat: { id: '', name: '', isPrivate: false },
+  selectedWorkspace: { id: '', name: '', hash: '', imageUrl: '' },
   channels: [],
   directMessages: []
 };
@@ -38,6 +41,11 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return {
         ...state,
         selectedChat: payload
+      };
+    case selectWorkspaceRoutine.SUCCESS:
+      return {
+        ...state,
+        selectedWorkspace: payload
       };
     default:
       return state;

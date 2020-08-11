@@ -3,6 +3,7 @@ import UserRepository from '../data/repositories/userRepository';
 import { IUserClient } from '../common/models/user/IUserClient';
 import { fromUserToUserClient } from '../common/mappers/user';
 import { IEditStatus } from '../common/models/user/IEditStatus';
+import { fromUserToUserWithWorkspaces } from '../common/mappers/user';
 
 export const getUsers = async () => {
   const users = await getCustomRepository(UserRepository).getAll();
@@ -11,7 +12,7 @@ export const getUsers = async () => {
 
 export const getUserById = async (id: string) => {
   const user = await getCustomRepository(UserRepository).getById(id);
-  return user;
+  return fromUserToUserWithWorkspaces(user);
 };
 
 export const deleteUser = async (id: string): Promise<void> => {
