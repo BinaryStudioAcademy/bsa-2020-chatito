@@ -6,18 +6,17 @@ import { IThreadsState } from './reducers/reducer';
 import Thread from '../Thread';
 import { IThread } from 'common/models/thread/IThread';
 
-export type IFetchThreads = () => IThread[];
 export type ISetThreads<T> = (arg: T) => void;
 interface IProps {
-  // fetchThreads: IFetchThreads;
+  fetchThreads: () => void;
   loading: boolean;
 }
 
-const ThreadsContainer: FunctionComponent<IProps> = ({ loading }) => {
+const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, loading }) => {
   const [threads, setThreads]:[IThread[], ISetThreads<IThread[]>] = useState<IThread[]>([]);
   useEffect(() => {
     const fetched = [{ name: 'first', id: '1' }, { name: 'second', id: '2' }];
-    // const fetched = fetchThreads();
+    // fetchThreads();
     setThreads(fetched);
   }, []);
   return (
