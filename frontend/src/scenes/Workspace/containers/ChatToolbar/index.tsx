@@ -21,19 +21,25 @@ import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/workstate/chat';
 import styles from './styles.module.sass';
 import { selectChatRoutine } from 'scenes/Workspace/routines/routines';
+import { showModalRoutine } from 'routines/modal';
+import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import CreateChannelModal from 'containers/CreateChannelModal';
 
 interface IProps {
   channels: IChat[];
   directMessages: IChat[];
   selectedChat: IChat;
   selectChatRoutine: Routine;
+  showModal: ({ modalType, show }: IModalRoutine) => void;
 }
 
 const ChatToolbar = ({
   channels,
   directMessages,
   selectedChat,
-  selectChatRoutine: selectRoutine
+  selectChatRoutine: selectRoutine,
+  showModal
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
@@ -89,53 +95,61 @@ const ChatToolbar = ({
   };
 
   return (
-    <div className={styles.leftToolbar}>
-      {channelSelector('Threads', faPodcast)}
-      {channelSelector('Mentions & reactions', faAt)}
-      {channelSelector('Drafts', faCopy)}
-      {channelSelector('Channel browser', faSearch)}
-      {channelSelector('People & user groups', faIdCard)}
-      {channelSelector('Apps', faTh)}
-      {channelSelector('File Browser', faDatabase)}
-      {channelSelector('Show less', faReply)}
-      <hr className={styles.hrr} />
-      <div className={styles.buttonChanel}>
-        <button type="button" className={styles.buttonSelect} onClick={() => setChatPanel(!chatPanel)}>
-          <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(chatPanel)} />
-          <span className={styles.buttonText}>Chanels</span>
-        </button>
-        <div className={styles.buttonPlus}>
-          <FontAwesomeIcon icon={faPlus} color="white" />
+    <>
+      <div className={styles.leftToolbar}>
+        {channelSelector('Threads', faPodcast)}
+        {channelSelector('Mentions & reactions', faAt)}
+        {channelSelector('Drafts', faCopy)}
+        {channelSelector('Channel browser', faSearch)}
+        {channelSelector('People & user groups', faIdCard)}
+        {channelSelector('Apps', faTh)}
+        {channelSelector('File Browser', faDatabase)}
+        {channelSelector('Show less', faReply)}
+        <hr className={styles.hrr} />
+        <div className={styles.buttonChanel}>
+          <button type="button" className={styles.buttonSelect} onClick={() => setChatPanel(!chatPanel)}>
+            <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(chatPanel)} />
+            <span className={styles.buttonText}>Chanels</span>
+          </button>
+          <button
+            type="button"
+            className={styles.buttonPlus}
+            onClick={() => showModal({ modalType: ModalTypes.CreateChannel, show: true })}
+          >
+            <FontAwesomeIcon icon={faPlus} color="white" />
+          </button>
+          <div className={styles.chanelInfo}>
+            Create New Chanel
+          </div>
         </div>
-        <div className={styles.chanelInfo}>
-          Create New Chanel
+        <div className={getClassNameDiv(chatPanel)}>
+          {channels.map(channel => (
+            userChannel(channel)))}
         </div>
-      </div>
-      <div className={getClassNameDiv(chatPanel)}>
-        {channels.map(channel => (
-          userChannel(channel)))}
-      </div>
-      <hr className={styles.hrr} />
-      <div className={styles.buttonChanel}>
-        <button type="button" className={styles.buttonSelect} onClick={() => setDirectPanel(!directPanel)}>
-          <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(directPanel)} />
-          <span className={styles.buttonText}>Direct Messages</span>
-        </button>
-        <div className={styles.buttonPlus}>
-          <FontAwesomeIcon icon={faPlus} color="white" />
+        <hr className={styles.hrr} />
+        <div className={styles.buttonChanel}>
+          <button type="button" className={styles.buttonSelect} onClick={() => setDirectPanel(!directPanel)}>
+            <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(directPanel)} />
+            <span className={styles.buttonText}>Direct Messages</span>
+          </button>
+          <div className={styles.buttonPlus}>
+            <FontAwesomeIcon icon={faPlus} color="white" />
+          </div>
+          <div className={styles.directInfo}>
+            Open a direct message
+            <br />
+            Ctrl + Shift + K
+          </div>
         </div>
-        <div className={styles.directInfo}>
-          Open a direct message
-          <br />
-          Ctrl + Shift + K
+        <div className={getClassNameDiv(directPanel)}>
+          {directMessages.map(directMessage => (
+            directChannel(directMessage)))}
         </div>
+        <hr className={styles.hrr} />
       </div>
-      <div className={getClassNameDiv(directPanel)}>
-        {directMessages.map(directMessage => (
-          directChannel(directMessage)))}
-      </div>
-      <hr className={styles.hrr} />
-    </div>
+
+      <CreateChannelModal />
+    </>
   );
 };
 
@@ -146,7 +160,8 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  selectChatRoutine
+  selectChatRoutine,
+  showModal: showModalRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatToolbar);

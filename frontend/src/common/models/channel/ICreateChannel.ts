@@ -1,5 +1,9 @@
+import { ChatType } from "common/enums/ChatType";
+
 export interface ICreateChannel {
   name: string;
   description?: string;
-  private: boolean;
+  type: ChatType;
+  isPrivate: boolean;
+  workspaceName: string;
 }

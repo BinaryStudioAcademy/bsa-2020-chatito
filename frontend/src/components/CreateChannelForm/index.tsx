@@ -5,7 +5,7 @@ import { ICreateChannel } from 'common/models/channel/ICreateChannel';
 import styles from './styles.module.sass';
 
 interface IProps {
-  createChannel: IBindingCallback1<ICreateChannel>;
+  createChannel: IBindingCallback1<any>;
 }
 
 const CreateChannel = ({ createChannel }: IProps) => {
@@ -20,7 +20,7 @@ const CreateChannel = ({ createChannel }: IProps) => {
     createChannel({
       name: channelName,
       description: channelDescription,
-      private: privateChannel
+      isPrivate: privateChannel
     });
   };
 
