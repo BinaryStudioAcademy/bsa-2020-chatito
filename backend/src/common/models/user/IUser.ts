@@ -6,4 +6,5 @@ export interface IUser {
   displayName: string;
   imageUrl?: string;
   title?: string;
+  status?: string;
 }

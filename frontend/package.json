@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.30",
+    "@fortawesome/free-regular-svg-icons": "^5.14.0",
     "@fortawesome/free-solid-svg-icons": "5.14.0",
     "@fortawesome/react-fontawesome": "0.1.11",
     "@tinymce/tinymce-react": "3.6.0",
@@ -19,6 +20,7 @@
     "bootstrap": "4.5.0",
     "connected-react-router": "6.8.0",
     "customize-cra": "1.0.0",
+    "emoji-picker-react": "^3.2.1",
     "eslint-config-airbnb": "18.2.0",
     "eslint-config-react": "1.1.7",
     "eslint-plugin-import": "2.22.0",
