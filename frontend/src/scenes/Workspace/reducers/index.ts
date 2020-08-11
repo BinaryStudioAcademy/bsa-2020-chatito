@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { addWorkspaceRoutine, selectChatRoutine, selectWorkspaceRoutine } from '../routines';
+import { selectChatRoutine, selectWorkspaceRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/workstate/chat';
 
@@ -32,14 +32,6 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return {
         ...state,
         workspace: payload
-      };
-    }
-    case addWorkspaceRoutine.SUCCESS: {
-      const addWorkspace = { ...payload };
-
-      return {
-        ...state,
-        workspace: addWorkspace
       };
     }
     default:
