@@ -1,4 +1,4 @@
-import { getOsEnv } from './common/helpers/pathHelper';
+import { getOsEnv } from 'common/helpers/pathHelper';
 
 export const env = {
   urls: {

@@ -19,13 +19,15 @@ class UserRepository extends Repository<User> {
     return this.findOne(id);
   }
 
-  deleteUser(id: string) {
+  async deleteUser(id: string): Promise<void> {
     const data = { id };
-    this.getById(id).then(user => user.remove({ data }));
+    const user = await this.getById(id);
+    user.remove({ data });
   }
 
   getByEmail(email: string): Promise<User> {
-    return this.findOne({ where: { email } });
+    const user = this.findOne({ where: { email }, relations: ['workspaces'] });
+    return user;
   }
 
   async editUser(id:string, data: IUserClient): Promise<User> {
@@ -47,6 +49,15 @@ class UserRepository extends Repository<User> {
     const user = await this.findOne(id);
 
     return user;
+  }
+
+  async editStatus(id: string, status: string): Promise<string> {
+    await this.update(
+      id,
+      { status }
+    );
+
+    return status;
   }
 }
 

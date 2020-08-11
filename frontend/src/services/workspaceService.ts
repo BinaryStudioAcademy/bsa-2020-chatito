@@ -1,11 +1,11 @@
-import api from '../common/helpers/apiHelper';
+import api from 'common/helpers/apiHelper';
 
-export async function addWorkspace(name: string) {
-  const response = await api.post('/', { name });
+export const addWorkspace = async (name: string) => {
+  const response = await api.post('/api/workspaces', { name });
   return response;
-}
+};
 
-export async function getWorkspaces() {
-  const response = await api.get('/');
+export const getWorkspaces = async () => {
+  const response = await api.get('/api/workspaces');
   return response;
-}
+};

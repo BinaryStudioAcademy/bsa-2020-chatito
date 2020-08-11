@@ -6,22 +6,30 @@ import {
   deleteAccountRoutine,
   loginUserRoutine,
   forgotPasswordRoutine,
-  resetPasswordRoutine
+  resetPasswordRoutine,
+  fetchWorkspacesRoutine,
+  editStatusRoutine
 } from '../routines/user';
-import { IAuthServerResponse } from '../common/models/auth/IAuthServerResponse';
-import { showModalRoutine } from '../routines/modal';
-import { ModalTypes } from '../common/enums/ModalTypes';
-import api from '../common/helpers/apiHelper';
+import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
+import { getWorkspaces } from 'services/workspaceService';
+import { showModalRoutine } from 'routines/modal';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import api from 'common/helpers/apiHelper';
 import { Routine } from 'redux-saga-routines';
-import { registration, login, fetchUser } from '../services/authService';
-import { setAccessToken } from '../common/helpers/storageHelper';
+import { registration, login, fetchUser } from 'services/authService';
+import { setTokens } from 'common/helpers/storageHelper';
+import { IUser } from 'common/models/user/IUser';
+import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
+import { toastrError } from 'services/toastrService';
+import { history } from 'common/helpers/historyHelper';
+import { push } from 'connected-react-router';
 
 function* fetchUserRequest(): Routine<any> {
   try {
-    const { token, user }: IAuthServerResponse = yield call(fetchUser);
-    yield put(fetchUserRoutine.success({ payload: user }));
-    setAccessToken(token);
+    const user: IUser = yield call(fetchUser);
+    yield put(fetchUserRoutine.success(user));
   } catch (error) {
+    yield call(toastrError, error.message);
     yield put(fetchUserRoutine.failure(error.message));
   }
 }
@@ -30,12 +38,13 @@ function* watchUserRequest() {
   yield takeEvery(fetchUserRoutine.TRIGGER, fetchUserRequest);
 }
 
-function* loginUserRequest({ payload }: any): Routine<any> {
+function* loginUserRequest({ payload }: Routine<any>) {
   try {
-    const { token, user }: IAuthServerResponse = yield call(login, payload);
-    yield put(loginUserRoutine.success({ payload: user }));
-    setAccessToken(token);
+    const { accessToken, refreshToken, user }: IAuthServerResponse = yield call(login, payload);
+    setTokens({ accessToken, refreshToken });
+    yield put(loginUserRoutine.success(user));
   } catch (error) {
+    yield call(toastrError, error.message);
     yield put(loginUserRoutine.failure(error.message));
   }
 }
@@ -46,13 +55,14 @@ function* watchLoginUserRequest() {
 
 function* updateProfile({ payload }: Routine<any>) {
   try {
-    const response = yield call(api.put, '/api/users/', payload);
+    const response = yield call(editUser, payload);
     const data = {
       ...response
     };
     yield put(editProfileRoutine.success(data));
     yield put(showModalRoutine({ modalType: ModalTypes.EditProfile, show: false }));
   } catch (error) {
+    yield call(toastrError, error.message);
     yield put(editProfileRoutine.failure(error.message));
   }
 }
@@ -63,12 +73,10 @@ function* watchUpdateProfile() {
 
 function* deleteAccount() {
   try {
-    const response = yield call(api.delete, '/api/users/');
-    const data = {
-      ...response
-    };
-    yield put(deleteAccountRoutine.success(data));
+    const response = yield call(deleteUser);
+    yield put(deleteAccountRoutine.success());
   } catch (error) {
+    yield call(toastrError, error.message);
     yield put(deleteAccountRoutine.failure(error.message));
   } finally {
     yield put(showModalRoutine.trigger({ modalType: ModalTypes.EditProfile, show: false }));
@@ -81,10 +89,12 @@ function* watchDeleteAccount() {
 
 function* addNewUserRequest({ payload }: any): Routine<any> {
   try {
-    const { token, user }: IAuthServerResponse = yield call(registration, payload);
-    yield put(addNewUserRoutine.success({ payload: user }));
-    setAccessToken(token);
+    const { accessToken, refreshToken, user }: IAuthServerResponse = yield call(registration, payload);
+    setTokens({ accessToken, refreshToken });
+    yield put(addNewUserRoutine.success(user));
+    history.push('/add-workspace');
   } catch (error) {
+    yield call(toastrError, error.message);
     yield put(addNewUserRoutine.failure(error.message));
   }
 }
@@ -95,9 +105,10 @@ function* watchAddNewUserRequest() {
 
 function* forgotPasswordRequest({ payload }: Routine<any>) {
   try {
-    const response = yield call(api.put, '/api/auth/forgotpass', payload);
+    yield call(forgotPassword, payload);
     yield put(forgotPasswordRoutine.success());
   } catch (error) {
+    yield call(toastrError, error.message);
     yield put(forgotPasswordRoutine.failure(error.message));
   }
 }
@@ -109,10 +120,11 @@ function* watchForgotPasswordRequest() {
 function* resetPasswordRequest({ payload }: Routine<any>) {
   try {
     const { token, password } = payload;
-    setAccessToken(token);
-    const response = yield call(api.put, '/api/auth/resetpass', { password });
+    yield call(resetPassword, password, token);
+    yield put(push('/signin'));
     yield put(resetPasswordRoutine.success());
   } catch (error) {
+    yield call(toastrError, error.message);
     yield put(resetPasswordRoutine.failure(error.message));
   }
 }
@@ -121,15 +133,45 @@ function* watchResetPasswordRequest() {
   yield takeEvery(resetPasswordRoutine.TRIGGER, resetPasswordRequest);
 }
 
+function* editStatusRequest({ payload }: Routine<any>) {
+  try {
+    const { id, status } = payload;
+    const response = yield call(editStatus, { id, status });
+    yield put(editStatusRoutine.success(response));
+  } catch (error) {
+    yield put(editStatusRoutine.failure(error.message));
+  }
+}
+
+function* watchEditStatusRequest() {
+  yield takeEvery(editStatusRoutine.TRIGGER, editStatusRequest);
+}
+
+function* fetchWorkspaces() {
+  try {
+    const workspaces = yield call(getWorkspaces);
+
+    yield put(fetchWorkspacesRoutine.success(workspaces));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(fetchWorkspacesRoutine.failure(error));
+  }
+}
+
+function* watchFetchWorkspaces() {
+  yield takeEvery(fetchWorkspacesRoutine.TRIGGER, fetchWorkspaces);
+}
+
 export default function* userSaga() {
   yield all([
     watchAddNewUserRequest(),
     watchUserRequest(),
     watchUpdateProfile(),
-    watchAddNewUserRequest(),
     watchForgotPasswordRequest(),
     watchLoginUserRequest(),
     watchDeleteAccount(),
-    watchResetPasswordRequest()
+    watchResetPasswordRequest(),
+    watchEditStatusRequest(),
+    watchFetchWorkspaces()
   ]);
 }
