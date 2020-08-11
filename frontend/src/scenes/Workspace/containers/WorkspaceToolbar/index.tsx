@@ -10,11 +10,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import WorkspaceItem from './components/WorkspaceItem';
 import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
-import { selectWorkspaceRoutine } from 'scenes/Workspace/routines';
 import { ListGroup } from 'react-bootstrap';
 
 interface IProps {
-  selectWorkspace: (workspace: IWorkspace) => void;
   workspaces?: IWorkspace[];
   selectedWorkspace: IWorkspace;
   router: (route: string) => void;
@@ -23,8 +21,7 @@ interface IProps {
 const WorkspaceToolbar: FunctionComponent<IProps> = ({
   workspaces,
   selectedWorkspace,
-  router,
-  selectWorkspace
+  router
 }: IProps) => {
   const onAddWorkspaceClick = () => {
     router(Routes.AddWorkspace);
@@ -36,7 +33,7 @@ const WorkspaceToolbar: FunctionComponent<IProps> = ({
         workspace => workspace.id === id
       );
       if (newSelectedWorkspace) {
-        selectWorkspace({ ...newSelectedWorkspace });
+        router(Routes.Workspace.replace(':hash', newSelectedWorkspace.hash));
       }
     }
   };
@@ -74,8 +71,7 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  router: push,
-  selectWorkspace: selectWorkspaceRoutine
+  router: push
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WorkspaceToolbar);
