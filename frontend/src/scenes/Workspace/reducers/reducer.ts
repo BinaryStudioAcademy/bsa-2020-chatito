@@ -16,7 +16,7 @@ export interface IWorkspaceState {
 const emptyChat = { id: '', name: '', isPrivate: false };
 
 const initialState: IWorkspaceState = {
-  workspace: {},
+  workspace: { id: '', name: '', hash: '', imageUrl: '' },
   loading: false,
   error: '',
   selectedChat: emptyChat,
