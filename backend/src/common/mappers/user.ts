@@ -6,20 +6,8 @@ import { IUserWithWorkspaces } from '../models/user/IUserWithWorkspaces';
 import { fromCreatedWorkspaceToClient } from './workspace';
 
 export const fromUserToUserClient = (user: User): IUserClient => {
-  const { id, fullName, displayName, email, imageUrl, title } = user;
+  const { id, fullName, displayName, email, imageUrl, title, status } = user;
 
-  return {
-    id,
-    fullName,
-    email,
-    displayName,
-    imageUrl,
-    title
-  };
-};
-
-export const fromUserToUserWithWorkspaces = (user: User): IUserWithWorkspaces => {
-  const { id, fullName, displayName, email, imageUrl, title, workspaces = [] } = user;
   return {
     id,
     fullName,
@@ -27,6 +15,20 @@ export const fromUserToUserWithWorkspaces = (user: User): IUserWithWorkspaces =>
     displayName,
     imageUrl,
     title,
+    status
+  };
+};
+
+export const fromUserToUserWithWorkspaces = (user: User): IUserWithWorkspaces => {
+  const { id, fullName, displayName, email, imageUrl, title, status, workspaces = [] } = user;
+  return {
+    id,
+    fullName,
+    email,
+    displayName,
+    imageUrl,
+    title,
+    status,
     workspaces: workspaces.map(workspace => fromCreatedWorkspaceToClient(workspace))
   };
 };
