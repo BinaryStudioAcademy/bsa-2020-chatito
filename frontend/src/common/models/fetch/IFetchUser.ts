@@ -1,7 +1,5 @@
 import { IWorkspace } from "../workspace/IWorkspace";
 
-export interface ILoginUser {
-  email: string;
-  password: string;
+export interface IFetchUser {
   workspace: IWorkspace;
 }

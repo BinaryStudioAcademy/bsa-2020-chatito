@@ -4,6 +4,7 @@ import { Routine } from 'redux-saga-routines';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   IconDefinition,
+  faUserFriends,
   faLock,
   faHashtag,
   faPodcast,
@@ -21,19 +22,26 @@ import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/workstate/chat';
 import styles from './styles.module.sass';
 import { selectChatRoutine } from 'scenes/Workspace/routines';
+import { showModalRoutine } from 'routines/modal';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import InvitePopup from 'containers/InvitePopup';
 
 interface IProps {
   channels: IChat[];
   directMessages: IChat[];
   selectedChat: IChat;
   selectChatRoutine: Routine;
+  showModal: IBindingCallback1<IModalRoutine>;
 }
 
 const ChatToolbar = ({
   channels,
   directMessages,
   selectedChat,
-  selectChatRoutine: selectRoutine
+  selectChatRoutine: selectRoutine,
+  showModal
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
@@ -61,8 +69,9 @@ const ChatToolbar = ({
     return styles.channelSelect;
   };
 
-  const channelSelector = (text: string, iconFa: IconDefinition) => (
-    <a href="#0" className={styles.channelSelect}>
+  // eslint-disable-next-line
+  const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => {}) => (
+    <a href="#0" className={styles.channelSelect} onClick={onClick}>
       <FontAwesomeIcon icon={iconFa} color="white" />
       <span className={styles.buttonText}>{text}</span>
     </a>
@@ -88,8 +97,13 @@ const ChatToolbar = ({
     );
   };
 
+  const showInvitePopup = () => {
+    showModal({ modalType: ModalTypes.InvitePopup, show: true });
+  };
+
   return (
     <div className={styles.leftToolbar}>
+      {channelSelector('Invite to workspace', faUserFriends, showInvitePopup)}
       {channelSelector('Threads', faPodcast)}
       {channelSelector('Mentions & reactions', faAt)}
       {channelSelector('Drafts', faCopy)}
@@ -135,6 +149,8 @@ const ChatToolbar = ({
           directChannel(directMessage)))}
       </div>
       <hr className={styles.hrr} />
+
+      <InvitePopup />
     </div>
   );
 };
@@ -146,7 +162,8 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  selectChatRoutine
+  selectChatRoutine,
+  showModal: showModalRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatToolbar);
