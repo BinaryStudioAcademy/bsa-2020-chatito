@@ -25,6 +25,8 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend }) => {
   //   setShowProfileHandler();
   // };
   const onSendMessage = () => {
+    console.log('Sending text');
+    console.log(text);
     if (text.trim()) {
       onSend(text);
     }
