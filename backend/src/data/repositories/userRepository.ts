@@ -16,7 +16,7 @@ class UserRepository extends Repository<User> {
   }
 
   getById(id: string): Promise<User> {
-    return this.findOne(id);
+    return this.findOne({ where: { id }, relations: ['workspaces'] });
   }
 
   async deleteUser(id: string): Promise<void> {

@@ -1,6 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styles from './styles.module.sass';
-import { ProfileContext, IContext } from 'scenes/Workspace/containers/Workspace/index';
 
 const ChatBody = () => {
   const {

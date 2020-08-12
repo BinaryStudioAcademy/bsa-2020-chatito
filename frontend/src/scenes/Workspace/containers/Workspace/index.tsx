@@ -1,4 +1,4 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
 
@@ -10,9 +10,14 @@ import { IAppState } from 'common/models/store';
 import ChatScene from 'scenes/Chat';
 import ChatToolbar from '../ChatToolbar';
 import Thread from 'scenes/Workspace/containers/Thread';
-import { IPost } from 'common/models/post/IPost';
-import { setActiveThreadRoutine } from 'scenes/Workspace/routines/routines';
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
+import { push } from 'connected-react-router';
+import { Routes } from 'common/enums/Routes';
+import { selectWorkspaceRoutine, setActiveThreadRoutine } from 'scenes/Workspace/routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { IPost } from 'common/models/post/IPost';
+
+
 
 export interface IContext {
   setShowProfileHandler: () => void;
@@ -23,17 +28,34 @@ export interface IContext {
 export const ProfileContext = createContext<IContext | {}>({});
 
 interface IProps {
-  currentUserId: string;
+  currentUserId?: string;
+  match: {
+    params: {
+      hash: string;
+    };
+  };
+  userWorkspaces: IWorkspace[];
+  router: (route: Routes) => void;
+  selectWorkspace: (workspace: IWorkspace) => void;
   toggleActiveThread: IBindingCallback1<IPost>;
 }
 
-const Workspace: React.FC<IProps> = ({
-  currentUserId,
-  toggleActiveThread
-}) => {
+const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, router, selectWorkspace, toggleActiveThread }) => {
+  if (!currentUserId) return <></>;
+
   const [showProfile, setShowProfile] = useState(false);
   const [showThread, setShowThread] = useState(false);
   const [userData, setUserData] = useState<IUser | {}>({});
+
+  useEffect(() => {
+    const { hash } = match.params;
+    const currWorkspace = userWorkspaces.find(workspaceItem => workspaceItem.hash === hash);
+    if (currWorkspace) {
+      selectWorkspace(currWorkspace);
+    } else {
+      router(Routes.BaseUrl);
+    }
+  }, [match]);
 
   const setShowProfileHandler = () => {
     setShowProfile(!showProfile);
@@ -99,10 +121,13 @@ const Workspace: React.FC<IProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => ({
-  currentUserId: state.user.user!.id
+  currentUserId: state.user.user?.id,
+  userWorkspaces: state.user.workspaceList
 });
 
 const mapDispatchToProps = {
+  router: push,
+  selectWorkspace: selectWorkspaceRoutine,
   toggleActiveThread: setActiveThreadRoutine
 };
 
