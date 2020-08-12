@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import TextEditor from 'components/TextEditor';
 import Post from 'components/Post';
 import styles from './styles.module.sass';
+import { IThread } from 'common/models/thread/IThread';
 
 import { IPost } from 'common/models/post/IPost';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';

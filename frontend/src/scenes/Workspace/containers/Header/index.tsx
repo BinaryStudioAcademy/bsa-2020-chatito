@@ -12,7 +12,7 @@ import EditProfile from 'containers/EditProfile';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
-
+import { ReactComponent as Logo } from 'img/logo-icon.svg';
 import Logout from 'components/Logout';
 
 interface IProps {
@@ -49,7 +49,7 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
   return (
     <header className={styles.headerContainer}>
       <div className={styles.logoWrapper}>
-        <img className={styles.logoImg} src="./logo.svg" alt="logo" />
+        <Logo className={styles.logoImg} />
         <h1 className={styles.logoText}>Chatito</h1>
       </div>
 
