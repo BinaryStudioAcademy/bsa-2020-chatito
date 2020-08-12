@@ -12,7 +12,7 @@ interface IParams {
 export const useKey = ({ key, callback, ref }: IParams) => {
   const onUp = (event: KeyboardEvent) => {
     if (areEqualStrings(key, event.key)) {
-        callback();
+      callback();
     }
   };
 

@@ -3,5 +3,6 @@ export default [
   '/auth/register',
   '/auth/tokens',
   '/auth/forgotpass',
-  '/auth/resetpass'
+  '/auth/resetpass',
+  '/users/invite'
 ];
