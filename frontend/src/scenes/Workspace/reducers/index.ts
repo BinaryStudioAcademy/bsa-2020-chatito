@@ -7,6 +7,7 @@ import {
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { ChatType } from 'common/enums/ChatType';
 import { IChat } from 'common/models/chat/IChat';
+import { IUser } from 'common/models/user/IUser';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
@@ -14,6 +15,7 @@ export interface IWorkspaceState {
   error: string;
   channels: Array<IChat>;
   directMessages: Array<IChat>;
+  users?: Array<IUser>;
 }
 
 const initialState: IWorkspaceState = {
@@ -21,7 +23,8 @@ const initialState: IWorkspaceState = {
   loading: false,
   error: '',
   channels: [],
-  directMessages: []
+  directMessages: [],
+  users: []
 };
 
 const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>) => {

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import CreateDirectForm from 'components/CreateDirectForm';
+import CreateDirectForm from 'containers/CreateDirectForm';
 import { connect } from 'react-redux';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IAppState } from 'common/models/store';
@@ -10,6 +10,7 @@ import ModalWindow from 'components/ModalWindow';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { ChatType } from 'common/enums/ChatType';
 import { createChatRoutine } from 'scenes/Chat/routines';
+import { IUser } from 'common/models/user/IUser';
 import { ICreateChat } from 'common/models/chat/ICreateChat';
 
 interface IProps {
@@ -22,6 +23,7 @@ interface IProps {
 interface IDirectModalData {
   name: string;
   isPrivate: boolean;
+  users: IUser[];
 }
 
 const CreateDirectModal: FunctionComponent<IProps> = ({
@@ -34,12 +36,13 @@ const CreateDirectModal: FunctionComponent<IProps> = ({
     toggleModal({ modalType: ModalTypes.CreateDirect, show: false });
   };
 
-  const getNewDirectData = ({ name, isPrivate }: IDirectModalData) => {
+  const getNewDirectData = ({ name, users, isPrivate }: IDirectModalData) => {
     const newDirect: ICreateChat = {
       name,
       isPrivate,
       type: ChatType.DirectMessage,
-      workspaceName: workspace.name
+      workspaceName: workspace.name,
+      users
     };
     createDirect(newDirect);
   };
