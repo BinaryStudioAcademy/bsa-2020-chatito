@@ -1,8 +1,9 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import styles from './styles.module.sass';
+
 import InputField from 'components/InputField/InputField';
 import { signInValSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
 import { ILoginUser } from 'common/models/auth/ILoginUser';
@@ -12,14 +13,25 @@ import { ReactComponent as SignInGoogle } from 'img/signInGoogle.svg';
 import { ReactComponent as SignInFacebook } from 'img/signInFacebook.svg';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { toastrError } from 'services/toastrService';
+import { ILoginWithGoogle } from 'common/models/auth/ILoginWithGoogle';
+import { googleAuthConfig } from 'config/googleAuthConfig';
+
+declare const gapi: any;
 
 interface IProps {
   loginUser: IBindingCallback1<ILoginUser>;
+  loginWithGoogle: IBindingCallback1<ILoginWithGoogle>;
   workspace: IWorkspace;
   invitedUserEmail?: string;
 }
 
-const SignIn: FunctionComponent<IProps> = ({ loginUser, workspace, invitedUserEmail }) => {
+const SignIn: FunctionComponent<IProps> = ({ loginUser, loginWithGoogle, workspace, invitedUserEmail }) => {
+  useEffect(() => {
+    gapi.load('auth2', () => {
+      gapi.auth2.init(googleAuthConfig);
+    });
+  });
+
   const onSubmit = (values: ILoginUser) => {
     const { email, password } = values;
     const payload = {
@@ -33,6 +45,14 @@ const SignIn: FunctionComponent<IProps> = ({ loginUser, workspace, invitedUserEm
     } else {
       loginUser(payload);
     }
+  };
+
+  const handleGoogleAuth = async () => {
+    const auth2 = gapi.auth2.getAuthInstance();
+    const googleUser = await auth2.signIn();
+
+    const token = googleUser.getAuthResponse().id_token;
+    loginWithGoogle({ token, workspace });
   };
 
   const initialValues = {
@@ -79,7 +99,7 @@ const SignIn: FunctionComponent<IProps> = ({ loginUser, workspace, invitedUserEm
             </Button>
             <div className={styles.socialSignInWrapper}>
               <span>Or Log in with</span>
-              <button className={styles.socialSignIn} type="button">
+              <button className={styles.socialSignIn} type="button" onClick={handleGoogleAuth}>
                 <SignInGoogle />
               </button>
               <button className={styles.socialSignIn} type="button">
