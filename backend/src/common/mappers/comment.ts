@@ -6,7 +6,7 @@ export const fromPostCommentsToPostCommentsClient = (comments: Comment[]) => {
     const { createdByUser } = comment;
     return {
       ...comment,
-      createdByUser: fromUserToUserClient(createdByUser)
+      user: fromUserToUserClient(createdByUser)
     };
   });
 
