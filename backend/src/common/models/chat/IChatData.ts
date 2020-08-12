@@ -1,4 +1,5 @@
 import { ChatType } from '../../enums/ChatType';
+import { IUser } from '../user/IUser';
 
 export interface IChatData {
   name: string;
@@ -7,4 +8,5 @@ export interface IChatData {
   isPrivate: boolean;
   workspaceName: string;
   createdByUserId: string;
+  users?: IUser[];
 }

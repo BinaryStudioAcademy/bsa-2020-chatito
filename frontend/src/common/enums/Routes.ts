@@ -9,7 +9,7 @@ export enum Routes {
   Workspace = '/w/:hash',
   AddWorkspace = '/add-workspace',
   Room = '/room',
-  Channel = '/channel',
+  Channel = '/channel/:name',
   Direct = '/direct',
   NotExistingPath = '*'
 }

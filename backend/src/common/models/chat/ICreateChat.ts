@@ -1,6 +1,8 @@
+import { IUser } from '../user/IUser';
 import { ChatType } from '../../enums/ChatType';
 import { Workspace } from '../../../data/entities/Workspace';
 import { User } from '../../../data/entities/User';
+
 
 export interface ICreateChat {
   name: string;
@@ -8,5 +10,5 @@ export interface ICreateChat {
   isPrivate: boolean;
   workspace: Workspace;
   createdByUser: User;
-  users: User[];
+  users: IUser[];
 }

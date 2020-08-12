@@ -1,5 +1,10 @@
 import { Routine } from 'redux-saga-routines';
-import { selectChatRoutine, selectWorkspaceRoutine } from '../routines';
+import {
+  selectChatRoutine,
+  selectWorkspaceRoutine,
+  fetchUserChannelsRoutine,
+  fetchUserDirectsRoutine
+} from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/workstate/chat';
 
@@ -13,7 +18,7 @@ export interface IWorkspaceState {
 }
 
 const initialState: IWorkspaceState = {
-  workspace: { id: '', name: '', hash: '', imageUrl: '' },
+  workspace: { id: '', name: '', hash: '', imageUrl: '', users: [] },
   loading: false,
   error: '',
   selectedChat: { id: '', name: '', isPrivate: false },
@@ -34,6 +39,30 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         workspace: payload
       };
     }
+    case fetchUserChannelsRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case fetchUserChannelsRoutine.SUCCESS:
+      return {
+        ...state, channels: payload, loading: false
+      };
+    case fetchUserChannelsRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
+    case fetchUserDirectsRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case fetchUserDirectsRoutine.SUCCESS:
+      return {
+        ...state, directs: payload, loading: false
+      };
+    case fetchUserDirectsRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
     default:
       return state;
   }

@@ -25,6 +25,7 @@ import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import CreateChannelModal from 'containers/CreateChannelModal';
+import CreateDirectModal from 'containers/CreateDirectModal';
 
 interface IProps {
   channels: IChat[];
@@ -132,9 +133,13 @@ const ChatToolbar = ({
             <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(directPanel)} />
             <span className={styles.buttonText}>Direct Messages</span>
           </button>
-          <div className={styles.buttonPlus}>
+          <button
+            type="button"
+            className={styles.buttonPlus}
+            onClick={() => showModal({ modalType: ModalTypes.CreateDirect, show: true })}
+          >
             <FontAwesomeIcon icon={faPlus} color="white" />
-          </div>
+          </button>
           <div className={styles.directInfo}>
             Open a direct message
             <br />
@@ -149,6 +154,7 @@ const ChatToolbar = ({
       </div>
 
       <CreateChannelModal />
+      <CreateDirectModal />
     </>
   );
 };

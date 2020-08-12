@@ -1,49 +1,50 @@
 import React, { FunctionComponent } from 'react';
-import CreateChannelForm from 'components/CreateChannelForm';
+import CreateDirectForm from 'components/CreateDirectForm';
 import { connect } from 'react-redux';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
-import { ICreateChannel } from 'common/models/channel/ICreateChannel';
+import { ICreateDirect } from 'common/models/direct/ICreateDirect';
 import { IAppState } from 'common/models/store';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
-import { createChannelRoutine } from 'routines/channel';
+import { createDirectRoutine } from 'routines/direct';
 import { showModalRoutine } from 'routines/modal';
 import ModalWindow from 'components/ModalWindow';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { ChatType } from 'common/enums/ChatType';
+import { IUser } from 'common/models/user/IUser';
 
 interface IProps {
   isShown: boolean;
-  createChannel: IBindingCallback1<ICreateChannel>;
+  createDirect: IBindingCallback1<ICreateDirect>;
   toggleModal: IBindingCallback1<IModalRoutine>;
   workspace: IWorkspace;
 }
 
-interface IChannelModalData {
+interface IDirectModalData {
   name: string;
-  description: string;
   isPrivate: boolean;
+  users: IUser[];
 }
 
-const CreateChannelModal: FunctionComponent<IProps> = ({
+const CreateDirectModal: FunctionComponent<IProps> = ({
   isShown,
-  createChannel,
+  createDirect,
   toggleModal,
   workspace
 }: IProps) => {
   const handleCloseModal = () => {
-    toggleModal({ modalType: ModalTypes.CreateChannel, show: false });
+    toggleModal({ modalType: ModalTypes.CreateDirect, show: false });
   };
 
-  const getNewChannelData = ({ name, description, isPrivate }: IChannelModalData) => {
-    const newChannel: ICreateChannel = {
+  const getNewDirectData = ({ name, users, isPrivate }: IDirectModalData) => {
+    const newDirect: ICreateDirect = {
       name,
-      description,
       isPrivate,
-      type: ChatType.Channel,
-      workspaceName: workspace.name
+      type: ChatType.DirectMessage,
+      workspaceName: workspace.name,
+      users
     };
-    createChannel(newChannel);
+    createDirect(newDirect);
   };
 
   return (
@@ -51,26 +52,26 @@ const CreateChannelModal: FunctionComponent<IProps> = ({
       isShown={isShown}
       onHide={handleCloseModal}
     >
-      <CreateChannelForm createChannel={getNewChannelData} />
+      <CreateDirectForm createDirect={getNewDirectData} users={workspace.users} />
     </ModalWindow>
   );
 };
 
 const mapStateToProps = (state: IAppState) => {
   const {
-    modal: { createChannel },
+    modal: { createDirect },
     workspace: { workspace }
   } = state;
 
   return {
-    isShown: createChannel,
+    isShown: createDirect,
     workspace
   };
 };
 
 const mapDispatchToProps = {
-  createChannel: createChannelRoutine,
+  createDirect: createDirectRoutine,
   toggleModal: showModalRoutine
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateChannelModal);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateDirectModal);

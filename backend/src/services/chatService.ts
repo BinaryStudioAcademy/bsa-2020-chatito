@@ -15,15 +15,20 @@ export const getAllChatPosts = async (chatId: string) => {
   return chatPosts;
 };
 
+export const getAllUserChats = async (userId: string) => {
+  const chats: IChat[] = await getCustomRepository(UserRepository).getAllUserChats(userId);
+  return chats;
+};
+
 export const addChat = async (userId: string, body: IChatData) => {
-  const { workspaceName, ...chatFields } = body;
+  const { workspaceName, users = [], ...chatFields } = body;
   const userCreator: User = await getCustomRepository(UserRepository).getById(userId);
   const workspace: Workspace = await getCustomRepository(WorkspaceRepository).findByName(workspaceName);
   const newChat: ICreateChat = {
     ...chatFields,
     workspace,
     createdByUser: userCreator,
-    users: [userCreator]
+    users: [userCreator, ...users]
   };
   const chat: IChat = await getCustomRepository(ChatRepository).addChat(newChat);
 

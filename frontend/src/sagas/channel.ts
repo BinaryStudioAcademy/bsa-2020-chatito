@@ -1,11 +1,12 @@
 import { history } from 'common/helpers/historyHelper';
 import { all, put, call, takeEvery } from 'redux-saga/effects';
 import { Routine } from 'redux-saga-routines';
-import { createChannelRoutine, fetchUserChannelsRoutine } from 'routines/channel';
+import { createChannelRoutine } from 'routines/channel';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
-import { createChannel, fetchUserChannels } from 'services/channelService';
+import { createChannel } from 'services/channelService';
 import { toastrError } from 'services/toastrService';
+import { fetchUserChannelsRoutine } from 'scenes/Workspace/routines';
 
 function* createChannelRequest({ payload }: Routine<any>) {
   try {
@@ -14,7 +15,7 @@ function* createChannelRequest({ payload }: Routine<any>) {
     yield put(showModalRoutine({ modalType: ModalTypes.CreateChannel, show: false }));
 
     yield put(fetchUserChannelsRoutine.trigger());
-    history.push(`/channel/${payload.chat.id}`);
+    history.push(`/channel/${payload.chat.name}`);
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(createChannelRoutine.failure());
@@ -23,20 +24,6 @@ function* createChannelRequest({ payload }: Routine<any>) {
 
 function* watchCreateChannelRequest() {
   yield takeEvery(createChannelRoutine.TRIGGER, createChannelRequest);
-}
-
-function* fetchUserChannelsRequest() {
-  try {
-    const response = yield call(fetchUserChannels);
-    yield put(fetchUserChannelsRoutine.success(response));
-  } catch (error) {
-    yield call(toastrError, error.message);
-    yield put(fetchUserChannelsRoutine.failure(error.message));
-  }
-}
-
-function* watchFetchUserChannelsRequest() {
-  yield takeEvery(fetchUserChannelsRoutine.TRIGGER, fetchUserChannelsRequest);
 }
 
 function* toggleCreateChannelModal({ payload }: Routine<any>) {
@@ -50,7 +37,6 @@ function* watchToggleCreateChannelModal() {
 export default function* channelSaga() {
   yield all([
     watchCreateChannelRequest(),
-    watchFetchUserChannelsRequest(),
     watchToggleCreateChannelModal()
   ]);
 }

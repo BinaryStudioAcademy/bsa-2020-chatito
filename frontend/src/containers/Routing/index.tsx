@@ -13,6 +13,7 @@ import AddWorkspace from '../../scenes/Workspace/containers/AddWorkspace';
 import PageNotFound from '../../scenes/PageNotFound/index';
 import Workspace from '../../scenes/Workspace/containers/Workspace';
 import Auth from '../../scenes/Auth/containers/Auth';
+import Chat from 'scenes/Chat/containers/Chat';
 
 interface IProps {
   isLoading: boolean;
