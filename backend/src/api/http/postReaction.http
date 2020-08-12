@@ -1,0 +1,27 @@
+POST http://localhost:3001/api/posts/react
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+  "postId": "<id>",
+  "reaction": "hi"
+}
+###
+
+PUT http://localhost:3001/api/posts/react
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+  "id": "<id>",
+  "reaction": "smile"
+}
+###
+
+DELETE http://localhost:3001/api/posts/react
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+  "id": "<id>"
+}
