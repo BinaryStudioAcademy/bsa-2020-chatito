@@ -27,7 +27,6 @@ const ChatFooter: React.FC<IProps> = ({ addPost, chatId }) => {
         placeholder=""
         height={120}
         onSend={onSubmit}
-        chatId={chatId}
       />
     </div>
   );

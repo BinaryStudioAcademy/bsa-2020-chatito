@@ -14,10 +14,11 @@ export async function fetchUserChannels() {
 }
 
 export async function fetchCnannelPosts(channelId: string) {
-  return new Promise(resolve => resolve(true));
+  const response = await api.post(`/api/chats/${channelId}/posts`);
+  return response;
 }
 
 export async function addPost({ chatId, text }: ICreatePost) {
   const response = await api.post(`/api/chats/${chatId}/posts`, { text });
-  return new Promise(resolve => resolve(true));
+  return response;
 }

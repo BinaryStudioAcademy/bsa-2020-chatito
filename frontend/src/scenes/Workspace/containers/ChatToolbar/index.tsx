@@ -1,4 +1,4 @@
-import React, { useState, FunctionComponent } from 'react';
+import React, { useState, FunctionComponent, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Routine } from 'redux-saga-routines';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,21 +19,25 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
+import { IBindingAction } from 'common/models/callback/IBindingActions';
 import styles from './styles.module.sass';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
+import { fetchChannelsRoutine } from '../../routines';
 
 interface IProps {
   channels: IChat[];
   directMessages: IChat[];
   selectedChat: IChat;
   selectChat: Routine;
+  fetchChats: IBindingAction;
 }
 
 const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
   selectedChat,
-  selectChat
+  selectChat,
+  fetchChats
 }) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
@@ -43,6 +47,10 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   const getClassNameDiv = (state: boolean) => (state ? styles.listBoxHidden : styles.listBox);
 
   const getClassNameImg = (state: boolean) => (state ? styles.chanelsImgRotate : styles.chanelsImg);
+
+  useEffect(() => {
+    fetchChats();
+  }, []);
 
   const getChannelSelect = (chat: IChat) => {
     if (selectedChat && selectedChat.id === chat.id) {
@@ -138,7 +146,8 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  selectChat: setCurrentChatRoutine
+  selectChat: setCurrentChatRoutine,
+  fetchChats: fetchChannelsRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatToolbar);

@@ -7,7 +7,6 @@ interface IProps {
   placeholder: string;
   height: number | 'auto';
   onSend: (text: string) => void;
-  chatId?: string;
 }
 
 const TextEditor: FunctionComponent<IProps> = ({ placeholder, height, onSend }) => {

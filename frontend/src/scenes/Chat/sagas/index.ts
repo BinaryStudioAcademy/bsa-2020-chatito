@@ -1,9 +1,7 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
 import { setCurrentChatRoutine, setPostsRoutine, addPostRoutine } from '../routines';
-import api from 'common/helpers/apiHelper';
 import { Routine } from 'redux-saga-routines';
 import { fetchCnannelPosts, addPost } from 'services/channelService';
-import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
 
@@ -29,8 +27,6 @@ function* watchPostsRequest() {
 
 function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
   try {
-    console.log('TEXT');
-    console.log(payload);
     yield call(addPost, payload);
     yield put(setPostsRoutine.trigger());
   } catch (error) {

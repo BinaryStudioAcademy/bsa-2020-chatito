@@ -1,17 +1,13 @@
-import React, { useState, createContext, useEffect } from 'react';
+import React, { useState, createContext } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
-import { IBindingAction } from 'common/models/callback/IBindingActions';
-
 import Header from '../Header';
 import WorkspaceToolbar from '../WorkspaceToolbar';
 import ProfileOverview from 'components/ProfileOverview';
 import { IUser } from 'common/models/user/IUser';
-import { IChat } from 'common/models/chat/IChat';
 import { IAppState } from 'common/models/store';
 import ChatScene from 'scenes/Chat';
 import ChatToolbar from '../ChatToolbar';
-import { fetchChannelsRoutine } from '../../routines';
 
 export interface IContext {
   setShowProfileHandler: () => void;
@@ -22,20 +18,15 @@ export const ProfileContext = createContext<IContext | {}>({});
 
 interface IProps {
   currentUserId: string;
-  fetchChats: IBindingAction;
 }
 
-const Workspace: React.FC<IProps> = ({ currentUserId, fetchChats }) => {
+const Workspace: React.FC<IProps> = ({ currentUserId }) => {
   const [showProfile, setShowProfile] = useState(false);
   const [userData, setUserData] = useState<IUser | {}>({});
 
   const setShowProfileHandler = () => {
     setShowProfile(!showProfile);
   };
-
-  useEffect(() => {
-    fetchChats();
-  }, []);
 
   const setUserDataHandler = (user: IUser | {}) => {
     setUserData(user);
@@ -79,12 +70,12 @@ const Workspace: React.FC<IProps> = ({ currentUserId, fetchChats }) => {
   );
 };
 
-const mapStateToProps = (state: IAppState) => ({
-  currentUserId: state.user.user!.id
-});
-
-const mapDispatchToProps = {
-  fetchChats: fetchChannelsRoutine
+const mapStateToProps = (state: IAppState) => {
+  const { user } = state.user;
+  const id = user ? user.id : null;
+  return {
+    currentUserId: id
+  };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Workspace);
+export default connect(mapStateToProps, null)(Workspace);
