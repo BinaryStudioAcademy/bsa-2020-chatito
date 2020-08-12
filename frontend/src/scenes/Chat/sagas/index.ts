@@ -10,7 +10,15 @@ function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
     let responce: IPost[] | true = yield call(fetchCnannelPosts, payload);
     responce = [
       {
-        user: {},
+        user: {
+          id: '1',
+          email: 'string',
+          fullName: 'Test Fullname',
+          displayName: 'string',
+          imageUrl: 'https://images.unsplash.com/photo-1555445091-5a8b655e8a4a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80', // eslint-disable-line max-len
+          title: 'string',
+          status: 'online'
+        },
         createdAt: new Date(),
         text: 'Message'
       }

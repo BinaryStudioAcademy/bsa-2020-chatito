@@ -4,6 +4,7 @@ import { ProfileContext, IContext } from 'scenes/Workspace/containers/Workspace/
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import { IPost } from 'common/models/post/IPost';
+import Post from 'components/Post/index';
 
 interface IProps {
   messages: IPost[];
@@ -14,10 +15,10 @@ const ChatBody: React.FC<IProps> = ({ messages }) => {
     setShowProfileHandler,
     setUserDataHandler
   } = useContext(ProfileContext) as IContext; // eslint-disable @typescript-eslint/no-unused-vars
-
+  // mocked post data
   return (
     <div className={styles.chatBody}>
-      {messages.map(m => m.text)}
+      {messages.map(m => <Post post={m} />)}
     </div>
   );
 };
@@ -29,4 +30,3 @@ const mapStateToProps = (state: IAppState) => ({
 const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatBody);
-
