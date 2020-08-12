@@ -14,23 +14,30 @@ import PageNotFound from 'scenes/PageNotFound/index';
 import Workspace from 'scenes/Workspace/containers/Workspace';
 import Auth from 'scenes/Auth/containers/Auth';
 import JoinInvitedWorkspace from 'containers/JoinInvitedWorkspace';
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
+import { IFetchUser } from 'common/models/fetch/IFetchUser';
 
 interface IProps {
   isLoading: boolean;
   isAuthorized: boolean;
-  fetchUser: IBindingAction;
+  workspace: IWorkspace;
+  fetchUser: IBindingCallback1<IFetchUser>;
 }
 
 const Routing: React.FC<IProps> = ({
   isLoading,
   isAuthorized,
+  workspace,
   fetchUser
 }) => {
   const hasToken = Boolean(getAccessToken());
 
   useEffect(() => {
     if (hasToken && !isAuthorized && !isLoading) {
-      fetchUser();
+      const payload = {
+        workspace
+      };
+      fetchUser(payload);
     }
   });
 
@@ -48,10 +55,11 @@ const Routing: React.FC<IProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { user: { isLoading, isAuthorized } } = state;
+  const { user: { isLoading, isAuthorized }, workspace } = state;
   return {
     isLoading,
-    isAuthorized
+    isAuthorized,
+    workspace: workspace.workspace
   };
 };
 

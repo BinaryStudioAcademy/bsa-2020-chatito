@@ -21,15 +21,20 @@ import { push } from 'connected-react-router';
 import { IUserWithWorkspaces } from 'common/models/user/IUserWithWorkspaces';
 import { Routes } from 'common/enums/Routes';
 
-function* fetchUserRequest(): Routine<any> {
+function* fetchUserRequest({ payload }: Routine<any>) {
   try {
     const user: IUserWithWorkspaces = yield call(fetchUser);
-    const workspace = (user && user.workspaces.length > 0) ? user.workspaces[0] : null;
-    if (workspace) {
-      yield put(push(Routes.Workspace.replace(':hash', workspace.hash)));
+
+    // TODO: rewrite if else
+
+    if (payload.workspace.id) { // selected workspace exists (when login throw invite link)
+      yield put(push(Routes.Workspace.replace(':hash', payload.workspace.hash)));
+    } else if (user && user.workspaces.length > 0) {
+      yield put(push(Routes.Workspace.replace(':hash', user.workspaces[0].hash)));
     } else {
       yield put(push(Routes.AddWorkspace));
     }
+
     yield put(fetchUserRoutine.success(user));
   } catch (error) {
     yield call(toastrError, error.message);
