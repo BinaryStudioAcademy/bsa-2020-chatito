@@ -1,7 +1,44 @@
 .threadContainer
-  &>header>p
-    // margin: 0
-    height: 200px
-    width: 100%
-    border: 1px solid black
-    border-radius: 8px
+  background-color: var(--chat-background-secondary)
+  height: 100%
+
+  margin-left: auto
+  border: 1px solid red
+  padding: 10px
+  height: 100%
+
+  display: flex
+  flex-direction: column
+  justify-content: space-around
+  align-items: left
+
+  p
+    margin: 0
+
+  .threadChatName
+    font-size: 1.5em
+    font-weight: bold
+
+  .threadComments
+    background-color: var(--chat-background-primary)
+    border-radius: 15px
+    border: 1px solid var(--border-lightbrown)
+    padding: 5px
+    height: 60%
+    margin-top: 10px
+
+    .commentsWrapper
+      padding: 10px
+      max-height: 600px
+      overflow-y: scroll
+
+// Mock
+
+.mockMessage
+  margin: 10px 0
+  padding: 10px
+  padding-left: 60px
+  width: 100%
+
+
+

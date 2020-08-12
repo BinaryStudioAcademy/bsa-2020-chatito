@@ -1,5 +1,10 @@
 import { Routine } from 'redux-saga-routines';
-import { addWorkspaceRoutine, selectChatRoutine } from '../routines/routines';
+import {
+  addWorkspaceRoutine,
+  selectChatRoutine,
+  setActiveThreadRoutine,
+  fetchPostCommentsRoutine
+} from '../routines/routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 export interface IWorkspaceState {
@@ -9,6 +14,7 @@ export interface IWorkspaceState {
   selectedChat: any;
   channels: Array<any>;
   directMessages: Array<any>;
+  activeThread: any;
 }
 
 const initialState: IWorkspaceState = {
@@ -17,7 +23,8 @@ const initialState: IWorkspaceState = {
   error: '',
   selectedChat: null,
   channels: [],
-  directMessages: []
+  directMessages: [],
+  activeThread: {}
 };
 
 const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>) => {
@@ -38,6 +45,16 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return {
         ...state,
         selectedChat: payload
+      };
+    case setActiveThreadRoutine.TRIGGER:
+      return {
+        ...state,
+        activeThread: { post: payload }
+      };
+    case fetchPostCommentsRoutine.SUCCESS:
+      return {
+        ...state,
+        activeThread: { ...state.activeThread, comments: payload }
       };
     default:
       return state;

@@ -9,24 +9,41 @@ import { IUser } from 'common/models/user/IUser';
 import { IAppState } from 'common/models/store';
 import ChatScene from 'scenes/Chat';
 import ChatToolbar from '../ChatToolbar';
+import Thread from 'scenes/Workspace/containers/Thread';
+import { IPost } from 'common/models/post/IPost';
+import { setActiveThreadRoutine } from 'scenes/Workspace/routines/routines';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 
 export interface IContext {
   setShowProfileHandler: () => void;
   setUserDataHandler: (user: IUser | {}) => void;
+  showThreadHandler: IBindingCallback1<IPost>;
 }
 
 export const ProfileContext = createContext<IContext | {}>({});
 
 interface IProps {
   currentUserId: string;
+  toggleActiveThread: IBindingCallback1<IPost>;
 }
 
-const Workspace: React.FC<IProps> = ({ currentUserId }) => {
+const Workspace: React.FC<IProps> = ({
+  currentUserId,
+  toggleActiveThread
+}) => {
   const [showProfile, setShowProfile] = useState(false);
+  const [showThread, setShowThread] = useState(false);
   const [userData, setUserData] = useState<IUser | {}>({});
 
   const setShowProfileHandler = () => {
     setShowProfile(!showProfile);
+    setShowThread(false);
+  };
+
+  const showThreadHandler = (post: IPost) => {
+    setShowThread(!showThread);
+    setShowProfile(false);
+    toggleActiveThread(post);
   };
 
   const setUserDataHandler = (user: IUser | {}) => {
@@ -42,6 +59,8 @@ const Workspace: React.FC<IProps> = ({ currentUserId }) => {
     />
   );
 
+  const renderThread = () => <Thread />;
+
   return (
     <div className={styles.mainContainer}>
       <Header />
@@ -55,13 +74,21 @@ const Workspace: React.FC<IProps> = ({ currentUserId }) => {
           </div>
 
           <div className={styles.ChatWrapper}>
-            <ProfileContext.Provider value={{ setShowProfileHandler, setUserDataHandler }}>
+            {/* rename Profile context, as it passing thread context too */}
+            <ProfileContext.Provider
+              value={{
+                setShowProfileHandler,
+                setUserDataHandler,
+                showThreadHandler
+              }}
+            >
               <ChatScene />
             </ProfileContext.Provider>
           </div>
 
           <div className={styles.RightPanelWrapper}>
             {showProfile && renderProfile()}
+            {showThread && renderThread()}
           </div>
 
         </div>
@@ -72,7 +99,11 @@ const Workspace: React.FC<IProps> = ({ currentUserId }) => {
 };
 
 const mapStateToProps = (state: IAppState) => ({
-  currentUserId: state.user.user
+  currentUserId: state.user.user!.id
 });
 
-export default connect(mapStateToProps, null)(Workspace);
+const mapDispatchToProps = {
+  toggleActiveThread: setActiveThreadRoutine
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Workspace);
