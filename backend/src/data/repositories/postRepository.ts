@@ -21,6 +21,9 @@ class PostRepository extends Repository<Post> {
   }
 
   addPost(post: ICreatePost): Promise<Post> {
+    console.log('create post');
+    console.log(post);
+
     const newPost = this.create(post);
 
     return newPost.save();

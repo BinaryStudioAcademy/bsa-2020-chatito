@@ -12,17 +12,15 @@ interface IProps {
 }
 
 const ChatFooter: React.FC<IProps> = ({ addPost, chatId }) => {
-  if (!chatId) {
-    return null;
-  }
-
   const onSubmit = (text: string) => {
+    console.log('SUBMITTED');
+
     if (chatId) addPost({ chatId, text });
     return chatId;
   };
 
   return (
-    <div className={styles.chatFooter}>
+    <div className={styles.chatFooter} key={chatId}>
       <TextEditor
         placeholder=""
         height={120}

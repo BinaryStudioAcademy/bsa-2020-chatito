@@ -8,6 +8,8 @@ $coloractive: rgb(120, 21, 145) // цвет активной строки
   height: 100%
   background-color: $color
   overflow-y: auto
+  min-width: 250px
+
 
 .channelSelect
   display: flex
@@ -61,10 +63,17 @@ $coloractive: rgb(120, 21, 145) // цвет активной строки
   height: 2px
   background-color: rgb(98, 16, 119)
 
+.channelButtonsWrapper
+  display: flex
+  width: 80%
+  flex-wrap: nowrap
+  justify-content: space-around
+
+
 .buttonChanel
   display: flex
-  flex-direction: row
-  align-items: center
+  flex-direction: column
+  align-items: flex-start
   border: 0
   padding: 0
   align-content: left

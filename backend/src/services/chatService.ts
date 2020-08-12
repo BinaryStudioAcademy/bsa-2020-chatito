@@ -3,8 +3,8 @@ import { Workspace } from '../data/entities/Workspace';
 import { User } from '../data/entities/User';
 import { IChatData } from '../common/models/chat/IChatData';
 import { ICreateChat } from '../common/models/chat/ICreateChat';
-import PostRepository from '../data/repositories/postRepository';
-import { IPost } from '../common/models/post/IPost';
+// import PostRepository from '../data/repositories/postRepository';
+// import { IPost } from '../common/models/post/IPost';
 import { IChat } from '../common/models/chat/IChat';
 import ChatRepository from '../data/repositories/chatRepository';
 import UserRepository from '../data/repositories/userRepository';
@@ -12,8 +12,13 @@ import WorkspaceRepository from '../data/repositories/workspaceRepository';
 import { ChatType } from '../common/enums/ChatType';
 
 export const getAllChatPosts = async (chatId: string) => {
-  const chatPosts: IPost[] = await getCustomRepository(PostRepository).getAllChatPosts(chatId);
-  return chatPosts;
+  const chat: IChat = await getCustomRepository(ChatRepository).getById(chatId);
+  console.log('chat posts');
+
+  console.log(chat.posts);
+  console.log(chat);
+
+  return chat.posts;
 };
 
 export const getAllUserChats = async (userId: string) => {

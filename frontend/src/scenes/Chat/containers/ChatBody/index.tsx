@@ -18,7 +18,7 @@ const ChatBody: React.FC<IProps> = ({ messages }) => {
   // mocked post data
   return (
     <div className={styles.chatBody}>
-      {messages.map(m => <Post post={m} />)}
+      {messages.map(m => <Post post={m} key={m.id} />)}
     </div>
   );
 };
