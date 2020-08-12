@@ -6,12 +6,14 @@ export interface IModalState {
   editProfile: boolean;
   createChannel: boolean;
   createDirect: boolean;
+  invitePopup: boolean;
 }
 
 const initialState: IModalState = {
   editProfile: false,
   createChannel: false,
-  createDirect: false
+  createDirect: false,
+  invitePopup: false
 };
 
 export default (state = initialState, action: Routine<any>) => {
@@ -27,6 +29,9 @@ export default (state = initialState, action: Routine<any>) => {
         }
         case ModalTypes.CreateDirect: {
           return { ...state, createDirect: show };
+        }
+        case ModalTypes.InvitePopup: {
+          return { ...state, invitePopup: show };
         }
         default:
           return state;

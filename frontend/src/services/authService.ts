@@ -5,14 +5,24 @@ import { ILoginUser } from 'common/models/auth/ILoginUser';
 
 type ServerResponse = IAuthServerResponse & Response;
 
-export const login = async (userInput: ILoginUser) => {
-  const response = await api.post<ServerResponse>('/api/auth/login', userInput);
+export const login = async ({ email, password, workspace }: ILoginUser) => {
+  const payload = {
+    email,
+    password,
+    workspaceId: workspace.id
+  };
+  const response = await api.post<ServerResponse>('/api/auth/login', payload);
   return response;
 };
 
-export const registration = async (userInput: IRegisterUser) => {
+export const registration = async ({ email, password, fullName, workspace }: IRegisterUser) => {
   const userData = {
-    user: { ...userInput }
+    user: {
+      email,
+      password,
+      fullName,
+      workspaceId: workspace.id
+    }
   };
   const response = await api.post('/api/auth/register', userData);
 

@@ -9,3 +9,12 @@ Authorization: Bearer <insert token here>
 {
   "name": "test workspace"
 }
+###
+
+POST http://localhost:3001/api/workspaces/<:id>/invite
+Content-Type: application/json
+Authorization: Bearer <insert token here>
+
+{
+  "email": "test@gmail.com"
+}

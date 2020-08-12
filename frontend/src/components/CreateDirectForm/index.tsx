@@ -16,6 +16,12 @@ interface IOption {
 
 const CreateDirect = ({ createDirect }: IProps) => {
   const [DirectUsers, setDirectUsers] = useState([]);
+  const users: IUser[] = [{
+    id: '1',
+    email: 'mock@gmail.com',
+    fullName: 'MockName',
+    displayName: 'MockName'
+  }];
   const mapOptionsToUsers = (options: IOption[]) => users
     .filter(user => options.map(({ value }) => value).indexOf(user.id) !== -1);
 

@@ -23,9 +23,9 @@ export const useKey = ({ key, callback, ref }: IParams) => {
       current.addEventListener('keyup', onUp, true);
 
       return () => {
-        current.removeEventListener('keyup', onUp);
+        current.removeEventListener('keyup', onUp, true);
       };
     }
     return undefined;
-  }, [key, ref]);
+  }, [key, ref, callback]);
 };

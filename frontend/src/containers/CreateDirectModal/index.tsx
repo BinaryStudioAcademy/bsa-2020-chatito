@@ -39,7 +39,7 @@ const CreateDirectModal: FunctionComponent<IProps> = ({
       name,
       isPrivate,
       type: ChatType.DirectMessage,
-      workspaceName: workspace.name,
+      workspaceName: workspace.name
     };
     createDirect(newDirect);
   };

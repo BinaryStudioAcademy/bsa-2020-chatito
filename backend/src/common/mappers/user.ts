@@ -33,7 +33,9 @@ export const fromUserToUserWithWorkspaces = (user: User): IUserWithWorkspaces =>
   };
 };
 
-export const fromRegisterUserToCreateUser = (user: IRegisterUser): ICreateUser => ({
-  ...user,
-  displayName: user.fullName
+export const fromRegisterUserToCreateUser = ({ fullName, email, password }: IRegisterUser): ICreateUser => ({
+  fullName,
+  email,
+  password,
+  displayName: fullName
 });

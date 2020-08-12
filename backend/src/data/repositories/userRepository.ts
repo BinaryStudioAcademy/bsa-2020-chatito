@@ -12,6 +12,11 @@ class UserRepository extends Repository<User> {
     return user.save();
   }
 
+  async addWorkspace(id: string, workspaceId: string): Promise<User> {
+    await this.createQueryBuilder().relation(User, 'workspaces').of(id).add(workspaceId);
+    return this.findOne({ where: { id }, relations: ['workspaces'] });
+  }
+
   getAll(): Promise<User[]> {
     return this.find();
   }
