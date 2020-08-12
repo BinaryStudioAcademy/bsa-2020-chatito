@@ -13,11 +13,6 @@ import { ChatType } from '../common/enums/ChatType';
 
 export const getAllChatPosts = async (chatId: string) => {
   const chat: IChat = await getCustomRepository(ChatRepository).getById(chatId);
-  console.log('chat posts');
-
-  console.log(chat.posts);
-  console.log(chat);
-
   return chat.posts;
 };
 
