@@ -3,7 +3,6 @@ import TextEditor from 'components/TextEditor';
 import Post from 'components/Post';
 import styles from './styles.module.sass';
 import { IThread } from 'common/models/thread/IThread';
-
 import { IPost } from 'common/models/post/IPost';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
@@ -11,18 +10,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 interface IProps {
-<<<<<<< HEAD
-  thread: IThread;
-}
-
-const Thread: React.FC<IProps> = ({ thread }) => (
-  <div className={styles.threadContainer}>
-    <header>
-      <p>{thread.name}</p>
-    </header>
-  </div>
-);
-=======
   width?: number | string;
   post: IPost;
   comments: IPost[];
@@ -69,6 +56,5 @@ const Thread: FunctionComponent<IProps> = ({
     </div>
   );
 };
->>>>>>> 3ae3a4f70b5d2bea01c21925a899ee148ecc6257
 
 export default Thread;
