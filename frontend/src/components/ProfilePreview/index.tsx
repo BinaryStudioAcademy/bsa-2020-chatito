@@ -25,19 +25,10 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend }) => {
   //   setShowProfileHandler();
   // };
   const onSendMessage = () => {
-    console.log('Sending text');
-    console.log(text);
-    if (text.trim()) {
-      onSend(text);
-    }
     setText('');
   };
   useKey({ key: 'enter', callback: onSendMessage, ref: inputRef });
-  // const keycheck = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (e.key === 'Enter') {
-  //     onSendMessage(text);
-  //   }
-  // };
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setText(e.target.value);
   };
