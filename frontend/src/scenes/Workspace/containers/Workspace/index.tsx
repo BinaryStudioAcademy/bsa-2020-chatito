@@ -68,11 +68,10 @@ const Workspace: React.FC<IProps> = ({
 
   const setShowProfileHandler = () => {
     toggleRightMenu(RightMenuTypes.Profile);
-    // toggleActiveThread({ id: ''});
   };
 
   const showThreadHandler = (post: IPost) => {
-    // if (post.id === activeThreadPostId) return;
+    if (post.id === activeThreadPostId) return;
     toggleRightMenu(RightMenuTypes.Thread);
     toggleActiveThread(post);
   };

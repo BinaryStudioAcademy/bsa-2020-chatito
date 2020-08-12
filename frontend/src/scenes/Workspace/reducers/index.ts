@@ -20,16 +20,19 @@ export interface IWorkspaceState {
   showRightSideMenu: RightMenuTypes;
   activeThread: IActiveThread;
 }
+const activeThreadInitialState = { post: { id: '', user: {}, text: '', createdAt: new Date() }, comments: [] };
+const selectedChatInitialState = { id: '', name: '', isPrivate: false };
+const workspaceInitialState = { id: '', name: '', hash: '', imageUrl: '' };
 
 const initialState: IWorkspaceState = {
-  workspace: { id: '', name: '', hash: '', imageUrl: '' },
+  workspace: workspaceInitialState,
   loading: false,
   error: '',
-  selectedChat: { id: '', name: '', isPrivate: false },
+  selectedChat: selectedChatInitialState,
   channels: [],
   directMessages: [],
   showRightSideMenu: RightMenuTypes.None,
-  activeThread: { post: { id: '', user: {}, text: '', createdAt: new Date() }, comments: [] }
+  activeThread: activeThreadInitialState
 };
 
 const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>) => {
@@ -48,7 +51,8 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
     case showRightSideMenuRoutine.TRIGGER:
       return {
         ...state,
-        showRightSideMenu: payload
+        showRightSideMenu: payload,
+        activeThread: activeThreadInitialState
       };
     case setActiveThreadRoutine.TRIGGER:
       return {
