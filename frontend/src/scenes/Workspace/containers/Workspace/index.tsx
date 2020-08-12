@@ -1,7 +1,6 @@
 import React, { useState, createContext, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
-
 import Header from '../Header';
 import WorkspaceToolbar from '../WorkspaceToolbar';
 import ProfileOverview from 'components/ProfileOverview';
@@ -13,6 +12,7 @@ import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
 import { selectWorkspaceRoutine } from 'scenes/Workspace/routines';
+import ThreadsContainer from 'containers/ThreadsContainer';
 
 export interface IContext {
   setShowProfileHandler: () => void;
@@ -95,10 +95,14 @@ const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, rou
   );
 };
 
-const mapStateToProps = (state: IAppState) => ({
-  currentUserId: state.user.user?.id,
-  userWorkspaces: state.user.workspaceList
-});
+const mapStateToProps = (state: IAppState) => {
+  const { user } = state.user;
+  const id = user ? user.id : '';
+  return {
+    currentUserId: id,
+    userWorkspaces: state.user.workspaceList
+  };
+};
 
 const mapDispatchToProps = {
   router: push,

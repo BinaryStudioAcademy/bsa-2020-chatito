@@ -4,3 +4,8 @@ export const addWorkspace = async (name: string) => {
   const response = await api.post('/api/workspaces', { name });
   return response;
 };
+
+export const getWorkspaceUsers = async (id: string) => {
+  const response = await api.get(`/api/workspaces/${id}/users`);
+  return response;
+};

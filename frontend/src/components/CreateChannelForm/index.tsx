@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
-import { ICreateChannel } from 'common/models/channel/ICreateChannel';
-import styles from 'styles.module.sass';
+import styles from './styles.module.sass';
 
 interface IProps {
-  createChannel: IBindingCallback1<ICreateChannel>;
+  createChannel: IBindingCallback1<any>;
 }
 
 const CreateChannel = ({ createChannel }: IProps) => {
@@ -20,7 +19,7 @@ const CreateChannel = ({ createChannel }: IProps) => {
     createChannel({
       name: channelName,
       description: channelDescription,
-      private: privateChannel
+      isPrivate: privateChannel
     });
   };
 

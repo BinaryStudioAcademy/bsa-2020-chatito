@@ -10,28 +10,45 @@ import { Routes } from 'common/enums/Routes';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { ReactComponent as SignInGoogle } from 'img/signInGoogle.svg';
 import { ReactComponent as SignInFacebook } from 'img/signInFacebook.svg';
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
+import { toastrError } from 'services/toastrService';
 
 interface IProps {
   loginUser: IBindingCallback1<ILoginUser>;
+  workspace: IWorkspace;
+  invitedUserEmail?: string;
 }
 
-const SignIn: FunctionComponent<IProps> = ({ loginUser }) => {
+const SignIn: FunctionComponent<IProps> = ({ loginUser, workspace, invitedUserEmail }) => {
   const onSubmit = (values: ILoginUser) => {
     const { email, password } = values;
     const payload = {
       email,
-      password
+      password,
+      workspace
     };
-    loginUser(payload);
+
+    if (invitedUserEmail && email !== invitedUserEmail) {
+      toastrError('Please, enter email which you where invited with.');
+    } else {
+      loginUser(payload);
+    }
   };
+
   const initialValues = {
     email: '',
-    password: ''
+    password: '',
+    workspace
   };
+
+  const invitationHeaderText = workspace.name ? ` to ${workspace.name}` : '';
 
   return (
     <div className={styles.signIn}>
-      <h1 className={styles.header}>Welcome</h1>
+      <h1 className={styles.header}>
+        Welcome
+        {invitationHeaderText}
+      </h1>
       <p className={styles.signUpLink}>
         {'New here? '}
         <Link className={styles.authLink} to={Routes.SignUp}>Create an account</Link>

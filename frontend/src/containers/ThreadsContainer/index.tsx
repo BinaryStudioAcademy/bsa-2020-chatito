@@ -6,18 +6,16 @@ import { IThreadsState } from './reducers/reducer';
 import Thread from '../Thread';
 import { IThread } from 'common/models/thread/IThread';
 
-export type IFetchThreads = () => IThread[];
-export type ISetThreads<T> = (arg: T) => void;
 interface IProps {
-  // fetchThreads: IFetchThreads;
+  fetchThreads: () => void;
   loading: boolean;
 }
 
-const ThreadsContainer: FunctionComponent<IProps> = ({ loading }) => {
-  const [threads, setThreads]:[IThread[], ISetThreads<IThread[]>] = useState<IThread[]>([]);
+const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, loading }) => {
+  const [threads, setThreads] = useState<IThread[]>([]);
   useEffect(() => {
     const fetched = [{ name: 'first', id: '1' }, { name: 'second', id: '2' }];
-    // const fetched = fetchThreads();
+    // fetchThreads();
     setThreads(fetched);
   }, []);
   return (
@@ -26,13 +24,22 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ loading }) => {
         <p className={styles.headerName}>Threads</p>
       </header>
       <div className={styles.threadsContainer}>
-        {threads.map((thread, index) => <div className={styles.thread}><Thread thread={thread.name} /></div>)}
+        {threads.map((thread, index) => (
+          <div
+            key={thread.id}
+            className={styles.thread}
+          >
+            <Thread
+              thread={thread}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
-const mapStateToProps = (state: IThreadsState) => ({ loading: state.loading});
+const mapStateToProps = (state: IThreadsState) => ({ loading: state.loading });
 
 const mapDispatchToProps = {
   fetchThreads: fetchThreadsRoutine

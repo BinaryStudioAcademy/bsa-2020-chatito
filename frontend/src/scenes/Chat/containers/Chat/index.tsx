@@ -8,6 +8,7 @@ import ChatFooter from '../ChatFooter';
 const ChatContainer = () => (
   <div className={styles.chatContainer}>
     <ChatHeader />
+    CHAT
     <ChatBody />
     <ChatFooter />
   </div>

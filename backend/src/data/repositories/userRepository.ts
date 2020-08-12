@@ -2,6 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { User } from '../entities/User';
 import { ICreateUser } from '../../common/models/user/ICreateUser';
 import { IUserClient } from '../../common/models/user/IUserClient';
+import { Chat } from '../entities/Chat';
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
@@ -11,12 +12,22 @@ class UserRepository extends Repository<User> {
     return user.save();
   }
 
+  async addWorkspace(id: string, workspaceId: string): Promise<User> {
+    await this.createQueryBuilder().relation(User, 'workspaces').of(id).add(workspaceId);
+    return this.findOne({ where: { id }, relations: ['workspaces'] });
+  }
+
   getAll(): Promise<User[]> {
     return this.find();
   }
 
   getById(id: string): Promise<User> {
-    return this.findOne({ where: { id }, relations: ['workspaces'] });
+    return this.findOne({ where: { id }, relations: ['workspaces', 'chats'] });
+  }
+
+  async getAllUserChats(id: string): Promise<Chat[]> {
+    const user = await this.getById(id);
+    return user.chats;
   }
 
   async deleteUser(id: string): Promise<void> {

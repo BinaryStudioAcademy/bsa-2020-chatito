@@ -1,7 +1,7 @@
 import { IUser } from '../user/IUser';
 
 export interface IPost {
-  user: Partial<IUser>;
+  user: IUser;
   text: string;
   createdAt: Date;
 }
