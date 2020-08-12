@@ -21,7 +21,7 @@ function* checkInvitedUserRegisteredRequest({ payload }: Routine<any>) {
     yield put(setInvitedUserEmailRoutine(invitedUserEmail));
     yield put(selectWorkspaceRoutine(workspace));
 
-    yield isRegistered ? put(push(Routes.SignIn)) : put(push(Routes.SignIn));
+    yield isRegistered ? put(push(Routes.SignIn)) : put(push(Routes.SignUp));
 
     yield put(checkInvitedUserRegisteredRoutine.success());
   } catch (error) {

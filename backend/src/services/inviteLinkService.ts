@@ -1,11 +1,9 @@
-import jwt from 'jsonwebtoken';
-import { secret, expiresIn } from '../config/inviteLinkConfig';
-
 import { ISendInviteLink } from '../common/models/inviteLink/ISendInviteLink';
 import { sendInviteLinkMail } from './mailService';
+import { createInviteToken } from '../common/utils/tokenHelper';
 
 export const sendInviteLink = async ({ email, workspaceId }: ISendInviteLink) => {
-  const inviteLinkToken = jwt.sign({ email, workspaceId }, secret, { expiresIn });
+  const inviteLinkToken = createInviteToken({ email, workspaceId });
 
   await sendInviteLinkMail({ to: email, token: inviteLinkToken });
 
