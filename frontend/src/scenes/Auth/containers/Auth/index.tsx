@@ -29,6 +29,7 @@ interface IProps {
   forgotPassword: IBindingCallback1<IForgotPasswordInput>;
   resetPassword: IBindingCallback1<IResetPasswordInput>;
   workspace: IWorkspace;
+  invitedUserEmail?: string;
 }
 
 const Auth = ({
@@ -36,7 +37,8 @@ const Auth = ({
   addNewUser,
   forgotPassword,
   resetPassword,
-  workspace }: IProps) => (
+  workspace,
+  invitedUserEmail }: IProps) => (
     <div className={styles.pageLayout}>
       <div className={styles.leftSide}>
         <Mascot className={styles.mascot} />
@@ -46,13 +48,27 @@ const Auth = ({
         <Route
           exact
           path={Routes.SignIn}
-          render={props => <SignIn {...props} loginUser={loginUser} workspace={workspace} />}
+          render={props => (
+            <SignIn
+              {...props}
+              loginUser={loginUser}
+              workspace={workspace}
+              invitedUserEmail={invitedUserEmail}
+            />
+          )}
           key={Routes.SignIn}
         />
         <Route
           exact
           path={Routes.SignUp}
-          render={props => <SignUp {...props} addNewUser={addNewUser} workspace={workspace} />}
+          render={props => (
+            <SignUp
+              {...props}
+              addNewUser={addNewUser}
+              workspace={workspace}
+              invitedUserEmail={invitedUserEmail}
+            />
+          )}
           key={Routes.SignUp}
         />
         <Route
@@ -72,7 +88,8 @@ const Auth = ({
 );
 
 const mapStateToProps = (state: IAppState) => ({
-  workspace: state.workspace.workspace
+  workspace: state.workspace.workspace,
+  invitedUserEmail: state.user.invitedUserEmail
 });
 
 const mapDispatchToProps = {

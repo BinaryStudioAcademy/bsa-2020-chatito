@@ -9,17 +9,24 @@ import { Routes } from 'common/enums/Routes';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import InputField from 'components/InputField/InputField';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
+import { toastrError } from 'services/toastrService';
 
 interface IProps {
   addNewUser: IBindingCallback1<IRegisterUser>;
   workspace: IWorkspace;
+  invitedUserEmail?: string;
 }
 
-export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspace }) => {
+export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspace, invitedUserEmail }) => {
   const onSubmit = (values: IRegisterUser) => {
     const { email, password, fullName } = values;
     const user = { email, password, fullName, workspace };
-    addNewUser(user);
+
+    if (invitedUserEmail && email !== invitedUserEmail) {
+      toastrError('Please, enter email which you where invited with.');
+    } else {
+      addNewUser(user);
+    }
   };
 
   const initialValues = {
