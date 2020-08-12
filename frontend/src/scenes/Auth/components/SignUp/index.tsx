@@ -29,9 +29,15 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspace }) => 
     confirmPassword: '',
     workspace
   };
+
+  const invitationHeaderText = workspace.name ? ` to ${workspace.name}` : '';
+
   return (
     <div className={styles.signUp}>
-      <h1 className={styles.header}>Sign up</h1>
+      <h1 className={styles.header}>
+        Sign up
+        {invitationHeaderText}
+      </h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

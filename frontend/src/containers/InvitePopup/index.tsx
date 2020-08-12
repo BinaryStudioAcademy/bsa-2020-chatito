@@ -18,15 +18,16 @@ import ModalWindow from 'components/ModalWindow';
 
 import InputField from 'components/InputField/InputField';
 import { inviteLinkSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 interface IProps {
   isShown: boolean;
-  workspaceId: string;
+  workspace: IWorkspace;
   sendInviteLink: IBindingCallback1<ISendInviteLink>;
   showModal: IBindingCallback1<IModalRoutine>;
 }
 
-const InvitePopup = ({ isShown, workspaceId, sendInviteLink, showModal }: IProps) => {
+const InvitePopup = ({ isShown, workspace, sendInviteLink, showModal }: IProps) => {
   const handleCloseModal = () => {
     showModal({ modalType: ModalTypes.InvitePopup, show: false });
   };
@@ -34,17 +35,20 @@ const InvitePopup = ({ isShown, workspaceId, sendInviteLink, showModal }: IProps
   const onSubmit = (values: ISendInviteLink) => {
     sendInviteLink({
       email: values.email,
-      workspaceId
+      workspaceId: workspace.id
     });
   };
 
   const initialValues = {
     email: '',
-    workspaceId
+    workspaceId: workspace.id
   };
 
   const modalHeader = (
-    <h4>Invite to Chatito</h4>
+    <h4>
+      <span>Invite to </span>
+      {workspace.name}
+    </h4>
   );
 
   const modalBody = (
@@ -83,7 +87,7 @@ const InvitePopup = ({ isShown, workspaceId, sendInviteLink, showModal }: IProps
 
 const mapStateToProps = (state: IAppState) => ({
   isShown: state.modal.invitePopup,
-  workspaceId: state.workspace.workspace.id
+  workspace: state.workspace.workspace
 });
 
 const mapDispatchToProps = {

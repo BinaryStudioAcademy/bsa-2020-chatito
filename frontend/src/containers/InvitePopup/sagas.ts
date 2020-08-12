@@ -13,6 +13,7 @@ function* sendInviteLinkRequest({ payload }: Routine<any>) {
 
     yield put(sendInviteLinkRoutine.success());
     yield put(showModalRoutine({ modalType: ModalTypes.InvitePopup, show: false }));
+    yield call(toastr.success, 'Success', `Invitation to ${payload.email} sent.`);
   } catch (error) {
     yield call(toastr.error, 'Error', 'Something went wrong while sending an invite link, please try again.');
     yield put(sendInviteLinkRoutine.failure());

@@ -33,9 +33,14 @@ const SignIn: FunctionComponent<IProps> = ({ loginUser, workspace }) => {
     workspace
   };
 
+  const invitationHeaderText = workspace.name ? ` to ${workspace.name}` : '';
+
   return (
     <div className={styles.signIn}>
-      <h1 className={styles.header}>Welcome</h1>
+      <h1 className={styles.header}>
+        Welcome
+        {invitationHeaderText}
+      </h1>
       <p className={styles.signUpLink}>
         {'New here? '}
         <Link className={styles.authLink} to={Routes.SignUp}>Create an account</Link>

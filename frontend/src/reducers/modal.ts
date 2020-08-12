@@ -11,7 +11,7 @@ export interface IModalState {
 const initialState: IModalState = {
   editProfile: false,
   createChannel: false,
-  invitePopup: true
+  invitePopup: false
 };
 
 export default (state = initialState, action: Routine<any>) => {
