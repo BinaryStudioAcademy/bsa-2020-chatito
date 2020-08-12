@@ -1,24 +1,57 @@
-.workspaceItemBlock
-  height: 60px
-  box-sizing: border-box
+.item, .selectedItem
+  width: 100px
+  padding: 10px 0
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  cursor: pointer
+
+.item
+  background-color: var(--workspace-toolbar-background)
+  &:hover
+    transition: all .2s
+    background-color: var(--workspace-toolbar-select-background)
+
+    .avatar
+      border: 2px solid var(--workspace-toolbar-select-border-color)
+      padding: 6px
+
+    .itemName
+      color: var(--workspace-toolbar-font-color-secondary)
+
+.selectedItem
+  background-color: var(--workspace-toolbar-select-background)
+
+.itemWithAvatar, .itemWithoutAvatar
+  height: 50px
+  width: 50px
+  border-radius: 50%
+
+.itemWithoutAvatar
+  background-color: var(--workspace-icon-background)
   display: flex
   justify-content: center
   align-items: center
-  
-.imageContainer
-  display: flex
-  justify-content: center
-  border-radius: 12px
+  color: var(--workspace-toolbar-font-color-primary)
+  font-weight: bolder
+
+.avatar, .selectedAvatar
+  padding: 8px
+  border-radius: 50%
+
+.selectedAvatar
+  border: 2px solid var(--workspace-toolbar-select-border-color)
+  padding: 6px
+
+.itemName, .selectedItemName
   margin: 3px 0
-  box-sizing: border-box
+  font-size: 13px
+  text-align: center
 
-.item
-  width: 39px
-  height: 39px
-  margin: 3px
-  border-radius: 8px
-  object-fit: cover
+.itemName
+  color: var(--workspace-toolbar-font-color-primary)
 
-.activeWorkspace
-  box-sizing: border-box
-  border: 4px solid #ffffff
+.selectedItemName
+  color: var(--workspace-toolbar-font-color-secondary)
+

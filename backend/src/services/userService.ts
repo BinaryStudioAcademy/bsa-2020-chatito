@@ -1,17 +1,18 @@
 import { getCustomRepository } from 'typeorm';
 import UserRepository from '../data/repositories/userRepository';
 import { IUserClient } from '../common/models/user/IUserClient';
-import { fromUserToUserClient } from '../common/mappers/user';
+import { fromUserToUserClient, fromUserToUserWithWorkspaces } from '../common/mappers/user';
 import { IEditStatus } from '../common/models/user/IEditStatus';
 
 export const getUsers = async () => {
   const users = await getCustomRepository(UserRepository).getAll();
-  return users;
+  const clientUsers = users.map(user => fromUserToUserClient(user));
+  return clientUsers;
 };
 
 export const getUserById = async (id: string) => {
   const user = await getCustomRepository(UserRepository).getById(id);
-  return user;
+  return fromUserToUserWithWorkspaces(user);
 };
 
 export const deleteUser = async (id: string): Promise<void> => {
