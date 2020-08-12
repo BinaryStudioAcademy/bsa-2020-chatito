@@ -18,8 +18,6 @@ interface IProps {
   hideCloseBtn?: boolean;
 }
 
-const createMessage = (id: string, text = '') => <div key={id} className={styles.mockMessage}>{text}</div>;
-
 const Thread: FunctionComponent<IProps> = ({
   width = 'auto',
   post,
@@ -44,13 +42,10 @@ const Thread: FunctionComponent<IProps> = ({
       <div>
         <Post post={post} />
       </div>
-
       <div className={styles.threadComments}>
-
         <div className={styles.commentsWrapper}>
-          {comments.map(comment => createMessage(comment.id, comment.text))}
+          {comments.map(comment => <Post key={comment.id} post={comment} />)}
         </div>
-
         <TextEditor placeholder="write a comment!" onSend={sendComment} height={130} />
       </div>
     </div>

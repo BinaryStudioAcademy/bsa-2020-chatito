@@ -1,4 +1,8 @@
-import { addWorkspaceRoutine, fetchPostCommentsRoutine, addCommentRoutine } from 'scenes/Workspace/routines';
+import {
+  addWorkspaceRoutine,
+  fetchPostCommentsRoutine,
+  addCommentRoutine,
+  setActiveThreadRoutine } from 'scenes/Workspace/routines';
 import { Routine } from 'redux-saga-routines';
 import { takeEvery, put, call, all } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
@@ -52,10 +56,25 @@ function* watchFetchPostCommentsRequest() {
   yield takeEvery(fetchPostCommentsRoutine.TRIGGER, fetchPostCommentsRequest);
 }
 
+function* setActiveThread({ payload }: Routine<any>) {
+  try {
+    const { id } = payload;
+    yield put(fetchPostCommentsRoutine.trigger(id));
+  } catch (error) {
+    yield call(toastr.error, 'Error', error.message);
+    yield put(setActiveThreadRoutine.failure());
+  }
+}
+
+function* watchSetActiveThread() {
+  yield takeEvery(setActiveThreadRoutine.TRIGGER, setActiveThread);
+}
+
 export default function* workspaceSaga() {
   yield all([
     watchPostWorkspaceName(),
     watchAddCommentRequest(),
-    watchFetchPostCommentsRequest()
+    watchFetchPostCommentsRequest(),
+    watchSetActiveThread()
   ]);
 }

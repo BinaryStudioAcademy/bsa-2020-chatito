@@ -13,9 +13,10 @@ import Thread from 'scenes/Workspace/containers/Thread';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
-import { selectWorkspaceRoutine, setActiveThreadRoutine } from 'scenes/Workspace/routines';
+import { selectWorkspaceRoutine, setActiveThreadRoutine, showRightSideMenuRoutine } from 'scenes/Workspace/routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
+import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 
 export interface IContext {
   setShowProfileHandler: () => void;
@@ -35,7 +36,10 @@ interface IProps {
   userWorkspaces: IWorkspace[];
   router: (route: Routes) => void;
   selectWorkspace: (workspace: IWorkspace) => void;
+  showRightSideMenu: RightMenuTypes;
+  toggleRightMenu: IBindingCallback1<RightMenuTypes>;
   toggleActiveThread: IBindingCallback1<IPost>;
+  activeThreadPostId: string;
 }
 
 const Workspace: React.FC<IProps> = ({
@@ -44,11 +48,12 @@ const Workspace: React.FC<IProps> = ({
   userWorkspaces,
   router,
   selectWorkspace,
-  toggleActiveThread }) => {
+  showRightSideMenu,
+  toggleRightMenu,
+  toggleActiveThread,
+  activeThreadPostId
+}) => {
   if (!currentUserId) return <></>;
-
-  const [showProfile, setShowProfile] = useState(false);
-  const [showThread, setShowThread] = useState(false);
   const [userData, setUserData] = useState<IUser | {}>({});
 
   useEffect(() => {
@@ -62,18 +67,18 @@ const Workspace: React.FC<IProps> = ({
   }, [match]);
 
   const setShowProfileHandler = () => {
-    setShowProfile(!showProfile);
-    setShowThread(false);
+    toggleRightMenu(RightMenuTypes.Profile);
+    // toggleActiveThread({ id: ''});
   };
 
   const showThreadHandler = (post: IPost) => {
-    setShowThread(!showThread);
-    setShowProfile(false);
+    // if (post.id === activeThreadPostId) return;
+    toggleRightMenu(RightMenuTypes.Thread);
     toggleActiveThread(post);
   };
 
-  const hideThreadHandler = () => {
-    setShowThread(false);
+  const hideRightMenu = () => {
+    toggleRightMenu(RightMenuTypes.None);
   };
 
   const setUserDataHandler = (user: IUser | {}) => {
@@ -89,7 +94,18 @@ const Workspace: React.FC<IProps> = ({
     />
   );
 
-  const renderThread = () => <Thread onHide={hideThreadHandler} />;
+  const renderThread = () => <Thread onHide={hideRightMenu} />;
+
+  const renderRightMenu = () => {
+    switch (showRightSideMenu) {
+      case RightMenuTypes.Profile:
+        return renderProfile();
+      case RightMenuTypes.Thread:
+        return renderThread();
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className={styles.mainContainer}>
@@ -117,8 +133,7 @@ const Workspace: React.FC<IProps> = ({
           </div>
 
           <div className={styles.RightPanelWrapper}>
-            {showProfile && renderProfile()}
-            {showThread && renderThread()}
+            {showRightSideMenu && renderRightMenu()}
           </div>
 
         </div>
@@ -130,13 +145,16 @@ const Workspace: React.FC<IProps> = ({
 
 const mapStateToProps = (state: IAppState) => ({
   currentUserId: state.user.user?.id,
-  userWorkspaces: state.user.workspaceList
+  userWorkspaces: state.user.workspaceList,
+  showRightSideMenu: state.workspace.showRightSideMenu,
+  activeThreadPostId: state.workspace.activeThread.post.id
 });
 
 const mapDispatchToProps = {
   router: push,
   selectWorkspace: selectWorkspaceRoutine,
-  toggleActiveThread: setActiveThreadRoutine
+  toggleActiveThread: setActiveThreadRoutine,
+  toggleRightMenu: showRightSideMenuRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Workspace);

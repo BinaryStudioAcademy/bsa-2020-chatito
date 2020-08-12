@@ -21,16 +21,12 @@ interface IProps {
 
 const Thread: React.FC<IProps> = ({
   post,
-  comments,
+  comments = [],
   fetchPostComments,
   sendComment,
   onHide
 }) => {
   const { id: postId } = post;
-
-  useEffect(() => {
-    fetchPostComments(postId);
-  }, []);
 
   const sendCommentHandler = (text: string) => {
     sendComment({ postId, text });
@@ -38,16 +34,13 @@ const Thread: React.FC<IProps> = ({
 
   return (
     <>
-      { comments
-        ? (
-          <ThreadView
-            post={post}
-            comments={comments}
-            sendComment={sendCommentHandler}
-            onHide={onHide}
-          />
-        )
-        : null }
+      <ThreadView
+        width="400px"
+        post={post}
+        comments={comments}
+        sendComment={sendCommentHandler}
+        onHide={onHide}
+      />
     </>
   );
 };

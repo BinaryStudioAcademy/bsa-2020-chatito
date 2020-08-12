@@ -3,10 +3,12 @@ import {
   selectChatRoutine,
   selectWorkspaceRoutine,
   setActiveThreadRoutine,
-  fetchPostCommentsRoutine } from '../routines';
+  fetchPostCommentsRoutine,
+  showRightSideMenuRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/workstate/chat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
+import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
@@ -15,6 +17,7 @@ export interface IWorkspaceState {
   selectedChat: IChat;
   channels: Array<IChat>;
   directMessages: Array<IChat>;
+  showRightSideMenu: RightMenuTypes;
   activeThread: IActiveThread;
 }
 
@@ -25,6 +28,7 @@ const initialState: IWorkspaceState = {
   selectedChat: { id: '', name: '', isPrivate: false },
   channels: [],
   directMessages: [],
+  showRightSideMenu: RightMenuTypes.None,
   activeThread: { post: { id: '', user: {}, text: '', createdAt: new Date() }, comments: [] }
 };
 
@@ -41,6 +45,11 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         workspace: payload
       };
     }
+    case showRightSideMenuRoutine.TRIGGER:
+      return {
+        ...state,
+        showRightSideMenu: payload
+      };
     case setActiveThreadRoutine.TRIGGER:
       return {
         ...state,
