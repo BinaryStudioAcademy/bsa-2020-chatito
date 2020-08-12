@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { IBindingAction } from 'common/models/callback/IBindingActions';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IAppState } from 'common/models/store';
 import { Routes } from 'common/enums/Routes';
 import { getAccessToken } from 'common/helpers/storageHelper';
