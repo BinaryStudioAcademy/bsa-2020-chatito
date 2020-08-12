@@ -17,8 +17,6 @@ import { selectWorkspaceRoutine, setActiveThreadRoutine } from 'scenes/Workspace
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
 
-
-
 export interface IContext {
   setShowProfileHandler: () => void;
   setUserDataHandler: (user: IUser | {}) => void;
@@ -40,7 +38,13 @@ interface IProps {
   toggleActiveThread: IBindingCallback1<IPost>;
 }
 
-const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, router, selectWorkspace, toggleActiveThread }) => {
+const Workspace: React.FC<IProps> = ({
+  currentUserId,
+  match,
+  userWorkspaces,
+  router,
+  selectWorkspace,
+  toggleActiveThread }) => {
   if (!currentUserId) return <></>;
 
   const [showProfile, setShowProfile] = useState(false);

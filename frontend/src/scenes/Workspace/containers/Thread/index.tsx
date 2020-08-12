@@ -4,7 +4,7 @@ import styles from './styles.module.sass';
 
 import ThreadView from 'containers/Thread';
 import { IUser } from 'common/models/user/IUser';
-import { fetchPostCommentsRoutine, addCommentRoutine } from '../../routines/routines';
+import { fetchPostCommentsRoutine, addCommentRoutine } from '../../routines';
 import { IAppState } from 'common/models/store';
 import { IPost } from 'common/models/post/IPost';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
