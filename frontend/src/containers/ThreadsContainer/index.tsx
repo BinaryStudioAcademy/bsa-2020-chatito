@@ -29,9 +29,9 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, loading }) 
             key={thread.id}
             className={styles.thread}
           >
-            <Thread
+            {/* <Thread
               thread={thread}
-            />
+            /> */}
           </div>
         ))}
       </div>

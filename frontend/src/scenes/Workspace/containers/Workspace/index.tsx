@@ -9,15 +9,19 @@ import { IUser } from 'common/models/user/IUser';
 import { IAppState } from 'common/models/store';
 import ChatScene from 'scenes/Chat';
 import ChatToolbar from '../ChatToolbar';
+import Thread from 'scenes/Workspace/containers/Thread';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
-import { selectWorkspaceRoutine } from 'scenes/Workspace/routines';
+import { selectWorkspaceRoutine, setActiveThreadRoutine } from 'scenes/Workspace/routines';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { IPost } from 'common/models/post/IPost';
 import ThreadsContainer from 'containers/ThreadsContainer';
 
 export interface IContext {
   setShowProfileHandler: () => void;
   setUserDataHandler: (user: IUser | {}) => void;
+  showThreadHandler: IBindingCallback1<IPost>;
 }
 
 export const ProfileContext = createContext<IContext | {}>({});
@@ -32,12 +36,20 @@ interface IProps {
   userWorkspaces: IWorkspace[];
   router: (route: Routes) => void;
   selectWorkspace: (workspace: IWorkspace) => void;
+  toggleActiveThread: IBindingCallback1<IPost>;
 }
 
-const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, router, selectWorkspace }) => {
+const Workspace: React.FC<IProps> = ({
+  currentUserId,
+  match,
+  userWorkspaces,
+  router,
+  selectWorkspace,
+  toggleActiveThread }) => {
   if (!currentUserId) return <></>;
 
   const [showProfile, setShowProfile] = useState(false);
+  const [showThread, setShowThread] = useState(false);
   const [userData, setUserData] = useState<IUser | {}>({});
 
   useEffect(() => {
@@ -52,6 +64,17 @@ const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, rou
 
   const setShowProfileHandler = () => {
     setShowProfile(!showProfile);
+    setShowThread(false);
+  };
+
+  const showThreadHandler = (post: IPost) => {
+    setShowThread(!showThread);
+    setShowProfile(false);
+    toggleActiveThread(post);
+  };
+
+  const hideThreadHandler = () => {
+    setShowThread(false);
   };
 
   const setUserDataHandler = (user: IUser | {}) => {
@@ -67,6 +90,8 @@ const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, rou
     />
   );
 
+  const renderThread = () => <Thread onHide={hideThreadHandler} />;
+
   return (
     <div className={styles.mainContainer}>
       <Header />
@@ -80,7 +105,14 @@ const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, rou
           </div>
 
           <div className={styles.ChatWrapper}>
-            <ProfileContext.Provider value={{ setShowProfileHandler, setUserDataHandler }}>
+            {/* rename Profile context, as it passing thread context too */}
+            <ProfileContext.Provider
+              value={{
+                setShowProfileHandler,
+                setUserDataHandler,
+                showThreadHandler
+              }}
+            >
               {/* <ChatScene /> */}
               <ThreadsContainer />
             </ProfileContext.Provider>
@@ -88,6 +120,7 @@ const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, rou
 
           <div className={styles.RightPanelWrapper}>
             {showProfile && renderProfile()}
+            {showThread && renderThread()}
           </div>
 
         </div>
@@ -104,7 +137,8 @@ const mapStateToProps = (state: IAppState) => ({
 
 const mapDispatchToProps = {
   router: push,
-  selectWorkspace: selectWorkspaceRoutine
+  selectWorkspace: selectWorkspaceRoutine,
+  toggleActiveThread: setActiveThreadRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Workspace);
