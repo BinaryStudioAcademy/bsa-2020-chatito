@@ -6,13 +6,17 @@ import { IPost } from 'common/models/post/IPost';
 export interface IChatState {
   chat?: IChat;
   posts: IPost[];
+  loading: boolean;
+  error: any;
 }
 
 const initialState: IChatState = {
-  posts: []
+  posts: [],
+  loading: false,
+  error: ''
 };
 
-const workspace = (state: IChatState = initialState, { type, payload }: Routine<any>) => {
+const reducer = (state: IChatState = initialState, { type, payload }: Routine<any>) => {
   switch (type) {
     case setCurrentChatRoutine.TRIGGER:
       return {
@@ -31,4 +35,5 @@ const workspace = (state: IChatState = initialState, { type, payload }: Routine<
   }
 };
 
-export default workspace;
+export default reducer;
+

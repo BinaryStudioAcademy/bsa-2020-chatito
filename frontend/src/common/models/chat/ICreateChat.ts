@@ -1,12 +1,11 @@
+import { IUser } from 'common/models/user/IUser';
 import { ChatType } from "common/enums/ChatType";
-import { IUser } from "../user/IUser";
 
-export interface IChat {
-  id: string;
+export interface ICreateChat {
   name: string;
+  description?: string;
   type: ChatType;
   isPrivate: boolean;
   workspaceName: string;
-  createdByUserId: string;
-  users: IUser[];
+  users?: IUser[];
 }

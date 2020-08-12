@@ -1,5 +1,9 @@
 import { Routine } from 'redux-saga-routines';
-import { addWorkspaceRoutine, selectChatRoutine, fetchChannelsRoutine, selectWorkspaceRoutine } from '../routines';
+import {
+  selectWorkspaceRoutine,
+  fetchUserChatsRoutine
+} from '../routines';
+
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { ChatType } from 'common/enums/ChatType';
 import { IChat } from 'common/models/chat/IChat';
@@ -13,7 +17,7 @@ export interface IWorkspaceState {
 }
 
 const initialState: IWorkspaceState = {
-  workspace: { id: '', name: '', hash: '', imageUrl: '' },
+  workspace: { id: '', name: '', hash: '', imageUrl: '', users: [] },
   loading: false,
   error: '',
   channels: [],
@@ -22,31 +26,26 @@ const initialState: IWorkspaceState = {
 
 const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>) => {
   switch (type) {
-    case selectChatRoutine.TRIGGER:
-      return {
-        ...state,
-        selectedChat: payload
-      };
     case selectWorkspaceRoutine.TRIGGER:
       return {
         ...state,
         workspace: payload
       };
-    case fetchChannelsRoutine.SUCCESS:
+    case fetchUserChatsRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case fetchUserChatsRoutine.SUCCESS:
       return {
         ...state,
         channels: payload.filter((chat: IChat) => chat.type === ChatType.Channel),
-        directMessages: payload.filter((chat: IChat) => chat.type === ChatType.DirectMessage)
+        directMessages: payload.filter((chat: IChat) => chat.type === ChatType.DirectMessage),
+        loading: false
       };
-
-    case addWorkspaceRoutine.SUCCESS: {
-      const addWorkspace = { ...payload };
-
+    case fetchUserChatsRoutine.FAILURE:
       return {
-        ...state,
-        workspace: addWorkspace
+        ...state, loading: false
       };
-    }
     default:
       return state;
   }

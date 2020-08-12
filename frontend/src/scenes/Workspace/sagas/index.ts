@@ -1,11 +1,12 @@
-import { addWorkspaceRoutine, fetchChannelsRoutine } from '../routines';
+import { addWorkspaceRoutine, fetchUserChatsRoutine } from 'scenes/Workspace/routines';
 import { Routine } from 'redux-saga-routines';
 import { takeEvery, put, call, all } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import { addWorkspace } from 'services/workspaceService';
-import { fetchUserChannels } from 'services/channelService';
 import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
+import { toastrError } from 'services/toastrService';
+import { fetchUserChats, createChat } from 'services/chatServise';
 
 function* addWorkspaceReq({ payload }: Routine<any>) {
   try {
@@ -22,23 +23,23 @@ function* watchPostWorkspaceName() {
   yield takeEvery(addWorkspaceRoutine.TRIGGER, addWorkspaceReq);
 }
 
-function* fetchChannelsRequest() {
+function* fetchUserChatsRequest() {
   try {
-    const response = yield call(fetchUserChannels);
-    yield put(fetchChannelsRoutine.success(response));
+    const response = yield call(fetchUserChats);
+    yield put(fetchUserChatsRoutine.success(response));
   } catch (error) {
-    yield call(toastr.error, 'Error', error.message);
-    yield put(fetchChannelsRoutine.failure(error));
+    yield call(toastrError, error.message);
+    yield put(fetchUserChatsRoutine.failure(error.message));
   }
 }
 
-function* watchFetchChannelsRequest() {
-  yield takeEvery(fetchChannelsRoutine.TRIGGER, fetchChannelsRequest);
+function* watchFetchUserChatsRequest() {
+  yield takeEvery(fetchUserChatsRoutine.TRIGGER, fetchUserChatsRequest);
 }
 
 export default function* workspaceSaga() {
   yield all([
     watchPostWorkspaceName(),
-    watchFetchChannelsRequest()
+    watchFetchUserChatsRequest()
   ]);
 }

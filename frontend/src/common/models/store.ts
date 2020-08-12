@@ -10,6 +10,6 @@ export interface IAppState {
   user: IUserState;
   modal: IModalState;
   workspace: IWorkspaceState;
-  errorBoundary: IErrorBoundaryState;
   chat: IChatState;
+  errorBoundary: IErrorBoundaryState;
 }

@@ -1,11 +1,15 @@
-// eslint-disable-next-line
 import api from 'common/helpers/apiHelper';
-import { ICreateChannel } from 'common/models/channel/ICreateChannel';
+import { ICreateChat } from 'common/models/chat/ICreateChat';
 import { ICreatePost } from 'common/models/post/ICreatePost';
 
-// eslint-disable-next-line
-export async function createChannel(payload: ICreateChannel) {
-  return new Promise(resolve => resolve(true));
+export async function createChat(payload: ICreateChat) {
+  const response = await api.post('/api/chats', payload);
+  return response;
+}
+
+export async function fetchUserChats() {
+  const response = await api.get('/api/chats');
+  return response;
 }
 
 export async function fetchUserChannels() {
