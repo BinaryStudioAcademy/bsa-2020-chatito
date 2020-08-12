@@ -20,7 +20,19 @@ export interface IWorkspaceState {
   showRightSideMenu: RightMenuTypes;
   activeThread: IActiveThread;
 }
-const activeThreadInitialState = { post: { id: '', user: {}, text: '', createdAt: new Date() }, comments: [] };
+
+const activeThreadInitialState = {
+  post:
+    { id: '',
+      user: {
+        id: '',
+        email: '',
+        fullName: '',
+        displayName: ''
+      },
+      text: '',
+      createdAt: new Date() },
+  comments: [] };
 const selectedChatInitialState = { id: '', name: '', isPrivate: false };
 const workspaceInitialState = { id: '', name: '', hash: '', imageUrl: '' };
 

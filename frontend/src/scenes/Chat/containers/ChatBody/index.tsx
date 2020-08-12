@@ -1,7 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styles from './styles.module.sass';
 import Post from 'components/Post/index';
-
+import { IBindingAction } from 'common/models/callback/IBindingActions';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { IPost } from 'common/models/post/IPost';
+import { setActiveThreadRoutine, showRightSideMenuRoutine } from 'scenes/Workspace/routines';
+import { connect } from 'react-redux';
 // mocked post data
 const postMock = {
   user: {
@@ -18,19 +22,20 @@ const postMock = {
   createdAt: new Date('2020-08-11T12:40:36.072Z')
 };
 
-const ChatBody = () => (
+interface IProps {
+  openProfile: IBindingAction;
+  openThread: IBindingCallback1<IPost>;
+}
+
+const ChatBody = ({ openProfile, openThread }: IProps) => (
   <div className={styles.chatBody}>
-    <Post post={postMock} />
+    <Post post={postMock} openThread={openThread} openProfile={openProfile} />
   </div>
 );
 
-export default ChatBody;
+const mapDispatchToProps = {
+  openProfile: showRightSideMenuRoutine,
+  openThread: setActiveThreadRoutine
+};
 
-// return (
-//   <div className={styles.chatBody}>
-//     <div />
-//     <button type="button" onClick={setShowProfileHandler}>Show profile</button>
-//     <button type="button" onClick={() => showThreadHandler(postMock)}>Show thread</button>
-//   </div>
-// );
-// };
+export default connect(null, mapDispatchToProps)(ChatBody);

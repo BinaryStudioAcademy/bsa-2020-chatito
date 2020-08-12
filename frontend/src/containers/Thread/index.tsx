@@ -16,6 +16,7 @@ interface IProps {
   sendComment: IBindingCallback1<string>;
   onHide?: IBindingAction;
   hideCloseBtn?: boolean;
+  openProfile: IBindingAction;
 }
 
 const Thread: FunctionComponent<IProps> = ({
@@ -24,7 +25,8 @@ const Thread: FunctionComponent<IProps> = ({
   comments,
   sendComment,
   onHide,
-  hideCloseBtn
+  hideCloseBtn,
+  openProfile
 }) => {
   const participants = Array.from(new Set(comments.map(comment => comment.user.id)));
   return (
@@ -40,11 +42,11 @@ const Thread: FunctionComponent<IProps> = ({
         {!hideCloseBtn && <FontAwesomeIcon onClick={onHide} icon={faTimes} className={styles.closeBtn} />}
       </header>
       <div>
-        <Post post={post} />
+        <Post post={post} openProfile={openProfile} />
       </div>
       <div className={styles.threadComments}>
         <div className={styles.commentsWrapper}>
-          {comments.map(comment => <Post key={comment.id} post={comment} />)}
+          {comments.map(comment => <Post key={comment.id} post={comment} openProfile={openProfile} />)}
         </div>
         <TextEditor placeholder="write a comment!" onSend={sendComment} height={130} />
       </div>

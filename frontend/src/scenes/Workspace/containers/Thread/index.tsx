@@ -14,7 +14,7 @@ import { IBindingAction } from 'common/models/callback/IBindingActions';
 interface IProps {
   post: IPost;
   comments: IPost[];
-  fetchPostComments: IBindingCallback1<string>;
+  // fetchPostComments: IBindingCallback1<string>;
   sendComment: IBindingCallback1<ICreateComment>;
   onHide: IBindingAction;
 }
@@ -22,7 +22,6 @@ interface IProps {
 const Thread: React.FC<IProps> = ({
   post,
   comments = [],
-  fetchPostComments,
   sendComment,
   onHide
 }) => {
@@ -32,6 +31,17 @@ const Thread: React.FC<IProps> = ({
     sendComment({ postId, text });
   };
 
+  const setShowProfileHandler = () => {
+    console.log('open profile');
+    // toggleRightMenu(RightMenuTypes.Profile);
+  };
+
+  // const showThreadHandler = (post: IPost) => {
+  //   if (post.id === activeThreadPostId) return;
+  //   toggleRightMenu(RightMenuTypes.Thread);
+  //   toggleActiveThread(post);
+  // };
+
   return (
     <>
       <ThreadView
@@ -40,6 +50,7 @@ const Thread: React.FC<IProps> = ({
         comments={comments}
         sendComment={sendCommentHandler}
         onHide={onHide}
+        openProfile={setShowProfileHandler}
       />
     </>
   );
@@ -54,7 +65,6 @@ const mapStateToProps = (state: IAppState) => {
 };
 
 const mapDispatchToProps = {
-  fetchPostComments: fetchPostCommentsRoutine,
   sendComment: addCommentRoutine
 };
 
