@@ -13,7 +13,8 @@ Content-Type: application/json
     "user": {
         "email": "test@gmail.com",
         "password": "password",
-        "fullName": "Name Surname"
+        "fullName": "Name Surname",
+        "workspaceId": "08ba479d-9236-4f4c-8131-26cae71b85ba"
     }
 }
 ###
@@ -24,4 +25,12 @@ Content-Type: application/json
 {
     "email": "test@gmail.com",
     "password": "password"
+}
+###
+
+POST http://localhost:3001/api/users/invite
+Content-Type: application/json
+
+{
+    "token": "token"
 }
