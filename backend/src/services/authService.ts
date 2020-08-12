@@ -38,22 +38,25 @@ const createRefreshToken = async (user: User): Promise<IRefreshToken> => {
   }
 };
 
-export const register = async ({ password, ...userData }: IRegisterUser) => {
+export const register = async ({ password, workspaceId, ...userData }: IRegisterUser) => {
   const passwordHash = await hash(password);
-  const createUserData = fromRegisterUserToCreateUser({ ...userData, password: passwordHash });
+  const createUserData = fromRegisterUserToCreateUser({ ...userData, password: passwordHash, workspaceId });
 
   const newUser = await getCustomRepository(UserRepository).addUser(createUserData);
+  const user = workspaceId
+    ? await getCustomRepository(UserRepository).addWorkspace(newUser.id, workspaceId)
+    : newUser;
 
-  const refreshToken = await createRefreshToken(newUser);
+  const refreshToken = await createRefreshToken(user);
 
   return {
-    user: fromUserToUserWithWorkspaces(newUser),
+    user: fromUserToUserWithWorkspaces(user),
     accessToken: createToken({ id: newUser.id }),
     refreshToken: encrypt(refreshToken.id)
   };
 };
 
-export const login = async ({ email, password }: ILoginUser) => {
+export const login = async ({ email, password, workspaceId }: ILoginUser) => {
   try {
     const logUser = await getCustomRepository(UserRepository).getByEmail(email);
 
@@ -61,10 +64,13 @@ export const login = async ({ email, password }: ILoginUser) => {
       const pwdLogg = await compare(password, logUser.password);
 
       if (pwdLogg) {
-        const refreshToken = await createRefreshToken(logUser);
+        const user = workspaceId
+          ? await getCustomRepository(UserRepository).addWorkspace(logUser.id, workspaceId)
+          : logUser;
+        const refreshToken = await createRefreshToken(user);
 
         return {
-          user: fromUserToUserWithWorkspaces(logUser),
+          user: fromUserToUserWithWorkspaces(user),
           accessToken: createToken({ id: logUser.id }),
           refreshToken: encrypt(refreshToken.id)
         };

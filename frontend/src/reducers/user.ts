@@ -7,7 +7,8 @@ import {
   deleteAccountRoutine,
   forgotPasswordRoutine,
   resetPasswordRoutine,
-  editStatusRoutine
+  editStatusRoutine,
+  setInvitedUserRoutine
 } from 'routines/user';
 import { IUser } from 'common/models/user/IUser';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
@@ -15,12 +16,16 @@ import { addWorkspaceRoutine } from 'scenes/Workspace/routines';
 
 export interface IUserState {
   user?: IUser;
+  invitedUserEmail?: string;
+  invitedUserRegistered?: boolean;
   isLoading: boolean;
   isAuthorized: boolean;
   workspaceList: IWorkspace[];
 }
 
 const initialState: IUserState = {
+  invitedUserEmail: '',
+  invitedUserRegistered: undefined,
   isLoading: false,
   isAuthorized: false,
   workspaceList: []
@@ -124,6 +129,14 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case addWorkspaceRoutine.FAILURE: {
       return { ...state, loading: false };
     }
+
+    case setInvitedUserRoutine.TRIGGER: {
+      return {
+        ...state,
+        invitedUserEmail: payload.invitedUserEmail,
+        invitedUserRegistered: payload.invitedUserRegistered };
+    }
+
     default:
       return state;
   }

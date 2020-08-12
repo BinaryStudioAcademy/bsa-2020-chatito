@@ -5,7 +5,6 @@ import { fetchThreadsRoutine } from './routines';
 import { IThreadsState } from './reducers/reducer';
 import Thread from '../Thread';
 import { IThread } from 'common/models/thread/IThread';
-import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 
 interface IProps {
   fetchThreads: () => void;
@@ -25,13 +24,22 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, loading }) 
         <p className={styles.headerName}>Threads</p>
       </header>
       <div className={styles.threadsContainer}>
-        {threads.map((thread, index) => <div className={styles.thread}><Thread thread={thread.name} /></div>)}
+        {threads.map((thread, index) => (
+          <div
+            key={thread.id}
+            className={styles.thread}
+          >
+            <Thread
+              thread={thread}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
-const mapStateToProps = (state: IThreadsState) => ({ loading: state.loading});
+const mapStateToProps = (state: IThreadsState) => ({ loading: state.loading });
 
 const mapDispatchToProps = {
   fetchThreads: fetchThreadsRoutine
