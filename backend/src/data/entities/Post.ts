@@ -3,6 +3,7 @@ import { AbstractEntity } from '../abstract/AbstractEntity';
 import { User } from './User';
 import { Chat } from './Chat';
 import { Comment } from './Comment';
+import { PostReaction } from './PostReaction';
 
 @Entity()
 export class Post extends AbstractEntity {
@@ -25,4 +26,7 @@ export class Post extends AbstractEntity {
 
   @RelationId((post: Post) => post.chat)
   readonly chatId: string;
+
+  @OneToMany(() => PostReaction, postReaction => postReaction.reaction)
+  postReactions: PostReaction[];
 }
