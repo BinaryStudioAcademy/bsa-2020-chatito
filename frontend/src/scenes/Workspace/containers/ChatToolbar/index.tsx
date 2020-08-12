@@ -27,6 +27,8 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import InvitePopup from 'containers/InvitePopup';
+import CreateChannelModal from 'containers/CreateChannelModal';
+import CreateDirectModal from 'containers/CreateDirectModal';
 
 interface IProps {
   channels: IChat[];
@@ -118,31 +120,41 @@ const ChatToolbar = ({
           <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(chatPanel)} />
           <span className={styles.buttonText}>Chanels</span>
         </button>
-        <div className={styles.buttonPlus}>
-          <FontAwesomeIcon icon={faPlus} color="white" />
-        </div>
-        <div className={styles.chanelInfo}>
-          Create New Chanel
-        </div>
-      </div>
-      <div className={getClassNameDiv(chatPanel)}>
-        {channels.map(channel => (
-          userChannel(channel)))}
-      </div>
-      <hr className={styles.hrr} />
-      <div className={styles.buttonChanel}>
-        <button type="button" className={styles.buttonSelect} onClick={() => setDirectPanel(!directPanel)}>
-          <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(directPanel)} />
-          <span className={styles.buttonText}>Direct Messages</span>
+        <button
+          type="button"
+          className={styles.buttonPlus}
+          onClick={() => showModal({ modalType: ModalTypes.CreateChannel, show: true })}
+        >
+          <FontAwesomeIcon icon={faPlus} />
         </button>
-        <div className={styles.buttonPlus}>
-          <FontAwesomeIcon icon={faPlus} color="white" />
+        <div className={getClassNameDiv(chatPanel)}>
+          {channels.map(channel => (
+            userChannel(channel)))}
         </div>
-        <div className={styles.directInfo}>
-          Open a direct message
-          <br />
-          Ctrl + Shift + K
+        <hr className={styles.hrr} />
+        <div className={styles.buttonChanel}>
+          <button type="button" className={styles.buttonSelect} onClick={() => setDirectPanel(!directPanel)}>
+            <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(directPanel)} />
+            <span className={styles.buttonText}>Direct Messages</span>
+          </button>
+          <button
+            type="button"
+            className={styles.buttonPlus}
+            onClick={() => showModal({ modalType: ModalTypes.CreateDirect, show: true })}
+          >
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+          <div className={styles.directInfo}>
+            Open a direct message
+            <br />
+            Ctrl + Shift + K
+          </div>
         </div>
+        <div className={getClassNameDiv(directPanel)}>
+          {directMessages.map(directMessage => (
+            directChannel(directMessage)))}
+        </div>
+        <hr className={styles.hrr} />
       </div>
       <div className={getClassNameDiv(directPanel)}>
         {directMessages.map(directMessage => (
@@ -151,6 +163,8 @@ const ChatToolbar = ({
       <hr className={styles.hrr} />
 
       <InvitePopup />
+      <CreateChannelModal />
+      <CreateDirectModal />
     </div>
   );
 };
