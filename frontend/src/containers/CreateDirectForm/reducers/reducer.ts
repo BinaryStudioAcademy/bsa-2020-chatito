@@ -6,7 +6,6 @@ const initialState: IWorkspaceState = {
   workspace: { id: '', name: '', hash: '', imageUrl: '', users: [] },
   loading: false,
   error: '',
-  selectedChat: { id: '', name: '', isPrivate: false },
   channels: [],
   directMessages: [],
   users: []
