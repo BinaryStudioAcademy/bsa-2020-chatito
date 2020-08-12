@@ -13,7 +13,8 @@ import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
 import { selectWorkspaceRoutine } from 'scenes/Workspace/routines';
-import ThreadsContainer from 'containers/ThreadsContainer'
+import ThreadsContainer from 'containers/ThreadsContainer';
+
 export interface IContext {
   setShowProfileHandler: () => void;
   setUserDataHandler: (user: IUser | {}) => void;
@@ -80,7 +81,8 @@ const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, rou
 
           <div className={styles.ChatWrapper}>
             <ProfileContext.Provider value={{ setShowProfileHandler, setUserDataHandler }}>
-              <ChatScene />
+              {/* <ChatScene /> */}
+              <ThreadsContainer />
             </ProfileContext.Provider>
           </div>
 
