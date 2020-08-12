@@ -1,10 +1,11 @@
-import React, { FunctionComponent, useState, useContext } from 'react';
+import React, { FunctionComponent, useState, useContext, useRef } from 'react';
 import { OverlayTrigger, Image, Popover, Form } from 'react-bootstrap';
 import { IUser } from 'common/models/user/IUser';
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
+import { useKey } from 'common/hooks/onInputSubmit';
 // import { ProfileContext, IContext } from 'scenes/Workspace/containers/Workspace/index';
 
 // const {
@@ -18,21 +19,23 @@ interface IProps {
 
 const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend }) => {
   const [text, setText] = useState('');
+  const inputRef = useRef(null);
   // const onViewProfile = () => {
   //   setUserDataHandler(user);
   //   setShowProfileHandler();
   // };
-  const onSendMessage = (message: string) => {
+  const onSendMessage = () => {
     if (text.trim()) {
-      onSend(message);
+      onSend(text);
     }
     setText('');
   };
-  const keycheck = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      onSendMessage(text);
-    }
-  };
+  useKey({ key: 'enter', callback: onSendMessage, ref: inputRef });
+  // const keycheck = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === 'Enter') {
+  //     onSendMessage(text);
+  //   }
+  // };
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setText(e.target.value);
   };
@@ -59,7 +62,8 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend }) => {
           className={styles.sendMessageBlock}
         >
           <Form.Control
-            onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => keycheck(e)}
+            // onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => keycheck(e)}
+            ref={inputRef}
             className={styles.textField}
             type="text"
             value={text}
@@ -68,7 +72,7 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend }) => {
           <button
             type="button"
             className={`${styles.arrowButton} ${styles.arrowButton_reset}`}
-            onClick={() => onSendMessage(text)}
+            onClick={() => onSendMessage()}
             // need to realise logic to go to the chat with user
           >
             <FontAwesomeIcon

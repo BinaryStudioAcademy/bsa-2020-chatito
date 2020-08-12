@@ -5,15 +5,15 @@ import { fetchThreadsRoutine } from './routines';
 import { IThreadsState } from './reducers/reducer';
 import Thread from '../Thread';
 import { IThread } from 'common/models/thread/IThread';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 
-export type ISetThreads<T> = (arg: T) => void;
 interface IProps {
   fetchThreads: () => void;
   loading: boolean;
 }
 
 const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, loading }) => {
-  const [threads, setThreads]:[IThread[], ISetThreads<IThread[]>] = useState<IThread[]>([]);
+  const [threads, setThreads] = useState<IThread[]>([]);
   useEffect(() => {
     const fetched = [{ name: 'first', id: '1' }, { name: 'second', id: '2' }];
     // fetchThreads();
