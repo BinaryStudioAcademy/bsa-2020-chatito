@@ -16,7 +16,8 @@ class CommentRepository extends Repository<Comment> {
       relations: ['createdByUser'],
       where: {
         post: { id: postId }
-      }
+      },
+      order: { createdAt: 'ASC' }
     });
   }
 }

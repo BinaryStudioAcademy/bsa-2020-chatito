@@ -3,9 +3,13 @@ import { fromUserToUserClient } from './user';
 
 export const fromPostCommentsToPostCommentsClient = (comments: Comment[]) => {
   const updated = comments.map(comment => {
-    const { createdByUser } = comment;
+    const { id, createdAt, updatedAt, text, postId, createdByUser } = comment;
     return {
-      ...comment,
+      id,
+      createdAt,
+      updatedAt,
+      text,
+      postId,
       user: fromUserToUserClient(createdByUser)
     };
   });
