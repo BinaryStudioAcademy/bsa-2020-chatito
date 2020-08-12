@@ -38,8 +38,8 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
     case fetchUserChatsRoutine.SUCCESS:
       return {
         ...state,
-        channels: payload.filter((chat: IChat) => chat.type === ChatType.Channel),
-        directMessages: payload.filter((chat: IChat) => chat.type === ChatType.DirectMessage),
+        channels: payload.channels,
+        directMessages: payload.directMessages,
         loading: false
       };
     case fetchUserChatsRoutine.FAILURE:

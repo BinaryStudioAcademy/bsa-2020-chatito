@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { setCurrentChatRoutine, setPostsRoutine } from '../routines';
+import { setCurrentChatRoutine, setPostsRoutine, createChatRoutine } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 
@@ -29,7 +29,18 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state,
         posts: payload
       };
-
+    case createChatRoutine.TRIGGER:
+      return {
+        ...state, chat: payload, loading: true
+      };
+    case createChatRoutine.SUCCESS:
+      return {
+        ...state, chat: payload, loading: false
+      };
+    case createChatRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
     default:
       return state;
   }

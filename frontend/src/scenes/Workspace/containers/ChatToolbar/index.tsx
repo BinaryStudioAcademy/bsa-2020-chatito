@@ -49,6 +49,8 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   fetchChats,
   showModal
 }: IProps) => {
+  console.log(directMessages);
+  console.log(channels);
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
 
@@ -169,8 +171,8 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 };
 
 const mapStateToProps = (state: IAppState) => ({
-  channels: state.workspace.channels,
-  directMessages: state.workspace.directMessages,
+  channels: state.workspace.channels || [],
+  directMessages: state.workspace.directMessages || [],
   selectedChat: state.chat.chat!
 });
 
