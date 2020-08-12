@@ -6,7 +6,7 @@ import { addWorkspace } from 'services/workspaceService';
 import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
 import { toastrError } from 'services/toastrService';
-import { fetchUserChats } from 'services/chatServise';
+import { fetchUserChats, createChat } from 'services/chatServise';
 
 function* addWorkspaceReq({ payload }: Routine<any>) {
   try {

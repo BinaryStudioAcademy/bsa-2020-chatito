@@ -10,7 +10,7 @@ import { showModalRoutine } from 'routines/modal';
 import ModalWindow from 'components/ModalWindow';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { ChatType } from 'common/enums/ChatType';
-import { createChatRoutine } from 'scenes/Workspace/routines/chat';
+import { createChatRoutine } from 'scenes/Chat/routines';
 
 interface IProps {
   isShown: boolean;

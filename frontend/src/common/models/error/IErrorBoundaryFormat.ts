@@ -1,4 +1,4 @@
-import { ErrorInfo } from 'react';
+import { ErrorInfo } from "react";
 
 export interface IErrorBoundaryFormat {
   error: Error;

@@ -9,8 +9,8 @@ import { showModalRoutine } from 'routines/modal';
 import ModalWindow from 'components/ModalWindow';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { ChatType } from 'common/enums/ChatType';
+import { createChatRoutine } from 'scenes/Chat/routines';
 import { IUser } from 'common/models/user/IUser';
-import { createChatRoutine } from 'scenes/Workspace/routines/chat';
 import { ICreateChat } from 'common/models/chat/ICreateChat';
 
 interface IProps {

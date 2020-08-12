@@ -6,7 +6,7 @@ import styles from './styles.module.sass';
 interface IProps {
   placeholder: string;
   height: number | 'auto';
-  onSend: (message: string) => void;
+  onSend: (text: string) => void;
 }
 
 const TextEditor: FunctionComponent<IProps> = ({ placeholder, height, onSend }) => {

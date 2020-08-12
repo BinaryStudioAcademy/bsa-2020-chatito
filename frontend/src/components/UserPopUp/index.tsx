@@ -6,6 +6,7 @@ import Image from 'react-bootstrap/Image';
 import Popover from 'react-bootstrap/Popover';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Button from 'react-bootstrap/Button';
+import { userLogoDefaultUrl } from 'common/configs/defaults';
 
 interface IProps {
   user: IUser;
@@ -18,7 +19,12 @@ interface IProps {
 const UserPopUp: FunctionComponent<IProps> = ({ user, trigger, id, placement, onEditProfileClick }) => {
   const popOver = (
     <Popover id={id}>
-      <Image className={styles.userAvatarBig} src={user.imageUrl || ''} alt="User avatar big" thumbnail />
+      <Image
+        className={styles.userAvatarBig}
+        src={user.imageUrl || userLogoDefaultUrl}
+        alt="User avatar big"
+        thumbnail
+      />
 
       <Popover.Content>
         <p className={styles.usernameHeader}>{user.fullName}</p>

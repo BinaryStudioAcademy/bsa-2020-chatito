@@ -1,7 +1,7 @@
 import { all } from 'redux-saga/effects';
 import userSaga from './user';
-import chatSaga from '../scenes/Workspace/sagas/chat';
-import workspaceSaga from 'scenes/Workspace/sagas/index';
+import workspaceSaga from 'scenes/Workspace/sagas';
+import chatSaga from 'scenes/Chat/sagas';
 import invitePopupSaga from 'containers/InvitePopup/sagas';
 import joinInvitedWorkspaceSaga from 'containers/JoinInvitedWorkspace/sagas';
 import workspaceUsersSaga from 'containers/CreateDirectForm/sagas/sagas';
@@ -12,6 +12,7 @@ export default function* rootSaga() {
     chatSaga(),
     workspaceUsersSaga(),
     workspaceSaga(),
+    chatSaga(),
     invitePopupSaga(),
     joinInvitedWorkspaceSaga()
   ]);

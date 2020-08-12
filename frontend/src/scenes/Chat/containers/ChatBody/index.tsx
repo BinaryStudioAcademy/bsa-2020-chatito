@@ -1,26 +1,32 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './styles.module.sass';
+import { ProfileContext, IContext } from 'scenes/Workspace/containers/Workspace/index';
+import { IAppState } from 'common/models/store';
+import { connect } from 'react-redux';
+import { IPost } from 'common/models/post/IPost';
 import Post from 'components/Post/index';
 
-// mocked post data
-const post = {
-  user: {
-    id: '1',
-    email: 'string',
-    fullName: 'Test Fullname',
-    displayName: 'string',
-    imageUrl: 'https://images.unsplash.com/photo-1555445091-5a8b655e8a4a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80', // eslint-disable-line max-len
-    title: 'string',
-    status: 'online'
-  },
-  text: 'Lorem ipsum dolor',
-  createdAt: new Date()
+interface IProps {
+  messages: IPost[];
+}
+
+const ChatBody: React.FC<IProps> = ({ messages }) => {
+  const {
+    setShowProfileHandler,
+    setUserDataHandler
+  } = useContext(ProfileContext) as IContext; // eslint-disable @typescript-eslint/no-unused-vars
+  // mocked post data
+  return (
+    <div className={styles.chatBody}>
+      {messages.map(m => <Post post={m} />)}
+    </div>
+  );
 };
 
-const ChatBody = () => (
-  <div className={styles.chatBody}>
-    <Post post={post} />
-  </div>
-);
+const mapStateToProps = (state: IAppState) => ({
+  messages: state.chat.posts
+});
 
-export default ChatBody;
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatBody);

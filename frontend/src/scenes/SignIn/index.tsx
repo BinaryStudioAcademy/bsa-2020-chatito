@@ -24,7 +24,14 @@ const SignIn: FunctionComponent<IProps> = ({ loginUser, router }) => {
   };
   const initialValues = {
     email: '',
-    password: ''
+    password: '',
+    workspace: {
+      id: '1',
+      name: 'test',
+      hash: 'test',
+      imageUrl: '',
+      users: []
+    },
   };
 
   const onForgotPassword = () => {
