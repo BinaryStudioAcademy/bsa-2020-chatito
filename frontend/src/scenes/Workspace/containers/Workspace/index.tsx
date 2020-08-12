@@ -13,8 +13,7 @@ import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
 import { selectWorkspaceRoutine } from 'scenes/Workspace/routines';
-import ThreadsContainer from 'containers/ThreadsContainer';
-
+import ThreadsContainer from 'containers/ThreadsContainer'
 export interface IContext {
   setShowProfileHandler: () => void;
   setUserDataHandler: (user: IUser | {}) => void;
