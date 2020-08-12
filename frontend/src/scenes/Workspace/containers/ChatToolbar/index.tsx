@@ -4,6 +4,7 @@ import { Routine } from 'redux-saga-routines';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   IconDefinition,
+  faUserFriends,
   faLock,
   faHashtag,
   faPodcast,
@@ -68,8 +69,9 @@ const ChatToolbar = ({
     return styles.channelSelect;
   };
 
-  const channelSelector = (text: string, iconFa: IconDefinition) => (
-    <a href="#0" className={styles.channelSelect}>
+  // eslint-disable-next-line
+  const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => {}) => (
+    <a href="#0" className={styles.channelSelect} onClick={onClick}>
       <FontAwesomeIcon icon={iconFa} color="white" />
       <span className={styles.buttonText}>{text}</span>
     </a>
@@ -101,7 +103,7 @@ const ChatToolbar = ({
 
   return (
     <div className={styles.leftToolbar}>
-      <button type="button" onClick={showInvitePopup}>Invite to workspace</button>
+      {channelSelector('Invite to workspace', faUserFriends, showInvitePopup)}
       {channelSelector('Threads', faPodcast)}
       {channelSelector('Mentions & reactions', faAt)}
       {channelSelector('Drafts', faCopy)}

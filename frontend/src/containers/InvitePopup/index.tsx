@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import { Button } from 'react-bootstrap';
-import { faLink } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './styles.module.sass';
 
 import { IAppState } from 'common/models/store';
@@ -57,10 +55,7 @@ const InvitePopup = ({ isShown, workspace, sendInviteLink, showModal }: IProps) 
 
   const modalFooter = (
     <div className={styles.modalFooter}>
-      <div className={styles.inviteLinkBlock}>
-        <FontAwesomeIcon icon={faLink} className={styles.copyLinkIcon} />
-        <span>Copy invite link</span>
-      </div>
+      <div className={styles.inviteLinkBlock} />
 
       <Button type="submit" variant="secondary">
         Send
