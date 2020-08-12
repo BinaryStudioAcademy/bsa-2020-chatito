@@ -4,9 +4,16 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
 import { IUser } from 'common/models/user/IUser';
 import MultiSelect from 'react-multi-select-component';
+import { IAppState } from 'common/models/store';
+import { fetchWorkspaceUsersRoutine } from './routines';
+import { connect } from 'react-redux';
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 interface IProps {
   createDirect: IBindingCallback1<any>;
+  getUsers: IBindingCallback1<any>;
+  workspace: IWorkspace;
+  users?: IUser[];
 }
 
 interface IOption {
@@ -14,14 +21,10 @@ interface IOption {
   label: string;
 }
 
-const CreateDirect = ({ createDirect }: IProps) => {
+const CreateDirect = ({ createDirect, workspace, users = [], getUsers }: IProps) => {
   const [DirectUsers, setDirectUsers] = useState([]);
-  const users: IUser[] = [{
-    id: '1',
-    email: 'mock@gmail.com',
-    fullName: 'MockName',
-    displayName: 'MockName'
-  }];
+
+  getUsers(workspace.id);
   const mapOptionsToUsers = (options: IOption[]) => users
     .filter(user => options.map(({ value }) => value).indexOf(user.id) !== -1);
 
@@ -37,7 +40,7 @@ const CreateDirect = ({ createDirect }: IProps) => {
   const handleSubmit = () => {
     const directUsers = mapOptionsToUsers(DirectUsers);
     createDirect({
-      name: `${DirectUsers.join(', ')}`,
+      name: `${DirectUsers.map(({ label }) => label).join(', ')}`,
       users: directUsers,
       isPrivate: (DirectUsers.length <= 2)
     });
@@ -92,4 +95,19 @@ const CreateDirect = ({ createDirect }: IProps) => {
   );
 };
 
-export default CreateDirect;
+const mapStateToProps = (state: IAppState) => {
+  const {
+    workspace: { workspace, users }
+  } = state;
+
+  return {
+    workspace,
+    users
+  };
+};
+
+const mapDispatchToProps = {
+  getUsers: fetchWorkspaceUsersRoutine
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateDirect);

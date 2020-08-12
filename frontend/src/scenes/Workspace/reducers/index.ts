@@ -6,6 +6,7 @@ import {
 } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/workstate/chat';
+import { IUser } from 'common/models/user/IUser';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
@@ -14,6 +15,7 @@ export interface IWorkspaceState {
   selectedChat: IChat;
   channels: Array<IChat>;
   directMessages: Array<IChat>;
+  users?: Array<IUser>;
 }
 
 const initialState: IWorkspaceState = {
@@ -22,7 +24,8 @@ const initialState: IWorkspaceState = {
   error: '',
   selectedChat: { id: '', name: '', isPrivate: false },
   channels: [],
-  directMessages: []
+  directMessages: [],
+  users: []
 };
 
 const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>) => {

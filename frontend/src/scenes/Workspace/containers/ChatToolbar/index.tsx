@@ -142,7 +142,7 @@ const ChatToolbar = ({
             className={styles.buttonPlus}
             onClick={() => showModal({ modalType: ModalTypes.CreateDirect, show: true })}
           >
-            <FontAwesomeIcon icon={faPlus} color="white" />
+            <FontAwesomeIcon icon={faPlus} />
           </button>
           <div className={styles.directInfo}>
             Open a direct message
