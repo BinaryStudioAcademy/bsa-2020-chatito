@@ -14,7 +14,6 @@ import PageNotFound from 'scenes/PageNotFound/index';
 import Workspace from 'scenes/Workspace/containers/Workspace';
 import Auth from 'scenes/Auth/containers/Auth';
 
-
 interface IProps {
   isLoading: boolean;
   isAuthorized: boolean;

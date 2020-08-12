@@ -1,4 +1,4 @@
-import { createChannelRoutine } from 'routines/channel';
+import { createChatRoutine } from '../routines/chat';
 import { Routine } from 'redux-saga-routines';
 import { IChat } from 'common/models/chat/IChat';
 
@@ -15,15 +15,15 @@ const initialState: IChatState = {
 
 const reducer = (state = initialState, { type, payload }: Routine<any>) => {
   switch (type) {
-    case createChannelRoutine.TRIGGER:
+    case createChatRoutine.TRIGGER:
       return {
         ...state, chat: payload, loading: true
       };
-    case createChannelRoutine.SUCCESS:
+    case createChatRoutine.SUCCESS:
       return {
         ...state, chat: payload, loading: false
       };
-    case createChannelRoutine.FAILURE:
+    case createChatRoutine.FAILURE:
       return {
         ...state, loading: false
       };

@@ -9,6 +9,7 @@ import { IChat } from '../common/models/chat/IChat';
 import ChatRepository from '../data/repositories/chatRepository';
 import UserRepository from '../data/repositories/userRepository';
 import WorkspaceRepository from '../data/repositories/workspaceRepository';
+import { ChatType } from '../common/enums/ChatType';
 
 export const getAllChatPosts = async (chatId: string) => {
   const chatPosts: IPost[] = await getCustomRepository(PostRepository).getAllChatPosts(chatId);
@@ -17,7 +18,9 @@ export const getAllChatPosts = async (chatId: string) => {
 
 export const getAllUserChats = async (userId: string) => {
   const chats: IChat[] = await getCustomRepository(UserRepository).getAllUserChats(userId);
-  return chats;
+  const directs = chats.filter(({ type }) => type === ChatType.DirectMessage);
+  const channels = chats.filter(({ type }) => type === ChatType.Channel);
+  return { directs, channels };
 };
 
 export const addChat = async (userId: string, body: IChatData) => {

@@ -2,19 +2,19 @@ import React, { FunctionComponent } from 'react';
 import CreateChannelForm from 'components/CreateChannelForm';
 import { connect } from 'react-redux';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
-import { ICreateChannel } from 'common/models/channel/ICreateChannel';
+import { ICreateChat } from 'common/models/chat/ICreateChat';
 import { IAppState } from 'common/models/store';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
-import { createChannelRoutine } from 'routines/channel';
 import { showModalRoutine } from 'routines/modal';
 import ModalWindow from 'components/ModalWindow';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { ChatType } from 'common/enums/ChatType';
+import { createChatRoutine } from 'scenes/Workspace/routines/chat';
 
 interface IProps {
   isShown: boolean;
-  createChannel: IBindingCallback1<ICreateChannel>;
+  createChannel: IBindingCallback1<ICreateChat>;
   toggleModal: IBindingCallback1<IModalRoutine>;
   workspace: IWorkspace;
 }
@@ -36,7 +36,7 @@ const CreateChannelModal: FunctionComponent<IProps> = ({
   };
 
   const getNewChannelData = ({ name, description, isPrivate }: IChannelModalData) => {
-    const newChannel: ICreateChannel = {
+    const newChannel: ICreateChat = {
       name,
       description,
       isPrivate,
@@ -69,7 +69,7 @@ const mapStateToProps = (state: IAppState) => {
 };
 
 const mapDispatchToProps = {
-  createChannel: createChannelRoutine,
+  createChannel: createChatRoutine,
   toggleModal: showModalRoutine
 };
 

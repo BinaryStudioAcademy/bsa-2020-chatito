@@ -5,7 +5,6 @@ import { reducer as toastrReducer } from 'react-redux-toastr';
 import workspace from 'scenes/Workspace/reducers';
 import user from './user';
 import modal from './modal';
-import channel from './channel';
 import errorBoundary from './errorBoundary';
 
 const rootReducer = () => combineReducers({
@@ -14,7 +13,6 @@ const rootReducer = () => combineReducers({
   workspace,
   modal,
   errorBoundary,
-  channel,
   toastr: toastrReducer
 });
 

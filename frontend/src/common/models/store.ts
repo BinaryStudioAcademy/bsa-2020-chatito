@@ -3,7 +3,7 @@ import { IModalState } from 'reducers/modal';
 import { IErrorBoundaryState } from 'reducers/errorBoundary';
 import { IUserState } from 'reducers/user';
 import { IWorkspaceState } from 'scenes/Workspace/reducers';
-import { IChatState } from 'reducers/channel';
+import { IChatState } from 'scenes/Workspace/reducers/channel';
 
 export interface IAppState {
   router: RouterState;

@@ -7,7 +7,6 @@ import MultiSelect from 'react-multi-select-component';
 
 interface IProps {
   createDirect: IBindingCallback1<any>;
-  users: IUser[];
 }
 
 interface IOption {
@@ -15,7 +14,7 @@ interface IOption {
   label: string;
 }
 
-const CreateDirect = ({ createDirect, users = [] }: IProps) => {
+const CreateDirect = ({ createDirect }: IProps) => {
   const [DirectUsers, setDirectUsers] = useState([]);
   const mapOptionsToUsers = (options: IOption[]) => users
     .filter(user => options.map(({ value }) => value).indexOf(user.id) !== -1);
