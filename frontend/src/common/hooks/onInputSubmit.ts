@@ -8,7 +8,7 @@ interface IParams {
   callback: IBindingAction;
 }
 
-// Usage: create ref on your input with useRef, pass key code as string
+// Usage: create ref on your input with useRef, pass key as string
 export const useKey = ({ key, callback, ref }: IParams) => {
   const onUp = (event: KeyboardEvent) => {
     if (areEqualStrings(key, event.key)) {
@@ -26,5 +26,6 @@ export const useKey = ({ key, callback, ref }: IParams) => {
         current.removeEventListener('keyup', onUp);
       };
     }
+    return undefined;
   }, [key, ref]);
 };

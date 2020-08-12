@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
 import { Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { IBindingAction } from '../../common/models/callback/IBindingActions';
-import { IAppState } from '../../common/models/store';
-import { Routes } from '../../common/enums/Routes';
-import { getAccessToken } from '../../common/helpers/storageHelper';
-import LoaderWrapper from '../../components/LoaderWrapper';
+import { IBindingAction } from 'common/models/callback/IBindingActions';
+import { IAppState } from 'common/models/store';
+import { Routes } from 'common/enums/Routes';
+import { getAccessToken } from 'common/helpers/storageHelper';
+import LoaderWrapper from 'components/LoaderWrapper';
 import PublicRoute from '../PublicRoute';
 import PrivateRoute from '../PrivateRoute';
-import { fetchUserRoutine } from '../../routines/user';
-import AddWorkspace from '../../scenes/Workspace/containers/AddWorkspace';
-import PageNotFound from '../../scenes/PageNotFound/index';
-import Workspace from '../../scenes/Workspace/containers/Workspace';
-import Auth from '../../scenes/Auth/containers/Auth';
-import Chat from 'scenes/Chat/containers/Chat';
+import { fetchUserRoutine } from 'routines/user';
+import AddWorkspace from 'scenes/Workspace/containers/AddWorkspace';
+import PageNotFound from 'scenes/PageNotFound/index';
+import Workspace from 'scenes/Workspace/containers/Workspace';
+import Auth from 'scenes/Auth/containers/Auth';
+
 
 interface IProps {
   isLoading: boolean;
