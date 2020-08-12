@@ -14,7 +14,7 @@ import { useKey } from 'common/hooks/onInputSubmit';
 // } = useContext(ProfileContext) as IContext; // eslint-disable @typescript-eslint/no-unused-vars
 interface IProps {
   user: IUser;
-  onSend: IBindingCallback1<string>;
+  onSend: () => void;
 }
 
 const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend }) => {
@@ -25,7 +25,10 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend }) => {
   //   setShowProfileHandler();
   // };
   const onSendMessage = () => {
-    setText('');
+    if (text.trim()) {
+      onSend();
+      setText('');
+    }
   };
   useKey({ key: 'enter', callback: onSendMessage, ref: inputRef });
 
