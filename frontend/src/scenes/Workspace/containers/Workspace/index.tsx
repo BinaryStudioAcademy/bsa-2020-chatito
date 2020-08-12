@@ -82,7 +82,6 @@ const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, rou
           <div className={styles.ChatWrapper}>
             <ProfileContext.Provider value={{ setShowProfileHandler, setUserDataHandler }}>
               <ChatScene />
-              {/* <ThreadsContainer /> */}
             </ProfileContext.Provider>
           </div>
 
