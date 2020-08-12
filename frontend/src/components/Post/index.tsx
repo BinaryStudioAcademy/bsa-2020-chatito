@@ -17,7 +17,7 @@ const Post: React.FC<IProps> = ({ post }) => {
         width={64}
         height={64}
         className="mr-3 rounded"
-        src={user.imageUrl ? user.imageUrl : "https://my.throtl.com/assets/icons/user-default-gray"}
+        src={user.imageUrl ? user.imageUrl : 'https://my.throtl.com/assets/icons/user-default-gray'}
         alt={user.fullName}
       />
       <Media.Body>
@@ -26,7 +26,7 @@ const Post: React.FC<IProps> = ({ post }) => {
         <div className={styles.text}>{text}</div>
       </Media.Body>
     </Media>
-  )
+  );
 };
 
 export default Post;

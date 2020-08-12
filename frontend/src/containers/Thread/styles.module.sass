@@ -1,6 +1,6 @@
 .threadContainer
   background-color: var(--chat-background-secondary)
-  height: 100%
+  position: relative
 
   margin-left: auto
   border: 1px solid red
@@ -9,15 +9,20 @@
 
   display: flex
   flex-direction: column
-  justify-content: space-around
+  justify-content: flex-start
   align-items: left
 
   p
     margin: 0
 
+  header
+    padding: 10px 0
+    border-bottom: 1px solid #b1b1b1
+
   .threadChatName
     font-size: 1.5em
     font-weight: bold
+    margin-bottom: 5px
 
   .threadComments
     background-color: var(--chat-background-primary)
@@ -31,6 +36,13 @@
       padding: 10px
       max-height: 600px
       overflow-y: scroll
+
+.closeBtn
+  position: absolute
+  z-index: 1000
+  top: 25px
+  right: 25px
+
 
 // Mock
 

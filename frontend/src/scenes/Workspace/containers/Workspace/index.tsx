@@ -72,6 +72,10 @@ const Workspace: React.FC<IProps> = ({
     toggleActiveThread(post);
   };
 
+  const hideThreadHandler = () => {
+    setShowThread(false);
+  };
+
   const setUserDataHandler = (user: IUser | {}) => {
     setUserData(user);
   };
@@ -85,7 +89,7 @@ const Workspace: React.FC<IProps> = ({
     />
   );
 
-  const renderThread = () => <Thread />;
+  const renderThread = () => <Thread onHide={hideThreadHandler} />;
 
   return (
     <div className={styles.mainContainer}>
