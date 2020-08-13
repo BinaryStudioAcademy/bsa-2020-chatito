@@ -12,7 +12,7 @@ import { fetchPostComments } from 'services/threadsService';
 import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
 import { toastrError } from 'services/toastrService';
-import { fetchUserChats, createChat } from 'services/chatServise';
+import { fetchUserChats } from 'services/chatServise';
 
 function* addWorkspaceReq({ payload }: Routine<any>) {
   try {

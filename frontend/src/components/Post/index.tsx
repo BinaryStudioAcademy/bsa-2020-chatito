@@ -26,6 +26,7 @@ const Post: React.FC<IProps> = ({ post, openThread, openUserProfile }) => {
         <a href="/" className={styles.author}>{createdByUser.fullName}</a>
         <br />
         <a href="/" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</a>
+        {/* eslint-disable-next-line */}
         <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
         <div className={styles.footer}>
           { openThread && (

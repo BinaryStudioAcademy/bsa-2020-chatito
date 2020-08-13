@@ -35,7 +35,7 @@ import CreateDirectModal from 'containers/CreateDirectModal';
 interface IProps {
   channels: IChat[];
   directMessages: IChat[];
-  selectedChat: IChat;
+  selectedChat?: IChat;
   selectChat: Routine;
   fetchChats: IBindingAction;
   showModal: IBindingCallback1<IModalRoutine>;
@@ -176,7 +176,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 const mapStateToProps = (state: IAppState) => ({
   channels: state.workspace.channels || [],
   directMessages: state.workspace.directMessages || [],
-  selectedChat: state.chat.chat!
+  selectedChat: state.chat.chat
 });
 
 const mapDispatchToProps = {
