@@ -13,7 +13,7 @@ export const deleteUser = async () => {
 };
 
 export const editUser = async (data: IUser) => {
-  const response = await api.put<IUser>('/api/users', { data });
+  const response = await api.put<IUser>('/api/users', data);
   return response;
 };
 
