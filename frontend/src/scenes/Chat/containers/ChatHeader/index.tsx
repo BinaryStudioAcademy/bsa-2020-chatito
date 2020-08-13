@@ -42,6 +42,9 @@ const ChatHeader: React.FC<IProps> = ({ chat }) => {
     return null;
   }
 
+  console.log('Drowing chat');
+  console.log(chat);
+
   return (
     <div className={styles.chatContainer} key={chat.id}>
 

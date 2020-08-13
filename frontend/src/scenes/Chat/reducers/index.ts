@@ -31,7 +31,7 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
       };
     case createChatRoutine.TRIGGER:
       return {
-        ...state, chat: payload, loading: true
+        ...state, loading: true
       };
     case createChatRoutine.SUCCESS:
       return {

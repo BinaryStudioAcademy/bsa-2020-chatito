@@ -6,6 +6,7 @@ import { fetchCnannelPosts, addPost, createChat } from 'services/chatServise';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
+import { IChat } from 'common/models/chat/IChat';
 
 function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
@@ -52,7 +53,10 @@ function* watchToggleCreateChatModal() {
 
 function* createChatRequest({ payload }: Routine<any>) {
   try {
-    const chat = yield call(createChat, payload);
+    const chat: IChat = yield call(createChat, payload);
+    console.log('Chat received');
+    console.log(chat);
+
     yield put(createChatRoutine.success(chat));
     yield put(showModalRoutine({ modalType: payload.type, show: false }));
 

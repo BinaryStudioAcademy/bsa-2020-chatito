@@ -37,6 +37,5 @@ export const addChat = async (userId: string, body: IChatData) => {
     users: [userCreator, ...users]
   };
   const chat: IChat = await getCustomRepository(ChatRepository).addChat(newChat);
-
   return chat;
 };
