@@ -1,3 +1,4 @@
-export interface IChatName {
-  name: string;
+export interface IFetchedChat {
+  id?: string;
+  name?: string;
 }

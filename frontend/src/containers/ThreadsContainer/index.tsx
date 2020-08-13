@@ -1,17 +1,13 @@
 import styles from './styles.module.sass';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { fetchThreadsRoutine } from './routines';
 import { IAppState } from 'common/models/store';
 import Thread from 'containers/Thread/index';
-import { IThread } from 'common/models/thread/IThread';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IGetThreads } from 'common/models/threads/IGetThreads';
 import LoaderWrapper from 'components/LoaderWrapper/index';
-import { exit } from 'process';
 import { IUser } from 'common/models/user/IUser';
-import { IPost } from 'common/models/post/IPost';
-import { IChatName } from 'common/models/threads/IThreadsChatName';
 import { IFetchedThreads } from 'common/models/threads/IFetchedThreads';
 
 interface IProps {
@@ -20,30 +16,14 @@ interface IProps {
   activeWorkspaceId: string;
   userId: string;
   threads: any;
+  openUserProfile: IBindingCallback1<IUser>;
 }
 
-interface IFilteredThreads {
-  id: string;
-  createdAt: string;
-  text: string;
-  chat: IChatName;
-  user: IUser;
-  comments: IPost[];
-}
-
-// interface IProps {
-//   width?: number | string;
-//   post: IPost;
-//   comments: IPost[];
-//   sendComment: IBindingCallback1<ICreateComment>;
-//   onHide?: IBindingAction;
-//   hideCloseBtn?: boolean;
-//   openUserProfile: IBindingCallback1<IUser>;
-// }
-
-const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorkspaceId, userId, loading, threads }) => {
+// eslint-disable-next-line
+const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorkspaceId, userId, loading, threads, openUserProfile }) => {
   let fetchedThreads: IFetchedThreads[] = [];
-  let filteredThreads: IFilteredThreads[] = []; // eslint-disable-line
+  const hideCloseBtn = true;
+  const showOnlyTwoComments = true;
   useEffect(() => {
     if (activeWorkspaceId) {
       fetchThreads({ userId, activeWorkspaceId });
@@ -51,34 +31,51 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
   }, [activeWorkspaceId]);
   if (threads) {
     fetchedThreads = [...threads];
-    console.log(fetchedThreads);
   }
-  if (!activeWorkspaceId || !threads) {
+  if (!activeWorkspaceId || loading) {
     return <LoaderWrapper loading={loading} />;
   }
+  if (!threads) {
+    return (
+      <header className={styles.headerContainer}>
+        <p className={styles.headerName}>You have no threads yet</p>
+      </header>
+    );
+  }
   return (
-    <div className={styles.ThreadsContainerComponent}>
+    <div className={styles.threadsContainerComponent}>
       <header className={styles.headerContainer}>
         <p className={styles.headerName}>Threads</p>
       </header>
       <div className={styles.threadsContainer}>
-        {/* {fetchedThreads.map((thread, index) => (
-          <div
-            key={thread.id}
-            className={styles.thread}
-          >
-            <Thread
-              width="100%"
-              post=
-              comments=
-              sendComment={console.log('sendComment')}
-              hideCloseBtn={false}
-              onHide={console.log('hide')}
-              openUserProfile={console.log('open profile')}
-            />
+        {fetchedThreads.map(post => (
+          <div>
+            {post ? (
+              <div
+                key={post.id}
+                className={styles.thread}
+              >
+                <Thread
+                  showOnlyTwoComments={showOnlyTwoComments}
+                  chatName={post.chat.name}
+                  key={post.id}
+                  maxThreadHeight="100%"
+                  width="100%"
+                  post={{
+                    createdByUser: post.createdByUser,
+                    text: post.text,
+                    createdAt: new Date(post.createdAt),
+                    id: post.id,
+                    chatId: post.chat.id
+                  }}
+                  comments={post.comments}
+                  hideCloseBtn={hideCloseBtn}
+                  openUserProfile={openUserProfile}
+                />
+              </div>
+            ) : '' }
           </div>
-        ))} */}
-        text
+        ))}
       </div>
     </div>
   );
@@ -86,6 +83,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
 
 const mapStateToProps = (state: IAppState) => ({
   loading: state.threads.loading,
+  // eslint-disable-next-line
   userId: state.user.user!.id,
   activeWorkspaceId: state.workspace.workspace.id,
   threads: state.threads.threads });

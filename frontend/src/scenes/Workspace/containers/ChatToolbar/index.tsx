@@ -100,11 +100,14 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   const showInvitePopup = () => {
     showModal({ modalType: ModalTypes.InvitePopup, show: true });
   };
+  const showThreads = () => {
+    console.log('Show threads');
+  };
 
   return (
     <div className={styles.leftToolbar}>
       {channelSelector('Invite to workspace', faUserFriends, showInvitePopup)}
-      {channelSelector('Threads', faPodcast)}
+      {channelSelector('Threads', faPodcast, showThreads)}
       {channelSelector('Mentions & reactions', faAt)}
       {channelSelector('Drafts', faCopy)}
       {channelSelector('Channel browser', faSearch)}
@@ -176,6 +179,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 const mapStateToProps = (state: IAppState) => ({
   channels: state.workspace.channels || [],
   directMessages: state.workspace.directMessages || [],
+  // eslint-disable-next-line
   selectedChat: state.chat.chat!
 });
 

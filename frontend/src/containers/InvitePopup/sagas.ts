@@ -1,11 +1,10 @@
 import { Routine } from 'redux-saga-routines';
 import { all, put, call, takeEvery } from 'redux-saga/effects';
-import { toastr } from 'react-redux-toastr';
-
 import { showModalRoutine } from 'routines/modal';
 import { sendInviteLinkRoutine } from './routines';
 import { sendInviteLink } from 'services/inviteLinkService';
 import { ModalTypes } from 'common/enums/ModalTypes';
+import { toastrError, toastrSuccess } from 'services/toastrService';
 
 function* sendInviteLinkRequest({ payload }: Routine<any>) {
   try {
@@ -13,9 +12,9 @@ function* sendInviteLinkRequest({ payload }: Routine<any>) {
 
     yield put(sendInviteLinkRoutine.success());
     yield put(showModalRoutine({ modalType: ModalTypes.InvitePopup, show: false }));
-    yield call(toastr.success, 'Success', `Invitation to ${payload.email} sent.`);
+    yield call(toastrSuccess, `Invitation to ${payload.email} sent.`);
   } catch (error) {
-    yield call(toastr.error, 'Error', 'Something went wrong while sending an invite link, please try again.');
+    yield call(toastrError, 'Something went wrong while sending an invite link, please try again.');
     yield put(sendInviteLinkRoutine.failure());
   }
 }

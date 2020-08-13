@@ -1,15 +1,15 @@
 import { addCommentRoutine } from './routines';
 import { Routine } from 'redux-saga-routines';
 import { takeEvery, put, call, all } from 'redux-saga/effects';
-import { toastr } from 'react-redux-toastr';
 import { addComment } from 'services/threadsService';
+import { toastrError } from 'services/toastrService';
 
 function* addCommentRequest({ payload }: Routine<any>) {
   try {
     yield call(addComment, payload);
     yield put(addCommentRoutine.success());
   } catch (error) {
-    yield call(toastr.error, 'Error', error.message);
+    yield call(toastrError, error.message);
     yield put(addCommentRoutine.failure());
   }
 }

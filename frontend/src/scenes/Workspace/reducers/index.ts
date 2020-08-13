@@ -1,6 +1,5 @@
 import { Routine } from 'redux-saga-routines';
 import {
-  selectChatRoutine,
   selectWorkspaceRoutine,
   setActiveThreadRoutine,
   fetchPostCommentsRoutine,

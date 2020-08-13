@@ -109,7 +109,9 @@ const Workspace: React.FC<IProps> = ({
 
           <div className={styles.chatWrapper}>
             {/* <ChatScene /> */}
-            <ThreadsContainer />
+            <ThreadsContainer
+              openUserProfile={showUserProfile}
+            />
           </div>
           {showRightSideMenu
             ? (

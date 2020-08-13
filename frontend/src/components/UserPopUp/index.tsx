@@ -37,7 +37,7 @@ const UserPopUp: FunctionComponent<IProps> = ({ user, trigger, id, placement, on
   );
 
   return (
-    <OverlayTrigger trigger="click" placement={placement} overlay={popOver}>
+    <OverlayTrigger trigger="click" rootClose placement={placement} overlay={popOver}>
       {trigger()}
     </OverlayTrigger>
   );

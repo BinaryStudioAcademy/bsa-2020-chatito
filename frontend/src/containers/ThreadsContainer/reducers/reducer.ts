@@ -1,6 +1,5 @@
 import { Routine } from 'redux-saga-routines';
 import { fetchThreadsRoutine } from '../routines';
-import { IThread } from 'common/models/thread/IThread';
 import { IFetchedThreads } from 'common/models/threads/IFetchedThreads';
 
 export interface IThreadsState {

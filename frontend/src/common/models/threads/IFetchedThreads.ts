@@ -1,12 +1,12 @@
-import { IChatName } from './IThreadsChatName';
+import { IFetchedChat } from './IThreadsChatName';
 import { IUser } from 'common/models/user/IUser';
-import { IFetchedPost } from '../post/IFetchedPost';
+import { IPost } from '../post/IPost';
 
 export interface IFetchedThreads {
   id: string;
   createdAt: string;
   text: string;
-  chat: IChatName;
+  chat: IFetchedChat;
   createdByUser: IUser;
-  comments: IFetchedPost[];
+  comments: IPost[];
 }
