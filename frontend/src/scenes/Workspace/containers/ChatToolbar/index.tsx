@@ -70,7 +70,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   };
 
   // eslint-disable-next-line
-  const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => {}) => (
+  const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => { }) => (
     <a href="#0" className={styles.channelSelect} onClick={onClick}>
       <FontAwesomeIcon icon={iconFa} color="white" />
       <span className={styles.buttonText}>{text}</span>
@@ -115,44 +115,49 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       <hr className={styles.hrr} />
 
       <div className={styles.buttonChanel}>
-        <button type="button" className={styles.buttonSelect} onClick={() => setChatPanel(!chatPanel)}>
-          <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(chatPanel)} />
-          <span className={styles.buttonText}>Chanels</span>
-        </button>
+        <div className={styles.channelButtonsWrapper}>
+          <button type="button" className={styles.buttonSelect} onClick={() => setChatPanel(!chatPanel)}>
+            <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(chatPanel)} />
+            <span className={styles.buttonText}>Chanels</span>
+          </button>
 
-        <button
-          type="button"
-          className={styles.buttonPlus}
-          onClick={() => showModal({ modalType: ModalTypes.CreateChannel, show: true })}
-        >
-          <FontAwesomeIcon icon={faPlus} />
-        </button>
+          <button
+            type="button"
+            className={styles.buttonPlus}
+            onClick={() => showModal({ modalType: ModalTypes.CreateChannel, show: true })}
+          >
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+        </div>
         <div className={getClassNameDiv(chatPanel)}>
           {channels.map(channel => (
             userChannel(channel)))}
         </div>
+
         <hr className={styles.hrr} />
         <div className={styles.buttonChanel}>
-          <button type="button" className={styles.buttonSelect} onClick={() => setDirectPanel(!directPanel)}>
-            <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(directPanel)} />
-            <span className={styles.buttonText}>Direct Messages</span>
-          </button>
-          <button
-            type="button"
-            className={styles.buttonPlus}
-            onClick={() => showModal({ modalType: ModalTypes.CreateDirect, show: true })}
-          >
-            <FontAwesomeIcon icon={faPlus} />
-          </button>
-          <div className={styles.directInfo}>
-            Open a direct message
-            <br />
-            Ctrl + Shift + K
+          <div className={styles.channelButtonsWrapper}>
+            <button type="button" className={styles.buttonSelect} onClick={() => setDirectPanel(!directPanel)}>
+              <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(directPanel)} />
+              <span className={styles.buttonText}>Direct Messages</span>
+            </button>
+            <button
+              type="button"
+              className={styles.buttonPlus}
+              onClick={() => showModal({ modalType: ModalTypes.CreateDirect, show: true })}
+            >
+              <FontAwesomeIcon icon={faPlus} />
+            </button>
+            <div className={styles.directInfo}>
+              Open a direct message
+              <br />
+              Ctrl + Shift + K
+            </div>
           </div>
-        </div>
-        <div className={getClassNameDiv(directPanel)}>
-          {directMessages.map(directMessage => (
-            directChannel(directMessage)))}
+          <div className={getClassNameDiv(directPanel)}>
+            {directMessages.map(directMessage => (
+              directChannel(directMessage)))}
+          </div>
         </div>
         <hr className={styles.hrr} />
       </div>

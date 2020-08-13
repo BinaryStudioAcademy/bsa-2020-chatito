@@ -5,7 +5,7 @@ import { User } from '../../data/entities/User';
 import { IUserWithWorkspaces } from '../models/user/IUserWithWorkspaces';
 import { fromCreatedWorkspaceToClient } from './workspace';
 
-export const fromUserToUserClient = (user: User): IUserClient => {
+export const fromUserToUserClient = (user: IUserWithWorkspaces): IUserClient => {
   const { id, fullName, displayName, email, imageUrl, title, status } = user;
 
   return {

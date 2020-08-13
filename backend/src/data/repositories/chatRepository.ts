@@ -8,6 +8,17 @@ class ChatRepository extends Repository<Chat> {
     const newChat = this.create(chat);
     return newChat.save();
   }
+
+  getById(id: string): Promise<Chat> {
+    return this.findOne({ where: { id }, relations: ['posts'] });
+  }
+
+  getAllByUser(userId: string): Promise<Chat[]> {
+    return this.find({
+      relations: ['users'],
+      where: { createdByUser: userId }
+    });
+  }
 }
 
 export default ChatRepository;

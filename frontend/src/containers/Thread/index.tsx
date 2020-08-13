@@ -31,7 +31,7 @@ const Thread: FunctionComponent<IProps> = ({
   hideCloseBtn,
   openUserProfile
 }) => {
-  const participants = Array.from(new Set(comments.map(comment => comment.user.id)));
+  const participants = Array.from(new Set(comments.map(comment => comment.createdByUser.id)));
 
   const sendCommentHandler = (text: string) => {
     const { id: postId } = post;
