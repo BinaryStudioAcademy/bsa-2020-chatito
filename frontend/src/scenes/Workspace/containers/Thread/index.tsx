@@ -1,68 +1,58 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import styles from './styles.module.sass';
 
 import ThreadView from 'containers/Thread';
-import { IUser } from 'common/models/user/IUser';
-import { fetchPostCommentsRoutine, addCommentRoutine } from '../../routines';
 import { IAppState } from 'common/models/store';
 import { IPost } from 'common/models/post/IPost';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { ICreateComment } from 'common/models/post/ICreateComment';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
+import { IUser } from 'common/models/user/IUser';
+import { addCommentRoutine } from 'scenes/Workspace/routines';
 
 interface IProps {
-  post: IPost;
-  comments: IPost[];
-  // fetchPostComments: IBindingCallback1<string>;
+  post: IPost | undefined;
+  comments: IPost[] | undefined;
   sendComment: IBindingCallback1<ICreateComment>;
   onHide: IBindingAction;
+  openUserProfile: IBindingCallback1<IUser>;
 }
 
 const Thread: React.FC<IProps> = ({
   post,
   comments = [],
   sendComment,
-  onHide
+  onHide,
+  openUserProfile
 }) => {
-  const { id: postId } = post;
+  const postId = post?.id;
 
   const sendCommentHandler = (text: string) => {
-    sendComment({ postId, text });
+    if (postId) {
+      sendComment({ postId, text });
+    }
   };
-
-  const setShowProfileHandler = () => {
-    console.log('open profile');
-    // toggleRightMenu(RightMenuTypes.Profile);
-  };
-
-  // const showThreadHandler = (post: IPost) => {
-  //   if (post.id === activeThreadPostId) return;
-  //   toggleRightMenu(RightMenuTypes.Thread);
-  //   toggleActiveThread(post);
-  // };
 
   return (
-    <>
-      <ThreadView
-        width="400px"
-        post={post}
-        comments={comments}
-        sendComment={sendCommentHandler}
-        onHide={onHide}
-        openProfile={setShowProfileHandler}
-      />
-    </>
+    post
+      ? (
+        <ThreadView
+          width="400px"
+          post={post}
+          comments={comments}
+          sendComment={sendCommentHandler}
+          onHide={onHide}
+          openUserProfile={openUserProfile}
+        />
+      ) : null
   );
 };
 
-const mapStateToProps = (state: IAppState) => {
-  const { workspace: { activeThread: { post, comments } } } = state;
-  return {
-    post,
-    comments
-  };
-};
+const mapStateToProps = (state: IAppState) => ({
+  // const { workspace: { activeThread: { post, comments } } } = state;
+  post: state.workspace.activeThread?.post,
+  comments: state.workspace.activeThread?.comments
+});
 
 const mapDispatchToProps = {
   sendComment: addCommentRoutine

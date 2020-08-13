@@ -3,38 +3,37 @@
   position: relative
 
   margin-left: auto
-  border: 1px solid red
-  padding: 10px
   height: 100%
 
   display: flex
   flex-direction: column
   justify-content: flex-start
-  align-items: left
 
   p
     margin: 0
 
   header
-    padding: 10px 0
-    border-bottom: 1px solid #b1b1b1
+    padding: 10px
+    border-bottom: 1px solid var(--border);
 
   .threadChatName
     font-size: 1.5em
     font-weight: bold
     margin-bottom: 5px
 
-  .threadComments
-    background-color: var(--chat-background-primary)
-    border-radius: 15px
-    border: 1px solid var(--border-lightbrown)
-    padding: 5px
-    margin-top: 10px
+  .threadPost
+    padding: 10px
+    border-bottom: 1px solid var(--border);
 
-    .commentsWrapper
-      padding: 10px
-      max-height: 600px
-      overflow-y: scroll
+  .threadComments
+    background-color: var(--chat-background-secondary)
+    margin: 10px 0
+    padding: 10px
+    max-height: 600px
+    overflow-y: scroll
+
+    .comment
+      margin-bottom: 3px
 
 .closeBtn
   position: absolute

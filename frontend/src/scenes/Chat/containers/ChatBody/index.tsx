@@ -4,8 +4,9 @@ import Post from 'components/Post/index';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
-import { setActiveThreadRoutine, showRightSideMenuRoutine } from 'scenes/Workspace/routines';
+import { setActiveThreadRoutine, showUserProfileRoutine } from 'scenes/Workspace/routines';
 import { connect } from 'react-redux';
+import { IAppState } from 'common/models/store';
 // mocked post data
 const postMock = {
   user: {
@@ -18,24 +19,39 @@ const postMock = {
     status: 'online'
   },
   id: 'e4bf2dab-1fc1-4c9b-a75e-67c23418d9c2',
-  text: 'Post test',
-  createdAt: new Date('2020-08-11T12:40:36.072Z')
+  text: 'Post test qwerqewrqwerqwerqwerdsauifasdfioausdpfoiausdpfoiasdufpaosdiufaspqwerqewrqwerqwerqwerdsauifasdfioausdpfoiausdpfoiasdufpaosdiufaspqwerqewrqwerqwerqwerdsauifasdfioausdpfoiausdpfoiasdufpaosdiufaspqwerqewrqwerqwerqwerdsauifasdfioausdpfoiausdpfoiasdufpaosdiufaspqwerqewrqwerqwerqwerdsauifasdfioausdpfoiausdpfoiasdufpaosdiufasp', // eslint-disable-line
+  createdAt: '2020-08-11T12:40:36.072Z'
 };
 
 interface IProps {
   openProfile: IBindingAction;
   openThread: IBindingCallback1<IPost>;
+  activeThreadPostId: string | undefined;
 }
 
-const ChatBody = ({ openProfile, openThread }: IProps) => (
-  <div className={styles.chatBody}>
-    <Post post={postMock} openThread={openThread} openProfile={openProfile} />
-  </div>
-);
+const ChatBody = ({ openProfile, openThread, activeThreadPostId = '' }: IProps) => {
+  const handleOpenThread = (post: IPost) => {
+    if (activeThreadPostId === post.id) return;
+    openThread(post);
+  };
+
+  return (
+    <div className={styles.chatBody}>
+      <Post post={postMock} openThread={handleOpenThread} openUserProfile={openProfile} />
+    </div>
+  );
+};
+
+const mapStateToProps = (state: IAppState) => {
+  const activeThreadPostId = state.workspace.activeThread?.post.id;
+  return {
+    activeThreadPostId
+  };
+};
 
 const mapDispatchToProps = {
-  openProfile: showRightSideMenuRoutine,
+  openProfile: showUserProfileRoutine,
   openThread: setActiveThreadRoutine
 };
 
-export default connect(null, mapDispatchToProps)(ChatBody);
+export default connect(mapStateToProps, mapDispatchToProps)(ChatBody);
