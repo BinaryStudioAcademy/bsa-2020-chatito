@@ -8,7 +8,8 @@ import { hash, compare, encrypt, decrypt } from '../common/utils/encryptHelper';
 import { ILoginUser } from '../common/models/user/ILoginUser';
 import {
   fromRegisterUserToCreateUser,
-  fromUserToUserWithWorkspaces
+  fromUserToUserWithWorkspaces,
+  fromGoogleUserToCreateUser
 } from '../common/mappers/user';
 import { createToken } from '../common/utils/tokenHelper';
 import { IRefreshToken } from '../common/models/refreshToken/IRefreshToken';
@@ -87,18 +88,19 @@ export const login = async ({ email, password, workspaceId }: ILoginUser) => {
 export const loginWithGoogle = async ({ token, workspaceId }: ILoginWithGoogle) => {
   const googleUser = await getGoogleUserPayload(token);
 
-  const loginUser = await getCustomRepository(UserRepository).getByEmail(googleUser.email);
-  if (!loginUser) {
-    throw new CustomError(404, 'No user exists. Please, sign up first.', ErrorCode.UserNotFound);
+  let user = await getCustomRepository(UserRepository).getByEmail(googleUser.email);
+  if (!user) {
+    const createUserData = fromGoogleUserToCreateUser({ name: googleUser.name, email: googleUser.email });
+    user = await getCustomRepository(UserRepository).addUser(createUserData);
   }
 
-  const user = workspaceId ? await addWorkspaceToUser(loginUser.id, workspaceId) : loginUser;
+  user = workspaceId ? await addWorkspaceToUser(user.id, workspaceId) : user;
 
   const refreshToken = await createRefreshToken(user);
 
   return {
     user: fromUserToUserWithWorkspaces(user),
-    accessToken: createToken({ id: loginUser.id }),
+    accessToken: createToken({ id: user.id }),
     refreshToken: encrypt(refreshToken.id)
   };
 };
