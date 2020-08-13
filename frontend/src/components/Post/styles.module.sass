@@ -4,6 +4,10 @@
 .postWrapper:hover
 	background: var(--post-bg)
 
+.body
+  overflow: hidden
+  padding: 5px
+
 .author
   display: inline-block
   font-size: 1rem
@@ -12,10 +16,11 @@
 
 .metadata
   display: inline-block
-  margin-left: .5rem
   font-weight: 400
   color: var(--secondary-text)
-  font-size: .8125rem
+  color: rgb(29, 28, 29)
+  font-size: .75rem
+  font-family: var(--secondary-font-family), sans-serif
 
 .text
   text-align: left
@@ -50,4 +55,13 @@
   margin-bottom: 18px
 
 .reactBtn:hover, .replyBtn:hover
+  margin: 15px 0
+  overflow-wrap: break-word
+
+.footer
+  display: flex
+
+.openThreadBtn
+  cursor: pointer
+  font-size: 13px
   text-decoration: underline

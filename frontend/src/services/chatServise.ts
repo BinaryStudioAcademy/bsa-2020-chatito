@@ -18,11 +18,11 @@ export async function fetchUserChannels() {
 }
 
 export async function fetchCnannelPosts(channelId: string) {
-  const response = await api.post(`/api/chats/${channelId}/posts`);
+  const response = await api.get(`/api/chats/${channelId}/posts`);
   return response;
 }
 
 export async function addPost({ chatId, text }: ICreatePost) {
-  const response = await api.post(`/api/chats/${chatId}/posts`, { text });
+  const response = await api.post('/api/posts', { text, chatId });
   return response;
 }

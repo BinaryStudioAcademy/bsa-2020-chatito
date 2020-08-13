@@ -6,25 +6,11 @@ import { fetchCnannelPosts, addPost, createChat } from 'services/chatServise';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
+import { IChat } from 'common/models/chat/IChat';
 
 function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
-    let responce: IPost[] | true = yield call(fetchCnannelPosts, payload);
-    responce = [
-      {
-        user: {
-          id: '1',
-          email: 'string',
-          fullName: 'Test Fullname',
-          displayName: 'string',
-          imageUrl: 'https://images.unsplash.com/photo-1555445091-5a8b655e8a4a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80', // eslint-disable-line max-len
-          title: 'string',
-          status: 'online'
-        },
-        createdAt: new Date(),
-        text: 'Message'
-      }
-    ];
+    const responce: IPost[] = yield call(fetchCnannelPosts, payload);
     yield put(setPostsRoutine.success(responce));
   } catch (error) {
     yield call(toastrError, error.message);
@@ -38,7 +24,7 @@ function* watchPostsRequest() {
 function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
   try {
     yield call(addPost, payload);
-    yield put(setPostsRoutine.trigger());
+    yield put(setPostsRoutine.trigger(payload.chatId));
   } catch (error) {
     yield call(toastrError, error.message);
   }
@@ -48,8 +34,9 @@ function* watchAddPostRequest() {
   yield takeEvery(addPostRoutine.TRIGGER, fetchAddPostRequest);
 }
 
-function* setCurrChat(): Routine<any> {
-  yield put(setPostsRoutine.trigger());
+function* setCurrChat({ payload }: Routine<any>): Routine<any> {
+  yield put(setPostsRoutine.trigger(payload.id));
+  yield put(setCurrentChatRoutine.success(payload));
 }
 
 function* watchCurrChat() {
@@ -66,12 +53,15 @@ function* watchToggleCreateChatModal() {
 
 function* createChatRequest({ payload }: Routine<any>) {
   try {
-    const chat = yield call(createChat, payload);
+    const chat: IChat = yield call(createChat, payload);
+    console.log('Chat received');
+    console.log(chat);
+
     yield put(createChatRoutine.success(chat));
     yield put(showModalRoutine({ modalType: payload.type, show: false }));
 
     yield put(fetchUserChatsRoutine.trigger());
-    // history.push(`/Direct/${payload.chat}`);
+    yield put(setCurrentChatRoutine.trigger(chat));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(createChatRoutine.failure());
@@ -87,7 +77,6 @@ export default function* chatSaga() {
     watchPostsRequest(),
     watchCurrChat(),
     watchAddPostRequest(),
-    watchCreateChatRequest(),
     watchCreateChatRequest(),
     watchToggleCreateChatModal()
   ]);
