@@ -7,6 +7,15 @@ const router = Router();
 router
   .get('/:id/posts', run((req: Request) => getAllChatPosts(req.params.id)))
   .get('/', run((req: Request) => getAllUserChats(req.user.id)))
-  .post('/', run((req: Request) => addChat(req.user.id, req.body)));
+  .post('/', run(async (req: Request) => {
+    try {
+      const chat = await addChat(req.user.id, req.body);
+      req.io.emit('joinRoom', chat.id);
+      return chat;
+    } catch (error) {
+      console.error(error.message);
+      return 'mock';
+    }
+  }));
 
 export default router;

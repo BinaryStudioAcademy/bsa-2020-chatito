@@ -12,7 +12,8 @@ import errorHandlerMiddleware from './api/middlewares/errorHandlerMiddleware';
 import routesWhiteList from './config/routesWhiteListConfig';
 import './config/passportConfig';
 import './config/sendgridConfig';
-import { initJoinToChatRoom } from './services/chatService';
+import socketInjector from './socket/injector';
+import socketHandlers from './socket/socketHandlers';
 
 const app = express();
 
@@ -42,9 +43,8 @@ export const io = socketIO().listen(server);
 
 io.use(jwtSocketMiddleware);
 
-io.on('connection', socket => {
-  const { user } = socket.request;
-  initJoinToChatRoom(socket, user.id);
-});
+io.on('connection', socket => socketHandlers(socket));
+
+app.use(socketInjector(io));
 
 export default app;

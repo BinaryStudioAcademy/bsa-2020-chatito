@@ -1,6 +1,6 @@
 import { io } from '../../server';
 
-export const emitToRoom = (
+export const emitToChatRoom = (
   roomId: string,
   address: string,
   ...args: any[]
