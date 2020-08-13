@@ -12,10 +12,10 @@ class PostRepository extends Repository<Post> {
     return this.findOne(id);
   }
 
-  getAllChatPosts(chatId: string): Promise<Post[]> {
+  async getAllChatPosts(chatId: string): Promise<Post[]> {
     return this.find({
       where: {
-        chatId
+        chat: chatId
       }
     });
   }
