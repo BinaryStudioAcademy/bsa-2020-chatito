@@ -71,6 +71,8 @@ function* setActiveThread({ payload }: Routine<any>) {
 
 function* watchSetActiveThread() {
   yield takeEvery(setActiveThreadRoutine.TRIGGER, setActiveThread);
+}
+
 function* fetchUserChatsRequest() {
   try {
     const response = yield call(fetchUserChats);
