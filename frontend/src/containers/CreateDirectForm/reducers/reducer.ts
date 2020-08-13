@@ -1,6 +1,7 @@
 import { IWorkspaceState } from 'scenes/Workspace/reducers';
 import { fetchWorkspaceUsersRoutine } from '../routines/index';
 import { Routine } from 'redux-saga-routines';
+import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 
 const initialState: IWorkspaceState = {
   workspace: { id: '', name: '', hash: '', imageUrl: '', users: [] },
@@ -8,7 +9,10 @@ const initialState: IWorkspaceState = {
   error: '',
   channels: [],
   directMessages: [],
-  users: []
+  users: [],
+  showRightSideMenu: RightMenuTypes.None,
+  activeThread: null,
+  userProfile: { id: '', email: '', fullName: '', displayName: '' }
 };
 
 const ThreadsReducer = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>) => {
