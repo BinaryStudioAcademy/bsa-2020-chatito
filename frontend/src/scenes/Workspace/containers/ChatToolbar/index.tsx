@@ -49,8 +49,6 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   fetchChats,
   showModal
 }: IProps) => {
-  console.log(directMessages);
-  console.log(channels);
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
 

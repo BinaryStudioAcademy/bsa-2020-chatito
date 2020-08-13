@@ -20,6 +20,7 @@ import { selectWorkspaceRoutine,
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
+import ThreadsContainer from 'containers/ThreadsContainer/index';
 
 interface IProps {
   currentUserId?: string;
@@ -107,7 +108,8 @@ const Workspace: React.FC<IProps> = ({
           </div>
 
           <div className={styles.chatWrapper}>
-            <ChatScene />
+            {/* <ChatScene /> */}
+            <ThreadsContainer />
           </div>
           {showRightSideMenu
             ? (

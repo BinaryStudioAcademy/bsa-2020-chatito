@@ -1,27 +1,24 @@
 import { Routine } from 'redux-saga-routines';
 import { fetchThreadsRoutine } from '../routines';
-
-interface IThread {
-  [key: string]: string;
-}
+import { IThread } from 'common/models/thread/IThread';
+import { IFetchedThreads } from 'common/models/threads/IFetchedThreads';
 
 export interface IThreadsState {
-  threads: IThread[];
   loading: boolean;
-  error: any;
+  error: string;
+  threads?: IFetchedThreads;
 }
 
 const initialState = {
-  threads: [],
   loading: false,
   error: ''
 };
 
-const ThreadsReducer = (state: IThreadsState = initialState, { type, payload }: Routine<any>) => {
+const threadsReducer = (state: IThreadsState = initialState, { type, payload }: Routine<any>) => {
   switch (type) {
     case fetchThreadsRoutine.TRIGGER:
       return {
-        ...state, threads: payload, loading: false
+        ...state, loading: true
       };
     case fetchThreadsRoutine.FAILURE:
       return {
@@ -29,11 +26,11 @@ const ThreadsReducer = (state: IThreadsState = initialState, { type, payload }: 
       };
     case fetchThreadsRoutine.SUCCESS:
       return {
-        ...state, loading: false
+        ...state, loading: false, threads: payload
       };
     default:
       return state;
   }
 };
 
-export default ThreadsReducer;
+export default threadsReducer;

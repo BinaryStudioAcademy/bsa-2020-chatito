@@ -18,7 +18,7 @@ function* watchAddCommentRequest() {
   yield takeEvery(addCommentRoutine.TRIGGER, addCommentRequest);
 }
 
-export default function* workspaceSaga() {
+export default function* threadSaga() {
   yield all([
     watchAddCommentRequest()
   ]);
