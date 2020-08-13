@@ -14,7 +14,7 @@ class PostRepository extends Repository<Post> {
 
   getAllChatPosts(chatId: string): Promise<Post[]> {
     return this.find({
-      relations: ['chat'],
+      relations: ['createdByUser'],
       where: { chat: chatId }
     });
   }

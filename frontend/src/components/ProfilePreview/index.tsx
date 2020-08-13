@@ -7,6 +7,7 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
 import { useKey } from 'common/hooks/onInputSubmit';
 // import { ProfileContext, IContext } from 'scenes/Workspace/containers/Workspace/index';
+import { userLogoDefaultUrl } from 'common/configs/defaults';
 
 // const {
 //   setShowProfileHandler,
@@ -38,7 +39,7 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend }) => {
   const popOver = (
     <Popover id={user.id} className={styles.popOverWindow}>
       <div className={styles.avatarContainer}>
-        <Image className={styles.userAvatar} src={user.imageUrl} alt="User avatar" thumbnail />
+        <Image className={styles.userAvatar || userLogoDefaultUrl} src={user.imageUrl} alt="User avatar" thumbnail />
       </div>
       <Popover.Content>
         {user.status === 'online' ? (
