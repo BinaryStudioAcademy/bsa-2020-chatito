@@ -37,3 +37,8 @@ export const getPostComments = async (postId: string) => {
   const comments = await getCustomRepository(CommentRepository).getAllPostComments(postId);
   return fromPostCommentsToPostCommentsClient(comments);
 };
+
+export const getPostsByUserId = async (id: string, activeworkspaceid: string) => {
+  const posts = await getCustomRepository(PostRepository).getPostsByUserId(id, activeworkspaceid);
+  return posts; 
+};

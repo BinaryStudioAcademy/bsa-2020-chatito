@@ -35,6 +35,21 @@ class PostRepository extends Repository<Post> {
     const editedPost = await this.findOne(id);
     return editedPost;
   }
+
+  getPostsByUserId(id: string, activeworkspaceid: string) {
+    console.log(id+ '\n'+activeworkspaceid);
+    const posts = this.createQueryBuilder("post")
+      .leftJoinAndSelect("post.chat", "chat")
+      .leftJoinAndSelect("post.comments", "comments")
+      .leftJoinAndSelect("comments.post", "commentsPost")
+      .leftJoinAndSelect("commentsPost.chat", "commentsPostChat")
+      .where("post.\"createdByUserId\" = :id", { id })
+      .andWhere("chat.\"workspaceId\" = :activeworkspaceid", { activeworkspaceid })
+      .orWhere("comments.\"createdByUserId\" = :id", { id } )
+      .andWhere("\"commentsPostChat\".\"workspaceId\" = :activeworkspaceid", { activeworkspaceid })
+      .getMany();
+    return posts
+  }
 }
 
 export default PostRepository;

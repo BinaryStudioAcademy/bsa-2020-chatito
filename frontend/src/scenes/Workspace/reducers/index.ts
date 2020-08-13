@@ -25,7 +25,8 @@ const initialState: IWorkspaceState = {
   selectedChat: { id: '', name: '', isPrivate: false },
   channels: [],
   directMessages: [],
-  activeThread: { post: { id: '', user: {}, text: '', createdAt: new Date() }, comments: [] }
+  // eslint-disable-next-line
+  activeThread: { post: { id: '', user: { id: '', email: '', fullName: '', displayName: '' }, text: '', createdAt: new Date() }, comments: [] }
 };
 
 const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>) => {

@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { User } from '../entities/User';
+// import { Chat } from '../entities/Chat';
 import { ICreateUser } from '../../common/models/user/ICreateUser';
 import { IUserClient } from '../../common/models/user/IUserClient';
 
