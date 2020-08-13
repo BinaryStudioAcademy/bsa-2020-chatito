@@ -1,26 +1,41 @@
 import React from 'react';
 import styles from './styles.module.sass';
+import { IAppState } from 'common/models/store';
+import { connect } from 'react-redux';
+import { IPost } from 'common/models/post/IPost';
 import Post from 'components/Post/index';
+import { IBindingAction } from 'common/models/callback/IBindingActions';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { showUserProfileRoutine, setActiveThreadRoutine } from 'scenes/Workspace/routines';
 
-// mocked post data
-const post = {
-  user: {
-    id: '1',
-    email: 'string',
-    fullName: 'Test Fullname',
-    displayName: 'string',
-    imageUrl: 'https://images.unsplash.com/photo-1555445091-5a8b655e8a4a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80', // eslint-disable-line max-len
-    title: 'string',
-    status: 'online'
-  },
-  text: 'Lorem ipsum dolor',
-  createdAt: new Date()
+interface IProps {
+  messages: IPost[];
+  openProfile: IBindingAction;
+  openThread: IBindingCallback1<IPost>;
+  activeThreadPostId: string | undefined;
+}
+
+const ChatBody: React.FC<IProps> = ({ messages, openProfile, openThread, activeThreadPostId = '' }) => {
+  const handleOpenThread = (post: IPost) => {
+    if (activeThreadPostId === post.id) return;
+    openThread(post);
+  };
+
+  return (
+    <div className={styles.chatBody}>
+      {messages.map(m => <Post post={m} openThread={handleOpenThread} openUserProfile={openProfile} />)}
+    </div>
+  );
 };
 
-const ChatBody = () => (
-  <div className={styles.chatBody}>
-    <Post post={post} />
-  </div>
-);
+const mapStateToProps = (state: IAppState) => ({
+  messages: state.chat.posts,
+  activeThreadPostId: state.workspace.activeThread?.post.id
+});
 
-export default ChatBody;
+const mapDispatchToProps = {
+  openProfile: showUserProfileRoutine,
+  openThread: setActiveThreadRoutine
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatBody);

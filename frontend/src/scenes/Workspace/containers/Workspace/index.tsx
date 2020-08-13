@@ -1,7 +1,6 @@
-import React, { useState, createContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
-
 import Header from '../Header';
 import WorkspaceToolbar from '../WorkspaceToolbar';
 import ProfileOverview from 'components/ProfileOverview';
@@ -9,18 +8,18 @@ import { IUser } from 'common/models/user/IUser';
 import { IAppState } from 'common/models/store';
 import ChatScene from 'scenes/Chat';
 import ChatToolbar from '../ChatToolbar';
+import Thread from 'scenes/Workspace/containers/Thread';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
-import { selectWorkspaceRoutine } from 'scenes/Workspace/routines';
-import ThreadsContainer from 'containers/ThreadsContainer';
-
-export interface IContext {
-  setShowProfileHandler: () => void;
-  setUserDataHandler: (user: IUser | {}) => void;
-}
-
-export const ProfileContext = createContext<IContext | {}>({});
+import { selectWorkspaceRoutine,
+  setActiveThreadRoutine,
+  showRightSideMenuRoutine,
+  showUserProfileRoutine
+} from 'scenes/Workspace/routines';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { IPost } from 'common/models/post/IPost';
+import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 
 interface IProps {
   currentUserId?: string;
@@ -32,12 +31,23 @@ interface IProps {
   userWorkspaces: IWorkspace[];
   router: (route: Routes) => void;
   selectWorkspace: (workspace: IWorkspace) => void;
+  showRightSideMenu: RightMenuTypes;
+  toggleRightMenu: IBindingCallback1<RightMenuTypes>;
+  showUserProfile: IBindingCallback1<IUser>;
+  toggleActiveThread: IBindingCallback1<IPost>;
 }
 
-const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, router, selectWorkspace }) => {
+const Workspace: React.FC<IProps> = ({
+  currentUserId,
+  match,
+  userWorkspaces,
+  router,
+  selectWorkspace,
+  showRightSideMenu,
+  showUserProfile,
+  toggleRightMenu
+}) => {
   if (!currentUserId) return <></>;
-
-  const [showProfile, setShowProfile] = useState(false);
   const [userData, setUserData] = useState<IUser | {}>({});
 
   useEffect(() => {
@@ -50,8 +60,12 @@ const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, rou
     }
   }, [match]);
 
-  const setShowProfileHandler = () => {
-    setShowProfile(!showProfile);
+  const setShowProfileHandler = (user: IUser) => {
+    showUserProfile(user);
+  };
+
+  const hideRightMenu = () => {
+    toggleRightMenu(RightMenuTypes.None);
   };
 
   const setUserDataHandler = (user: IUser | {}) => {
@@ -62,10 +76,23 @@ const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, rou
     <ProfileOverview
       user={userData as IUser}
       currentUserId={currentUserId}
-      setShowProfileHandler={setShowProfileHandler}
+      setShowProfileHandler={hideRightMenu}
       setUserDataHandler={setUserDataHandler}
     />
   );
+
+  const renderThread = () => <Thread onHide={hideRightMenu} openUserProfile={setShowProfileHandler} />;
+
+  const renderRightMenu = () => {
+    switch (showRightSideMenu) {
+      case RightMenuTypes.Profile:
+        return renderProfile();
+      case RightMenuTypes.Thread:
+        return renderThread();
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className={styles.mainContainer}>
@@ -75,21 +102,19 @@ const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, rou
 
         <div className={styles.workspaceViewContainer}>
 
-          <div className={styles.LeftPanelWrapper}>
+          <div className={styles.leftPanelWrapper}>
             <ChatToolbar />
           </div>
 
-          <div className={styles.ChatWrapper}>
-            <ProfileContext.Provider value={{ setShowProfileHandler, setUserDataHandler }}>
-              {/* <ChatScene /> */}
-              <ThreadsContainer />
-            </ProfileContext.Provider>
+          <div className={styles.chatWrapper}>
+            <ChatScene />
           </div>
-
-          <div className={styles.RightPanelWrapper}>
-            {showProfile && renderProfile()}
-          </div>
-
+          {showRightSideMenu
+            ? (
+              <div className={styles.rightPanelWrapper}>
+                {renderRightMenu()}
+              </div>
+            ) : null }
         </div>
 
       </div>
@@ -97,14 +122,25 @@ const Workspace: React.FC<IProps> = ({ currentUserId, match, userWorkspaces, rou
   );
 };
 
-const mapStateToProps = (state: IAppState) => ({
-  currentUserId: state.user.user?.id,
-  userWorkspaces: state.user.workspaceList
-});
+const mapStateToProps = (state: IAppState) => {
+  const { user } = state.user;
+  const id = user ? user.id : '';
+  const { showRightSideMenu } = state.workspace;
+  const activeThreadPostId = state.workspace.activeThread?.post.id;
+  return {
+    currentUserId: id,
+    userWorkspaces: state.user.workspaceList,
+    showRightSideMenu,
+    activeThreadPostId
+  };
+};
 
 const mapDispatchToProps = {
   router: push,
-  selectWorkspace: selectWorkspaceRoutine
+  selectWorkspace: selectWorkspaceRoutine,
+  toggleActiveThread: setActiveThreadRoutine,
+  toggleRightMenu: showRightSideMenuRoutine,
+  showUserProfile: showUserProfileRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Workspace);

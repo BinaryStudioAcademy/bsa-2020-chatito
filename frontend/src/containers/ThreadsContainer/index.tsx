@@ -24,7 +24,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, loading }) 
         <p className={styles.headerName}>Threads</p>
       </header>
       <div className={styles.threadsContainer}>
-        {threads.map((thread, index) => (
+        {/* {threads.map((thread, index) => (
           <div
             key={thread.id}
             className={styles.thread}
@@ -33,7 +33,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, loading }) 
               thread={thread}
             />
           </div>
-        ))}
+        ))} */}
       </div>
     </div>
   );
