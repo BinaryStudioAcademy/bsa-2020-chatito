@@ -5,7 +5,7 @@ import styles from './styles.module.sass';
 
 interface IProps {
   placeholder: string;
-  height: number | 'auto';
+  height: number | string | 'auto';
   onSend: (text: string) => void;
 }
 

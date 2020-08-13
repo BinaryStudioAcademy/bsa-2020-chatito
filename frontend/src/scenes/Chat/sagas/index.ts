@@ -6,15 +6,12 @@ import { fetchCnannelPosts, addPost, createChat } from 'services/chatServise';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
-import { IChat } from 'common/models/chat/IChat';
 
 function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
     const responce: IPost[] | true = yield call(fetchCnannelPosts, payload);
     yield put(setPostsRoutine.success(responce));
   } catch (error) {
-    console.error(error);
-
     yield call(toastrError, error.message);
   }
 }
@@ -25,7 +22,7 @@ function* watchPostsRequest() {
 
 function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
   try {
-    const response = yield call(addPost, payload);
+    yield call(addPost, payload);
     yield put(setPostsRoutine.trigger(payload.chatId));
   } catch (error) {
     yield call(toastrError, error.message);

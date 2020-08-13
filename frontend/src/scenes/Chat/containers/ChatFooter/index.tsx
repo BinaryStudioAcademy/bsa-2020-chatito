@@ -21,8 +21,8 @@ const ChatFooter: React.FC<IProps> = ({ addPost, chatId }) => {
     <div className={styles.chatFooter} key={chatId}>
       <TextEditor
         placeholder=""
-        height={120}
         onSend={onSubmit}
+        height="100px"
       />
     </div>
   );

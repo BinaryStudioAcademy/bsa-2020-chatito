@@ -22,7 +22,7 @@ const Post: React.FC<IProps> = ({ post }) => {
       <Media.Body>
         <a href="/" className={styles.author}>{createdByUser.displayName}</a>
         <a href="/" className={styles.metadata}>{getAmPmTimeFromDate(createdAt)}</a>
-        <div className={styles.text}>{text}</div>
+        <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
       </Media.Body>
     </Media>
   );
