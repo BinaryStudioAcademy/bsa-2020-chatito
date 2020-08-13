@@ -18,7 +18,7 @@ export const addPost = async (id: string, post: ICreatePost) => {
   const newPost: ICreatePost = { ...post, createdByUser: user, chat };
   const createdPost: IPost = await getCustomRepository(PostRepository).addPost(newPost);
   const clientPost = await fromPostToPostClient(createdPost);
-  emitToRoom(clientPost.chatId, SocketRoutes.NewPost, createdPost);
+  emitToRoom(clientPost.chatId, SocketRoutes.AddPost, createdPost);
   return clientPost;
 };
 

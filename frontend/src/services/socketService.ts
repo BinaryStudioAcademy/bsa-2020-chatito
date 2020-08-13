@@ -15,15 +15,17 @@ const socket = io(server!, { query: `auth_token=${getAccessToken()}` });
 export const connectSockets = () => {
   socket.on(SocketRoutes.AddPost, (post: IPost) => {
     const state = store.getState();
-    post.chatId === state.chat.chat.id
-      ? addPostWithSocketRoutine(post)
-      : incUnreadCountRoutine({ chatId: post.chatId });
+    if (post.chatId === state.chat.chat.id) {
+      store.dispatch(addPostWithSocketRoutine(post));
+    } else {
+      store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
+    }
   });
 
   socket.on(SocketRoutes.EditPost, (post: IPost) => {
     const state = store.getState();
-    post.chatId === state.chat.chat.id
-      ? editPostWithSocketRoutine(post)
-      : null;
+    if (post.chatId === state.chat.chat.id) {
+      store.dispatch(editPostWithSocketRoutine(post));
+    }
   });
 };

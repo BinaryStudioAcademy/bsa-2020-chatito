@@ -1,5 +1,9 @@
 import { Routine } from 'redux-saga-routines';
-import { setCurrentChatRoutine, setPostsRoutine, createChatRoutine, addPostWithSocketRoutine, editPostWithSocketRoutine } from '../routines';
+import { setCurrentChatRoutine,
+  setPostsRoutine,
+  createChatRoutine,
+  addPostWithSocketRoutine,
+  editPostWithSocketRoutine } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 
@@ -41,16 +45,18 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
       return {
         ...state, loading: false
       };
-    case addPostWithSocketRoutine.TRIGGER:{
-      const posts = [ ...state.posts ];
+    case addPostWithSocketRoutine.TRIGGER: {
+      const posts = [...state.posts];
+      console.log(payload);
+
       posts.push(payload);
       return {
         ...state, posts
       };
     }
-    case editPostWithSocketRoutine.TRIGGER:{
+    case editPostWithSocketRoutine.TRIGGER: {
       const editedPost = payload;
-      const posts = [ ...state.posts ].map(post => { return post.id === editedPost.id ? editedPost : post });
+      const posts = [...state.posts].map(post => (post.id === editedPost.id ? editedPost : post));
       return {
         ...state, posts
       };
