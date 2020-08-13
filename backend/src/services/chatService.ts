@@ -1,4 +1,3 @@
-import { Socket } from 'socket.io';
 import { getCustomRepository } from 'typeorm';
 import { Workspace } from '../data/entities/Workspace';
 import { User } from '../data/entities/User';
@@ -39,11 +38,4 @@ export const addChat = async (userId: string, body: IChatData) => {
   };
   const chat: IChat = await getCustomRepository(ChatRepository).addChat(newChat);
   return chat;
-};
-
-export const initJoinToChatRoom = async (socket: Socket, userId: string) => {
-  const chats = await getAllUserChats(userId);
-
-  chats.channels.forEach(chat => socket.join(chat.id));
-  chats.directs.forEach(chat => socket.join(chat.id));
 };
