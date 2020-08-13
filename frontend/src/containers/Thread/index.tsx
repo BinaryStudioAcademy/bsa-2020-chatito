@@ -9,12 +9,15 @@ import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { IUser } from 'common/models/user/IUser';
+import { ICreateComment } from 'common/models/post/ICreateComment';
+import { addCommentRoutine } from './routines';
+import { connect } from 'react-redux';
 
 interface IProps {
   width?: number | string;
   post: IPost;
   comments: IPost[];
-  sendComment: IBindingCallback1<string>;
+  sendComment: IBindingCallback1<ICreateComment>;
   onHide?: IBindingAction;
   hideCloseBtn?: boolean;
   openUserProfile: IBindingCallback1<IUser>;
@@ -30,6 +33,11 @@ const Thread: FunctionComponent<IProps> = ({
   openUserProfile
 }) => {
   const participants = Array.from(new Set(comments.map(comment => comment.user.id)));
+
+  const sendCommentHandler = (text: string) => {
+    const { id: postId } = post;
+    sendComment({ postId, text });
+  };
 
   return (
     <div className={styles.threadContainer} style={{ width }}>
@@ -59,9 +67,13 @@ const Thread: FunctionComponent<IProps> = ({
           ))}
         </div>
       </div>
-      <TextEditor placeholder="write a comment!" onSend={sendComment} height={130} />
+      <TextEditor placeholder="write a comment!" onSend={sendCommentHandler} height={130} />
     </div>
   );
 };
 
-export default Thread;
+const mapDispatchToProps = {
+  sendComment: addCommentRoutine
+};
+
+export default connect(null, mapDispatchToProps)(Thread);
