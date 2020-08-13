@@ -40,19 +40,21 @@ const SignIn: FunctionComponent<IProps> = ({ loginUser, loginWithGoogle, workspa
       workspace
     };
 
-    if (invitedUserEmail && email !== invitedUserEmail) {
-      toastrError('Please, enter email which you where invited with.');
-    } else {
-      loginUser(payload);
-    }
+    return (invitedUserEmail && email !== invitedUserEmail)
+      ? toastrError('Please, use email which you where invited with.')
+      : loginUser(payload);
   };
 
   const handleGoogleAuth = async () => {
     const auth2 = gapi.auth2.getAuthInstance();
     const googleUser = await auth2.signIn();
 
+    const email = googleUser.getBasicProfile().getEmail();
     const token = googleUser.getAuthResponse().id_token;
-    loginWithGoogle({ token, workspace });
+
+    return (invitedUserEmail && email !== invitedUserEmail)
+      ? toastrError('Please, use email which you where invited with.')
+      : loginWithGoogle({ token, workspace });
   };
 
   const initialValues = {
