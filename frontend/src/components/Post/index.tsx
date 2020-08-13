@@ -12,7 +12,6 @@ interface IProps {
 const Post: React.FC<IProps> = ({ post }) => {
   const { createdByUser, text } = post;
   const createdAt = new Date(post.createdAt);
-
   const onSend = () => {
     console.log('Send text message');
   };

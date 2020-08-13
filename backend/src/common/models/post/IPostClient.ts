@@ -1,9 +1,9 @@
-import { IUserClient } from './../user/IUserClient';
+import { IUserClient } from '../user/IUserClient';
 
 export interface IPostClient {
   id: string;
   createdAt: Date;
   text: string;
   chatId: string;
-  user: IUserClient
+  createdByUser: IUserClient
 }

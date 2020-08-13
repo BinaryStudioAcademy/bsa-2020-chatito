@@ -12,6 +12,6 @@ export const fromPostToPostClient = async (post: IPost): Promise<IPostClient> =>
     createdAt,
     text,
     chatId,
-    user: userClient
+    createdByUser: userClient
   };
 };

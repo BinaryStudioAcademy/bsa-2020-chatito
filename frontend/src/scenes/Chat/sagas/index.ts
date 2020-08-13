@@ -9,7 +9,7 @@ import { showModalRoutine } from 'routines/modal';
 
 function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
-    const responce: IPost[] | true = yield call(fetchCnannelPosts, payload);
+    const responce: IPost[] = yield call(fetchCnannelPosts, payload);
     yield put(setPostsRoutine.success(responce));
   } catch (error) {
     yield call(toastrError, error.message);

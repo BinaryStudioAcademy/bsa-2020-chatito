@@ -14,7 +14,7 @@ import { fromPostToPostClient } from '../common/mappers/post';
 
 export const getAllChatPosts = async (chatId: string) => {
   const chatPosts: IPost[] = await getCustomRepository(PostRepository).getAllChatPosts(chatId);
-  const mappedChatPosts = chatPosts.map(async post => fromPostToPostClient(post));
+  const mappedChatPosts = Promise.all(chatPosts.map(async post => fromPostToPostClient(post)));
   return mappedChatPosts;
 };
 
