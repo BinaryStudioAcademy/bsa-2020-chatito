@@ -120,7 +120,7 @@ export const forgotPassword = async ({ email }: IForgotPasswordUser) => {
 };
 
 export const resetPassword = async (id: string, password: string) => {
-  const passwordHash = await encrypt(password);
+  const passwordHash = await hash(password);
   const user = await getCustomRepository(UserRepository).editPassword(id, passwordHash);
   return user;
 };
