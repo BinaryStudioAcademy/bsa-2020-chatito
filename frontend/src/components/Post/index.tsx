@@ -21,8 +21,9 @@ const Post: React.FC<IProps> = ({ post, openThread, openUserProfile }) => {
   return (
     <Media className={styles.postWrapper}>
       <ProfilePreview user={user} onSend={onSend} openProfile={openUserProfile} />
-      <Media.Body>
+      <Media.Body bsPrefix={styles.body}>
         <a href="/" className={styles.author}>{user.fullName}</a>
+        <br />
         <a href="/" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</a>
         <div className={styles.text}>{text}</div>
         <div className={styles.footer}>

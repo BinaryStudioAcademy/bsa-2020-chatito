@@ -19,7 +19,7 @@ const postMock = {
     status: 'online'
   },
   id: 'e4bf2dab-1fc1-4c9b-a75e-67c23418d9c2',
-  text: 'Post test qwerqewrqwerqwerqwerdsauifasdfioausdpfoiausdpfoiasdufpaosdiufaspqwerqewrqwerqwerqwerdsauifasdfioausdpfoiausdpfoiasdufpaosdiufaspqwerqewrqwerqwerqwerdsauifasdfioausdpfoiausdpfoiasdufpaosdiufaspqwerqewrqwerqwerqwerdsauifasdfioausdpfoiausdpfoiasdufpaosdiufaspqwerqewrqwerqwerqwerdsauifasdfioausdpfoiausdpfoiasdufpaosdiufasp', // eslint-disable-line
+  text: 'Phasellus varius pretium vulputate. Sed finibus maximus tortor, ac cursus nulla dignissim a. Mauris iaculis, turpis vel pulvinar iaculis, ex ipsum rhoncus erat, sit amet convallis turpis libero posuere urna. Donec orci nulla, ultrices sit amet enim quis, suscipit posuere eros. Aenean sed magna diam. Donec imperdiet sagittis nulla, elementum feugiat sapien maximus quis. Nulla nec rhoncus urna. Suspendisse mi dui, sollicitudin sit amet ante ut, semper malesuada nisi.', // eslint-disable-line
   createdAt: '2020-08-11T12:40:36.072Z'
 };
 

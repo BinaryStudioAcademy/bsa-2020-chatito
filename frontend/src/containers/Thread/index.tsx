@@ -30,6 +30,7 @@ const Thread: FunctionComponent<IProps> = ({
   openUserProfile
 }) => {
   const participants = Array.from(new Set(comments.map(comment => comment.user.id)));
+
   return (
     <div className={styles.threadContainer} style={{ width }}>
       <header>
