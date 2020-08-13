@@ -10,10 +10,12 @@ import ChatRepository from '../data/repositories/chatRepository';
 import UserRepository from '../data/repositories/userRepository';
 import WorkspaceRepository from '../data/repositories/workspaceRepository';
 import { ChatType } from '../common/enums/ChatType';
+import { fromPostToPostClient } from '../common/mappers/post';
 
 export const getAllChatPosts = async (chatId: string) => {
-  const posts: IPost[] = await getCustomRepository(PostRepository).getAllChatPosts(chatId);
-  return posts;
+  const chatPosts: IPost[] = await getCustomRepository(PostRepository).getAllChatPosts(chatId);
+  const mappedChatPosts = chatPosts.map(async post => fromPostToPostClient(post));
+  return mappedChatPosts;
 };
 
 export const getAllUserChats = async (userId: string) => {
