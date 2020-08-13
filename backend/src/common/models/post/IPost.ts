@@ -4,4 +4,5 @@ export interface IPost {
   updatedAt: Date;
   createdByUserId: string;
   chatId: string;
+  text: string;
 }

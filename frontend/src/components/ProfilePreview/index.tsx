@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
 import { useKey } from 'common/hooks/onInputSubmit';
+import { userLogoDefaultUrl } from 'common/configs/defaults';
 
 interface IProps {
   user: IUser;
@@ -33,7 +34,7 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
   const popOver = (
     <Popover id={user.id} className={styles.popOverWindow}>
       <div className={styles.avatarContainer}>
-        <Image className={styles.userAvatar} src={user.imageUrl} alt="User avatar" thumbnail />
+        <Image className={styles.userAvatar || userLogoDefaultUrl} src={user.imageUrl} alt="User avatar" thumbnail />
       </div>
       <Popover.Content>
         {user.status === 'online' ? (

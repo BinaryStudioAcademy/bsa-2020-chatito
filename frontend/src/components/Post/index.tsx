@@ -14,18 +14,19 @@ interface IProps {
 }
 
 const Post: React.FC<IProps> = ({ post, openThread, openUserProfile }) => {
-  const { user, text, createdAt } = post;
+  const { createdByUser, text } = post;
+  const createdAt = new Date(post.createdAt);
   const onSend = () => {
     console.log('Send text message'); // eslint-disable-line
   };
   return (
     <Media className={styles.postWrapper}>
-      <ProfilePreview user={user} onSend={onSend} openProfile={openUserProfile} />
+      <ProfilePreview user={createdByUser} onSend={onSend} openProfile={openUserProfile} />
       <Media.Body bsPrefix={styles.body}>
-        <a href="/" className={styles.author}>{user.fullName}</a>
+        <a href="/" className={styles.author}>{createdByUser.fullName}</a>
         <br />
         <a href="/" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</a>
-        <div className={styles.text}>{text}</div>
+        <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
         <div className={styles.footer}>
           { openThread && (
             <Card.Link
