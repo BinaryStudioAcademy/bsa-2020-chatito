@@ -13,7 +13,6 @@ export default function* rootSaga() {
     chatSaga(),
     workspaceUsersSaga(),
     workspaceSaga(),
-    chatSaga(),
     invitePopupSaga(),
     joinInvitedWorkspaceSaga(),
     threadSaga()

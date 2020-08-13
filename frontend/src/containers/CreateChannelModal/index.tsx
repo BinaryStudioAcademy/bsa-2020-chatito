@@ -44,6 +44,7 @@ const CreateChannelModal: FunctionComponent<IProps> = ({
       workspaceName: workspace.name
     };
     createChannel(newChannel);
+    toggleModal({ modalType: ModalTypes.CreateChannel, show: false });
   };
 
   return (

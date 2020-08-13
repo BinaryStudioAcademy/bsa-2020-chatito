@@ -88,7 +88,7 @@ const EditProfile: FunctionComponent<IProps> = ({
                 value={displayName}
                 onChange={handleChange}
               />
-              <Form.Text className="text-muted">
+              <Form.Text className="text-muted small">
                 This could be your nickname — however you’d like people to refer
                 to you in Chatito.
               </Form.Text>
@@ -102,7 +102,7 @@ const EditProfile: FunctionComponent<IProps> = ({
                 value={title}
                 onChange={handleChange}
               />
-              <Form.Text className="text-muted">
+              <Form.Text className="text-muted small">
                 Let people know what you do at this channel.
               </Form.Text>
             </Form.Group>
