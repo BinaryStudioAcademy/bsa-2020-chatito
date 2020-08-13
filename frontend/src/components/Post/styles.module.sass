@@ -1,24 +1,53 @@
+.postWrapper
+  color: var(--main)
+
 .postWrapper:hover
-	background: #fafafa
+	background: var(--post-bg)
 
 .author
   display: inline-block
   font-size: 1rem
-  color: rgb(29, 28, 29)
+  color: var(--title-text)
   font-weight: 900
-
-.author:hover
-  color: rgb(29, 28, 29)
 
 .metadata
   display: inline-block
   margin-left: .5rem
   font-weight: 400
-  color: rgb(29, 28, 29)
+  color: var(--secondary-text)
   font-size: .8125rem
-
-.metadata:hover
-  color: rgb(29, 28, 29)
 
 .text
   text-align: left
+  margin-bottom: 10px
+
+.emojiStats
+  display: flex
+  flex-wrap: wrap
+
+.emojiStatItem
+  margin-right: 5px
+  margin-bottom: 5px
+  padding: 2px 4px
+  border: 1px solid transparent
+  cursor: pointer
+  background-color: var(--post-emoji-bg)
+  border-radius: 20px
+
+.emojiStatItem:hover
+  border: 1px solid var(--border)
+  border-radius: 20px
+  background-color: var(--post-emoji-bg-hover)
+
+.emoji
+  margin-right: 3px
+  font-size: 14px
+
+.reactBtn, .replyBtn
+  font-size: 12px
+  line-height: 14px
+  margin-right: 18px
+  margin-bottom: 18px
+
+.reactBtn:hover, .replyBtn:hover
+  text-decoration: underline
