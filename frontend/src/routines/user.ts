@@ -8,4 +8,5 @@ export const loginUserRoutine = createRoutine('LOGIN_USER');
 export const forgotPasswordRoutine = createRoutine('FORGOT_PASSWORD');
 export const resetPasswordRoutine = createRoutine('RESET_PASSWORD');
 export const editStatusRoutine = createRoutine('EDIT_STATUS');
+export const fetchWorkspacesRoutine = createRoutine('FETCH_WORKSPACES');
 export const setInvitedUserRoutine = createRoutine('SET_INVITED_USER');

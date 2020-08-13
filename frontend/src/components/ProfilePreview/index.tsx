@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useContext, useRef } from 'react';
+import React, { FunctionComponent, useState, useRef } from 'react';
 import { OverlayTrigger, Image, Popover, Form } from 'react-bootstrap';
 import { IUser } from 'common/models/user/IUser';
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
@@ -6,24 +6,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
 import { useKey } from 'common/hooks/onInputSubmit';
-// import { ProfileContext, IContext } from 'scenes/Workspace/containers/Workspace/index';
 
-// const {
-//   setShowProfileHandler,
-//   setUserDataHandler
-// } = useContext(ProfileContext) as IContext; // eslint-disable @typescript-eslint/no-unused-vars
 interface IProps {
   user: IUser;
   onSend: () => void;
+  openProfile: IBindingCallback1<IUser>;
 }
 
-const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend }) => {
+const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }) => {
   const [text, setText] = useState('');
   const inputRef = useRef(null);
-  // const onViewProfile = () => {
-  //   setUserDataHandler(user);
-  //   setShowProfileHandler();
-  // };
+  const onViewProfile = () => {
+    openProfile(user);
+  };
   const onSendMessage = () => {
     if (text.trim()) {
       onSend();
@@ -49,7 +44,7 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend }) => {
         <p className={styles.title}>{user.title}</p>
         <button
           type="button"
-          // onClick={onViewProfile}
+          onClick={onViewProfile}
           className={styles.link}
         >
           View full profile

@@ -1,56 +1,43 @@
-.threadContainer
-  background-color: var(--chat-background-secondary)
-  position: relative
-
-  margin-left: auto
-  border: 1px solid red
-  padding: 10px
-  height: 100%
-
-  display: flex
-  flex-direction: column
-  justify-content: flex-start
-  align-items: left
-
-  p
-    margin: 0
-
-  header
-    padding: 10px 0
-    border-bottom: 1px solid #b1b1b1
-
-  .threadChatName
-    font-size: 1.5em
-    font-weight: bold
-    margin-bottom: 5px
-
-  .threadComments
-    background-color: var(--chat-background-primary)
-    border-radius: 15px
-    border: 1px solid var(--border-lightbrown)
-    padding: 5px
-    height: 60%
-    margin-top: 10px
-
-    .commentsWrapper
-      padding: 10px
-      max-height: 600px
-      overflow-y: scroll
-
 .closeBtn
   position: absolute
   z-index: 1000
   top: 25px
   right: 25px
 
+.threadContainer
+  background-color: var(--chat-background-secondary)
+  position: relative
 
-// Mock
+  margin-left: auto
+  height: 100%
 
-.mockMessage
-  margin: 10px 0
-  padding: 10px
-  padding-left: 60px
-  width: 100%
+  display: flex
+  flex-direction: column
+  justify-content: flex-start
 
+  p
+    margin: 0
 
+  header
+    height: 64px
+    padding: 10px
+    border-bottom: 1px solid var(--border);
 
+  .threadChatName
+    font-size: 1.5em
+    font-weight: bold
+    margin-bottom: 5px
+
+  .threadPost
+    padding: 10px
+    border-bottom: 1px solid var(--border);
+
+  .threadComments
+    background-color: var(--chat-background-secondary)
+    margin: 10px 0
+    padding: 10px
+    max-height: 600px
+    overflow-y: scroll
+
+    .comment
+      margin-bottom: 3px

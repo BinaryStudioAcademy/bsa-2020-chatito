@@ -1,68 +1,41 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import styles from './styles.module.sass';
 
 import ThreadView from 'containers/Thread';
-import { IUser } from 'common/models/user/IUser';
-import { fetchPostCommentsRoutine, addCommentRoutine } from '../../routines';
 import { IAppState } from 'common/models/store';
 import { IPost } from 'common/models/post/IPost';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
-import { ICreateComment } from 'common/models/post/ICreateComment';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
+import { IUser } from 'common/models/user/IUser';
 
 interface IProps {
-  post: IPost;
-  comments: IPost[];
-  fetchPostComments: IBindingCallback1<string>;
-  sendComment: IBindingCallback1<ICreateComment>;
+  post: IPost | undefined;
+  comments: IPost[] | undefined;
   onHide: IBindingAction;
+  openUserProfile: IBindingCallback1<IUser>;
 }
 
 const Thread: React.FC<IProps> = ({
   post,
-  comments,
-  fetchPostComments,
-  sendComment,
-  onHide
-}) => {
-  const { id: postId } = post;
+  comments = [],
+  onHide,
+  openUserProfile
+}) => (
+  post
+    ? (
+      <ThreadView
+        width="400px"
+        post={post}
+        comments={comments}
+        onHide={onHide}
+        openUserProfile={openUserProfile}
+      />
+    ) : null
+);
 
-  useEffect(() => {
-    fetchPostComments(postId);
-  }, []);
+const mapStateToProps = (state: IAppState) => ({
+  post: state.workspace.activeThread?.post,
+  comments: state.workspace.activeThread?.comments
+});
 
-  const sendCommentHandler = (text: string) => {
-    sendComment({ postId, text });
-  };
-
-  return (
-    <>
-      { comments
-        ? (
-          <ThreadView
-            post={post}
-            comments={comments}
-            sendComment={sendCommentHandler}
-            onHide={onHide}
-          />
-        )
-        : null }
-    </>
-  );
-};
-
-const mapStateToProps = (state: IAppState) => {
-  const { workspace: { activeThread: { post, comments } } } = state;
-  return {
-    post,
-    comments
-  };
-};
-
-const mapDispatchToProps = {
-  fetchPostComments: fetchPostCommentsRoutine,
-  sendComment: addCommentRoutine
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Thread);
+export default connect(mapStateToProps)(Thread);
