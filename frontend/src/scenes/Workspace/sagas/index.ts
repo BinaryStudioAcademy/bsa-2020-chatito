@@ -2,7 +2,8 @@ import {
   addWorkspaceRoutine,
   fetchPostCommentsRoutine,
   addCommentRoutine,
-  setActiveThreadRoutine } from 'scenes/Workspace/routines';
+  setActiveThreadRoutine,
+  fetchUserChatsRoutine } from 'scenes/Workspace/routines';
 import { Routine } from 'redux-saga-routines';
 import { takeEvery, put, call, all } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
@@ -10,6 +11,8 @@ import { addWorkspace } from 'services/workspaceService';
 import { addComment, fetchPostComments } from 'services/threadsService';
 import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
+import { toastrError } from 'services/toastrService';
+import { fetchUserChats, createChat } from 'services/chatServise';
 
 function* addWorkspaceReq({ payload }: Routine<any>) {
   try {
@@ -68,6 +71,18 @@ function* setActiveThread({ payload }: Routine<any>) {
 
 function* watchSetActiveThread() {
   yield takeEvery(setActiveThreadRoutine.TRIGGER, setActiveThread);
+function* fetchUserChatsRequest() {
+  try {
+    const response = yield call(fetchUserChats);
+    yield put(fetchUserChatsRoutine.success(response));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(fetchUserChatsRoutine.failure(error.message));
+  }
+}
+
+function* watchFetchUserChatsRequest() {
+  yield takeEvery(fetchUserChatsRoutine.TRIGGER, fetchUserChatsRequest);
 }
 
 export default function* workspaceSaga() {
@@ -75,6 +90,7 @@ export default function* workspaceSaga() {
     watchPostWorkspaceName(),
     watchAddCommentRequest(),
     watchFetchPostCommentsRequest(),
-    watchSetActiveThread()
+    watchSetActiveThread(),
+    watchFetchUserChatsRequest()
   ]);
 }

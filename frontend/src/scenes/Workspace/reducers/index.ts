@@ -5,32 +5,34 @@ import {
   setActiveThreadRoutine,
   fetchPostCommentsRoutine,
   showRightSideMenuRoutine,
-  showUserProfileRoutine } from '../routines';
+  showUserProfileRoutine,
+  fetchUserChatsRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
-import { IChat } from 'common/models/workstate/chat';
+import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
+import { ChatType } from 'common/enums/ChatType';
 import { IUser } from 'common/models/user/IUser';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
   loading: boolean;
   error: string;
-  selectedChat: IChat;
   channels: Array<IChat>;
   directMessages: Array<IChat>;
+  users?: Array<IUser>;
   showRightSideMenu: RightMenuTypes;
   activeThread: IActiveThread | null;
   userProfile: IUser;
 }
 
 const initialState: IWorkspaceState = {
-  workspace: { id: '', name: '', hash: '', imageUrl: '' },
+  workspace: { id: '', name: '', hash: '', imageUrl: '', users: [] },
   loading: false,
   error: '',
-  selectedChat: { id: '', name: '', isPrivate: false },
   channels: [],
   directMessages: [],
+  users: [],
   showRightSideMenu: RightMenuTypes.None,
   activeThread: null,
   userProfile: { id: '', email: '', fullName: '', displayName: '' }
@@ -38,17 +40,26 @@ const initialState: IWorkspaceState = {
 
 const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>) => {
   switch (type) {
-    case selectChatRoutine.TRIGGER:
-      return {
-        ...state,
-        selectedChat: payload
-      };
-    case selectWorkspaceRoutine.TRIGGER: {
+    case selectWorkspaceRoutine.TRIGGER:
       return {
         ...state,
         workspace: payload
       };
-    }
+    case fetchUserChatsRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case fetchUserChatsRoutine.SUCCESS:
+      return {
+        ...state,
+        channels: payload.channels,
+        directMessages: payload.directMessages,
+        loading: false
+      };
+    case fetchUserChatsRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
     case showRightSideMenuRoutine.TRIGGER:
       return {
         ...state,
