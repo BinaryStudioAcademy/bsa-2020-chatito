@@ -5,7 +5,6 @@ import {
 } from '../routines';
 
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
-import { ChatType } from 'common/enums/ChatType';
 import { IChat } from 'common/models/chat/IChat';
 import { IUser } from 'common/models/user/IUser';
 

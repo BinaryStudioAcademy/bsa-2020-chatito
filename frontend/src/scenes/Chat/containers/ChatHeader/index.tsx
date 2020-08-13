@@ -24,9 +24,6 @@ interface IProps {
 }
 
 const ChatHeader: React.FC<IProps> = ({ chat }) => {
-  console.log('RENDER');
-  console.log(chat);
-
   const maxAvatarsDisplayed = 5;
   const userAvatars = (users: IUser[]) => {
     const initVal: string[] = [];
@@ -37,16 +34,11 @@ const ChatHeader: React.FC<IProps> = ({ chat }) => {
       prevValue.push(currUser.imageUrl || userLogoDefaultUrl);
       return prevValue;
     }, initVal);
-    console.log('VATARS');
-
-    console.log(initVal);
 
     return initVal.map(url => (<Image src={url} key={url} rounded className={styles.memberAvatarIcon} />));
   };
 
   if (!chat) {
-    console.log('RETURN NULL');
-
     return null;
   }
 
