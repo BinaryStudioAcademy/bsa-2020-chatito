@@ -37,15 +37,21 @@ const createRefreshToken = async (user: User): Promise<IRefreshToken> => {
   return refreshToken;
 };
 
+const addWorkspaceToUser = async (userId: string, workspaceId: string) => {
+  try {
+    const user = await getCustomRepository(UserRepository).addWorkspace(userId, workspaceId);
+    return user;
+  } catch (error) {
+    throw new CustomError(409, 'User already exists in workspace. Please, sign in.', ErrorCode.UserExistsInWorkspace);
+  }
+};
+
 export const register = async ({ password, workspaceId, ...userData }: IRegisterUser) => {
   const passwordHash = await hash(password);
   const createUserData = fromRegisterUserToCreateUser({ ...userData, password: passwordHash, workspaceId });
 
   const newUser = await getCustomRepository(UserRepository).addUser(createUserData);
-
-  const user = workspaceId
-    ? await getCustomRepository(UserRepository).addWorkspace(newUser.id, workspaceId)
-    : newUser;
+  const user = workspaceId ? await addWorkspaceToUser(newUser.id, workspaceId) : newUser;
 
   const refreshToken = await createRefreshToken(user);
 
@@ -64,12 +70,10 @@ export const login = async ({ email, password, workspaceId }: ILoginUser) => {
 
   const comparePassword = await compare(password, loginUser.password);
   if (!comparePassword) {
-    throw new CustomError(401, 'Wrong credentials. Please, try again.', ErrorCode.Unauthorized);
+    throw new CustomError(400, 'Wrong credentials. Please, try again.', ErrorCode.Unauthorized);
   }
 
-  const user = workspaceId
-    ? await getCustomRepository(UserRepository).addWorkspace(loginUser.id, workspaceId)
-    : loginUser;
+  const user = workspaceId ? await addWorkspaceToUser(loginUser.id, workspaceId) : loginUser;
 
   const refreshToken = await createRefreshToken(user);
 
@@ -88,9 +92,7 @@ export const loginWithGoogle = async ({ token, workspaceId }: ILoginWithGoogle) 
     throw new CustomError(404, 'No user exists. Please, sign up first.', ErrorCode.UserNotFound);
   }
 
-  const user = workspaceId
-    ? await getCustomRepository(UserRepository).addWorkspace(loginUser.id, workspaceId)
-    : loginUser;
+  const user = workspaceId ? await addWorkspaceToUser(loginUser.id, workspaceId) : loginUser;
 
   const refreshToken = await createRefreshToken(user);
 
