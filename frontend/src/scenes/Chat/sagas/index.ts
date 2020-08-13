@@ -21,7 +21,8 @@ function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
           title: 'string',
           status: 'online'
         },
-        createdAt: new Date(),
+        id: '',
+        createdAt: '2020-08-11T12:40:36.072Z',
         text: 'Message'
       }
     ];
