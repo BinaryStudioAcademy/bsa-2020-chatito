@@ -1,8 +1,9 @@
 import { IUser } from '../user/IUser';
 
 export interface IPost {
-  id: string;
-  user: IUser;
+  createdByUser: IUser;
   text: string;
-  createdAt: string;
+  createdAt: Date;
+  id: string;
+  chatId?: string;
 }

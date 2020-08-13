@@ -23,7 +23,7 @@ const ChatBody: React.FC<IProps> = ({ messages, openProfile, openThread, activeT
 
   return (
     <div className={styles.chatBody}>
-      {messages.map(m => <Post post={m} openThread={handleOpenThread} openUserProfile={openProfile} />)}
+      {messages.map(m => <Post post={m} key={m.id} openThread={handleOpenThread} openUserProfile={openProfile} />)}
     </div>
   );
 };

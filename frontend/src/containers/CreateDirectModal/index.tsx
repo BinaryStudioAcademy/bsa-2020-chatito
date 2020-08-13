@@ -45,6 +45,7 @@ const CreateDirectModal: FunctionComponent<IProps> = ({
       users
     };
     createDirect(newDirect);
+    toggleModal({ modalType: ModalTypes.CreateDirect, show: false });
   };
 
   return (
