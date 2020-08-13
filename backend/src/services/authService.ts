@@ -1,4 +1,5 @@
 import { getCustomRepository } from 'typeorm';
+
 import UserRepository from '../data/repositories/userRepository';
 import RefreshTokenRepository from '../data/repositories/refreshTokenRepository';
 
@@ -16,6 +17,8 @@ import { IForgotPasswordUser } from '../common/models/user/IForgotPasswordUser';
 import CustomError from '../common/models/CustomError';
 import { sendResetPasswordMail } from './mailService';
 import { ErrorCode } from '../common/enums/ErrorCode';
+import { ILoginWithGoogle } from '../common/models/user/ILoginWithGoogle';
+import { getGoogleUserPayload } from '../common/utils/googleAuthHelper';
 
 const createRefreshTokenData = (user: User) => {
   const cur = new Date();
@@ -80,6 +83,27 @@ export const login = async ({ email, password, workspaceId }: ILoginUser) => {
   } catch (err) {
     throw new Error('User not found !');
   }
+};
+
+export const loginWithGoogle = async ({ token, workspaceId }: ILoginWithGoogle) => {
+  const googleUser = await getGoogleUserPayload(token);
+
+  const loginUser = await getCustomRepository(UserRepository).getByEmail(googleUser.email);
+  if (!loginUser) {
+    throw new CustomError(404, 'No user exists. Please, sign up first.', ErrorCode.UserNotFound);
+  }
+
+  const user = workspaceId
+    ? await getCustomRepository(UserRepository).addWorkspace(loginUser.id, workspaceId)
+    : loginUser;
+
+  const refreshToken = await createRefreshToken(user);
+
+  return {
+    user: fromUserToUserWithWorkspaces(user),
+    accessToken: createToken({ id: loginUser.id }),
+    refreshToken: encrypt(refreshToken.id)
+  };
 };
 
 export const refreshTokens = async (encryptedId: string) => {
