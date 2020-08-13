@@ -6,7 +6,8 @@ import {
   fetchPostCommentsRoutine,
   showRightSideMenuRoutine,
   showUserProfileRoutine,
-  fetchUserChatsRoutine } from '../routines';
+  fetchUserChatsRoutine,
+  incUnreadCountRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
@@ -84,6 +85,20 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state,
         activeThread: { ...state.activeThread, comments: payload }
       };
+    case incUnreadCountRoutine.TRIGGER: {
+      const { chatId } = payload;
+      const channels = [ ...state.channels ].map(channel => {
+        return chatId === channel.id
+        ? { ...channel, unreadCount: channel.unreadCount + 1 }
+        : channel
+      });
+      const directMessages = [ ...state.directMessages ].map(direct => {
+        return chatId === direct.id
+        ? { ...direct, unreadCount: direct.unreadCount + 1 }
+        : direct
+      });
+      return { ...state, channels, directMessages }
+    }
     default:
       return state;
   }
