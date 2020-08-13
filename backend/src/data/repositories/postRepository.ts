@@ -37,11 +37,40 @@ class PostRepository extends Repository<Post> {
   }
 
   getPostsByUserId(id: string, activeworkspaceid: string) {
-    console.log(id+ '\n'+activeworkspaceid);
     const posts = this.createQueryBuilder("post")
-      .leftJoinAndSelect("post.chat", "chat")
-      .leftJoinAndSelect("post.comments", "comments")
-      .leftJoinAndSelect("comments.post", "commentsPost")
+      .select("post.createdByUser")
+      .addSelect("post.text")
+      .addSelect("post.createdAt")
+      .addSelect("post.id")
+
+      .leftJoin("post.chat", "chat")
+      .addSelect("chat.name")
+
+      .leftJoin("post.createdByUser", "user")
+      .addSelect("user.id")
+      .addSelect("user.email")
+      .addSelect("user.fullName")
+      .addSelect("user.displayName")
+      .addSelect("user.imageUrl")
+      .addSelect("user.title")
+      .addSelect("user.status")
+
+      .leftJoin("post.comments", "comments")
+      .leftJoin("comments.createdByUser", "commentuser")
+      .addSelect("commentuser.id")
+      .addSelect("commentuser.email")
+      .addSelect("commentuser.fullName")
+      .addSelect("commentuser.displayName")
+      .addSelect("commentuser.imageUrl")
+      .addSelect("commentuser.title")
+      .addSelect("commentuser.status")
+      
+      .addSelect("comments.id")
+      .addSelect("comments.\"createdByUserId\"")
+      .addSelect("comments.text")
+      .addSelect("comments.createdAt")
+      .leftJoin("comments.post", "commentsPost")
+      
       .leftJoinAndSelect("commentsPost.chat", "commentsPostChat")
       .where("post.\"createdByUserId\" = :id", { id })
       .andWhere("chat.\"workspaceId\" = :activeworkspaceid", { activeworkspaceid })
