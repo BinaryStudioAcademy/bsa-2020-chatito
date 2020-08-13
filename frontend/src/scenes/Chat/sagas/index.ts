@@ -13,8 +13,7 @@ function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
     const responce: IPost[] | true = yield call(fetchCnannelPosts, payload);
     yield put(setPostsRoutine.success(responce));
   } catch (error) {
-    console.log('Err');
-    console.log(error);
+    console.error(error);
 
     yield call(toastrError, error.message);
   }
@@ -61,7 +60,7 @@ function* createChatRequest({ payload }: Routine<any>) {
     yield put(showModalRoutine({ modalType: payload.type, show: false }));
 
     yield put(fetchUserChatsRoutine.trigger());
-    // history.push(`/Direct/${payload.chat}`);
+    yield put(setCurrentChatRoutine.trigger(chat));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(createChatRoutine.failure());
@@ -77,7 +76,6 @@ export default function* chatSaga() {
     watchPostsRequest(),
     watchCurrChat(),
     watchAddPostRequest(),
-    watchCreateChatRequest(),
     watchCreateChatRequest(),
     watchToggleCreateChatModal()
   ]);

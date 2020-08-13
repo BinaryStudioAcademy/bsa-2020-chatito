@@ -13,8 +13,6 @@ interface IProps {
 
 const ChatFooter: React.FC<IProps> = ({ addPost, chatId }) => {
   const onSubmit = (text: string) => {
-    console.log('SUBMITTED');
-
     if (chatId) addPost({ chatId, text });
     return chatId;
   };
