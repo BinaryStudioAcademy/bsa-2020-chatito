@@ -2,6 +2,7 @@ import api from 'common/helpers/apiHelper';
 import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
 import { IRegisterUser } from 'common/models/auth/IRegisterUser';
 import { ILoginUser } from 'common/models/auth/ILoginUser';
+import { ILoginWithGoogle } from 'common/models/auth/ILoginWithGoogle';
 
 type ServerResponse = IAuthServerResponse & Response;
 
@@ -12,6 +13,13 @@ export const login = async ({ email, password, workspace }: ILoginUser) => {
     workspaceId: workspace.id
   };
   const response = await api.post<ServerResponse>('/api/auth/login', payload);
+  return response;
+};
+
+export const loginWithGoogle = async ({ token, workspace }: ILoginWithGoogle) => {
+  const payload = { token, workspaceId: workspace.id };
+
+  const response = await api.post<ServerResponse>('/api/auth/login/google', payload);
   return response;
 };
 

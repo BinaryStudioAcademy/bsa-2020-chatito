@@ -21,7 +21,6 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import ThreadsContainer from 'containers/ThreadsContainer/index';
-import { IFetchedThreads } from 'common/models/threads/IFetchedThreads';
 import { IThreadsState } from 'containers/ThreadsContainer/reducers/reducer';
 
 interface IProps {

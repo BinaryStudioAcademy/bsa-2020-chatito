@@ -4,7 +4,7 @@ import { IForgotPasswordInput } from 'common/models/auth/IForgotPasswordInput';
 import { IEditStatusData } from 'common/models/status/IEditStatusData';
 
 export const editStatus = async (editStatusData: IEditStatusData) => {
-  const response = await api.put<string>('/edit-status', { editStatusData });
+  const response = await api.put('/api/users/edit-status', editStatusData);
   return response;
 };
 

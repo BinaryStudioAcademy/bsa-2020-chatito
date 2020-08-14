@@ -3,12 +3,11 @@ import { ICreateComment } from 'common/models/post/ICreateComment';
 import { IPostsForThreads } from 'common/models/post/IPostsForThreads';
 
 export const getThreads = async ({ userId, activeWorkspaceId }: IPostsForThreads) => {
-  const response = await api.get(`/api/posts/${userId}/${activeWorkspaceId}/threads`);
+  const response = await api.get(`/api/workspaces/${activeWorkspaceId}/users/${userId}/posts`);
   return response;
 };
 
 export const addComment = async ({ postId, text }: ICreateComment) => {
-  console.log(postId, text);
   const response = await api.post(`/api/posts/${postId}/comments`, { text });
   return response;
 };

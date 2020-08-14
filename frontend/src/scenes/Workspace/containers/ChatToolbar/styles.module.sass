@@ -1,5 +1,6 @@
-$color: rgb(67, 6, 82) // цвет фона
-$coloractive: rgb(120, 21, 145) // цвет активной строки
+$color: var(--workspace-toolbar-select-background) // цвет фона
+$colorText: var(--title-text) // цвет текста
+$coloractive: #CECCC0 // цвет активной строки
 
 .leftToolbar
   padding-top: 15px
@@ -8,24 +9,33 @@ $coloractive: rgb(120, 21, 145) // цвет активной строки
   height: 100%
   background-color: $color
   overflow-y: auto
-  min-width: 250px
-
 
 .channelSelect
   display: flex
   flex-direction: row
   align-items: center
   border: 0
-  padding: 3px
-  padding-left: 28px
+  padding: 8px
+  padding-left: 23px
+  margin-top: 5px
   align-content: left
   outline: none
   width: 100%
-  color: white
+  color: $colorText
   cursor: pointer
 
 .channelCurrent
   background-color: $coloractive
+
+.iconBorder
+  display: flex;
+  justify-content: center
+  align-items: center
+  width: 30px
+  height: 30px
+  margin-left: -8px
+  border: 1px solid red
+  border-radius: 15px
 
 .buttonText
   margin-left: 10px
@@ -51,35 +61,28 @@ $coloractive: rgb(120, 21, 145) // цвет активной строки
   margin-left: 3px
 
 .channelSelect:hover
-  color: white
+  color: $colorText
   background-color: $coloractive
 
 .channelSelect:active
-  color: white
+  color: $colorText
   background-color: $coloractive
 
 .hrr
   margin-top: 10px
   height: 2px
-  background-color: rgb(98, 16, 119)
-
-.channelButtonsWrapper
-  display: flex
-  width: 80%
-  flex-wrap: nowrap
-  justify-content: space-around
-
+  background-color: $coloractive
 
 .buttonChanel
   display: flex
-  flex-direction: column
-  align-items: flex-start
+  flex-direction: row
+  align-items: center
   border: 0
   padding: 0
   align-content: left
   outline: none
   width: 100%
-  color: white
+  color: $colorText
 
 .buttonSelect
   display: flex
@@ -90,8 +93,8 @@ $coloractive: rgb(120, 21, 145) // цвет активной строки
   padding-left: 25px
   border: 0
   outline: none
-  width: 85%
-  color: white
+  width: 100%
+  color: $colorText
   background-color: $color
 
 .chanelsImg
@@ -100,6 +103,7 @@ $coloractive: rgb(120, 21, 145) // цвет активной строки
   transition-property: transform
   transition-duration: 1000ms
   transform: rotate(90deg)
+  color: var(--workspace-icon-background)
 
 .chanelsImgRotate
   width: 22px
@@ -107,56 +111,14 @@ $coloractive: rgb(120, 21, 145) // цвет активной строки
   transition-property: transform
   transition-duration: 1000ms
   transform: none
+  color: var(--workspace-icon-background)
 
 .buttonSelect:hover
-  background-color: rgb(120, 21, 145)
+  background-color: #CECCC0
 
 .buttonSelect:focus
   outline: none
   font-weight: bold
-
-.buttonPlus
-  width: 35px
-  padding: 6px
-
-.chanelInfo
-  position: absolute
-  padding: 5px
-  left: 110px
-  top: 320px
-  width: 150px
-  color: white
-  background: #495474
-  border-radius: 5px
-  font-size: 18px
-  transition: opacity 500ms
-  opacity: 0
-  z-index: -1
-
-.directInfo
-  position: absolute
-  padding: 5px
-  left: 50px
-  top: 450px
-  width: 200px
-  color: white
-  background: #495474
-  border-radius: 5px
-  font-size: 16px
-  transition: opacity 500ms
-  opacity: 0
-  z-index: -1
-
-.buttonPlus:hover
-  background-color: rgb(120, 21, 145)
-
-.buttonPlus:hover ~ .chanelInfo
-  z-index: 3
-  opacity: 1
-
-.buttonPlus:hover ~ .directInfo
-  z-index: 3
-  opacity: 1;
 
 .listBox
   overflow: hidden
