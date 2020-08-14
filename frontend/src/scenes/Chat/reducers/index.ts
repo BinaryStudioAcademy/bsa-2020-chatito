@@ -2,10 +2,12 @@ import { Routine } from 'redux-saga-routines';
 import { setCurrentChatRoutine, setPostsRoutine, createChatRoutine } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
+import { IUser } from 'common/models/user/IUser';
 
 export interface IChatState {
   chat?: IChat;
   posts: IPost[];
+  users?: IUser[];
   loading: boolean;
   error: any;
 }
