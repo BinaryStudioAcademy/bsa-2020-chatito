@@ -73,7 +73,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   };
 
   // eslint-disable-next-line
-  const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => {}) => (
+  const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => { }) => (
     <a href="#0" className={styles.channelSelect} onClick={onClick}>
       <FontAwesomeIcon icon={iconFa} color="black" />
       <span className={styles.buttonText}>{text}</span>
@@ -101,11 +101,32 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   };
 
   const addChannelButton = () => (
-    <a href="#0" className={styles.channelSelect}>
+    <a
+      href="#0"
+      className={styles.channelSelect}
+      onClick={() => showModal({ modalType: ModalTypes.CreateChannel, show: true })}
+    >
       <div className={styles.iconBorder}>
         <FontAwesomeIcon icon={faPlus} color="red" />
       </div>
-      <span className={styles.buttonText}>Add a channel</span>
+      <span className={styles.buttonText}>
+        Add a channel
+      </span>
+    </a>
+  );
+
+  const addDirectButton = () => (
+    <a
+      href="#0"
+      className={styles.channelSelect}
+      onClick={() => showModal({ modalType: ModalTypes.CreateDirect, show: true })}
+    >
+      <div className={styles.iconBorder}>
+        <FontAwesomeIcon icon={faPlus} color="red" />
+      </div>
+      <span className={styles.buttonText}>
+        Add a direct
+      </span>
     </a>
   );
 
@@ -147,7 +168,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       <div className={getClassNameDiv(directPanel)}>
         {directMessages.map(directMessage => (
           directChannel(directMessage)))}
-        {addChannelButton()}
+        {addDirectButton()}
       </div>
       <hr className={styles.hrr} />
       <InvitePopup />
