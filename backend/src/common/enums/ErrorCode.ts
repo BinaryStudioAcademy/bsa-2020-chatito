@@ -3,5 +3,6 @@ export enum ErrorCode {
   UserNotFound,
   UserExistsInWorkspace,
   InvalidAccessToken,
-  InvalidRefreshToken
+  InvalidRefreshToken,
+  WorkspaceAlreadyExists
 }
