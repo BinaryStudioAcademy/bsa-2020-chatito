@@ -63,7 +63,8 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     case addChatWithSocketRoutine.TRIGGER: {
       return {
         ...state,
-        chat: { ...payload }
+        chat: { ...payload },
+        posts: payload.posts
       };
     }
     default:
