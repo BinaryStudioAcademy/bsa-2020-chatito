@@ -14,7 +14,7 @@ class ChatRepository extends Repository<Chat> {
   }
 
   getByIdWithUsers(id: string): Promise<Chat> {
-    return this.findOne({ where: { id }, relations: ['posts', 'users'] });
+    return this.findOne({ where: { id }, relations: ['posts', 'users', 'workspace'] });
   }
 
   getAllByUser(userId: string): Promise<Chat[]> {

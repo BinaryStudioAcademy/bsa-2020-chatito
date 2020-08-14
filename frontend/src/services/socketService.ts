@@ -8,6 +8,8 @@ import { incUnreadCountRoutine } from 'scenes/Workspace/routines';
 import { IChat } from 'common/models/chat/IChat';
 import { ClientSockets } from 'common/enums/ClientSockets';
 import { ServerSockets } from 'common/enums/ServerSockets';
+import { Routes } from 'common/enums/Routes';
+import { push } from 'connected-react-router';
 
 const { server } = env.urls;
 
@@ -35,5 +37,6 @@ export const connectSockets = () => {
   });
   chatSocket.on(ClientSockets.AddChat, (chat: IChat) => {
     store.dispatch(addChatWithSocketRoutine(chat));
+    store.dispatch(push(Routes.WorkspaceWithChat.replace(':whash', chat.workspace.hash).replace(':chash', chat.hash)));
   });
 };
