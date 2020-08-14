@@ -8,6 +8,7 @@ export const getThreads = async ({ userId, activeWorkspaceId }: IPostsForThreads
 };
 
 export const addComment = async ({ postId, text }: ICreateComment) => {
+  console.log(postId, text);
   const response = await api.post(`/api/posts/${postId}/comments`, { text });
   return response;
 };

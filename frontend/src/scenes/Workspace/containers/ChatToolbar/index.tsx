@@ -22,6 +22,7 @@ import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import styles from './styles.module.sass';
+import { goToThreadsRoutine } from 'containers/ThreadsContainer/routines';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 import { fetchUserChatsRoutine } from '../../routines';
 import { showModalRoutine } from 'routines/modal';
@@ -39,6 +40,7 @@ interface IProps {
   selectChat: Routine;
   fetchChats: IBindingAction;
   showModal: IBindingCallback1<IModalRoutine>;
+  goToThreads: Routine;
 }
 
 const ChatToolbar: FunctionComponent<IProps> = ({
@@ -47,12 +49,16 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   selectedChat,
   selectChat,
   fetchChats,
-  showModal
+  showModal,
+  goToThreads
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
 
-  const doSelectChannel = (channel: IChat) => selectChat(channel);
+  const doSelectChannel = (channel: IChat) => {
+    selectChat(channel);
+    goToThreads(false);
+  };
 
   const getClassNameDiv = (state: boolean) => (state ? styles.listBoxHidden : styles.listBox);
 
@@ -100,14 +106,15 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   const showInvitePopup = () => {
     showModal({ modalType: ModalTypes.InvitePopup, show: true });
   };
-  const showThreads = () => {
-    console.log('Show threads');
+
+  const goToThreadsCallBack = () => {
+    goToThreads(true);
   };
 
   return (
     <div className={styles.leftToolbar}>
       {channelSelector('Invite to workspace', faUserFriends, showInvitePopup)}
-      {channelSelector('Threads', faPodcast, showThreads)}
+      {channelSelector('Threads', faPodcast, goToThreadsCallBack)}
       {channelSelector('Mentions & reactions', faAt)}
       {channelSelector('Drafts', faCopy)}
       {channelSelector('Channel browser', faSearch)}
@@ -184,6 +191,7 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
+  goToThreads: goToThreadsRoutine,
   selectChat: setCurrentChatRoutine,
   fetchChats: fetchUserChatsRoutine,
   showModal: showModalRoutine

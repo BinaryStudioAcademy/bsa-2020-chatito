@@ -61,13 +61,17 @@ const Thread: FunctionComponent<IProps> = ({
         <div className={styles.commentsWrapper}>
           {showOnlyTwoComments && !showAll ? (
             <div>
-              <button
-                type="button"
-                onClick={() => setShowAll(!showAll)}
-                className={styles.link}
-              >
-                Show other replies
-              </button>
+              {comments.length > 2 ? (
+                <button
+                  type="button"
+                  onClick={() => setShowAll(!showAll)}
+                  className={styles.link}
+                >
+                  Show other replies
+                </button>
+              ) : (
+                ''
+              )}
               {comments.slice(-2).map(comment => (
                 <div className={styles.comment} key={comment.id}>
                   <Post

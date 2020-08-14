@@ -54,14 +54,8 @@ function* watchToggleCreateChatModal() {
 function* createChatRequest({ payload }: Routine<any>) {
   try {
     const chat: IChat = yield call(createChat, payload);
-    // eslint-disable-next-line
-    console.log('Chat received');
-    // eslint-disable-next-line
-    console.log(chat);
-
     yield put(createChatRoutine.success(chat));
     yield put(showModalRoutine({ modalType: payload.type, show: false }));
-
     yield put(fetchUserChatsRoutine.trigger());
     yield put(setCurrentChatRoutine.trigger(chat));
   } catch (error) {

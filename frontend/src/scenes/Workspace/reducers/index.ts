@@ -10,7 +10,6 @@ import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
-import { ChatType } from 'common/enums/ChatType';
 import { IUser } from 'common/models/user/IUser';
 
 export interface IWorkspaceState {

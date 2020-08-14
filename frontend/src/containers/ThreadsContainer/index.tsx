@@ -17,10 +17,11 @@ interface IProps {
   userId: string;
   threads: any;
   openUserProfile: IBindingCallback1<IUser>;
+  sending?: boolean;
 }
 
 // eslint-disable-next-line
-const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorkspaceId, userId, loading, threads, openUserProfile }) => {
+const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorkspaceId, userId, loading, threads, openUserProfile, sending }) => {
   let fetchedThreads: IFetchedThreads[] = [];
   const hideCloseBtn = true;
   const showOnlyTwoComments = true;
@@ -28,12 +29,12 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
     if (activeWorkspaceId) {
       fetchThreads({ userId, activeWorkspaceId });
     }
-  }, [activeWorkspaceId]);
+  }, [activeWorkspaceId, sending]);
   if (threads) {
     fetchedThreads = [...threads];
   }
   if (!activeWorkspaceId || loading) {
-    return <LoaderWrapper loading={loading} />;
+    return <div className={styles.headerContainer}><LoaderWrapper loading={loading} /></div>;
   }
   if (!threads) {
     return (
@@ -50,7 +51,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
       <div className={styles.threadsContainer}>
         {fetchedThreads.map(post => (
           <div>
-            {post ? (
+            {post.comments.length ? (
               <div
                 key={post.id}
                 className={styles.thread}
@@ -86,7 +87,8 @@ const mapStateToProps = (state: IAppState) => ({
   // eslint-disable-next-line
   userId: state.user.user!.id,
   activeWorkspaceId: state.workspace.workspace.id,
-  threads: state.threads.threads });
+  threads: state.threads.threads,
+  sending: state.threads.sendingComment });
 
 const mapDispatchToProps = {
   fetchThreads: fetchThreadsRoutine
