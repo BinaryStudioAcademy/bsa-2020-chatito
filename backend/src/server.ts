@@ -14,9 +14,16 @@ import './config/passportConfig';
 import './config/sendgridConfig';
 import socketInjector from './socket/injector';
 import socketHandlers from './socket/socketHandlers';
+import { registerSockets } from './socket/connectNamespaces';
 
 const app = express();
+const io = socketIO();
 
+io.use(jwtSocketMiddleware);
+io.on('connection', socket => socketHandlers(socket));
+export const chatNamespace = io.of('/chat');
+
+app.use(socketInjector(io));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -39,12 +46,8 @@ const server = app.listen(port, async () => {
   }
 });
 
-export const io = socketIO().listen(server);
+io.listen(server);
 
-io.use(jwtSocketMiddleware);
-
-io.on('connection', socket => socketHandlers(socket));
-
-app.use(socketInjector(io));
+registerSockets();
 
 export default app;
