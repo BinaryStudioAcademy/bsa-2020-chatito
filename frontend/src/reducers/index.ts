@@ -7,6 +7,7 @@ import chat from 'scenes/Chat/reducers';
 import user from './user';
 import modal from './modal';
 import errorBoundary from './errorBoundary';
+import threadsReducer from 'containers/ThreadsContainer/reducers/reducer';
 
 const rootReducer = () => combineReducers({
   router: connectRouter(history),
@@ -15,7 +16,8 @@ const rootReducer = () => combineReducers({
   chat,
   modal,
   errorBoundary,
-  toastr: toastrReducer
+  toastr: toastrReducer,
+  threads: threadsReducer
 });
 
 export default rootReducer;

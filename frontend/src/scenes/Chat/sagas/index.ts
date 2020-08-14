@@ -55,7 +55,6 @@ function* createChatRequest({ payload }: Routine<any>) {
     const chat: IChat = yield call(createChat, payload);
     yield put(createChatRoutine.success(chat));
     yield put(showModalRoutine({ modalType: payload.type, show: false }));
-
     yield put(fetchUserChatsRoutine.trigger());
     yield put(setCurrentChatRoutine.trigger(chat));
   } catch (error) {
