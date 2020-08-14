@@ -6,13 +6,12 @@ import {
 } from 'scenes/Workspace/routines';
 import { Routine } from 'redux-saga-routines';
 import { takeEvery, put, call, all } from 'redux-saga/effects';
-import { toastr } from 'react-redux-toastr';
 import { addWorkspace } from 'services/workspaceService';
 import { fetchPostComments } from 'services/threadsService';
 import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
-import { toastrError } from 'services/toastrService';
 import { fetchUserChats } from 'services/chatServise';
+import { toastrError } from 'services/toastrService';
 
 function* addWorkspaceReq({ payload }: Routine<any>) {
   try {
@@ -20,7 +19,7 @@ function* addWorkspaceReq({ payload }: Routine<any>) {
     yield put(addWorkspaceRoutine.success(workspace));
     yield put(push(Routes.Workspace.replace(':hash', workspace.hash)));
   } catch (error) {
-    yield call(toastr.error, 'Error', error.message);
+    yield call(toastrError, error.message);
     yield put(addWorkspaceRoutine.failure(error));
   }
 }
@@ -34,7 +33,7 @@ function* fetchPostCommentsRequest({ payload }: Routine<any>) {
     const comments = yield call(fetchPostComments, payload);
     yield put(fetchPostCommentsRoutine.success(comments));
   } catch (error) {
-    yield call(toastr.error, 'Error', error.message);
+    yield call(toastrError, error.message);
     yield put(fetchPostCommentsRoutine.failure());
   }
 }
@@ -48,7 +47,7 @@ function* setActiveThread({ payload }: Routine<any>) {
     const { id } = payload;
     yield put(fetchPostCommentsRoutine.trigger(id));
   } catch (error) {
-    yield call(toastr.error, 'Error', error.message);
+    yield call(toastrError, error.message);
     yield put(setActiveThreadRoutine.failure());
   }
 }
