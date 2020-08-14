@@ -6,7 +6,8 @@ import { fetchCnannelPosts, addPost, createChat } from 'services/chatServise';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
-import { IChat } from 'common/models/chat/IChat';
+import { push } from 'connected-react-router';
+import { Routes } from 'common/enums/Routes';
 
 function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
@@ -55,12 +56,11 @@ function* watchToggleCreateChatModal() {
 
 function* createChatRequest({ payload }: Routine<any>) {
   try {
-    const chat: IChat = yield call(createChat, payload);
+    const chat = yield call(createChat, payload);
     yield put(createChatRoutine.success(chat));
     yield put(showModalRoutine({ modalType: payload.type, show: false }));
-
     yield put(fetchUserChatsRoutine.trigger());
-    yield put(setCurrentChatRoutine.trigger(chat));
+    push(Routes.WorkspaceWithChat.replace(':whash', chat.workspace.id).replace(':chash', chat.hash));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(createChatRoutine.failure());

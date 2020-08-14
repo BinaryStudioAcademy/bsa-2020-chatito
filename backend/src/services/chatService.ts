@@ -38,8 +38,5 @@ export const addChat = async (userId: string, body: IChatData) => {
     hash: cryptoRandomString({ length: 7, type: 'url-safe' }).toUpperCase()
   };
   const chat: IChat = await getCustomRepository(ChatRepository).addChat(newChat);
-  console.log('Created chat');
-  console.log(chat);
-
   return chat;
 };

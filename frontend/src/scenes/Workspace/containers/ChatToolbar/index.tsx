@@ -18,6 +18,8 @@ import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import styles from './styles.module.sass';
+import { goToThreadsRoutine } from 'containers/ThreadsContainer/routines';
+import { Routine } from 'redux-saga-routines';
 import { fetchUserChatsRoutine } from '../../routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
@@ -38,6 +40,7 @@ interface IProps {
   fetchChats: IBindingAction;
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
+  goToThreads: Routine;
 }
 
 const ChatToolbar: FunctionComponent<IProps> = ({
@@ -47,7 +50,8 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   fetchChats,
   showModal,
   router,
-  selectedWorkspace
+  selectedWorkspace,
+  goToThreads
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
@@ -61,6 +65,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     } else {
       router(Routes.AddWorkspace);
     }
+    goToThreads(false);
   };
 
   const getClassNameDiv = (state: boolean) => (state ? styles.listBoxHidden : styles.listBox);
@@ -107,11 +112,32 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   };
 
   const addChannelButton = () => (
-    <a href="#0" className={styles.channelSelect}>
+    <a
+      href="#0"
+      className={styles.channelSelect}
+      onClick={() => showModal({ modalType: ModalTypes.CreateChannel, show: true })}
+    >
       <div className={styles.iconBorder}>
         <FontAwesomeIcon icon={faPlus} color="red" />
       </div>
-      <span className={styles.buttonText}>Add a channel</span>
+      <span className={styles.buttonText}>
+        Add a channel
+      </span>
+    </a>
+  );
+
+  const addDirectButton = () => (
+    <a
+      href="#0"
+      className={styles.channelSelect}
+      onClick={() => showModal({ modalType: ModalTypes.CreateDirect, show: true })}
+    >
+      <div className={styles.iconBorder}>
+        <FontAwesomeIcon icon={faPlus} color="red" />
+      </div>
+      <span className={styles.buttonText}>
+        Add a direct
+      </span>
     </a>
   );
 
@@ -119,10 +145,14 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     showModal({ modalType: ModalTypes.InvitePopup, show: true });
   };
 
+  const goToThreadsCallBack = () => {
+    goToThreads(true);
+  };
+
   return (
     <div className={styles.leftToolbar}>
       {channelSelector('Invite to workspace', faUserFriends, showInvitePopup)}
-      {channelSelector('Threads', faClipboardList)}
+      {channelSelector('Threads', faClipboardList, goToThreadsCallBack)}
       {channelSelector('Mentions & reactions', faAt)}
       {channelSelector('Drafts', faListAlt)}
       {channelSelector('Saved Items', faSearch)}
@@ -149,7 +179,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       <div className={getClassNameDiv(directPanel)}>
         {directMessages.map(directMessage => (
           directChannel(directMessage)))}
-        {addChannelButton()}
+        {addDirectButton()}
       </div>
       <hr className={styles.hrr} />
       <InvitePopup />
@@ -167,6 +197,7 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
+  goToThreads: goToThreadsRoutine,
   fetchChats: fetchUserChatsRoutine,
   showModal: showModalRoutine,
   router: push

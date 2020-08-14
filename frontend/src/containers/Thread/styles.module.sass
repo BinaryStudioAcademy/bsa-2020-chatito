@@ -1,3 +1,21 @@
+@mixin buttonReset
+  border: none
+  padding: 0
+  width: auto
+  overflow: visible
+  background: transparent
+  color: inherit
+  font: inherit
+  line-height: normal
+  -webkit-font-smoothing: inherit
+  -moz-osx-font-smoothing: inherit
+  -webkit-appearance: none
+  &::-moz-focus-inner
+      border: 0
+      padding: 0
+  &:focus
+    outline: none
+
 .closeBtn
   position: absolute
   z-index: 1000
@@ -41,3 +59,12 @@
 
     .comment
       margin-bottom: 3px
+
+.link
+  @include buttonReset
+  color: var(--show-more-replies-link)
+  font-weight: 500
+  font-size: 16px
+  margin-bottom: 20px
+  &:hover
+    text-decoration: underline

@@ -1,27 +1,26 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchThreadsRoutine } from '../routines';
-
-interface IThread {
-  [key: string]: string;
-}
+import { fetchThreadsRoutine, goToThreadsRoutine } from '../routines';
+import { IFetchedThreads } from 'common/models/threads/IFetchedThreads';
+import { addCommentRoutine } from 'containers/Thread/routines';
 
 export interface IThreadsState {
-  threads: IThread[];
   loading: boolean;
-  error: any;
+  error: string;
+  threads?: IFetchedThreads;
+  goToThreads?: boolean;
+  sendingComment?: false;
 }
 
 const initialState = {
-  threads: [],
   loading: false,
   error: ''
 };
 
-const ThreadsReducer = (state: IThreadsState = initialState, { type, payload }: Routine<any>) => {
+const threadsReducer = (state: IThreadsState = initialState, { type, payload }: Routine<any>) => {
   switch (type) {
     case fetchThreadsRoutine.TRIGGER:
       return {
-        ...state, threads: payload, loading: false
+        ...state, loading: true
       };
     case fetchThreadsRoutine.FAILURE:
       return {
@@ -29,11 +28,27 @@ const ThreadsReducer = (state: IThreadsState = initialState, { type, payload }: 
       };
     case fetchThreadsRoutine.SUCCESS:
       return {
-        ...state, loading: false
+        ...state, loading: false, threads: payload
+      };
+    case goToThreadsRoutine.SUCCESS:
+      return {
+        ...state, goToThreads: payload
+      };
+    case addCommentRoutine.TRIGGER:
+      return {
+        ...state, sendingComment: true
+      };
+    case addCommentRoutine.SUCCESS:
+      return {
+        ...state, sendingComment: false
+      };
+    case addCommentRoutine.FAILURE:
+      return {
+        ...state, sendingComment: false
       };
     default:
       return state;
   }
 };
 
-export default ThreadsReducer;
+export default threadsReducer;
