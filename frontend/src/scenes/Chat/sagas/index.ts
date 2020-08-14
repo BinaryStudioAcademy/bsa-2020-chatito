@@ -54,9 +54,6 @@ function* watchToggleCreateChatModal() {
 function* createChatRequest({ payload }: Routine<any>) {
   try {
     const chat: IChat = yield call(createChat, payload);
-    console.log('Chat received');
-    console.log(chat);
-
     yield put(createChatRoutine.success(chat));
     yield put(showModalRoutine({ modalType: payload.type, show: false }));
 

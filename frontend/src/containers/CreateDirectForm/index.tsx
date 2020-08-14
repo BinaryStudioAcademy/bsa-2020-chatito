@@ -32,7 +32,6 @@ const CreateDirect = ({ createDirect, workspace, users = [], getUsers }: IProps)
     { label: displayName, value: id }
   ));
 
-  const nameMaxCharacters = 80;
   const options = mapUsersToOptions(users);
 
   const isSelectEmpty = () => !DirectUsers.length;
