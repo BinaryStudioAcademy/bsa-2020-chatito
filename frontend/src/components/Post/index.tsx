@@ -20,7 +20,6 @@ const Post: React.FC<IProps> = ({ post, openThread, openUserProfile }) => {
   const onSend = () => {
     console.log('Send text message'); // eslint-disable-line
   };
-  const testUser = { id: '0', email: '', fullName: 'test', displayName: 'test', userAvatar: userLogoDefaultUrl, status: 'online' }; // eslint-disable-line
   return (
     <Media className={styles.postWrapper}>
       <ProfilePreview user={createdByUser} onSend={onSend} openProfile={openUserProfile} />
