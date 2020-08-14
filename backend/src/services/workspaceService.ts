@@ -1,5 +1,5 @@
-import { ErrorCode } from '../common/enums/ErrorCode';
 import { getCustomRepository } from 'typeorm';
+import { ErrorCode } from '../common/enums/ErrorCode';
 
 import WorkspaceRepository from '../data/repositories/workspaceRepository';
 import UserRepository from '../data/repositories/userRepository';
@@ -11,18 +11,16 @@ import { IUser } from '../common/models/user/IUser';
 import CustomError from '../common/models/CustomError';
 
 export const createWorkspace = async (data: IClientCreateWorkspace): Promise<IWorkspaceResponse> => {
-
   const { name } = data;
   const isWorkspaceExist = await getCustomRepository(WorkspaceRepository).findByName(name);
   if (isWorkspaceExist) {
-    throw new CustomError(500, 'This workspace is already exists! Please, choose the other name for your workspace.', ErrorCode.WorkspaceAlreadyExists);
+    throw new CustomError(500,
+      'This workspace is already exists! Please, choose the other name for your workspace.',
+      ErrorCode.WorkspaceAlreadyExists);
   }
-
   const workspaceData = fromClientCreateWorkspaceToCreateWorkspace(data);
   const user = await getCustomRepository(UserRepository).getById(data.createdByUserId);
-
   const newWorkspace = await getCustomRepository(WorkspaceRepository).addWorkspace(workspaceData, user);
-
   return fromCreatedWorkspaceToClient(newWorkspace);
 };
 

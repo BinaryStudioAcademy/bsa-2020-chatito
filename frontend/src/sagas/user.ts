@@ -21,6 +21,7 @@ import { toastrError, toastrSuccess } from 'services/toastrService';
 import { push } from 'connected-react-router';
 import { IUserWithWorkspaces } from 'common/models/user/IUserWithWorkspaces';
 import { Routes } from 'common/enums/Routes';
+import { connectSockets } from 'services/socketService';
 
 function* fetchUserRequest({ payload }: Routine<any>) {
   try {
@@ -30,10 +31,11 @@ function* fetchUserRequest({ payload }: Routine<any>) {
 
     // eslint-disable-next-line
     yield payload.workspace.id // selected workspace exists (when login through invite link)
-      ? put(push(Routes.Workspace.replace(':hash', payload.workspace.hash)))
+      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
       : (user && user.workspaces.length > 0)
-        ? put(push(Routes.Workspace.replace(':hash', user.workspaces[0].hash)))
+        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
         : put(push(Routes.AddWorkspace));
+    yield call(connectSockets);
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(fetchUserRoutine.failure(error.message));
@@ -53,10 +55,11 @@ function* loginUserRequest({ payload }: Routine<any>) {
 
     // eslint-disable-next-line
     yield payload.workspace.id // selected workspace exists (when login through invite link)
-      ? put(push(Routes.Workspace.replace(':hash', payload.workspace.hash)))
+      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
       : (user && user.workspaces.length > 0)
-        ? put(push(Routes.Workspace.replace(':hash', user.workspaces[0].hash)))
+        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
         : put(push(Routes.AddWorkspace));
+    yield call(connectSockets);
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(loginUserRoutine.failure(error.message));
@@ -76,9 +79,9 @@ function* loginWithGoogleRequest({ payload }: Routine<any>) {
 
     // eslint-disable-next-line
     yield payload.workspace.id // selected workspace exists (when login through invite link)
-      ? put(push(Routes.Workspace.replace(':hash', payload.workspace.hash)))
+      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
       : (user && user.workspaces.length > 0)
-        ? put(push(Routes.Workspace.replace(':hash', user.workspaces[0].hash)))
+        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
         : put(push(Routes.AddWorkspace));
   } catch (error) {
     yield call(toastrError, error.message);
@@ -132,8 +135,9 @@ function* addNewUserRequest({ payload }: any): Routine<any> {
     yield put(addNewUserRoutine.success(user));
 
     yield payload.workspace.id // selected workspace exists (when register through invite link)
-      ? put(push(Routes.Workspace.replace(':hash', payload.workspace.hash)))
+      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
       : put(push(Routes.AddWorkspace));
+    yield call(connectSockets);
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(addNewUserRoutine.failure(error.message));

@@ -1,15 +1,13 @@
 import { ChatType } from "common/enums/ChatType";
 import { IUser } from "../user/IUser";
-import { IWorkspace } from "../workspace/IWorkspace";
 
 export interface IChat {
   id: string;
   name: string;
   type: ChatType;
   isPrivate: boolean;
-  workspace: IWorkspace;
+  workspaceName: string;
   createdByUserId: string;
-  users: IUser[]
+  users: IUser[];
   unreadCount?: number;
-  hash: string;
 }
