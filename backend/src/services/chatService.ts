@@ -1,4 +1,5 @@
 import { getCustomRepository } from 'typeorm';
+import cryptoRandomString from 'crypto-random-string';
 import { Workspace } from '../data/entities/Workspace';
 import { User } from '../data/entities/User';
 import { IChatData } from '../common/models/chat/IChatData';
@@ -33,7 +34,8 @@ export const addChat = async (userId: string, body: IChatData) => {
     ...chatFields,
     workspace,
     createdByUser: userCreator,
-    users: [userCreator, ...users]
+    users: [userCreator, ...users],
+    hash: cryptoRandomString({ length: 7, type: 'url-safe' }).toUpperCase()
   };
   const chat: IChat = await getCustomRepository(ChatRepository).addChat(newChat);
   return chat;

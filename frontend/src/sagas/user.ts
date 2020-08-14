@@ -31,9 +31,9 @@ function* fetchUserRequest({ payload }: Routine<any>) {
 
     // eslint-disable-next-line
     yield payload.workspace.id // selected workspace exists (when login through invite link)
-      ? put(push(Routes.Workspace.replace(':hash', payload.workspace.hash)))
+      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
       : (user && user.workspaces.length > 0)
-        ? put(push(Routes.Workspace.replace(':hash', user.workspaces[0].hash)))
+        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
         : put(push(Routes.AddWorkspace));
     yield call(connectSockets);
   } catch (error) {
@@ -55,9 +55,9 @@ function* loginUserRequest({ payload }: Routine<any>) {
 
     // eslint-disable-next-line
     yield payload.workspace.id // selected workspace exists (when login through invite link)
-      ? put(push(Routes.Workspace.replace(':hash', payload.workspace.hash)))
+      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
       : (user && user.workspaces.length > 0)
-        ? put(push(Routes.Workspace.replace(':hash', user.workspaces[0].hash)))
+        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
         : put(push(Routes.AddWorkspace));
     yield call(connectSockets);
   } catch (error) {
@@ -79,9 +79,9 @@ function* loginWithGoogleRequest({ payload }: Routine<any>) {
 
     // eslint-disable-next-line
     yield payload.workspace.id // selected workspace exists (when login through invite link)
-      ? put(push(Routes.Workspace.replace(':hash', payload.workspace.hash)))
+      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
       : (user && user.workspaces.length > 0)
-        ? put(push(Routes.Workspace.replace(':hash', user.workspaces[0].hash)))
+        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
         : put(push(Routes.AddWorkspace));
   } catch (error) {
     yield call(toastrError, error.message);
@@ -135,7 +135,7 @@ function* addNewUserRequest({ payload }: any): Routine<any> {
     yield put(addNewUserRoutine.success(user));
 
     yield payload.workspace.id // selected workspace exists (when register through invite link)
-      ? put(push(Routes.Workspace.replace(':hash', payload.workspace.hash)))
+      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
       : put(push(Routes.AddWorkspace));
     yield call(connectSockets);
   } catch (error) {
