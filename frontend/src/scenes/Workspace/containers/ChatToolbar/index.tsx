@@ -21,9 +21,6 @@ import styles from './styles.module.sass';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 import { fetchUserChatsRoutine } from '../../routines';
 import { showModalRoutine } from 'routines/modal';
-// import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
-// import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
-// import { ModalTypes } from 'common/enums/ModalTypes';
 import InvitePopup from 'containers/InvitePopup';
 import CreateChannelModal from 'containers/CreateChannelModal';
 import CreateDirectModal from 'containers/CreateDirectModal';
@@ -34,7 +31,6 @@ interface IProps {
   selectedChat: IChat;
   selectChat: Routine;
   fetchChats: IBindingAction;
-  // showModal: IBindingCallback1<IModalRoutine>;
 }
 
 const ChatToolbar: FunctionComponent<IProps> = ({
@@ -43,7 +39,6 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   selectedChat,
   selectChat,
   fetchChats
-  // showModal
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
@@ -101,10 +96,6 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       <span className={styles.buttonText}>Add a channel</span>
     </a>
   );
-
-  /* const showInvitePopup = () => {
-    showModal({ modalType: ModalTypes.InvitePopup, show: true });
-  }; */
 
   return (
     <div className={styles.leftToolbar}>
