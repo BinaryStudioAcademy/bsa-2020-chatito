@@ -9,4 +9,5 @@ export interface IChat {
   workspaceName: string;
   createdByUserId: string;
   users: IUser[];
+  hash: string;
 }
