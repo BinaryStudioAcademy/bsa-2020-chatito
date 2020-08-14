@@ -12,6 +12,8 @@ import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { IUser } from 'common/models/user/IUser';
+import { addChatWithSocketRoutine } from 'scenes/Chat/routines';
+import { ChatType } from 'common/enums/ChatType';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
@@ -96,6 +98,20 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
           : direct
       ));
       return { ...state, channels, directMessages };
+    }
+    case addChatWithSocketRoutine.TRIGGER: {
+      const newChat = payload;
+      if (newChat.type === ChatType.Channel) {
+        const channels = [...state.channels];
+        channels.push(newChat);
+        return { ...state, channels };
+      }
+      if (newChat.type === ChatType.DirectMessage) {
+        const directMessages = [...state.directMessages];
+        directMessages.push(newChat);
+        return { ...state, directMessages };
+      }
+      return state;
     }
     default:
       return state;

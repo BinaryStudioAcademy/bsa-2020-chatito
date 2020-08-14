@@ -3,7 +3,8 @@ import { setCurrentChatRoutine,
   setPostsRoutine,
   createChatRoutine,
   addPostWithSocketRoutine,
-  editPostWithSocketRoutine } from '../routines';
+  editPostWithSocketRoutine,
+  addChatWithSocketRoutine } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 
@@ -47,8 +48,6 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
       };
     case addPostWithSocketRoutine.TRIGGER: {
       const posts = [...state.posts];
-      console.log(payload);
-
       posts.push(payload);
       return {
         ...state, posts
@@ -59,6 +58,12 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
       const posts = [...state.posts].map(post => (post.id === editedPost.id ? editedPost : post));
       return {
         ...state, posts
+      };
+    }
+    case addChatWithSocketRoutine.TRIGGER: {
+      return {
+        ...state,
+        chat: { ...payload }
       };
     }
     default:

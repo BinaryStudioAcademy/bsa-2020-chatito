@@ -1,6 +1,5 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
 import { setCurrentChatRoutine, setPostsRoutine, addPostRoutine, createChatRoutine } from '../routines';
-import { fetchUserChatsRoutine } from 'scenes/Workspace/routines';
 import { Routine } from 'redux-saga-routines';
 import { fetchCnannelPosts, addPost, createChat } from 'services/chatServise';
 import { IPost } from 'common/models/post/IPost';
@@ -55,8 +54,6 @@ function* createChatRequest({ payload }: Routine<any>) {
     const chat: IChat = yield call(createChat, payload);
     yield put(createChatRoutine.success(chat));
     yield put(showModalRoutine({ modalType: payload.type, show: false }));
-    yield put(fetchUserChatsRoutine.trigger());
-    yield put(setCurrentChatRoutine.trigger(chat));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(createChatRoutine.failure());
