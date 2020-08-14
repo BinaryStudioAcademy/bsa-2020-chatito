@@ -1,4 +1,5 @@
 import { getCustomRepository } from 'typeorm';
+
 import UserRepository from '../data/repositories/userRepository';
 import RefreshTokenRepository from '../data/repositories/refreshTokenRepository';
 
@@ -7,7 +8,8 @@ import { hash, compare, encrypt, decrypt } from '../common/utils/encryptHelper';
 import { ILoginUser } from '../common/models/user/ILoginUser';
 import {
   fromRegisterUserToCreateUser,
-  fromUserToUserWithWorkspaces
+  fromUserToUserWithWorkspaces,
+  fromGoogleUserToCreateUser
 } from '../common/mappers/user';
 import { createToken } from '../common/utils/tokenHelper';
 import { IRefreshToken } from '../common/models/refreshToken/IRefreshToken';
@@ -16,6 +18,8 @@ import { IForgotPasswordUser } from '../common/models/user/IForgotPasswordUser';
 import CustomError from '../common/models/CustomError';
 import { sendResetPasswordMail } from './mailService';
 import { ErrorCode } from '../common/enums/ErrorCode';
+import { ILoginWithGoogle } from '../common/models/user/ILoginWithGoogle';
+import { getGoogleUserPayload } from '../common/utils/googleAuthHelper';
 
 const createRefreshTokenData = (user: User) => {
   const cur = new Date();
@@ -28,13 +32,18 @@ const createRefreshTokenData = (user: User) => {
 };
 
 const createRefreshToken = async (user: User): Promise<IRefreshToken> => {
-  try {
-    const refreshTokenData = createRefreshTokenData(user);
-    const refreshToken = await getCustomRepository(RefreshTokenRepository).addToken(refreshTokenData);
+  const refreshTokenData = createRefreshTokenData(user);
+  const refreshToken = await getCustomRepository(RefreshTokenRepository).addToken(refreshTokenData);
 
-    return refreshToken;
-  } catch (err) {
-    throw Error('Internal error');
+  return refreshToken;
+};
+
+const addWorkspaceToUser = async (userId: string, workspaceId: string) => {
+  try {
+    const user = await getCustomRepository(UserRepository).addWorkspace(userId, workspaceId);
+    return user;
+  } catch (error) {
+    throw new CustomError(409, 'User already exists in workspace. Please, sign in.', ErrorCode.UserExistsInWorkspace);
   }
 };
 
@@ -43,9 +52,7 @@ export const register = async ({ password, workspaceId, ...userData }: IRegister
   const createUserData = fromRegisterUserToCreateUser({ ...userData, password: passwordHash, workspaceId });
 
   const newUser = await getCustomRepository(UserRepository).addUser(createUserData);
-  const user = workspaceId
-    ? await getCustomRepository(UserRepository).addWorkspace(newUser.id, workspaceId)
-    : newUser;
+  const user = workspaceId ? await addWorkspaceToUser(newUser.id, workspaceId) : newUser;
 
   const refreshToken = await createRefreshToken(user);
 
@@ -57,57 +64,71 @@ export const register = async ({ password, workspaceId, ...userData }: IRegister
 };
 
 export const login = async ({ email, password, workspaceId }: ILoginUser) => {
-  try {
-    const logUser = await getCustomRepository(UserRepository).getByEmail(email);
-
-    if (logUser) {
-      const pwdLogg = await compare(password, logUser.password);
-
-      if (pwdLogg) {
-        const user = workspaceId
-          ? await getCustomRepository(UserRepository).addWorkspace(logUser.id, workspaceId)
-          : logUser;
-        const refreshToken = await createRefreshToken(user);
-
-        return {
-          user: fromUserToUserWithWorkspaces(user),
-          accessToken: createToken({ id: logUser.id }),
-          refreshToken: encrypt(refreshToken.id)
-        };
-      }
-    }
-    throw new Error('User not found !');
-  } catch (err) {
-    throw new Error('User not found !');
+  const loginUser = await getCustomRepository(UserRepository).getByEmail(email);
+  if (!loginUser) {
+    throw new CustomError(404, 'No user exists. Please, sign up first.', ErrorCode.UserNotFound);
   }
+
+  const comparePassword = await compare(password, loginUser.password);
+  if (!comparePassword) {
+    throw new CustomError(400, 'Wrong credentials. Please, try again.', ErrorCode.Unauthorized);
+  }
+
+  const user = workspaceId ? await addWorkspaceToUser(loginUser.id, workspaceId) : loginUser;
+
+  const refreshToken = await createRefreshToken(user);
+
+  return {
+    user: fromUserToUserWithWorkspaces(user),
+    accessToken: createToken({ id: loginUser.id }),
+    refreshToken: encrypt(refreshToken.id)
+  };
+};
+
+export const loginWithGoogle = async ({ token, workspaceId }: ILoginWithGoogle) => {
+  const googleUser = await getGoogleUserPayload(token);
+
+  let user = await getCustomRepository(UserRepository).getByEmail(googleUser.email);
+  if (!user) {
+    const createUserData = fromGoogleUserToCreateUser({ name: googleUser.name, email: googleUser.email });
+    user = await getCustomRepository(UserRepository).addUser(createUserData);
+  }
+
+  user = workspaceId ? await addWorkspaceToUser(user.id, workspaceId) : user;
+
+  const refreshToken = await createRefreshToken(user);
+
+  return {
+    user: fromUserToUserWithWorkspaces(user),
+    accessToken: createToken({ id: user.id }),
+    refreshToken: encrypt(refreshToken.id)
+  };
 };
 
 export const refreshTokens = async (encryptedId: string) => {
-  try {
-    const id = decrypt(encryptedId);
-    const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
+  const id = decrypt(encryptedId);
+  const refreshTokenRepository = getCustomRepository(RefreshTokenRepository);
 
-    const refreshToken = await refreshTokenRepository.getById(id);
+  const refreshToken = await refreshTokenRepository.getById(id);
 
-    if (!refreshToken) {
-      throw Error('Invalid token');
-    } else if (Date.now() > refreshToken.expiresAt) {
-      await refreshTokenRepository.deleteToken(id);
-      throw Error('Token expired');
-    }
-
-    const user = await getCustomRepository(UserRepository).getById(refreshToken.userId);
-    const newRefreshToken = await createRefreshToken(user);
-
-    await refreshTokenRepository.deleteToken(id);
-
-    return {
-      accessToken: createToken({ id: newRefreshToken.userId }),
-      refreshToken: encrypt(newRefreshToken.id)
-    };
-  } catch (err) {
-    throw Error(err.message);
+  if (!refreshToken) {
+    throw new CustomError(401, 'Invalid refresh token', ErrorCode.InvalidRefreshToken);
   }
+
+  if (Date.now() > refreshToken.expiresAt) {
+    await refreshTokenRepository.deleteToken(id);
+    throw new CustomError(401, 'Refresh token expired', ErrorCode.InvalidRefreshToken);
+  }
+
+  const user = await getCustomRepository(UserRepository).getById(refreshToken.userId);
+  const newRefreshToken = await createRefreshToken(user);
+
+  await refreshTokenRepository.deleteToken(id);
+
+  return {
+    accessToken: createToken({ id: newRefreshToken.userId }),
+    refreshToken: encrypt(newRefreshToken.id)
+  };
 };
 
 export const forgotPassword = async ({ email }: IForgotPasswordUser) => {
@@ -120,7 +141,7 @@ export const forgotPassword = async ({ email }: IForgotPasswordUser) => {
 };
 
 export const resetPassword = async (id: string, password: string) => {
-  const passwordHash = await encrypt(password);
+  const passwordHash = await hash(password);
   const user = await getCustomRepository(UserRepository).editPassword(id, passwordHash);
   return user;
 };

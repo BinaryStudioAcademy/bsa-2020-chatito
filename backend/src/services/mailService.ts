@@ -16,8 +16,10 @@ export const sendResetPasswordMail = async ({ to, token }: IResetPasswordMessage
   const message = {
     to,
     subject: 'Password reset instructions',
-    text: `Please use the following link to reset your password: ${client}/resetpassword/${token}`
+    text: `Please use the following link to reset your password: ${client}/auth/reset/${token}`
   };
+  // eslint-disable-next-line
+  console.log(message);
 
   await sendMail(message);
 };

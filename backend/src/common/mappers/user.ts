@@ -4,8 +4,9 @@ import { ICreateUser } from '../models/user/ICreateUser';
 import { User } from '../../data/entities/User';
 import { IUserWithWorkspaces } from '../models/user/IUserWithWorkspaces';
 import { fromCreatedWorkspaceToClient } from './workspace';
+import { IGoogleUser } from '../models/user/IGoogleUser';
 
-export const fromUserToUserClient = (user: User): IUserClient => {
+export const fromUserToUserClient = (user: IUserWithWorkspaces): IUserClient => {
   const { id, fullName, displayName, email, imageUrl, title, status } = user;
 
   return {
@@ -38,4 +39,11 @@ export const fromRegisterUserToCreateUser = ({ fullName, email, password }: IReg
   email,
   password,
   displayName: fullName
+});
+
+export const fromGoogleUserToCreateUser = ({ name, email }: IGoogleUser): ICreateUser => ({
+  fullName: name,
+  email,
+  password: null,
+  displayName: name
 });

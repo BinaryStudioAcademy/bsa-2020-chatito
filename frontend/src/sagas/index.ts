@@ -5,6 +5,7 @@ import chatSaga from 'scenes/Chat/sagas';
 import invitePopupSaga from 'containers/InvitePopup/sagas';
 import joinInvitedWorkspaceSaga from 'containers/JoinInvitedWorkspace/sagas';
 import workspaceUsersSaga from 'containers/CreateDirectForm/sagas/sagas';
+import threadSaga from 'containers/Thread/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -13,6 +14,7 @@ export default function* rootSaga() {
     workspaceUsersSaga(),
     workspaceSaga(),
     invitePopupSaga(),
-    joinInvitedWorkspaceSaga()
+    joinInvitedWorkspaceSaga(),
+    threadSaga()
   ]);
 }

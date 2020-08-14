@@ -3,48 +3,52 @@ import styles from './styles.module.sass';
 
 import {
   faLock,
-  // faHashtag,
-  // faPhone,
-  // faCircle,
   faStar,
   faUserPlus,
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'react-bootstrap/Image';
+import { IAppState } from 'common/models/store';
+import { IChat } from 'common/models/chat/IChat';
+import { IUser } from 'common/models/user/IUser';
+import { userLogoDefaultUrl } from 'common/configs/defaults';
+import { connect } from 'react-redux';
 
 const privateChannelIcon = (
   <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
 );
 
-// const publicChannelIcon = (
-//   <FontAwesomeIcon icon={faHashtag} className={styles.iconChatType} />
-// );
+interface IProps {
+  chat?: IChat;
+}
 
-// const directMessageIcon = (
-//   <FontAwesomeIcon icon={faCircle} className={`${styles.iconChatType} ${styles.active}`} />
-// );
+const ChatHeader: React.FC<IProps> = ({ chat }) => {
+  const maxAvatarsDisplayed = 5;
+  const userAvatars = (users: IUser[]) => {
+    const initVal: string[] = [];
+    users.reduce((prevValue, currUser, currIndex) => {
+      if (currIndex >= maxAvatarsDisplayed) {
+        return prevValue;
+      }
+      prevValue.push(currUser.imageUrl || userLogoDefaultUrl);
+      return prevValue;
+    }, initVal);
 
-// const callIcon = (
-//   <FontAwesomeIcon icon={faPhone} className={styles.icon} />
-// );
+    return initVal.map(url => (<Image src={url} key={url} rounded className={styles.memberAvatarIcon} />));
+  };
 
-const ChatHeader = () => {
-  const memberAvatar = (
-    <Image
-      src="https://ca.slack-edge.com/T016ALRN75L-U0188LUR38U-g7678769d661-24"
-      rounded
-      className={styles.memberAvatarIcon}
-    />
-  );
+  if (!chat) {
+    return null;
+  }
 
   return (
-    <div className={styles.chatContainer}>
+    <div className={styles.chatContainer} key={chat.id}>
 
       <div className={styles.headerInfo}>
         <div className={styles.titleBlock}>
-          {privateChannelIcon}
-          <div className={styles.title}>chatito</div>
+          {chat.isPrivate ? privateChannelIcon : null}
+          <div className={styles.title}>{chat.name || ''}</div>
           <FontAwesomeIcon icon={faStar} className={styles.icon} />
         </div>
 
@@ -53,10 +57,8 @@ const ChatHeader = () => {
 
       <div className={styles.rightHeaderBlock}>
         <div className={styles.memberAvatarBlock}>
-          {memberAvatar}
-          {memberAvatar}
-          {memberAvatar}
-          <div className={styles.memberCounter}>17</div>
+          {userAvatars(chat.users)}
+          <div className={styles.memberCounter}>{chat.users.length || 0}</div>
         </div>
 
         <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
@@ -66,4 +68,9 @@ const ChatHeader = () => {
   );
 };
 
-export default ChatHeader;
+const mapStateToProps = (state: IAppState) => {
+  const { chat } = state.chat;
+  return { chat };
+};
+
+export default connect(mapStateToProps, null)(ChatHeader);

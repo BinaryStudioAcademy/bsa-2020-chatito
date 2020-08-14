@@ -6,5 +6,9 @@ export const env = {
   },
   apiKeys: {
     textEditor: getOsEnv('REACT_APP_TEXT_EDITOR_API_KEY')
+  },
+  googleAuth: {
+    clientId: getOsEnv('REACT_APP_GOOGLE_AUTH_CLIENT_ID'),
+    clientSecret: getOsEnv('REACT_APP_GOOGLE_AUTH_CLIENT_SECRET')
   }
 };

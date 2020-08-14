@@ -13,12 +13,12 @@ export const deleteUser = async () => {
 };
 
 export const editUser = async (data: IUser) => {
-  const response = await api.put<IUser>('/api/users', { data });
+  const response = await api.put<IUser>('/api/users', data);
   return response;
 };
 
 export const forgotPassword = async (forgotpassword: IForgotPasswordInput) => {
-  await api.put('/api/auth/forgotpass', { forgotpassword });
+  await api.put('/api/auth/forgotpass', forgotpassword);
 };
 
 export const resetPassword = async (password: string, token: string) => {

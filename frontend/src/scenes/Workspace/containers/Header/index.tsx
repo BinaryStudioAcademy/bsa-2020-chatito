@@ -13,7 +13,6 @@ import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ReactComponent as Logo } from 'img/logo-icon.svg';
-import Logout from 'components/Logout';
 
 interface IProps {
   user?: IUser;
@@ -39,7 +38,7 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
   );
 
   const showEditModal = () => {
-    showModalRoutine({ modalType: ModalTypes.EditProfile, show: true });
+    showModal({ modalType: ModalTypes.EditProfile, show: true });
   };
 
   if (!user) {
@@ -66,14 +65,12 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
           <UserAvatar imgUrl={user.imageUrl || ''} isOnline />
 
           <UserPopUp
-            user={user}
             trigger={getPopUpTrigger}
             id="mainHeaderPopUp"
             placement="bottom"
             onEditProfileClick={showEditModal}
           />
         </div>
-        <Logout />
         <EditProfile />
       </div>
     </header>

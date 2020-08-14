@@ -8,6 +8,7 @@ import styles from './styles.module.sass';
 import { IUser } from 'common/models/user/IUser';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
+import { getUserImgLink } from 'common/helpers/imageHelper';
 
 interface IProps {
   showModal: ({ modalType, show }: IModalRoutine) => void;
@@ -88,7 +89,7 @@ const EditProfile: FunctionComponent<IProps> = ({
                 value={displayName}
                 onChange={handleChange}
               />
-              <Form.Text className="text-muted">
+              <Form.Text className="text-muted small">
                 This could be your nickname — however you’d like people to refer
                 to you in Chatito.
               </Form.Text>
@@ -102,7 +103,7 @@ const EditProfile: FunctionComponent<IProps> = ({
                 value={title}
                 onChange={handleChange}
               />
-              <Form.Text className="text-muted">
+              <Form.Text className="text-muted small">
                 Let people know what you do at this channel.
               </Form.Text>
             </Form.Group>
@@ -111,14 +112,12 @@ const EditProfile: FunctionComponent<IProps> = ({
             className={`d-flex flex-column align-items-center ${styles.imageEditBlock}`}
           >
             <span className={styles.imageLabel}>Profile photo</span>
-            {user.imageUrl ? (
-              <Image
-                className={styles.image}
-                height={150}
-                src="https://interactive-examples.mdn.mozilla.net/media/examples/grapefruit-slice-332-332.jpg"
-                rounded
-              />
-            ) : null}
+            <Image
+              className={styles.image}
+              height={150}
+              src={getUserImgLink(user.imageUrl as string)}
+              rounded
+            />
             <Button variant="light" className={styles.imageEditButton}>
               Upload an Image
             </Button>

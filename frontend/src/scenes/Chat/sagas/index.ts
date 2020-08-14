@@ -10,8 +10,8 @@ import { IChat } from 'common/models/chat/IChat';
 
 function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
-    const responce: IPost[] | true = yield call(fetchCnannelPosts, payload);
-    yield put(setPostsRoutine.success(responce));
+    const response: IPost[] | true = yield call(fetchCnannelPosts, payload);
+    yield put(setPostsRoutine.success(response));
   } catch (error) {
     console.error(error);
 
@@ -55,7 +55,7 @@ function* watchToggleCreateChatModal() {
 
 function* createChatRequest({ payload }: Routine<any>) {
   try {
-    const chat = yield call(createChat, payload);
+    const chat: IChat = yield call(createChat, payload);
     yield put(createChatRoutine.success(chat));
     yield put(showModalRoutine({ modalType: payload.type, show: false }));
 
