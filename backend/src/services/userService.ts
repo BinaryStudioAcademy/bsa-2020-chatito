@@ -30,6 +30,7 @@ export const editProfile = async (user: IUserClient) => {
 };
 
 export const editStatus = async ({ id, status }: IEditStatus) => {
+  console.log(id, status);
   const newStatus = await getCustomRepository(UserRepository).editStatus(id, status);
   return newStatus;
 };
