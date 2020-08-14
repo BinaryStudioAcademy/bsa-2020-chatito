@@ -12,6 +12,8 @@ function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
     const response: IPost[] = yield call(fetchCnannelPosts, payload);
     yield put(setPostsRoutine.success(response.reverse()));
   } catch (error) {
+    console.error(error);
+
     yield call(toastrError, error.message);
   }
 }
