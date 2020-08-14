@@ -10,15 +10,13 @@ import { IUser } from '../common/models/user/IUser';
 import CustomError from '../common/models/CustomError';
 
 export const createWorkspace = async (data: IClientCreateWorkspace): Promise<IWorkspaceResponse> => {
-  try {
-    const { name } = data;
-    const isWorkspaceExist = await getCustomRepository(WorkspaceRepository).findByName(name);
-    if (isWorkspaceExist) {
-      throw new Error('This workspace name is already exists');
-    }
-  } catch (err) {
-    throw new CustomError(500, 'This workspace is already exists! Please, choose the other name for your workspace.', ErrorCode.WorkspaceAlreadyExists, err);
+
+  const { name } = data;
+  const isWorkspaceExist = await getCustomRepository(WorkspaceRepository).findByName(name);
+  if (isWorkspaceExist) {
+    throw new CustomError(500, 'This workspace is already exists! Please, choose the other name for your workspace.', ErrorCode.WorkspaceAlreadyExists);
   }
+
   const workspaceData = fromClientCreateWorkspaceToCreateWorkspace(data);
   const user = await getCustomRepository(UserRepository).getById(data.createdByUserId);
 
