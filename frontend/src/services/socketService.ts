@@ -1,19 +1,19 @@
 import io from 'socket.io-client';
 import { env } from '../env';
 import { getAccessToken } from 'common/helpers/storageHelper';
-import { SocketRoutes } from 'common/enums/SocketRoutes';
 import { store } from 'store';
 import { IPost } from 'common/models/post/IPost';
-import { addPostWithSocketRoutine, editPostWithSocketRoutine } from 'scenes/Chat/routines';
+import { addPostWithSocketRoutine, editPostWithSocketRoutine, addChatWithSocketRoutine } from 'scenes/Chat/routines';
 import { incUnreadCountRoutine } from 'scenes/Workspace/routines';
+import { IChat } from 'common/models/chat/IChat';
 
 const { server } = env.urls;
 
 // eslint-disable-next-line
-const socket = io(server!, { query: `auth_token=${getAccessToken()}` });
+const chatSocket = io(`${server!}/chat`, { query: `auth_token=${getAccessToken()}` });
 
 export const connectSockets = () => {
-  socket.on(SocketRoutes.AddPost, (post: IPost) => {
+  chatSocket.on('addPost', (post: IPost) => {
     const state = store.getState();
     if (post.chatId === state.chat.chat.id) {
       store.dispatch(addPostWithSocketRoutine(post));
@@ -22,10 +22,16 @@ export const connectSockets = () => {
     }
   });
 
-  socket.on(SocketRoutes.EditPost, (post: IPost) => {
+  chatSocket.on('editPost', (post: IPost) => {
     const state = store.getState();
     if (post.chatId === state.chat.chat.id) {
       store.dispatch(editPostWithSocketRoutine(post));
     }
+  });
+  chatSocket.on('joinChat', (chatId: string) => {
+    chatSocket.emit('joinChatRoom', chatId);
+  });
+  chatSocket.on('addChat', (chat: IChat) => {
+    store.dispatch(addChatWithSocketRoutine(chat));
   });
 };
