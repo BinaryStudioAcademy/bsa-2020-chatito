@@ -10,8 +10,8 @@ import { IChat } from 'common/models/chat/IChat';
 
 function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
-    const response: IPost[] | true = yield call(fetchCnannelPosts, payload);
-    yield put(setPostsRoutine.success(response));
+    const responce: IPost[] = yield call(fetchCnannelPosts, payload);
+    yield put(setPostsRoutine.success(responce));
   } catch (error) {
     console.error(error);
 
@@ -25,7 +25,7 @@ function* watchPostsRequest() {
 
 function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
   try {
-    const response = yield call(addPost, payload);
+    yield call(addPost, payload);
     yield put(setPostsRoutine.trigger(payload.chatId));
   } catch (error) {
     yield call(toastrError, error.message);
@@ -58,7 +58,6 @@ function* createChatRequest({ payload }: Routine<any>) {
     const chat: IChat = yield call(createChat, payload);
     yield put(createChatRoutine.success(chat));
     yield put(showModalRoutine({ modalType: payload.type, show: false }));
-
     yield put(fetchUserChatsRoutine.trigger());
     yield put(setCurrentChatRoutine.trigger(chat));
   } catch (error) {

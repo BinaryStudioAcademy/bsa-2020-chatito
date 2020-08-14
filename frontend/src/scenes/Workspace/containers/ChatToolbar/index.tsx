@@ -19,6 +19,7 @@ import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import styles from './styles.module.sass';
+import { goToThreadsRoutine } from 'containers/ThreadsContainer/routines';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 import { fetchUserChatsRoutine } from '../../routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
@@ -36,6 +37,7 @@ interface IProps {
   selectChat: Routine;
   fetchChats: IBindingAction;
   showModal: IBindingCallback1<IModalRoutine>;
+  goToThreads: Routine;
 }
 
 const ChatToolbar: FunctionComponent<IProps> = ({
@@ -44,12 +46,16 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   selectedChat,
   selectChat,
   fetchChats,
-  showModal
+  showModal,
+  goToThreads
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
 
-  const doSelectChannel = (channel: IChat) => selectChat(channel);
+  const doSelectChannel = (channel: IChat) => {
+    selectChat(channel);
+    goToThreads(false);
+  };
 
   const getClassNameDiv = (state: boolean) => (state ? styles.listBoxHidden : styles.listBox);
 
@@ -128,10 +134,14 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     showModal({ modalType: ModalTypes.InvitePopup, show: true });
   };
 
+  const goToThreadsCallBack = () => {
+    goToThreads(true);
+  };
+
   return (
     <div className={styles.leftToolbar}>
       {channelSelector('Invite to workspace', faUserFriends, showInvitePopup)}
-      {channelSelector('Threads', faClipboardList)}
+      {channelSelector('Threads', faClipboardList, goToThreadsCallBack)}
       {channelSelector('Mentions & reactions', faAt)}
       {channelSelector('Drafts', faListAlt)}
       {channelSelector('Saved Items', faSearch)}
@@ -171,10 +181,12 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 const mapStateToProps = (state: IAppState) => ({
   channels: state.workspace.channels || [],
   directMessages: state.workspace.directMessages || [],
+  // eslint-disable-next-line
   selectedChat: state.chat.chat!
 });
 
 const mapDispatchToProps = {
+  goToThreads: goToThreadsRoutine,
   selectChat: setCurrentChatRoutine,
   fetchChats: fetchUserChatsRoutine,
   showModal: showModalRoutine

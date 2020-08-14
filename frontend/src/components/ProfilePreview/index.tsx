@@ -84,6 +84,7 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
         className={styles.link}
       >
         <img
+          style={{ objectFit: 'cover' }}
           width={64}
           height={64}
           className="mr-3 rounded"

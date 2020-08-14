@@ -20,6 +20,8 @@ import { selectWorkspaceRoutine,
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
+import ThreadsContainer from 'containers/ThreadsContainer/index';
+import { IThreadsState } from 'containers/ThreadsContainer/reducers/reducer';
 
 interface IProps {
   currentUserId?: string;
@@ -32,6 +34,7 @@ interface IProps {
   router: (route: Routes) => void;
   selectWorkspace: (workspace: IWorkspace) => void;
   showRightSideMenu: RightMenuTypes;
+  threads: IThreadsState;
   toggleRightMenu: IBindingCallback1<RightMenuTypes>;
   showUserProfile: IBindingCallback1<IUser>;
   toggleActiveThread: IBindingCallback1<IPost>;
@@ -43,6 +46,7 @@ const Workspace: React.FC<IProps> = ({
   userWorkspaces,
   router,
   selectWorkspace,
+  threads,
   showRightSideMenu,
   showUserProfile,
   toggleRightMenu
@@ -105,10 +109,17 @@ const Workspace: React.FC<IProps> = ({
           <div className={styles.leftPanelWrapper}>
             <ChatToolbar />
           </div>
-
-          <div className={styles.chatWrapper}>
-            <ChatScene />
-          </div>
+          {!threads.goToThreads ? (
+            <div className={styles.chatWrapper}>
+              <ChatScene />
+            </div>
+          ) : (
+            <div className={styles.chatWrapper}>
+              <ThreadsContainer
+                openUserProfile={showUserProfile}
+              />
+            </div>
+          )}
           {showRightSideMenu
             ? (
               <div className={styles.rightPanelWrapper}>
@@ -131,7 +142,8 @@ const mapStateToProps = (state: IAppState) => {
     currentUserId: id,
     userWorkspaces: state.user.workspaceList,
     showRightSideMenu,
-    activeThreadPostId
+    activeThreadPostId,
+    threads: state.threads
   };
 };
 
