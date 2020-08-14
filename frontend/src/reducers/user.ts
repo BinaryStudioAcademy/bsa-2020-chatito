@@ -8,7 +8,8 @@ import {
   forgotPasswordRoutine,
   resetPasswordRoutine,
   editStatusRoutine,
-  setInvitedUserRoutine
+  setInvitedUserRoutine,
+  loginWithGoogleRoutine
 } from 'routines/user';
 import { IUser } from 'common/models/user/IUser';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
@@ -40,7 +41,8 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
       };
     case addNewUserRoutine.SUCCESS:
     case fetchUserRoutine.SUCCESS:
-    case loginUserRoutine.SUCCESS: {
+    case loginUserRoutine.SUCCESS:
+    case loginWithGoogleRoutine.SUCCESS: {
       const { id, fullName, displayName, email, imageUrl, title, workspaces } = payload;
 
       return {
@@ -84,11 +86,13 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
     case deleteAccountRoutine.FAILURE:
       return { ...state, isLoading: false };
     case loginUserRoutine.TRIGGER:
+    case loginWithGoogleRoutine.TRIGGER:
       return {
         ...state,
         isLoading: true
       };
     case loginUserRoutine.FAILURE:
+    case loginWithGoogleRoutine.FAILURE:
       return {
         ...state,
         isLoading: false,
