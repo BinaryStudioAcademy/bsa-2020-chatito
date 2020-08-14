@@ -19,7 +19,6 @@ export const getAllChatPosts = async (chatId: string) => {
 };
 
 export const getAllUserChats = async (userId: string) => {
-  // const chats: IChat[] = await getCustomRepository(UserRepository).getAllUserChats(userId);
   const chats: IChat[] = await getCustomRepository(ChatRepository).getAllByUser(userId);
   const directs = chats.filter(({ type }) => type === ChatType.DirectMessage);
   const channels = chats.filter(({ type }) => type === ChatType.Channel);

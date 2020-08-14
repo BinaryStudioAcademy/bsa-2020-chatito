@@ -13,14 +13,12 @@ import routesWhiteList from './config/routesWhiteListConfig';
 import './config/passportConfig';
 import './config/sendgridConfig';
 import socketInjector from './socket/injector';
-import socketHandlers from './socket/socketHandlers';
 import { registerSockets } from './socket/connectNamespaces';
 
 const app = express();
 const io = socketIO();
 
 io.use(jwtSocketMiddleware);
-io.on('connection', socket => socketHandlers(socket));
 export const chatNamespace = io.of('/chat');
 
 app.use(socketInjector(io));
