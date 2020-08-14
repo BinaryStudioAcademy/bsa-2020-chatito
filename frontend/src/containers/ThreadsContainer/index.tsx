@@ -50,7 +50,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
       </header>
       <div className={styles.threadsContainer}>
         {fetchedThreads.map(post => (
-          <div>
+          <div key={post.id}>
             {post.comments.length ? (
               <div
                 key={post.id}
@@ -60,7 +60,6 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
                   showOnlyTwoComments={showOnlyTwoComments}
                   chatName={post.chat.name}
                   key={post.id}
-                  maxThreadHeight="100%"
                   width="100%"
                   post={{
                     createdByUser: post.createdByUser,

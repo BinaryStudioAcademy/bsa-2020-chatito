@@ -2,6 +2,7 @@ import { getCustomRepository } from 'typeorm';
 
 import WorkspaceRepository from '../data/repositories/workspaceRepository';
 import UserRepository from '../data/repositories/userRepository';
+import PostRepository from '../data/repositories/postRepository';
 import { IClientCreateWorkspace } from '../common/models/workspace/IClientCreateWorkspace';
 import { IWorkspaceResponse } from '../common/models/workspace/IWorkspaceResponse';
 import { fromCreatedWorkspaceToClient, fromClientCreateWorkspaceToCreateWorkspace } from '../common/mappers/workspace';
@@ -20,4 +21,9 @@ export const getWorkspaceUsers = async (id: string): Promise<IUser[]> => {
   const workspace = await getCustomRepository(WorkspaceRepository).getById(id);
 
   return workspace.users;
+};
+
+export const getThreads = async (workspaceId: string, userId: string) => {
+  const posts = await getCustomRepository(PostRepository).getPostsByUserId(workspaceId, userId);
+  return posts;
 };

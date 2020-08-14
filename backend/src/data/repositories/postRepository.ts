@@ -35,7 +35,7 @@ class PostRepository extends Repository<Post> {
     return editedPost;
   }
 
-  getPostsByUserId(id: string, activeworkspaceid: string) {
+  getPostsByUserId(activeworkspaceid: string, id: string) {
     const posts = this.createQueryBuilder("post")
       .select([
         "post.createdByUser",

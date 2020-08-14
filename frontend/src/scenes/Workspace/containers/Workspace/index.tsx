@@ -21,9 +21,7 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import ThreadsContainer from 'containers/ThreadsContainer/index';
-import { IFetchedThreads } from 'common/models/threads/IFetchedThreads';
 import { IThreadsState } from 'containers/ThreadsContainer/reducers/reducer';
-import ChangeStatus from 'containers/ChangeStatus';
 
 interface IProps {
   currentUserId?: string;
@@ -117,10 +115,9 @@ const Workspace: React.FC<IProps> = ({
             </div>
           ) : (
             <div className={styles.chatWrapper}>
-              {/* <ThreadsContainer
+              <ThreadsContainer
                 openUserProfile={showUserProfile}
-              /> */}
-              <ChangeStatus />
+              />
             </div>
           )}
           {showRightSideMenu

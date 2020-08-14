@@ -29,7 +29,6 @@ const Thread: FunctionComponent<IProps> = ({
   showOnlyTwoComments = false,
   chatName = '',
   width = 'auto',
-  maxThreadHeight = '600px',
   post,
   comments,
   sendComment,
@@ -57,7 +56,7 @@ const Thread: FunctionComponent<IProps> = ({
       <div className={styles.threadPost}>
         <Post post={post} openUserProfile={openUserProfile} />
       </div>
-      <div className={styles.threadComments} style={{ maxHeight: maxThreadHeight }}>
+      <div className={styles.threadComments} style={{ maxHeight: '100%' }}>
         <div className={styles.commentsWrapper}>
           {showOnlyTwoComments && !showAll ? (
             <div>
