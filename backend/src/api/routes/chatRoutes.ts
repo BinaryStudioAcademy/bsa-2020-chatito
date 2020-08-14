@@ -7,6 +7,10 @@ const router = Router();
 router
   .get('/:id/posts', run((req: Request) => getAllChatPosts(req.params.id)))
   .get('/', run((req: Request) => getAllUserChats(req.user.id)))
-  .post('/', run((req: Request) => addChat(req.user.id, req.body)));
+  .post('/', run(async (req: Request) => {
+    const chat = await addChat(req.user.id, req.body);
+    req.io.of('/chat').emit('joinChat', chat.id);
+    return chat;
+  }));
 
 export default router;

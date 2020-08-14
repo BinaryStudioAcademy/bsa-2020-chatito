@@ -1,18 +1,15 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
 import { setCurrentChatRoutine, setPostsRoutine, addPostRoutine, createChatRoutine } from '../routines';
-import { fetchUserChatsRoutine } from 'scenes/Workspace/routines';
 import { Routine } from 'redux-saga-routines';
 import { fetchCnannelPosts, addPost, createChat } from 'services/chatServise';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
-import { push } from 'connected-react-router';
-import { Routes } from 'common/enums/Routes';
 
 function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
-    const responce: IPost[] = yield call(fetchCnannelPosts, payload);
-    yield put(setPostsRoutine.success(responce));
+    const response: IPost[] = yield call(fetchCnannelPosts, payload);
+    yield put(setPostsRoutine.success(response.reverse()));
   } catch (error) {
     yield call(toastrError, error.message);
   }
@@ -25,7 +22,6 @@ function* watchPostsRequest() {
 function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
   try {
     yield call(addPost, payload);
-    yield put(setPostsRoutine.trigger(payload.chatId));
   } catch (error) {
     yield call(toastrError, error.message);
   }
@@ -59,8 +55,6 @@ function* createChatRequest({ payload }: Routine<any>) {
     const chat = yield call(createChat, payload);
     yield put(createChatRoutine.success(chat));
     yield put(showModalRoutine({ modalType: payload.type, show: false }));
-    yield put(fetchUserChatsRoutine.trigger());
-    push(Routes.WorkspaceWithChat.replace(':whash', chat.workspace.id).replace(':chash', chat.hash));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(createChatRoutine.failure());
