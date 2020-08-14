@@ -5,7 +5,6 @@ import styles from './styles.module.sass';
 import { IPost } from 'common/models/post/IPost';
 import { IUser } from 'common/models/user/IUser';
 import ProfilePreview from 'components/ProfilePreview/index';
-import { userLogoDefaultUrl } from 'common/configs/defaults';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 
 interface IProps {
