@@ -7,13 +7,14 @@ import {
   loginUserRoutine,
   forgotPasswordRoutine,
   resetPasswordRoutine,
-  editStatusRoutine
+  editStatusRoutine,
+  loginWithGoogleRoutine
 } from '../routines/user';
 import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { Routine } from 'redux-saga-routines';
-import { registration, login, fetchUser } from 'services/authService';
+import { registration, login, fetchUser, loginWithGoogle } from 'services/authService';
 import { setTokens } from 'common/helpers/storageHelper';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
 import { toastrError, toastrSuccess } from 'services/toastrService';
@@ -67,6 +68,29 @@ function* loginUserRequest({ payload }: Routine<any>) {
 
 function* watchLoginUserRequest() {
   yield takeEvery(loginUserRoutine.TRIGGER, loginUserRequest);
+}
+
+function* loginWithGoogleRequest({ payload }: Routine<any>) {
+  try {
+    const { accessToken, refreshToken, user }: IAuthServerResponse = yield call(loginWithGoogle, payload);
+    setTokens({ accessToken, refreshToken });
+
+    yield put(loginWithGoogleRoutine.success(user));
+
+    // eslint-disable-next-line
+    yield payload.workspace.id // selected workspace exists (when login through invite link)
+      ? put(push(Routes.Workspace.replace(':hash', payload.workspace.hash)))
+      : (user && user.workspaces.length > 0)
+        ? put(push(Routes.Workspace.replace(':hash', user.workspaces[0].hash)))
+        : put(push(Routes.AddWorkspace));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(loginWithGoogleRoutine.failure(error.message));
+  }
+}
+
+function* watchLoginWithGoogleRequest() {
+  yield takeEvery(loginWithGoogleRoutine.TRIGGER, loginWithGoogleRequest);
 }
 
 function* updateProfile({ payload }: Routine<any>) {
@@ -176,6 +200,7 @@ export default function* userSaga() {
     watchUpdateProfile(),
     watchForgotPasswordRequest(),
     watchLoginUserRequest(),
+    watchLoginWithGoogleRequest(),
     watchDeleteAccount(),
     watchResetPasswordRequest(),
     watchEditStatusRequest()
