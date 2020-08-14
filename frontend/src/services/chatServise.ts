@@ -12,13 +12,8 @@ export async function fetchUserChats() {
   return response;
 }
 
-export async function fetchUserChannels() {
-  const response = await api.get('/api/chats');
-  return response;
-}
-
-export async function fetchCnannelPosts(channelId: string) {
-  const response = await api.get(`/api/chats/${channelId}/posts`);
+export async function fetchChatPosts(chatId: string) {
+  const response = await api.get(`/api/chats/${chatId}/posts`);
   return response;
 }
 

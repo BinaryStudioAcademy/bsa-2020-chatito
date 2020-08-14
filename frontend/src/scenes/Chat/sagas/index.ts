@@ -2,15 +2,15 @@ import { all, put, call, takeEvery } from 'redux-saga/effects';
 import { setCurrentChatRoutine, setPostsRoutine, addPostRoutine, createChatRoutine } from '../routines';
 import { fetchUserChatsRoutine } from 'scenes/Workspace/routines';
 import { Routine } from 'redux-saga-routines';
-import { fetchCnannelPosts, addPost, createChat } from 'services/chatServise';
+import { fetchChatPosts, addPost, createChat } from 'services/chatServise';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
 import { IChat } from 'common/models/chat/IChat';
 
-function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
+function* fetchChatPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
-    const responce: IPost[] = yield call(fetchCnannelPosts, payload);
+    const responce: IPost[] = yield call(fetchChatPosts, payload);
     yield put(setPostsRoutine.success(responce));
   } catch (error) {
     yield call(toastrError, error.message);
@@ -18,7 +18,7 @@ function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
 }
 
 function* watchPostsRequest() {
-  yield takeEvery(setPostsRoutine.TRIGGER, fetchChannelsPostsRequest);
+  yield takeEvery(setPostsRoutine.TRIGGER, fetchChatPostsRequest);
 }
 
 function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
