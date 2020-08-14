@@ -6,6 +6,8 @@ import { IPost } from 'common/models/post/IPost';
 import { addPostWithSocketRoutine, editPostWithSocketRoutine, addChatWithSocketRoutine } from 'scenes/Chat/routines';
 import { incUnreadCountRoutine } from 'scenes/Workspace/routines';
 import { IChat } from 'common/models/chat/IChat';
+import { ClientSockets } from 'common/enums/ClientSockets';
+import { ServerSockets } from 'common/enums/ServerSockets';
 
 const { server } = env.urls;
 
@@ -13,7 +15,7 @@ const { server } = env.urls;
 const chatSocket = io(`${server!}/chat`, { query: `auth_token=${getAccessToken()}` });
 
 export const connectSockets = () => {
-  chatSocket.on('addPost', (post: IPost) => {
+  chatSocket.on(ClientSockets.AddPost, (post: IPost) => {
     const state = store.getState();
     if (post.chatId === state.chat.chat.id) {
       store.dispatch(addPostWithSocketRoutine(post));
@@ -22,16 +24,16 @@ export const connectSockets = () => {
     }
   });
 
-  chatSocket.on('editPost', (post: IPost) => {
+  chatSocket.on(ClientSockets.EditPost, (post: IPost) => {
     const state = store.getState();
     if (post.chatId === state.chat.chat.id) {
       store.dispatch(editPostWithSocketRoutine(post));
     }
   });
-  chatSocket.on('joinChat', (chatId: string) => {
-    chatSocket.emit('joinChatRoom', chatId);
+  chatSocket.on(ClientSockets.JoinChat, (chatId: string) => {
+    chatSocket.emit(ServerSockets.JoinChatRoom, chatId);
   });
-  chatSocket.on('addChat', (chat: IChat) => {
+  chatSocket.on(ClientSockets.AddChat, (chat: IChat) => {
     store.dispatch(addChatWithSocketRoutine(chat));
   });
 };
