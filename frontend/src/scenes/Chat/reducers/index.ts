@@ -19,9 +19,10 @@ const initialState: IChatState = {
 const reducer = (state: IChatState = initialState, { type, payload }: Routine<any>) => {
   switch (type) {
     case setCurrentChatRoutine.SUCCESS:
+      const chat = payload ? { ...payload } : null;
       return {
         ...state,
-        chat: { ...payload }
+        chat
       };
 
     case setPostsRoutine.SUCCESS:

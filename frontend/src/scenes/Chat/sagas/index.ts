@@ -35,7 +35,9 @@ function* watchAddPostRequest() {
 }
 
 function* setCurrChat({ payload }: Routine<any>): Routine<any> {
-  yield put(setPostsRoutine.trigger(payload.id));
+  if (payload && payload.id) {
+    yield put(setPostsRoutine.trigger(payload.id));
+  }
   yield put(setCurrentChatRoutine.success(payload));
 }
 
