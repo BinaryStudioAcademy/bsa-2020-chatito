@@ -11,6 +11,7 @@ import PrivateRoute from '../PrivateRoute';
 import { fetchUserRoutine } from 'routines/user';
 import AddWorkspace from 'scenes/Workspace/containers/AddWorkspace';
 import PageNotFound from 'scenes/PageNotFound/index';
+import Maintenance from 'containers/Maintenance';
 import Workspace from 'scenes/Workspace/containers/Workspace';
 import Auth from 'scenes/Auth/containers/Auth';
 import JoinInvitedWorkspace from 'containers/JoinInvitedWorkspace';
@@ -49,6 +50,7 @@ const Routing: React.FC<IProps> = ({
         <PrivateRoute exact path={Routes.Workspace} component={Workspace} />
         <PrivateRoute exact path={Routes.AddWorkspace} component={AddWorkspace} />
         <PrivateRoute path={Routes.NotExistingPath} component={PageNotFound} />
+        <PrivateRoute path={Routes.Maintenance} component={Maintenance} />
       </Switch>
     </LoaderWrapper>
   );

@@ -1,9 +1,13 @@
-import React, { useState, FunctionComponent } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import React, { FunctionComponent } from 'react';
 import styles from './styles.module.sass';
-import bgImg from 'img/bg-img.png';
+import InputField from 'components/InputField/InputField';
 import { connect } from 'react-redux';
 import { addWorkspaceRoutine } from 'scenes/Workspace/routines';
+import { ReactComponent as Mascot } from 'img/chatitoMascot.svg';
+import { ReactComponent as Logo } from 'img/logo.svg';
+import { Formik, Form } from 'formik';
+import { Button } from 'react-bootstrap';
+import { createWorkspaceValSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
 
 type IFetchWorkspace<T, S> = (name: T) => S;
 
@@ -12,43 +16,46 @@ interface IProps {
 }
 
 const AddWorkspace: FunctionComponent<IProps> = props => {
-  const [name, setName] = useState('');
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setName(e.target.value);
+  const onSubmit = (values: IInitialValues): void => {
+    props.addWorkspace(values.workspaceName);
   };
-  const onSubmit = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    e.preventDefault();
-    props.addWorkspace(name);
-    setName('');
+  const initialValues = {
+    workspaceName: ''
   };
+  interface IInitialValues {
+    workspaceName: string;
+  }
   return (
     <div className={styles.container}>
-      <Form className={styles.inputWorkspace} onSubmit={onSubmit}>
-        <Form.Group className={styles.inputContainer}>
-          <p className={styles.inputContainer__header}>Create a new workspace</p>
-          <Form.Label className={styles.inputContainer__label}>Your workspace name</Form.Label>
-          <Form.Control
-            size="lg"
-            type="text"
-            placeholder="workspace name"
-            className={styles.inputContainer__input}
-            value={name}
-            onChange={onChange}
-          />
-        </Form.Group>
-        <Button
-          className={styles.inputButton}
-          variant="secondary"
-          type="submit"
-        >
-          Next
-        </Button>
-      </Form>
-      <div className={styles.infoSide}>
-
-        <div className={styles.infoSide__imageContainer}>
-          <img className={styles.bgImage} src={bgImg} alt="background" />
+      <div className={styles.leftSide}>
+        <div className={styles.createWorkspace}>
+          <header className={styles.signInHeader}>
+            <h1 className={styles.header}>Create a new workspace</h1>
+          </header>
+          <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+            <Form
+              className={`${styles.inpBlock} signIn-form d-flex flex-column justify-content-center align-items-center`}
+            >
+              <div className={styles.inputContainer}>
+                <InputField
+                  label="Workspace name"
+                  name="workspaceName"
+                  type="workspaceName"
+                  placeholder="workspace"
+                />
+              </div>
+              <div className={`${styles.formFooter} w-100`}>
+                <Button type="submit" variant="primary" className={styles.primaryBtn}>
+                  Sign In
+                </Button>
+              </div>
+            </Form>
+          </Formik>
         </div>
+      </div>
+      <div className={styles.rightSide}>
+        <Mascot className={styles.mascot} />
+        <Logo className={styles.logo} />
       </div>
     </div>
   );
