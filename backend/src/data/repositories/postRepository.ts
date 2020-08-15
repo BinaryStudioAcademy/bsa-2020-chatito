@@ -35,8 +35,8 @@ class PostRepository extends Repository<Post> {
     return editedPost;
   }
 
-  getPostsByUserId(activeworkspaceid: string, id: string) {
-    const posts = this.createQueryBuilder('post')
+  async getPostsByUserId(activeworkspaceid: string, id: string) {
+    const posts = await this.createQueryBuilder('post')
       .select([
         'post.createdByUser',
         'post.text',
@@ -61,18 +61,18 @@ class PostRepository extends Repository<Post> {
         'user.status'
       ])
 
+      .leftJoin('post.postReactions', 'reactions')
+      .addSelect([
+        'reactions."userId"',
+        'reactions.reaction'
+      ])
+
       .leftJoin('post.comments', 'comments')
       .addSelect([
         'comments.id',
-        'comments.\'createdByUserId\'',
+        'comments."createdByUserId"',
         'comments.text',
         'comments.createdAt'
-      ])
-
-      .leftJoin('post.postReactions', 'postReactions')
-      .addSelect([
-        'postReactions.userId',
-        'postReactions.reaction'
       ])
 
       .leftJoin('comments.createdByUser', 'commentuser')
@@ -89,11 +89,11 @@ class PostRepository extends Repository<Post> {
       .leftJoin('comments.post', 'commentsPost')
 
       .leftJoin('commentsPost.chat', 'commentsPostChat')
-      .where('post.\'createdByUserId\' = :id', { id })
-      .andWhere('chat.\'workspaceId\' = :activeworkspaceid', { activeworkspaceid })
-      .orWhere('comments.\'createdByUserId\' = :id', { id })
-      .andWhere('\'commentsPostChat\'.\'workspaceId\' = :activeworkspaceid', { activeworkspaceid })
-      .orderBy('comments.\'createdAt\'', 'ASC')
+      .where('post."createdByUserId" = :id', { id })
+      .andWhere('chat."workspaceId" = :activeworkspaceid', { activeworkspaceid })
+      .orWhere('comments."createdByUserId" = :id', { id })
+      .andWhere('"commentsPostChat"."workspaceId" = :activeworkspaceid', { activeworkspaceid })
+      .orderBy('comments."createdAt"', 'ASC')
       .getMany();
     return posts;
   }
