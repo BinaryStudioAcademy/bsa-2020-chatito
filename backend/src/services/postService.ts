@@ -50,10 +50,6 @@ export const addReaction = (reaction: string, postId: string, userId: string) =>
   })
 );
 
-export const updateReaction = (id: string, reaction: string) => (
-  getCustomRepository(PostReactionRepository).updateReaction(id, reaction)
-);
-
-export const deleteReaction = (id: string) => (
-  getCustomRepository(PostReactionRepository).deleteReaction(id)
+export const deleteReaction = (reaction: string, postId: string, userId: string) => (
+  getCustomRepository(PostReactionRepository).deleteReaction({ reaction, postId, userId })
 );

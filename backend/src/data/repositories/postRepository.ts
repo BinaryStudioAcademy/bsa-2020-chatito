@@ -14,7 +14,7 @@ class PostRepository extends Repository<Post> {
 
   async getAllChatPosts(chatId: string): Promise<Post[]> {
     return this.find({
-      relations: ['createdByUser'],
+      relations: ['createdByUser', 'postReactions'],
       where: { chat: chatId }
     });
   }

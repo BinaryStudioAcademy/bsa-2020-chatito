@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class addPostReaction1597168421313 implements MigrationInterface {
-    name = 'addPostReaction1597168421313'
+export class addPostReaction1597428417522 implements MigrationInterface {
+    name = 'addPostReaction1597428417522'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "post_reaction" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "reaction" character varying NOT NULL, "postId" uuid, "userId" uuid, CONSTRAINT "PK_72c5fe23f6a0f35b8c2ba78945f" PRIMARY KEY ("id"))`);

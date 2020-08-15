@@ -27,6 +27,6 @@ export class Post extends AbstractEntity {
   @RelationId((post: Post) => post.chat)
   readonly chatId: string;
 
-  @OneToMany(() => PostReaction, postReaction => postReaction.reaction)
+  @OneToMany(() => PostReaction, postReaction => postReaction.post)
   postReactions: PostReaction[];
 }
