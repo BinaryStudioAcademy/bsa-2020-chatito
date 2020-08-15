@@ -38,6 +38,9 @@ const Post: React.FC<IProps> = ({ post, openThread, openUserProfile }) => {
             </Card.Link>
           )}
         </div>
+        <div>
+          {post.comments.length}
+        </div>
       </Media.Body>
     </Media>
   );

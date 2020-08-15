@@ -150,7 +150,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 const mapStateToProps = (state: IAppState) => ({
   channels: state.workspace.channels || [],
   directMessages: state.workspace.directMessages || [],
-  selectedChat: state.chat.chat!
+  selectedChat: state.chat.chat! // eslint-disable-line
 });
 
 const mapDispatchToProps = {
