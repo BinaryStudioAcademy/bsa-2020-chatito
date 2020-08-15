@@ -96,10 +96,10 @@ const EditProfile: FunctionComponent<IProps> = ({
             </Form.Group>
 
             <Form.Group controlId="formEditTitle">
-              <Form.Label>What I do</Form.Label>
+              <Form.Label>Live position</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="What I do"
+                placeholder="Live position"
                 value={title}
                 onChange={handleChange}
               />
