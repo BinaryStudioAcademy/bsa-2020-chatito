@@ -36,58 +36,58 @@ class PostRepository extends Repository<Post> {
   }
 
   getPostsByUserId(activeworkspaceid: string, id: string) {
-    const posts = this.createQueryBuilder("post")
+    const posts = this.createQueryBuilder('post')
       .select([
-        "post.createdByUser",
-        "post.text",
-        "post.createdAt",
-        "post.id"
+        'post.createdByUser',
+        'post.text',
+        'post.createdAt',
+        'post.id'
       ])
 
-      .leftJoin("post.chat", "chat")
+      .leftJoin('post.chat', 'chat')
       .addSelect([
-        "chat.name",
-        "chat.id"
+        'chat.name',
+        'chat.id'
       ])
 
-      .leftJoin("post.createdByUser", "user")
+      .leftJoin('post.createdByUser', 'user')
       .addSelect([
-        "user.email",
-        "user.id",
-        "user.fullName",
-        "user.displayName",
-        "user.imageUrl",
-        "user.title",
-        "user.status"
+        'user.email',
+        'user.id',
+        'user.fullName',
+        'user.displayName',
+        'user.imageUrl',
+        'user.title',
+        'user.status'
       ])
 
-      .leftJoin("post.comments", "comments")
+      .leftJoin('post.comments', 'comments')
       .addSelect([
-        "comments.id",
-        "comments.\"createdByUserId\"",
-        "comments.text",
-        "comments.createdAt"
+        'comments.id',
+        'comments.\"createdByUserId\"',
+        'comments.text',
+        'comments.createdAt'
       ])
 
-      .leftJoin("comments.createdByUser", "commentuser")
+      .leftJoin('comments.createdByUser', 'commentuser')
       .addSelect([
-        "commentuser.id",
-        "commentuser.email",
-        "commentuser.fullName",
-        "commentuser.displayName",
-        "commentuser.imageUrl",
-        "commentuser.title",
-        "commentuser.status",
+        'commentuser.id',
+        'commentuser.email',
+        'commentuser.fullName',
+        'commentuser.displayName',
+        'commentuser.imageUrl',
+        'commentuser.title',
+        'commentuser.status',
       ])
 
-      .leftJoin("comments.post", "commentsPost")
+      .leftJoin('comments.post', 'commentsPost')
 
-      .leftJoin("commentsPost.chat", "commentsPostChat")
-      .where("post.\"createdByUserId\" = :id", { id })
-      .andWhere("chat.\"workspaceId\" = :activeworkspaceid", { activeworkspaceid })
-      .orWhere("comments.\"createdByUserId\" = :id", { id } )
-      .andWhere("\"commentsPostChat\".\"workspaceId\" = :activeworkspaceid", { activeworkspaceid })
-      .orderBy("comments.\"createdAt\"", "ASC")
+      .leftJoin('commentsPost.chat', 'commentsPostChat')
+      .where('post.\"createdByUserId\" = :id', { id })
+      .andWhere('chat.\"workspaceId\" = :activeworkspaceid', { activeworkspaceid })
+      .orWhere('comments.\"createdByUserId\" = :id', { id } )
+      .andWhere('\"commentsPostChat\".\"workspaceId\" = :activeworkspaceid', { activeworkspaceid })
+      .orderBy('comments.\"createdAt\"', 'ASC')
       .getMany();
     return posts
   }
