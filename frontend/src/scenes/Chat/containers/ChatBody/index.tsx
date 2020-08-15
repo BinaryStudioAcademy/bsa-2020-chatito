@@ -3,7 +3,7 @@ import styles from './styles.module.sass';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import { IPost } from 'common/models/post/IPost';
-import Post from 'components/Post/index';
+import Post from 'containers/Post';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { showUserProfileRoutine, setActiveThreadRoutine } from 'scenes/Workspace/routines';

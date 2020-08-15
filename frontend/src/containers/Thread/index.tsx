@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import TextEditor from 'components/TextEditor';
-import Post from 'components/Post';
+import Post from 'containers/Post';
 import styles from './styles.module.sass';
 
 import { IPost } from 'common/models/post/IPost';
