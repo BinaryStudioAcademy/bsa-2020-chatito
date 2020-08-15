@@ -69,6 +69,12 @@ class PostRepository extends Repository<Post> {
         'comments.createdAt'
       ])
 
+      .leftJoin('post.postReactions', 'postReactions')
+      .addSelect([
+        'postReactions.userId',
+        'postReactions.reaction'
+      ])
+
       .leftJoin('comments.createdByUser', 'commentuser')
       .addSelect([
         'commentuser.id',

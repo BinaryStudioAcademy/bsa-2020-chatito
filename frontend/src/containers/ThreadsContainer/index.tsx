@@ -66,7 +66,8 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
                     text: post.text,
                     createdAt: new Date(post.createdAt),
                     id: post.id,
-                    chatId: post.chat.id
+                    chatId: post.chat.id,
+                    postReactions: post.postReactions
                   }}
                   comments={post.comments}
                   hideCloseBtn={hideCloseBtn}
