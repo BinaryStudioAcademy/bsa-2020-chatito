@@ -11,5 +11,6 @@ export interface IChat {
   workspace: Workspace;
   createdByUser: User;
   users: User[];
+  hash: string;
   posts: Post[];
 }

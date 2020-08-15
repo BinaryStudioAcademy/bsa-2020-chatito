@@ -1,58 +1,72 @@
 import React, { useState, FunctionComponent, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Routine } from 'redux-saga-routines';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   IconDefinition,
   faUserFriends,
+  faListAlt,
+  faClipboardList,
   faLock,
   faHashtag,
-  faPodcast,
   faAt,
-  faCopy,
   faSearch,
-  faIdCard,
-  faTh,
   faDatabase,
-  faReply,
-  faPlus,
-  faPlay
+  faPlay,
+  faPlus
 } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import styles from './styles.module.sass';
-import { setCurrentChatRoutine } from 'scenes/Chat/routines';
+import { goToThreadsRoutine } from 'containers/ThreadsContainer/routines';
+import { Routine } from 'redux-saga-routines';
 import { fetchUserChatsRoutine } from '../../routines';
-import { showModalRoutine } from 'routines/modal';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
+import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import InvitePopup from 'containers/InvitePopup';
 import CreateChannelModal from 'containers/CreateChannelModal';
 import CreateDirectModal from 'containers/CreateDirectModal';
+import { push } from 'connected-react-router';
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
+import { Routes } from 'common/enums/Routes';
 
 interface IProps {
   channels: IChat[];
   directMessages: IChat[];
   selectedChat: IChat;
-  selectChat: Routine;
+  selectedWorkspace: IWorkspace;
   fetchChats: IBindingAction;
   showModal: IBindingCallback1<IModalRoutine>;
+  router: (route: string) => void;
+  goToThreads: Routine;
 }
 
 const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
   selectedChat,
-  selectChat,
   fetchChats,
-  showModal
+  showModal,
+  router,
+  selectedWorkspace,
+  goToThreads
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
 
-  const doSelectChannel = (channel: IChat) => selectChat(channel);
+  const doSelectChannel = (chat: IChat) => {
+    if (selectedWorkspace && chat) {
+      router(Routes.WorkspaceWithChat.replace(':whash', selectedWorkspace.hash)
+        .replace(':chash', chat.hash));
+    } else if (selectedWorkspace) {
+      router(Routes.Workspace.replace(':whash', selectedWorkspace.hash));
+    } else {
+      router(Routes.AddWorkspace);
+    }
+    goToThreads(false);
+  };
 
   const getClassNameDiv = (state: boolean) => (state ? styles.listBoxHidden : styles.listBox);
 
@@ -72,7 +86,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   // eslint-disable-next-line
   const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => { }) => (
     <a href="#0" className={styles.channelSelect} onClick={onClick}>
-      <FontAwesomeIcon icon={iconFa} color="white" />
+      <FontAwesomeIcon icon={iconFa} color="black" />
       <span className={styles.buttonText}>{text}</span>
     </a>
   );
@@ -81,7 +95,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     const { name, isPrivate, id } = channel;
     return (
       <a href="#0" key={id} className={getChannelSelect(channel)} onClick={() => doSelectChannel(channel)}>
-        <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} color="white" />
+        <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} color="black" />
         <span className={styles.buttonText}>{name}</span>
       </a>
     );
@@ -97,75 +111,77 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     );
   };
 
+  const addChannelButton = () => (
+    <a
+      href="#0"
+      className={styles.channelSelect}
+      onClick={() => showModal({ modalType: ModalTypes.CreateChannel, show: true })}
+    >
+      <div className={styles.iconBorder}>
+        <FontAwesomeIcon icon={faPlus} color="red" />
+      </div>
+      <span className={styles.buttonText}>
+        Add a channel
+      </span>
+    </a>
+  );
+
+  const addDirectButton = () => (
+    <a
+      href="#0"
+      className={styles.channelSelect}
+      onClick={() => showModal({ modalType: ModalTypes.CreateDirect, show: true })}
+    >
+      <div className={styles.iconBorder}>
+        <FontAwesomeIcon icon={faPlus} color="red" />
+      </div>
+      <span className={styles.buttonText}>
+        Add a direct
+      </span>
+    </a>
+  );
+
   const showInvitePopup = () => {
     showModal({ modalType: ModalTypes.InvitePopup, show: true });
+  };
+
+  const goToThreadsCallBack = () => {
+    goToThreads(true);
   };
 
   return (
     <div className={styles.leftToolbar}>
       {channelSelector('Invite to workspace', faUserFriends, showInvitePopup)}
-      {channelSelector('Threads', faPodcast)}
+      {channelSelector('Threads', faClipboardList, goToThreadsCallBack)}
       {channelSelector('Mentions & reactions', faAt)}
-      {channelSelector('Drafts', faCopy)}
-      {channelSelector('Channel browser', faSearch)}
-      {channelSelector('People & user groups', faIdCard)}
-      {channelSelector('Apps', faTh)}
+      {channelSelector('Drafts', faListAlt)}
+      {channelSelector('Saved Items', faSearch)}
       {channelSelector('File Browser', faDatabase)}
-      {channelSelector('Show less', faReply)}
       <hr className={styles.hrr} />
-
       <div className={styles.buttonChanel}>
-        <div className={styles.channelButtonsWrapper}>
-          <button type="button" className={styles.buttonSelect} onClick={() => setChatPanel(!chatPanel)}>
-            <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(chatPanel)} />
-            <span className={styles.buttonText}>Chanels</span>
-          </button>
-
-          <button
-            type="button"
-            className={styles.buttonPlus}
-            onClick={() => showModal({ modalType: ModalTypes.CreateChannel, show: true })}
-          >
-            <FontAwesomeIcon icon={faPlus} />
-          </button>
-        </div>
-        <div className={getClassNameDiv(chatPanel)}>
-          {channels.map(channel => (
-            userChannel(channel)))}
-        </div>
-
-        <hr className={styles.hrr} />
-        <div className={styles.buttonChanel}>
-          <div className={styles.channelButtonsWrapper}>
-            <button type="button" className={styles.buttonSelect} onClick={() => setDirectPanel(!directPanel)}>
-              <FontAwesomeIcon icon={faPlay} color="blue" className={getClassNameImg(directPanel)} />
-              <span className={styles.buttonText}>Direct Messages</span>
-            </button>
-            <button
-              type="button"
-              className={styles.buttonPlus}
-              onClick={() => showModal({ modalType: ModalTypes.CreateDirect, show: true })}
-            >
-              <FontAwesomeIcon icon={faPlus} />
-            </button>
-            <div className={styles.directInfo}>
-              Open a direct message
-              <br />
-              Ctrl + Shift + K
-            </div>
-          </div>
-          <div className={getClassNameDiv(directPanel)}>
-            {directMessages.map(directMessage => (
-              directChannel(directMessage)))}
-          </div>
-        </div>
-        <hr className={styles.hrr} />
+        <button type="button" className={styles.buttonSelect} onClick={() => setChatPanel(!chatPanel)}>
+          <FontAwesomeIcon icon={faPlay} className={getClassNameImg(chatPanel)} />
+          <span className={styles.buttonText}>Chanels</span>
+        </button>
+      </div>
+      <div className={getClassNameDiv(chatPanel)}>
+        {channels.map(channel => (
+          userChannel(channel)))}
+        {addChannelButton()}
+      </div>
+      <hr className={styles.hrr} />
+      <div className={styles.buttonChanel}>
+        <button type="button" className={styles.buttonSelect} onClick={() => setDirectPanel(!directPanel)}>
+          <FontAwesomeIcon icon={faPlay} className={getClassNameImg(directPanel)} />
+          <span className={styles.buttonText}>Direct Messages</span>
+        </button>
       </div>
       <div className={getClassNameDiv(directPanel)}>
-        {directMessages.map(directMessage => directChannel(directMessage))}
+        {directMessages.map(directMessage => (
+          directChannel(directMessage)))}
+        {addDirectButton()}
       </div>
       <hr className={styles.hrr} />
-
       <InvitePopup />
       <CreateChannelModal />
       <CreateDirectModal />
@@ -176,13 +192,15 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 const mapStateToProps = (state: IAppState) => ({
   channels: state.workspace.channels || [],
   directMessages: state.workspace.directMessages || [],
-  selectedChat: state.chat.chat!
+  selectedWorkspace: state.workspace.workspace,
+  selectedChat: state.chat.chat! // eslint-disable-line
 });
 
 const mapDispatchToProps = {
-  selectChat: setCurrentChatRoutine,
+  goToThreads: goToThreadsRoutine,
   fetchChats: fetchUserChatsRoutine,
-  showModal: showModalRoutine
+  showModal: showModalRoutine,
+  router: push
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatToolbar);

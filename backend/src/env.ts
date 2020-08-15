@@ -10,5 +10,9 @@ export const env = {
     sendgrid: getOsEnv('SENDGRID_API_KEY'),
     mail: getOsEnv('SENDGRID_MAIL'),
     client: getOsEnv('APP_CLIENT_URL')
+  },
+  googleAuth: {
+    clientId: getOsEnv('GOOGLE_AUTH_CLIENT_ID'),
+    clientSecret: getOsEnv('GOOGLE_AUTH_CLIENT_SECRET')
   }
 };

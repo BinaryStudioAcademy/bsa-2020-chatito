@@ -10,18 +10,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import WorkspaceItem from './components/WorkspaceItem';
 import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
+import { Routine } from 'redux-saga-routines';
+import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 import { ListGroup } from 'react-bootstrap';
 
 interface IProps {
   workspaces?: IWorkspace[];
   selectedWorkspace: IWorkspace;
   router: (route: string) => void;
+  selectChat: Routine;
 }
 
 const WorkspaceToolbar: FunctionComponent<IProps> = ({
   workspaces,
   selectedWorkspace,
-  router
+  router,
+  selectChat
 }: IProps) => {
   const onAddWorkspaceClick = () => {
     router(Routes.AddWorkspace);
@@ -33,7 +37,8 @@ const WorkspaceToolbar: FunctionComponent<IProps> = ({
         workspace => workspace.id === id
       );
       if (newSelectedWorkspace) {
-        router(Routes.Workspace.replace(':hash', newSelectedWorkspace.hash));
+        router(Routes.Workspace.replace(':whash', newSelectedWorkspace.hash));
+        selectChat(null);
       }
     }
   };
@@ -71,7 +76,8 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  router: push
+  router: push,
+  selectChat: setCurrentChatRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WorkspaceToolbar);

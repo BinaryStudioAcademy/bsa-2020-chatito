@@ -1,10 +1,9 @@
 .mainContainer
   display: flex
   flex-direction: column
-  height: 100vh
+  min-height: 100vh
 
   .contentContainer
-    height: 80%
     display: flex
     flex: 1
 
@@ -14,12 +13,11 @@
 
       .leftPanelWrapper
         flex-basis: 15%
+        min-width: 275px
 
-      .ChatWrapper
-        width: 40%
-        height: 100%
+      .chatWrapper
+        flex: 1
 
       .rightPanelWrapper
-        flex: 1
-        flex-basis: 15%
+        flex-basis: 20%
         border-left: 1px solid var(--border-lightbrown)
