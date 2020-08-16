@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import TextEditor from 'components/TextEditor';
 import Post from 'components/Post';
 import styles from './styles.module.sass';
-
+import dayjs from 'dayjs';
 import { IPost } from 'common/models/post/IPost';
 import { IComment } from 'common/models/post/IComment';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
@@ -13,6 +13,7 @@ import { IUser } from 'common/models/user/IUser';
 import { ICreateComment } from 'common/models/post/ICreateComment';
 import { addCommentRoutine } from './routines';
 import { connect } from 'react-redux';
+import { getUserImgLink } from 'common/helpers/imageHelper';
 
 interface IProps {
   width?: number | string;
@@ -38,6 +39,24 @@ const Thread: FunctionComponent<IProps> = ({
     sendComment({ postId, text });
   };
 
+  const commentBox = (comment: IComment) => (
+    <div className={styles.commentsWrapper}>
+      <img
+        className={styles.commentImage}
+        src={getUserImgLink(comment.user.imageUrl as string)}
+        alt={comment.user.fullName}
+      />
+      <div className={styles.commentData}>
+        <span className={styles.commentAuthor}>{comment.user.displayName}</span>
+        <br />
+        <span className={styles.commentData}>{dayjs(post.comments[0].createdAt).format('DD:MM:YYYY hh:mm A')}</span>
+        <br />
+        <br />
+        <span className={styles.commentText}>{comment.text}</span>
+      </div>
+    </div>
+  );
+
   return (
     <div className={styles.threadContainer} style={{ width }}>
       <header>
@@ -54,19 +73,11 @@ const Thread: FunctionComponent<IProps> = ({
         <Post post={post} openUserProfile={openUserProfile} />
       </div>
       <div className={styles.threadComments}>
-        <div className={styles.commentsWrapper}>
-          {comments.map(comment => (
-            <div className={styles.comment}>
-              <Post
-                key={comment.id}
-                post={post}
-                openUserProfile={openUserProfile}
-              />
-            </div>
-          ))}
-        </div>
+        {comments.map(comment => (commentBox(comment)))}
       </div>
-      <TextEditor placeholder="write a comment!" onSend={sendCommentHandler} height={130} />
+      <div className={styles.textEditor}>
+        <TextEditor placeholder="write a comment!" onSend={sendCommentHandler} height={130} />
+      </div>
     </div>
   );
 };

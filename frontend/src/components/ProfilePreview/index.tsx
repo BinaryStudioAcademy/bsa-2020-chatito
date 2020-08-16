@@ -7,6 +7,7 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
 import { useKey } from 'common/hooks/onInputSubmit';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
+import { getUserImgLink } from 'common/helpers/imageHelper';
 
 interface IProps {
   user: IUser;
@@ -31,10 +32,16 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setText(e.target.value);
   };
+
   const popOver = (
     <Popover id={user.id} className={styles.popOverWindow}>
       <div className={styles.avatarContainer}>
-        <Image className={styles.userAvatar || userLogoDefaultUrl} src={user.imageUrl} alt="User avatar" thumbnail />
+        <Image
+          className={styles.userAvatar || userLogoDefaultUrl}
+          src={getUserImgLink(user.imageUrl as string)}
+          alt="User avatar"
+          thumbnail
+        />
       </div>
       <Popover.Content>
         {user.status === 'online' ? (
@@ -84,10 +91,8 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
         className={styles.link}
       >
         <img
-          width={64}
-          height={64}
-          className="mr-3 rounded"
-          src={user.imageUrl ? user.imageUrl : 'https://my.throtl.com/assets/icons/user-default-gray'}
+          className={styles.postImage}
+          src={getUserImgLink(user.imageUrl as string)}
           alt={user.fullName}
         />
       </button>
