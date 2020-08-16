@@ -7,6 +7,7 @@ import Post from 'containers/Post';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { showUserProfileRoutine, setActiveThreadRoutine } from 'scenes/Workspace/routines';
+import { PostType } from 'common/enums/PostType';
 
 interface IProps {
   messages: IPost[];
@@ -23,7 +24,15 @@ const ChatBody: React.FC<IProps> = ({ messages, openProfile, openThread, activeT
 
   return (
     <div className={styles.chatBody}>
-      {messages.map(m => <Post post={m} key={m.id} openThread={handleOpenThread} openUserProfile={openProfile} />)}
+      {messages.map(m => (
+        <Post
+          post={m}
+          key={m.id}
+          openThread={handleOpenThread}
+          openUserProfile={openProfile}
+          type={PostType.Post}
+        />
+      ))}
     </div>
   );
 };

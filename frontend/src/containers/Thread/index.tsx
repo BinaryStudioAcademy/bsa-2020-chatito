@@ -11,6 +11,7 @@ import { IUser } from 'common/models/user/IUser';
 import { ICreateComment } from 'common/models/post/ICreateComment';
 import { addCommentRoutine } from './routines';
 import { connect } from 'react-redux';
+import { PostType } from 'common/enums/PostType';
 
 interface IProps {
   showOnlyTwoComments?: boolean;
@@ -54,7 +55,7 @@ const Thread: FunctionComponent<IProps> = ({
         {!hideCloseBtn && <FontAwesomeIcon onClick={onHide} icon={faTimes} className={styles.closeBtn} />}
       </header>
       <div className={styles.threadPost}>
-        <Post post={post} openUserProfile={openUserProfile} />
+        <Post post={post} openUserProfile={openUserProfile} type={PostType.Post} />
       </div>
       <div className={styles.threadComments} style={{ maxHeight: '100%' }}>
         <div className={styles.commentsWrapper}>
@@ -77,6 +78,7 @@ const Thread: FunctionComponent<IProps> = ({
                     key={comment.id}
                     post={comment}
                     openUserProfile={openUserProfile}
+                    type={PostType.Comment}
                   />
                 </div>
               ))}
@@ -89,6 +91,7 @@ const Thread: FunctionComponent<IProps> = ({
                     key={comment.id}
                     post={comment}
                     openUserProfile={openUserProfile}
+                    type={PostType.Comment}
                   />
                 </div>
               ))}

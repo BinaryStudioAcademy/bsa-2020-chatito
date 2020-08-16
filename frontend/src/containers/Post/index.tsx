@@ -13,17 +13,19 @@ import { addPostReactionRoutine, deletePostReactionRoutine } from 'containers/Po
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPostReactionRoutine } from 'common/models/postReaction/IPostReactionRoutine';
 import { IAppState } from 'common/models/store';
+import { PostType } from 'common/enums/PostType';
 
 interface IProps {
   post: IPost;
   userId: string;
+  type: PostType;
   openThread?: IBindingCallback1<IPost>;
   openUserProfile: IBindingCallback1<IUser>;
   addPostReaction: IBindingCallback1<IPostReactionRoutine>;
   deletePostReaction: IBindingCallback1<IPostReactionRoutine>;
 }
 
-const Post: React.FC<IProps> = ({ post: postData, userId, openThread,
+const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
   openUserProfile, addPostReaction, deletePostReaction }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
@@ -110,7 +112,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, openThread,
         {/* eslint-disable-next-line */}
         <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
         <div className={styles.emojiStats}>
-          {renderEmojis()}
+          {type === PostType.Post && renderEmojis()}
         </div>
         <div className={styles.footer}>
           { openThread && (
@@ -121,7 +123,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, openThread,
               Reply
             </Card.Link>
           )}
-          <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />
+          {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
         </div>
       </Media.Body>
     </Media>
