@@ -73,6 +73,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, openThread,
 
   const onEmojiClick = (event: MouseEvent, emojiObject: IEmojiData) => {
     onEmojiHandler(emojiObject.emoji);
+    document.body.click();
   };
 
   const countEmojis = (emojis: string[]) => countBy(toLower)(emojis);
@@ -120,10 +121,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, openThread,
               Reply
             </Card.Link>
           )}
-          <EmojiPopUp
-            trigger={trigger}
-            onEmojiClick={onEmojiClick}
-          />
+          <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />
         </div>
       </Media.Body>
     </Media>
