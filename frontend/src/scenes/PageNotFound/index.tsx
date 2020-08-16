@@ -1,12 +1,11 @@
 import React, { FunctionComponent } from 'react';
-import { Redirect } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { Routes } from 'common/enums/Routes';
 import { ReactComponent as Upset } from 'img/error404.svg';
 import { Button } from 'react-bootstrap';
 
 const PageNotFound: FunctionComponent = () => {
-  const onClick = () => <Redirect to={Routes.Workspace} />;
+  const onClick = () => { window.location.href = Routes.Workspace; };
   return (
     <div className={styles.notFoundPage}>
       <div className={styles.centralBlock}>
