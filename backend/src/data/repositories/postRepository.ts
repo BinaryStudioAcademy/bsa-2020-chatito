@@ -61,11 +61,7 @@ class PostRepository extends Repository<Post> {
         'user.status'
       ])
 
-      .leftJoin('post.postReactions', 'reactions')
-      .addSelect([
-        'reactions."userId"',
-        'reactions.reaction'
-      ])
+      .leftJoinAndSelect('post.postReactions', 'reactions')
 
       .leftJoin('post.comments', 'comments')
       .addSelect([
