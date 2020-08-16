@@ -20,6 +20,11 @@ class CommentRepository extends Repository<Comment> {
       order: { createdAt: 'ASC' }
     });
   }
+
+  async findByName(postId: string, text: string) {
+    const comment = await this.find({ where: { post: postId, text } });
+    return comment;
+  }
 }
 
 export default CommentRepository;

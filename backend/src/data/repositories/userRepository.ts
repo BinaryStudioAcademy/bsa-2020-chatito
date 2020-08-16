@@ -36,8 +36,8 @@ class UserRepository extends Repository<User> {
     user.remove({ data });
   }
 
-  getByEmail(email: string): Promise<User> {
-    const user = this.findOne({ where: { email }, relations: ['workspaces'] });
+  async getByEmail(email: string): Promise<User> {
+    const user = await this.findOne({ where: { email }, relations: ['workspaces'] });
     return user;
   }
 

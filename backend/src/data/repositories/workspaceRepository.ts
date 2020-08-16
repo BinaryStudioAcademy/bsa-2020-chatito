@@ -13,8 +13,9 @@ class WorkspaceRepository extends Repository<Workspace> {
     return workspace.save();
   }
 
-  findByName(name: string) {
-    return this.findOne({ name });
+  async findByName(name: string) {
+    const workspace = await this.findOne({ name });
+    return workspace;
   }
 
   getById(id: string): Promise<Workspace> {

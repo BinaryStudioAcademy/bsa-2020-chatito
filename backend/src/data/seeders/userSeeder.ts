@@ -13,8 +13,11 @@ const createUserData = async ({ password, ...userData }: IUser) => {
 export default class UserSeeder {
   public static async execute() {
     await asyncForEach(async user => {
-      const storeUser = await createUserData(user as IUser);
-      await getCustomRepository(UserRepository).addUser(storeUser);
+      const existUser = await getCustomRepository(UserRepository).getByEmail(user.email);
+      if (!existUser) {
+        const storeUser = await createUserData(user as IUser);
+        await getCustomRepository(UserRepository).addUser(storeUser);
+      };
     }, users);
   }
 }
