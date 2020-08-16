@@ -1,13 +1,17 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
-import { setCurrentChatRoutine, setPostsRoutine, addPostRoutine, createChatRoutine, fetchChatUsersRoutine } from '../routines';
-import { fetchUserChatsRoutine } from 'scenes/Workspace/routines';
+import {
+  setCurrentChatRoutine,
+  setPostsRoutine,
+  addPostRoutine,
+  createChatRoutine,
+  fetchChatUsersRoutine
+} from '../routines';
 import { Routine } from 'redux-saga-routines';
-import { fetchChatPosts, addPost, createChat } from 'services/chatServise';
+import { fetchChatPosts, addPost, createChat, fetchChatUsers } from 'services/chatServise';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
-import { IChat } from 'common/models/chat/IChat';
-import { IUserWithWorkspaces } from 'common/models/user/IUserWithWorkspaces';
+import { IUser } from 'common/models/user/IUser';
 
 function* fetchChatPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
@@ -25,7 +29,6 @@ function* watchPostsRequest() {
 function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
   try {
     yield call(addPost, payload);
-    yield put(setPostsRoutine.trigger(payload.chatId));
   } catch (error) {
     yield call(toastrError, error.message);
   }
@@ -36,7 +39,9 @@ function* watchAddPostRequest() {
 }
 
 function* setCurrChat({ payload }: Routine<any>): Routine<any> {
-  yield put(setPostsRoutine.trigger(payload.id));
+  if (payload && payload.id) {
+    yield put(setPostsRoutine.trigger(payload.id));
+  }
   yield put(setCurrentChatRoutine.success(payload));
 }
 
@@ -54,12 +59,9 @@ function* watchToggleCreateChatModal() {
 
 function* createChatRequest({ payload }: Routine<any>) {
   try {
-    const chat: IChat = yield call(createChat, payload);
+    const chat = yield call(createChat, payload);
     yield put(createChatRoutine.success(chat));
     yield put(showModalRoutine({ modalType: payload.type, show: false }));
-
-    yield put(fetchUserChatsRoutine.trigger());
-    yield put(setCurrentChatRoutine.trigger(chat));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(createChatRoutine.failure());
@@ -72,10 +74,9 @@ function* watchCreateChatRequest() {
 
 function* fetchChatUsersRequest({ payload }: Routine<any>) {
   try {
-    const user: IUserWithWorkspaces = yield call(fetchChatUsers);
+    const users: IUser[] = yield call(fetchChatUsers, payload);
 
-    yield put(fetchChatUsersRoutine.success(user));
-
+    yield put(fetchChatUsersRoutine.success(users));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(fetchChatUsersRoutine.failure(error.message));
@@ -85,7 +86,6 @@ function* fetchChatUsersRequest({ payload }: Routine<any>) {
 function* watchFetchChatUsersRequest() {
   yield takeEvery(fetchChatUsersRoutine.TRIGGER, fetchChatUsersRequest);
 }
-
 
 export default function* chatSaga() {
   yield all([

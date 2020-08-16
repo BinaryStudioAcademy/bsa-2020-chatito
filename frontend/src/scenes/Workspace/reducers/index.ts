@@ -5,12 +5,15 @@ import {
   fetchPostCommentsRoutine,
   showRightSideMenuRoutine,
   showUserProfileRoutine,
-  fetchUserChatsRoutine } from '../routines';
+  fetchUserChatsRoutine,
+  incUnreadCountRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { IUser } from 'common/models/user/IUser';
+import { addChatWithSocketRoutine } from 'scenes/Chat/routines';
+import { ChatType } from 'common/enums/ChatType';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
@@ -82,6 +85,34 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state,
         activeThread: { ...state.activeThread, comments: payload }
       };
+    case incUnreadCountRoutine.TRIGGER: {
+      const { chatId } = payload;
+      const channels = [...state.channels].map(channel => (
+        chatId === channel.id
+          ? { ...channel, unreadCount: (channel.unreadCount || 0) + 1 }
+          : channel
+      ));
+      const directMessages = [...state.directMessages].map(direct => (
+        chatId === direct.id
+          ? { ...direct, unreadCount: (direct.unreadCount || 0) + 1 }
+          : direct
+      ));
+      return { ...state, channels, directMessages };
+    }
+    case addChatWithSocketRoutine.TRIGGER: {
+      const newChat = payload;
+      if (newChat.type === ChatType.Channel) {
+        const channels = [...state.channels];
+        channels.push(newChat);
+        return { ...state, channels };
+      }
+      if (newChat.type === ChatType.DirectMessage) {
+        const directMessages = [...state.directMessages];
+        directMessages.push(newChat);
+        return { ...state, directMessages };
+      }
+      return state;
+    }
     default:
       return state;
   }

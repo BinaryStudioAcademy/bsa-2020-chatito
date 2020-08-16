@@ -1,5 +1,10 @@
 import { Routine } from 'redux-saga-routines';
-import { setCurrentChatRoutine, setPostsRoutine, createChatRoutine } from '../routines';
+import { setCurrentChatRoutine,
+  setPostsRoutine,
+  createChatRoutine,
+  addPostWithSocketRoutine,
+  editPostWithSocketRoutine,
+  fetchChatUsersRoutine } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 import { IUser } from 'common/models/user/IUser';
@@ -21,9 +26,10 @@ const initialState: IChatState = {
 const reducer = (state: IChatState = initialState, { type, payload }: Routine<any>) => {
   switch (type) {
     case setCurrentChatRoutine.SUCCESS:
+      const chat = payload ? { ...payload } : null;
       return {
         ...state,
-        chat: { ...payload }
+        chat
       };
 
     case setPostsRoutine.SUCCESS:
@@ -40,6 +46,32 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state, chat: payload, loading: false
       };
     case createChatRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
+    case addPostWithSocketRoutine.TRIGGER: {
+      const posts = [...state.posts];
+      posts.push(payload);
+      return {
+        ...state, posts
+      };
+    }
+    case editPostWithSocketRoutine.TRIGGER: {
+      const editedPost = payload;
+      const posts = [...state.posts].map(post => (post.id === editedPost.id ? editedPost : post));
+      return {
+        ...state, posts
+      };
+    }
+    case fetchChatUsersRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case fetchChatUsersRoutine.SUCCESS:
+      return {
+        ...state, users: payload, loading: false
+      };
+    case fetchChatUsersRoutine.FAILURE:
       return {
         ...state, loading: false
       };

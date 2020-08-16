@@ -17,6 +17,11 @@ export async function fetchChatPosts(chatId: string) {
   return response;
 }
 
+export async function fetchChatUsers(chatId: string) {
+  const response = await api.get(`/api/chats/${chatId}/users`);
+  return response;
+}
+
 export async function addPost({ chatId, text }: ICreatePost) {
   const response = await api.post('/api/posts', { text, chatId });
   return response;
