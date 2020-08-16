@@ -15,9 +15,9 @@ interface IProps {
   addWorkspace: IFetchWorkspace<string, void>;
 }
 
-const AddWorkspace: FunctionComponent<IProps> = props => {
+const AddWorkspace: FunctionComponent<IProps> = ({ addWorkspace }) => {
   const onSubmit = (values: IInitialValues): void => {
-    props.addWorkspace(values.workspaceName);
+    addWorkspace(values.workspaceName);
   };
   const initialValues = {
     workspaceName: ''
@@ -46,7 +46,7 @@ const AddWorkspace: FunctionComponent<IProps> = props => {
               </div>
               <div className={`${styles.formFooter} w-100`}>
                 <Button type="submit" variant="primary" className={styles.primaryBtn}>
-                  Sign In
+                  Next
                 </Button>
               </div>
             </Form>
