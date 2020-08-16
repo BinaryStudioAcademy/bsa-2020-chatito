@@ -16,7 +16,6 @@ interface IProps {
 
 const Thread: React.FC<IProps> = ({
   post,
-  // comments = [],
   onHide,
   openUserProfile
 }) => (
