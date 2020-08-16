@@ -61,7 +61,7 @@ const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditPr
   );
 
   return (
-    <OverlayTrigger trigger="focus" placement={placement} overlay={popOver}>
+    <OverlayTrigger trigger="click" rootClose placement={placement} overlay={popOver}>
       {trigger()}
     </OverlayTrigger>
   );

@@ -1,6 +1,5 @@
 import React, { useState, FunctionComponent, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Routine } from 'redux-saga-routines';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   IconDefinition,
@@ -19,7 +18,8 @@ import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import styles from './styles.module.sass';
-import { setCurrentChatRoutine } from 'scenes/Chat/routines';
+import { goToThreadsRoutine } from 'containers/ThreadsContainer/routines';
+import { Routine } from 'redux-saga-routines';
 import { fetchUserChatsRoutine } from '../../routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
@@ -28,28 +28,45 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import InvitePopup from 'containers/InvitePopup';
 import CreateChannelModal from 'containers/CreateChannelModal';
 import CreateDirectModal from 'containers/CreateDirectModal';
+import { push } from 'connected-react-router';
+import { IWorkspace } from 'common/models/workspace/IWorkspace';
+import { Routes } from 'common/enums/Routes';
 
 interface IProps {
   channels: IChat[];
   directMessages: IChat[];
   selectedChat: IChat;
-  selectChat: Routine;
+  selectedWorkspace: IWorkspace;
   fetchChats: IBindingAction;
   showModal: IBindingCallback1<IModalRoutine>;
+  router: (route: string) => void;
+  goToThreads: Routine;
 }
 
 const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
   selectedChat,
-  selectChat,
   fetchChats,
-  showModal
+  showModal,
+  router,
+  selectedWorkspace,
+  goToThreads
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
 
-  const doSelectChannel = (channel: IChat) => selectChat(channel);
+  const doSelectChannel = (chat: IChat) => {
+    if (selectedWorkspace && chat) {
+      router(Routes.WorkspaceWithChat.replace(':whash', selectedWorkspace.hash)
+        .replace(':chash', chat.hash));
+    } else if (selectedWorkspace) {
+      router(Routes.Workspace.replace(':whash', selectedWorkspace.hash));
+    } else {
+      router(Routes.AddWorkspace);
+    }
+    goToThreads(false);
+  };
 
   const getClassNameDiv = (state: boolean) => (state ? styles.listBoxHidden : styles.listBox);
 
@@ -67,7 +84,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   };
 
   // eslint-disable-next-line
-  const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => {}) => (
+  const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => { }) => (
     <a href="#0" className={styles.channelSelect} onClick={onClick}>
       <FontAwesomeIcon icon={iconFa} color="black" />
       <span className={styles.buttonText}>{text}</span>
@@ -95,11 +112,32 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   };
 
   const addChannelButton = () => (
-    <a href="#0" className={styles.channelSelect}>
+    <a
+      href="#0"
+      className={styles.channelSelect}
+      onClick={() => showModal({ modalType: ModalTypes.CreateChannel, show: true })}
+    >
       <div className={styles.iconBorder}>
         <FontAwesomeIcon icon={faPlus} color="red" />
       </div>
-      <span className={styles.buttonText}>Add a channel</span>
+      <span className={styles.buttonText}>
+        Add a channel
+      </span>
+    </a>
+  );
+
+  const addDirectButton = () => (
+    <a
+      href="#0"
+      className={styles.channelSelect}
+      onClick={() => showModal({ modalType: ModalTypes.CreateDirect, show: true })}
+    >
+      <div className={styles.iconBorder}>
+        <FontAwesomeIcon icon={faPlus} color="red" />
+      </div>
+      <span className={styles.buttonText}>
+        Add a direct
+      </span>
     </a>
   );
 
@@ -107,10 +145,14 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     showModal({ modalType: ModalTypes.InvitePopup, show: true });
   };
 
+  const goToThreadsCallBack = () => {
+    goToThreads(true);
+  };
+
   return (
     <div className={styles.leftToolbar}>
       {channelSelector('Invite to workspace', faUserFriends, showInvitePopup)}
-      {channelSelector('Threads', faClipboardList)}
+      {channelSelector('Threads', faClipboardList, goToThreadsCallBack)}
       {channelSelector('Mentions & reactions', faAt)}
       {channelSelector('Drafts', faListAlt)}
       {channelSelector('Saved Items', faSearch)}
@@ -137,7 +179,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       <div className={getClassNameDiv(directPanel)}>
         {directMessages.map(directMessage => (
           directChannel(directMessage)))}
-        {addChannelButton()}
+        {addDirectButton()}
       </div>
       <hr className={styles.hrr} />
       <InvitePopup />
@@ -150,13 +192,15 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 const mapStateToProps = (state: IAppState) => ({
   channels: state.workspace.channels || [],
   directMessages: state.workspace.directMessages || [],
+  selectedWorkspace: state.workspace.workspace,
   selectedChat: state.chat.chat! // eslint-disable-line
 });
 
 const mapDispatchToProps = {
-  selectChat: setCurrentChatRoutine,
+  goToThreads: goToThreadsRoutine,
   fetchChats: fetchUserChatsRoutine,
-  showModal: showModalRoutine
+  showModal: showModalRoutine,
+  router: push
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatToolbar);

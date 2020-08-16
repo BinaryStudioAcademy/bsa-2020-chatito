@@ -9,6 +9,8 @@ $coloractive: #CECCC0
   height: 100%
   background-color: $color
   overflow-y: auto
+  min-width: 250px
+
 
 .channelSelect
   display: flex
@@ -73,10 +75,17 @@ $coloractive: #CECCC0
   height: 2px
   background-color: $coloractive
 
+.channelButtonsWrapper
+  display: flex
+  width: 80%
+  flex-wrap: nowrap
+  justify-content: space-around
+
+
 .buttonChanel
   display: flex
-  flex-direction: row
-  align-items: center
+  flex-direction: column
+  align-items: flex-start
   border: 0
   padding: 0
   align-content: left

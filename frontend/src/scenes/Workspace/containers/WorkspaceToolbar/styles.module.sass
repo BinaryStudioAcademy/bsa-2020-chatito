@@ -5,11 +5,18 @@
   flex-direction: column
   align-items: center
   justify-content: flex-start
+  overflow-y: scroll
+  max-height: calc( 100vh -  91px)
+
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+  &::-webkit-scrollbar
+    display: none;  /* Safari and Chrome */
 
 .plusIconContainer
   width: 50px
-  height: 50px
-  margin: 3px
+  min-height: 50px
+  margin: 3px 3px 15px
   margin-top: 10px
   padding: 5px
   cursor: pointer
@@ -20,10 +27,10 @@
   transition: all .3s
   border-radius: 50%
   &:hover
-    background-color: var(--text-color-for-dark-bg)
+    background-color: #ffffff
   &:hover .plusIcon
     color: var(--workspace-background-color)
 
 .plusIcon
-  color: var(--text-color-for-dark-bg)
+  color: #ffffff
   transition: all .3s

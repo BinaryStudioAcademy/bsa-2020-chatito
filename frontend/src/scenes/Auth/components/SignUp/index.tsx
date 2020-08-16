@@ -51,30 +51,38 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspace, invit
         onSubmit={onSubmit}
       >
         <Form className="signUp-form d-flex flex-column justify-content-center align-items-center">
-          <InputField
-            label="Full Name"
-            name="fullName"
-            type="text"
-            placeholder="John Brown"
-          />
-          <InputField
-            label="Email"
-            name="email"
-            type="email"
-            placeholder="example@gmail.com"
-          />
-          <InputField
-            label="Password"
-            name="password"
-            type="password"
-          />
-          <InputField
-            label="Confirm Password"
-            name="confirmPassword"
-            type="password"
-          />
+          <div className={styles.inputContainer}>
+            <InputField
+              label="Full Name"
+              name="fullName"
+              type="text"
+              placeholder="John Brown"
+            />
+          </div>
+          <div className={styles.inputContainer}>
+            <InputField
+              label="Email"
+              name="email"
+              type="email"
+              placeholder="example@gmail.com"
+            />
+          </div>
+          <div className={styles.inputContainer}>
+            <InputField
+              label="Password"
+              name="password"
+              type="password"
+            />
+          </div>
+          <div className={styles.inputContainer}>
+            <InputField
+              label="Confirm Password"
+              name="confirmPassword"
+              type="password"
+            />
+          </div>
 
-          <div className={`${styles.formFooter} mt-4 w-100`}>
+          <div className={`${styles.formFooter} w-100`}>
             <Button className={styles.primaryBtn} type="submit" variant="primary">
               Sign Up
             </Button>

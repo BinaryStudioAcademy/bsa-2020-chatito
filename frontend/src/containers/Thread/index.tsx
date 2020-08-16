@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import TextEditor from 'components/TextEditor';
 import Post from 'components/Post';
 import styles from './styles.module.sass';
@@ -16,6 +16,8 @@ import { connect } from 'react-redux';
 import { getUserImgLink } from 'common/helpers/imageHelper';
 
 interface IProps {
+  showOnlyTwoComments?: boolean;
+  chatName?: string;
   width?: number | string;
   post: IPost;
   sendComment: IBindingCallback1<ICreateComment>;
@@ -25,6 +27,8 @@ interface IProps {
 }
 
 const Thread: FunctionComponent<IProps> = ({
+  showOnlyTwoComments = false,
+  chatName = '',
   width = 'auto',
   post,
   sendComment,
@@ -38,7 +42,6 @@ const Thread: FunctionComponent<IProps> = ({
     const { id: postId } = post;
     sendComment({ postId, text });
   };
-
   const commentBox = (comment: IComment) => (
     <div className={styles.commentsWrapper}>
       <img
@@ -56,13 +59,10 @@ const Thread: FunctionComponent<IProps> = ({
       </div>
     </div>
   );
-
   return (
     <div className={styles.threadContainer} style={{ width }}>
       <header>
-        <p className={styles.threadChatName}>
-          Thread
-        </p>
+        {chatName ? <p className={styles.threadChatName}>{chatName}</p> : 'Thread'}
         <p>
           {'Participants '}
           {participants.length}

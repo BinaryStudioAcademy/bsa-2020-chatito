@@ -31,14 +31,15 @@ const ForgotPassword: FunctionComponent<IProps> = ({ forgotPassword }) => {
         onSubmit={onSubmit}
       >
         <Form className="d-flex flex-column justify-content-center align-items-center">
-          <InputField
-            label="Email"
-            name="email"
-            type="email"
-            placeholder="Your email address"
-          />
-
-          <div className={`${styles.formFooter} w-100 mt-4`}>
+          <div className={styles.inputContainer}>
+            <InputField
+              label="Email"
+              name="email"
+              type="email"
+              placeholder="Your email address"
+            />
+          </div>
+          <div className={`${styles.formFooter} w-100`}>
             <Button type="submit" className={styles.primaryBtn}>
               Recover
             </Button>
