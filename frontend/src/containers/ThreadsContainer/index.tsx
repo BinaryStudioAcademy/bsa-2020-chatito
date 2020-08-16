@@ -66,9 +66,9 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
                     text: post.text,
                     createdAt: new Date(post.createdAt),
                     id: post.id,
-                    chatId: post.chat.id
+                    chatId: post.chat.id,
+                    comments: post.comments
                   }}
-                  comments={post.comments}
                   hideCloseBtn={hideCloseBtn}
                   openUserProfile={openUserProfile}
                 />

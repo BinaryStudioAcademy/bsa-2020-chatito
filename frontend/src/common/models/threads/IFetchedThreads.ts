@@ -1,6 +1,7 @@
 import { IFetchedChat } from './IThreadsChatName';
 import { IUser } from 'common/models/user/IUser';
 import { IPost } from '../post/IPost';
+import { IComment } from '../post/IComment';
 
 export interface IFetchedThreads {
   id: string;
@@ -8,5 +9,5 @@ export interface IFetchedThreads {
   text: string;
   chat: IFetchedChat;
   createdByUser: IUser;
-  comments: IPost[];
+  comments: Array<IComment>;
 }
