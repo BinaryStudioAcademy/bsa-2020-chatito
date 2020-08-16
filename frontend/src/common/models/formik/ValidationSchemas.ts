@@ -44,3 +44,10 @@ export const inviteLinkSchema = Yup.object().shape({
     .email('Email is invalid')
     .required('Email is required')
 });
+
+export const createWorkspaceValSchema = Yup.object().shape({
+  workspaceName: Yup.string()
+    .required('Workspace name is required')
+    .min(5, 'Enter more, than 5 symbols')
+    .max(40, 'Workspace name should be no longer 40 characters')
+});

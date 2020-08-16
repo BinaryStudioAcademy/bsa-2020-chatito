@@ -1,8 +1,12 @@
 .forgotPassword
   width: 350px
+  position: relative
+  height: 210px
+  display: flex
+  flex-direction: column
+  justify-content: space-between
 
 .header
-  margin-bottom: 30px
   font-weight: 900
   text-align: left
 
@@ -33,3 +37,10 @@
     font-family: var(--secondary-font-family), sans-serif
     font-size: 13px
     font-weight: 500
+
+.inputContainer
+  width: 100%
+  min-height: 39px
+  position: absolute
+  &:first-child
+    top: 55px

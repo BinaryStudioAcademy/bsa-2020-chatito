@@ -1,10 +1,15 @@
 .signUp
+  position: relative
   width: 350px
+  height: 480px
+  display: flex
+  justify-content: space-between
+  flex-direction: column
 
 .header
-  margin-bottom: 30px
   font-weight: 900
   text-align: left
+  height: 30px
 
 .formFooter
   display: flex
@@ -27,3 +32,18 @@
     font-size: 13px
     font-weight: 500
     margin-left: auto
+
+
+.inputContainer
+  width: 100%
+  min-height: 39px
+  position: absolute
+  &:first-child
+    top: 60px
+  &:nth-child(2)
+    top: 150px
+  &:nth-child(3)
+    top: 240px
+  &:nth-child(4)
+    top: 330px
+ 

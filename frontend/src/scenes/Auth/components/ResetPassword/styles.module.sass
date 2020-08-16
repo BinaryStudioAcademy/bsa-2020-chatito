@@ -1,8 +1,12 @@
 .resetPassword
   width: 350px
+  height: 285px
+  display: flex
+  justify-content: space-between
+  flex-direction: column
+  position: relative
 
 .header
-  margin-bottom: 30px
   font-weight: 900
   text-align: left
 
@@ -20,3 +24,12 @@
     &:hover, &:active,
       background-color: var(--auth-scene-btn-background)
       border-color: var(--auth-scene-btn-background)
+
+.inputContainer
+  width: 100%
+  min-height: 39px
+  position: absolute
+  &:first-child
+    top: 50px
+  &:nth-child(2)
+    top: 140px

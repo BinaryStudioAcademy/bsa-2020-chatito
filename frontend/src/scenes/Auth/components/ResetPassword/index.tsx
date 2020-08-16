@@ -35,15 +35,18 @@ const ForgotPassword: FunctionComponent<IProps> = ({ resetPassword, match }) => 
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        <Form className="d-flex flex-column justify-content-center align-items-center">
-          <InputField label="Password" name="password" type="password" />
-          <InputField
-            label="Confirm Password"
-            name="confirmPassword"
-            type="password"
-          />
-
-          <div className={`${styles.formFooter} mt-4 w-100`}>
+        <Form className={`${styles.inputForms} d-flex flex-column justify-content-center align-items-center`}>
+          <div className={styles.inputContainer}>
+            <InputField label="Password" name="password" type="password" />
+          </div>
+          <div className={styles.inputContainer}>
+            <InputField
+              label="Confirm Password"
+              name="confirmPassword"
+              type="password"
+            />
+          </div>
+          <div className={`${styles.formFooter} w-100`}>
             <Button type="submit" className={styles.primaryBtn}>
               Reset password
             </Button>
