@@ -16,3 +16,15 @@ export const fromPostCommentsToPostCommentsClient = (comments: Comment[]) => {
 
   return updated;
 };
+
+const maxAvatarsCount = 3;
+
+export const fromPostCommentsToCommentsInfo = (comments: Comment[]) => {
+  const count = comments.length;
+  const avatars = [];
+  for (let i = 0; i < Math.min(count, maxAvatarsCount); i += 1) {
+    const { createdByUser: { imageUrl } } = comments[i];
+    avatars.push(imageUrl);
+  }
+  return { count, avatars };
+};
