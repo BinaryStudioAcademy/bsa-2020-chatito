@@ -5,6 +5,7 @@ export const setPostsRoutine = createRoutine('SET_POSTS');
 export const addPostRoutine = createRoutine('ADD_POST');
 export const createChatRoutine = createRoutine('CREATE_CHAT');
 export const fetchChatUsersRoutine = createRoutine('FETCH_CHAT_USERS');
+export const removeUserFromChatRoutine = createRoutine('REMOVE_USER_FROM_CHAT');
 export const addPostWithSocketRoutine = createRoutine('ADD_POST_WITH_SOCKET');
 export const editPostWithSocketRoutine = createRoutine('EDIT_POST_WITH_SOCKET');
 export const addChatWithSocketRoutine = createRoutine('ADD_CHAT_WITH_SOCKET');

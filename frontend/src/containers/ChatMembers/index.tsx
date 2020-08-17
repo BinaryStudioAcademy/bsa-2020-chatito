@@ -7,7 +7,7 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
 import ModalWindow from 'components/ModalWindow';
 import { IChat } from 'common/models/chat/IChat';
-import { fetchChatUsersRoutine } from 'scenes/Chat/routines';
+import { fetchChatUsersRoutine, removeUserFromChatRoutine } from 'scenes/Chat/routines';
 import { IUser } from 'common/models/user/IUser';
 import ChatMember from 'components/ChatMember';
 
@@ -15,6 +15,7 @@ interface IProps {
   isShown: boolean;
   chat: IChat;
   getUserList: CallableFunction;
+  removeUser: CallableFunction;
   toggleModal: IBindingCallback1<IModalRoutine>;
 }
 
@@ -22,21 +23,25 @@ const ChatMembers: FunctionComponent<any> = ({
   isShown,
   toggleModal,
   getUserList,
+  removeUser,
   chat
 }: IProps) => {
   const handleCloseModal = () => {
     toggleModal({ modalType: ModalTypes.ChatMembers, show: false });
   };
 
-  getUserList(chat.id);
+  const removeUserFromChat = async (userId: string) => {
+    await removeUser({ chatId: chat.id, userId });
+  };
 
+  getUserList(chat.id);
   return (
     <ModalWindow
       isShown={isShown}
       onHide={handleCloseModal}
     >
       <div>
-        {chat.users.map((user: IUser) => <ChatMember user={user} />)}
+        {chat.users.map((user: IUser) => <ChatMember removeUser={removeUserFromChat} user={user} key={user.id} />)}
       </div>
     </ModalWindow>
   );
@@ -56,6 +61,7 @@ const mapStateToProps = (state: IAppState) => {
 
 const mapDispatchToProps = {
   getUserList: fetchChatUsersRoutine,
+  removeUser: removeUserFromChatRoutine,
   toggleModal: showModalRoutine
 };
 

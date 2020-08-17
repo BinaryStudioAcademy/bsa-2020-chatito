@@ -1,6 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import cryptoRandomString from 'crypto-random-string';
 import { Workspace } from '../data/entities/Workspace';
+import { fromUserToUserClient } from '../common/mappers/user';
 import { User } from '../data/entities/User';
 import { IChatData } from '../common/models/chat/IChatData';
 import { ICreateChat } from '../common/models/chat/ICreateChat';
@@ -23,7 +24,7 @@ export const getAllChatPosts = async (chatId: string) => {
 export const getAllChatUsers = async (chatId: string) => {
   const chatUsers: IUser[] = await getCustomRepository(ChatRepository).getAllChatUsers(chatId);
 
-  return chatUsers;
+  return chatUsers.map(user => fromUserToUserClient(user));
 };
 
 export const getAllUserChats = async (userId: string) => {
@@ -46,4 +47,8 @@ export const addChat = async (userId: string, body: IChatData) => {
   };
   const chat: IChat = await getCustomRepository(ChatRepository).addChat(newChat);
   return chat;
+};
+
+export const removeUserFromChat = async (chatId: string, userId: string) => {
+  await getCustomRepository(ChatRepository).removeUser(chatId, userId);
 };

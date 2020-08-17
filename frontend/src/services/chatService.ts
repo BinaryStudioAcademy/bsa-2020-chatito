@@ -22,6 +22,12 @@ export async function fetchChatUsers(chatId: string) {
   return response;
 }
 
+export async function removeUserFromChat(chatId: string, userId: string) {
+  console.log(chatId, userId);
+  const response = await api.delete(`/api/chats/${chatId}/users/${userId}`);
+  return response;
+}
+
 export async function addPost({ chatId, text }: ICreatePost) {
   const response = await api.post('/api/posts', { text, chatId });
   return response;

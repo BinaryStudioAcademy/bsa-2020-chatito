@@ -4,10 +4,11 @@ import {
   setPostsRoutine,
   addPostRoutine,
   createChatRoutine,
-  fetchChatUsersRoutine
+  fetchChatUsersRoutine,
+  removeUserFromChatRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
-import { fetchChatPosts, addPost, createChat, fetchChatUsers } from 'services/chatServise';
+import { fetchChatPosts, addPost, createChat, fetchChatUsers, removeUserFromChat } from 'services/chatService';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
@@ -87,6 +88,22 @@ function* watchFetchChatUsersRequest() {
   yield takeEvery(fetchChatUsersRoutine.TRIGGER, fetchChatUsersRequest);
 }
 
+function* removeUserFromChatRequest({ payload }: Routine<any>) {
+  try {
+    const { chatId, userId } = payload;
+    yield call(removeUserFromChat, chatId, userId);
+
+    yield put(removeUserFromChatRoutine.success(userId));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(removeUserFromChatRoutine.failure(error.message));
+  }
+}
+
+function* watchRemoveUserFromChat() {
+  yield takeEvery(removeUserFromChatRoutine.TRIGGER, removeUserFromChatRequest);
+}
+
 export default function* chatSaga() {
   yield all([
     watchPostsRequest(),
@@ -94,6 +111,7 @@ export default function* chatSaga() {
     watchAddPostRequest(),
     watchCreateChatRequest(),
     watchToggleCreateChatModal(),
-    watchFetchChatUsersRequest()
+    watchFetchChatUsersRequest(),
+    watchRemoveUserFromChat()
   ]);
 }

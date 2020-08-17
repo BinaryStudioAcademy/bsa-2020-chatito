@@ -4,7 +4,8 @@ import { setCurrentChatRoutine,
   createChatRoutine,
   addPostWithSocketRoutine,
   editPostWithSocketRoutine,
-  fetchChatUsersRoutine } from '../routines';
+  fetchChatUsersRoutine,
+  removeUserFromChatRoutine } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 import { IUser } from 'common/models/user/IUser';
@@ -72,6 +73,19 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state, users: payload, loading: false
       };
     case fetchChatUsersRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
+    case removeUserFromChatRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case removeUserFromChatRoutine.SUCCESS:
+      const newUserList = state.users?.filter(user => user.id !== payload);
+      return {
+        ...state, users: newUserList, loading: false
+      };
+    case removeUserFromChatRoutine.FAILURE:
       return {
         ...state, loading: false
       };

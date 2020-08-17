@@ -66,14 +66,16 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal }) => {
       </div>
 
       <div className={styles.rightHeaderBlock}>
-        <button
-          type="button"
+        <div
+          role="button"
           className={styles.memberAvatarBlock}
           onClick={showChatMembers}
+          onKeyDown={showChatMembers}
+          tabIndex={0}
         >
           {userAvatars(chat.users)}
           <div className={styles.memberCounter}>{chat.users.length || 0}</div>
-        </button>
+        </div>
 
         <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
         <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />

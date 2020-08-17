@@ -2,6 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { Chat } from '../entities/Chat';
 import { ICreateChat } from '../../common/models/chat/ICreateChat';
 import { User } from '../entities/User';
+import { IUser } from '../../common/models/user/IUser';
 
 @EntityRepository(Chat)
 class ChatRepository extends Repository<Chat> {
@@ -32,6 +33,16 @@ class ChatRepository extends Repository<Chat> {
     });
 
     return chat.users;
+  }
+
+  async removeUser(chatId: string, userId: string): Promise<void> {
+    const chat = await this.findOne({
+      relations: ['users'],
+      where: { id: chatId }
+    });
+
+    chat.users = chat.users.filter((user: IUser) => user.id !== userId);
+    chat.save();
   }
 }
 
