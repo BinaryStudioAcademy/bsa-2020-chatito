@@ -2,11 +2,13 @@ import React, { FunctionComponent } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { env } from 'env';
 import styles from './styles.module.sass';
+import { IBindingAction } from 'common/models/callback/IBindingActions';
 
 interface IProps {
   placeholder: string;
   height: number | string | 'auto';
   onSend: (text: string) => void;
+  // onInputChange: IBindingAction;
 }
 
 const TextEditor: FunctionComponent<IProps> = ({ placeholder, height, onSend }) => {
