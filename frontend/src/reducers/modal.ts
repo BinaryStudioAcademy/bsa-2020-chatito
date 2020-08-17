@@ -7,13 +7,15 @@ export interface IModalState {
   createChannel: boolean;
   createDirect: boolean;
   invitePopup: boolean;
+  inviteChat: boolean;
 }
 
 const initialState: IModalState = {
   editProfile: false,
   createChannel: false,
   createDirect: false,
-  invitePopup: false
+  invitePopup: false,
+  inviteChat: true
 };
 
 export default (state = initialState, action: Routine<any>) => {
@@ -32,6 +34,9 @@ export default (state = initialState, action: Routine<any>) => {
         }
         case ModalTypes.InvitePopup: {
           return { ...state, invitePopup: show };
+        }
+        case ModalTypes.InviteChat: {
+          return { ...state, inviteChat: show };
         }
         default:
           return state;

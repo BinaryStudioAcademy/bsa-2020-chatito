@@ -14,6 +14,7 @@ import { IChat } from 'common/models/chat/IChat';
 import { IUser } from 'common/models/user/IUser';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
 import { connect } from 'react-redux';
+import InviteChatModal from 'scenes/Workspace/containers/InviteChatModal';
 
 const privateChannelIcon = (
   <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
@@ -63,6 +64,8 @@ const ChatHeader: React.FC<IProps> = ({ chat }) => {
 
         <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
         <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
+
+        <InviteChatModal />
       </div>
     </div>
   );
