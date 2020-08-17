@@ -17,7 +17,7 @@ function* addWorkspaceReq({ payload }: Routine<any>) {
   try {
     const workspace = yield call(addWorkspace, payload);
     yield put(addWorkspaceRoutine.success(workspace));
-    yield put(push(Routes.Workspace.replace(':hash', workspace.hash)));
+    yield put(push(Routes.Workspace.replace(':whash', workspace.hash)));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(addWorkspaceRoutine.failure(error));
