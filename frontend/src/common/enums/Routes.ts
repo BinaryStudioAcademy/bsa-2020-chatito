@@ -13,6 +13,6 @@ export enum Routes {
   Room = '/room',
   Channel = '/channel/:name',
   Direct = '/direct',
-  NotExistingPath = '/404',
+  NotExistingPath = '/not-found',
   Maintenance='/maintenance'
 }
