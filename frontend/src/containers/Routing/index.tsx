@@ -47,7 +47,6 @@ const Routing: React.FC<IProps> = ({
       <Switch>
         <PublicRoute path={Routes.Auth} component={Auth} />
         <PublicRoute path={Routes.JoinInvitedWorkspace} component={JoinInvitedWorkspace} />
-        <PublicRoute path={Routes.NotExistingPath} restricted={false} component={PageNotFound} />
         <PrivateRoute exact path={Routes.Workspace} component={Workspace} />
         <PrivateRoute exact path={Routes.WorkspaceWithChat} component={Workspace} />
         <PrivateRoute exact path={Routes.AddWorkspace} component={AddWorkspace} />
