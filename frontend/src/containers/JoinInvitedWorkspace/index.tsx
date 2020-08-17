@@ -27,7 +27,7 @@ const JoinInvitedWorkspace = ({ match, invitedUserRegistered, checkInvitedUserRe
 
   return (
     <>
-      <LoaderWrapper loading={loading}>
+      <LoaderWrapper loading={loading || invitedUserRegistered === undefined}>
         {invitedUserRegistered
           ? <Redirect to={{ pathname: Routes.SignIn }} />
           : <Redirect to={{ pathname: Routes.SignUp }} />}
