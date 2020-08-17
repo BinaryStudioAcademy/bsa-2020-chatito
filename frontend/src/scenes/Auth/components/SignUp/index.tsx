@@ -43,7 +43,7 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspace, invit
     <div className={styles.signUp}>
       <h1 className={styles.header}>
         Sign up
-        {invitationHeaderText}
+        <span className={styles.workspace}>{invitationHeaderText}</span>
       </h1>
       <Formik
         initialValues={initialValues}
@@ -52,34 +52,42 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspace, invit
       >
         <Form className="signUp-form d-flex flex-column justify-content-center align-items-center">
           <div className={styles.inputContainer}>
-            <InputField
-              label="Full Name"
-              name="fullName"
-              type="text"
-              placeholder="John Brown"
-            />
+            <div className={styles.input}>
+              <InputField
+                label="Full Name"
+                name="fullName"
+                type="text"
+                placeholder="John Brown"
+              />
+            </div>
           </div>
           <div className={styles.inputContainer}>
-            <InputField
-              label="Email"
-              name="email"
-              type="email"
-              placeholder="example@gmail.com"
-            />
+            <div className={styles.input}>
+              <InputField
+                label="Email"
+                name="email"
+                type="email"
+                placeholder="example@gmail.com"
+              />
+            </div>
           </div>
           <div className={styles.inputContainer}>
-            <InputField
-              label="Password"
-              name="password"
-              type="password"
-            />
+            <div className={styles.input}>
+              <InputField
+                label="Password"
+                name="password"
+                type="password"
+              />
+            </div>
           </div>
           <div className={styles.inputContainer}>
-            <InputField
-              label="Confirm Password"
-              name="confirmPassword"
-              type="password"
-            />
+            <div className={styles.input}>
+              <InputField
+                label="Confirm Password"
+                name="confirmPassword"
+                type="password"
+              />
+            </div>
           </div>
 
           <div className={`${styles.formFooter} w-100`}>
