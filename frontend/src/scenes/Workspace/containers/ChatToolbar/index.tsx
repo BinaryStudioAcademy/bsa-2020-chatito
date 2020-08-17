@@ -89,7 +89,6 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   }, []);
 
   useEffect(() => {
-    console.log('S');
     const { chash } = match.params;
     if (chash) {
       const currChat = [...channels, ...directMessages].find(chatItem => chatItem.hash === chash);

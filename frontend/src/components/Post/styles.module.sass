@@ -8,9 +8,6 @@ $fontColorSecond: var(--workspace-toolbar-font-color-second)
   border-radius: 15px
   margin-bottom: 5px
 
-.postWrapper:hover
-	background: #fafafa
-
 .body
   overflow: hidden
   padding: 5px
@@ -48,6 +45,8 @@ $fontColorSecond: var(--workspace-toolbar-font-color-second)
 
 .footer
   display: flex
+  flex-direction: row
+  align-items: center
 
 .footerKey  
   font-size: 0.9rem
@@ -59,26 +58,20 @@ $fontColorSecond: var(--workspace-toolbar-font-color-second)
 
 .openThreadBtn
   cursor: pointer
-  font-size: 13px
+  font-size: 15px
   text-decoration: underline
   color: $fontColorSecond
   margin-right: 5px
 
-.commentWrapper
-  display: flex
-  justify-content: flex-start
-  align-items: center
-  margin-top: 10px
-
 .commentImage
-  width: 32px
-  height: 32px
-  border-radius: 16px
+  width: 36px
+  height: 36px
   overflow: hidden
+  margin: 0 1px
+  padding: 2px
+  border: 2px solid var(--workspace-icon-background)
+  border-radius: 18px
 
-.commentUser
-  margin: 10px
+.commentText
   font-size: 0.9rem
-  color: $fontColor
-  font-weight: 700
-  
+  margin: 0 15px

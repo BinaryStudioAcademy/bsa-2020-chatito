@@ -7,6 +7,7 @@ import { IPost } from 'common/models/post/IPost';
 import { IUser } from 'common/models/user/IUser';
 import ProfilePreview from 'components/ProfilePreview/index';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { getUserImgLink } from 'common/helpers/imageHelper';
 
 interface IProps {
   post: IPost;
@@ -20,16 +21,17 @@ const Post: React.FC<IProps> = ({ post, openThread, openUserProfile }) => {
   const onSend = () => {
     console.log('Send text message'); // eslint-disable-line
   };
+  const { commentsInfo } = post;
 
   return (
     <Media className={styles.postWrapper}>
       <ProfilePreview user={createdByUser} onSend={onSend} openProfile={openUserProfile} />
       <Media.Body bsPrefix={styles.body}>
-        <a href="/" className={styles.author}>{createdByUser.fullName}</a>
+        <a href="#0" className={styles.author}>{createdByUser.fullName}</a>
         <br />
         <div className={styles.status}>{createdByUser.status}</div>
         <br />
-        <a href="/" className={styles.metadata}>{dayjs(createdAt).format('DD:MM:YYYY hh:mm A')}</a>
+        <a href="#0" className={styles.metadata}>{dayjs(createdAt).format('DD:MM:YYYY hh:mm A')}</a>
         {/* eslint-disable-next-line */}
         <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
         {openThread && (
@@ -50,6 +52,21 @@ const Post: React.FC<IProps> = ({ post, openThread, openUserProfile }) => {
                   React
                 </Card.Link>
               </div>
+              {commentsInfo.count > 0
+                ? (
+                  <span className={styles.commentText}>Comments :</span>
+                ) : ('')}
+              {commentsInfo.avatars.map(avatar => (
+                <img
+                  className={styles.commentImage}
+                  src={getUserImgLink(avatar)}
+                  alt={avatar}
+                />
+              ))}
+              {commentsInfo.count > 3
+                ? (
+                  <span className={styles.commentText}>{`And ${commentsInfo.count - 3} more comments`}</span>
+                ) : ('')}
             </div>
           </>
         )}
