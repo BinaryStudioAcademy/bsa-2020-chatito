@@ -10,7 +10,7 @@ export const fromPostCommentsToPostCommentsClient = (comments: Comment[]) => {
       updatedAt,
       text,
       postId,
-      user: fromUserToUserClient(createdByUser)
+      createdByUser: fromUserToUserClient(createdByUser)
     };
   });
 
