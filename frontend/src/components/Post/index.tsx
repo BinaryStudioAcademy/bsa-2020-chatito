@@ -67,6 +67,12 @@ const Post: React.FC<IProps> = ({ post, openThread, openUserProfile }) => {
                 ? (
                   <span className={styles.commentText}>{`And ${commentsInfo.count - 3} more comments`}</span>
                 ) : ('')}
+              {commentsInfo.count > 0
+                ? (
+                  <span className={styles.commentText}>
+                    {`last at ${dayjs(commentsInfo.lastAt).format('DD:MM:YYYY hh:mm A')}`}
+                  </span>
+                ) : ('')}
             </div>
           </>
         )}
