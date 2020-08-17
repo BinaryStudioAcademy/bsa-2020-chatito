@@ -31,11 +31,10 @@
   background-color: var(--workspace-toolbar-background)
   
 .avatarContainer
-  width: 170px
-  height: 170px
+  width: 100%
+  height: 250px
   display: flex
   justify-content: center
-  overflow: hidden;
 
 .userAvatar
   object-fit: cover
@@ -99,11 +98,3 @@
     color: var(--offline)
   &_reset
     @include buttonReset
-
-.postImage
-  width: 64px
-  height: 64px
-  border-radius: 32px
-  display: flex
-  justify-content: center
-  overflow: hidden;

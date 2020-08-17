@@ -10,20 +10,23 @@ import { IUser } from 'common/models/user/IUser';
 
 interface IProps {
   post: IPost | undefined;
+  comments: IPost[] | undefined;
   onHide: IBindingAction;
   openUserProfile: IBindingCallback1<IUser>;
 }
 
 const Thread: React.FC<IProps> = ({
   post,
+  comments = [],
   onHide,
   openUserProfile
 }) => (
   post
     ? (
       <ThreadView
-        width="20vw"
+        width="400px"
         post={post}
+        comments={comments}
         onHide={onHide}
         openUserProfile={openUserProfile}
       />
@@ -31,7 +34,8 @@ const Thread: React.FC<IProps> = ({
 );
 
 const mapStateToProps = (state: IAppState) => ({
-  post: state.workspace.activeThread?.post
+  post: state.workspace.activeThread?.post,
+  comments: state.workspace.activeThread?.comments
 });
 
 export default connect(mapStateToProps)(Thread);

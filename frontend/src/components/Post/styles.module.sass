@@ -1,13 +1,5 @@
-$color: var(--workspace-toolbar-select-background)
-
 .postWrapper
-  padding: 5px
-  background: $color
-  border-radius: 15px
-  margin-bottom: 5px
-
-.postWrapper:hover
-	background: #fafafa
+  margin: 10px 0
 
 .body
   overflow: hidden
@@ -18,13 +10,6 @@ $color: var(--workspace-toolbar-select-background)
   font-size: 1rem
   color: rgb(29, 28, 29)
   font-weight: 900
-  margin: 5px 0
-
-.status
-  display: inline-block
-  font-size: 16px
-  color: "#555"
-  margin-bottom: 5px
 
 .author:hover
   color: rgb(29, 28, 29)
@@ -41,42 +26,17 @@ $color: var(--workspace-toolbar-select-background)
 
 .text
   text-align: left
-  margin: 15px 0
+  padding: 10px
+  margin: 5px 0
   overflow-wrap: break-word
+
+.text:hover
+	background: var(--chat-background-secondary)
 
 .footer
   display: flex
-
-.footerKey  
-  font-size: 0.9rem
-  font-weight: 900
-  color: var(--workspace-icon-background)
-
-.footerData
-  font-size: 0.85rem
 
 .openThreadBtn
   cursor: pointer
   font-size: 13px
   text-decoration: underline
-  color: "#555"
-  margin-right: 5px
-
-.commentWrapper
-  display: flex;
-  justify-content: flex-start
-  align-items: center
-  margin-top: 10px
-
-.commentImage
-  width: 32px
-  height: 32px
-  border-radius: 16px
-  overflow: hidden;
-
-.commentUser
-  margin: 10px
-  font-size: 0.9rem
-  color: rgb(29, 28, 29)
-  font-weight: 700
-  

@@ -7,7 +7,6 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
 import { useKey } from 'common/hooks/onInputSubmit';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
-import { getUserImgLink } from 'common/helpers/imageHelper';
 
 interface IProps {
   user: IUser;
@@ -32,16 +31,10 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setText(e.target.value);
   };
-
   const popOver = (
     <Popover id={user.id} className={styles.popOverWindow}>
       <div className={styles.avatarContainer}>
-        <Image
-          className={styles.userAvatar || userLogoDefaultUrl}
-          src={getUserImgLink(user.imageUrl as string)}
-          alt="User avatar"
-          thumbnail
-        />
+        <Image className={styles.userAvatar} src={user.imageUrl || userLogoDefaultUrl} alt="User avatar" thumbnail />
       </div>
       <Popover.Content>
         {user.status === 'online' ? (
@@ -72,7 +65,7 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
             type="button"
             className={`${styles.arrowButton} ${styles.arrowButton_reset}`}
             onClick={() => onSendMessage()}
-            // need to realise logic to go to the chat with user
+          // need to realise logic to go to the chat with user
           >
             <FontAwesomeIcon
               className={styles.arrowIcon}
@@ -90,10 +83,14 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
         type="button"
         className={styles.link}
       >
-        <img
-          className={styles.postImage}
-          src={getUserImgLink(user.imageUrl as string)}
+        <Image
+          src={user.imageUrl || userLogoDefaultUrl}
+          style={{ objectFit: 'cover' }}
+          width={40}
+          height={40}
+          className="mr-3 rounded"
           alt={user.fullName}
+          roundedCircle
         />
       </button>
     </OverlayTrigger>

@@ -13,7 +13,6 @@ import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ReactComponent as Logo } from 'img/logo-icon.svg';
-import { getUserImgLink } from 'common/helpers/imageHelper';
 
 interface IProps {
   user?: IUser;
@@ -63,7 +62,7 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
         />
 
         <div className={styles.userLogoWrapper}>
-          <UserAvatar imgUrl={getUserImgLink(user.imageUrl as string)} isOnline />
+          <UserAvatar imgUrl={user.imageUrl || ''} isOnline />
 
           <UserPopUp
             trigger={getPopUpTrigger}
