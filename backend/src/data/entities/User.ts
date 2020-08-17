@@ -6,6 +6,7 @@ import { Post } from './Post';
 import { Comment } from './Comment';
 import { RefreshToken } from './RefreshToken';
 import { PostReaction } from './PostReaction';
+import { DraftPost } from './DraftPost';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -32,6 +33,9 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => Post, post => post.createdByUser)
   posts: Post[];
+
+  @OneToMany(() => DraftPost, draftPost => draftPost.createdByUser)
+  draftPosts: DraftPost[];
 
   @OneToMany(() => RefreshToken, token => token.user, { onDelete: 'CASCADE' })
   refreshTokens: RefreshToken[];
