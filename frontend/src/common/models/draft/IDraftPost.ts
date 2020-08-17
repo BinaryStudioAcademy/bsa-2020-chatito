@@ -1,6 +1,4 @@
 export interface IDraftPost {
-  id: string;
+  id?: string;
   text: string;
-  createdByUserId: string;
-  chatId: string;
 }

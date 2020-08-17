@@ -10,11 +10,13 @@ import { setCurrentChatRoutine,
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 import { IUser } from 'common/models/user/IUser';
+import { IDraftPost } from 'common/models/draft/IDraftPost';
 
 export interface IChatState {
   chat?: IChat;
   posts: IPost[];
   users?: IUser[];
+  draftPost: IDraftPost;
   loading: boolean;
   error: any;
   hasMorePosts: boolean;
@@ -24,6 +26,9 @@ export interface IChatState {
 
 const initialState: IChatState = {
   posts: [],
+  draftPost: {
+    text: ''
+  },
   loading: false,
   error: '',
   hasMorePosts: true,
