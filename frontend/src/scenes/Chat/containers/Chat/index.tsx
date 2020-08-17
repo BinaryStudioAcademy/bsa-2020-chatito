@@ -3,7 +3,6 @@ import styles from './styles.module.sass';
 
 import ChatHeader from '../ChatHeader';
 import ChatBody from '../ChatBody';
-import ChatFooter from '../ChatFooter';
 import NoChatReminder from '../NoChatReminder';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
@@ -26,7 +25,6 @@ const ChatContainer: React.FC<IProps> = ({ chat }) => {
     <div className={styles.chatContainer}>
       <ChatHeader />
       <ChatBody />
-      <ChatFooter />
     </div>
   );
 };
