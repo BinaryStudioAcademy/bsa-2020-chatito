@@ -12,6 +12,7 @@ import LoaderWrapper from 'components/LoaderWrapper';
 interface IProps {
   checkInvitedUserRegistered: IBindingCallback1<ICheckInvitedUserRegistered>;
   invitedUserRegistered?: boolean;
+  loading: boolean;
   match: {
     params: {
       token: string;
@@ -19,14 +20,14 @@ interface IProps {
   };
 }
 
-const JoinInvitedWorkspace = ({ match, invitedUserRegistered, checkInvitedUserRegistered }: IProps) => {
+const JoinInvitedWorkspace = ({ match, invitedUserRegistered, checkInvitedUserRegistered, loading }: IProps) => {
   useLayoutEffect(() => {
     checkInvitedUserRegistered({ token: match.params.token });
   }, [match.params.token]);
 
   return (
     <>
-      <LoaderWrapper loading={invitedUserRegistered === undefined}>
+      <LoaderWrapper loading={loading || invitedUserRegistered === undefined}>
         {invitedUserRegistered
           ? <Redirect to={{ pathname: Routes.SignIn }} />
           : <Redirect to={{ pathname: Routes.SignUp }} />}
@@ -38,7 +39,8 @@ const JoinInvitedWorkspace = ({ match, invitedUserRegistered, checkInvitedUserRe
 const mapStateToProps = (state: IAppState) => {
   const { user } = state;
   return {
-    invitedUserRegistered: user.invitedUserRegistered
+    invitedUserRegistered: user.invitedUserRegistered,
+    loading: state.inviteWorkspace.loading
   };
 };
 
