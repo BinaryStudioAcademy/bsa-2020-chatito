@@ -76,7 +76,6 @@ function* watchCreateChatRequest() {
 function* fetchChatUsersRequest({ payload }: Routine<any>) {
   try {
     const users: IUser[] = yield call(fetchChatUsers, payload);
-
     yield put(fetchChatUsersRoutine.success(users));
   } catch (error) {
     yield call(toastrError, error.message);
@@ -92,7 +91,6 @@ function* removeUserFromChatRequest({ payload }: Routine<any>) {
   try {
     const { chatId, userId } = payload;
     yield call(removeUserFromChat, chatId, userId);
-
     yield put(removeUserFromChatRoutine.success(userId));
   } catch (error) {
     yield call(toastrError, error.message);

@@ -69,9 +69,6 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state, loading: true
       };
     case fetchChatUsersRoutine.SUCCESS:
-      console.log('fetchSuccess');
-      console.log(payload);
-      console.log(state);
       const newChat = { ...state.chat, users: payload };
       return {
         ...state, chat: newChat, loading: false
@@ -81,13 +78,11 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state, loading: false
       };
     case removeUserFromChatRoutine.TRIGGER:
-      console.log('RemoveUser');
-      console.log(state);
       return {
         ...state, loading: true
       };
     case removeUserFromChatRoutine.SUCCESS:
-      const newUserList = state.chat?.users?.filter(user => user.id !== payload);
+      const newUserList = state.chat?.users?.filter(user => user.id !== payload) || [];
       const result = { ...state.chat, users: newUserList };
       return {
         ...state, chat: result, loading: false

@@ -40,7 +40,6 @@ class ChatRepository extends Repository<Chat> {
       relations: ['users'],
       where: { id: chatId }
     });
-
     chat.users = chat.users.filter((user: IUser) => user.id !== userId);
     chat.save();
   }

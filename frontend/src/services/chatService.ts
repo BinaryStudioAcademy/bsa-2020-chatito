@@ -19,12 +19,10 @@ export async function fetchChatPosts(chatId: string) {
 
 export async function fetchChatUsers(chatId: string) {
   const response = await api.get(`/api/chats/${chatId}/users`);
-  console.log(response);
   return response;
 }
 
 export async function removeUserFromChat(chatId: string, userId: string) {
-  console.log(chatId, userId);
   const response = await api.delete(`/api/chats/${chatId}/users/${userId}`);
   return response;
 }
