@@ -66,14 +66,12 @@ const Workspace: React.FC<IProps> = ({
   useEffect(() => {
     const { whash, chash } = match.params;
     const currWorkspace = userWorkspaces.find(workspaceItem => workspaceItem.hash === whash);
+
     if (currWorkspace) {
       selectWorkspace(currWorkspace);
       if (chash) {
         const currChat = chats.find(chatItem => chatItem.hash === chash);
-
-        // case error with chat
         if (currChat) selectChat(currChat);
-        else router(Routes.Workspace.replace(':whash', whash));
       }
     } else {
       // case error with workspace
@@ -124,7 +122,7 @@ const Workspace: React.FC<IProps> = ({
         <div className={styles.workspaceViewContainer}>
 
           <div className={styles.leftPanelWrapper}>
-            <ChatToolbar />
+            <ChatToolbar match={match} />
           </div>
           {!threads.goToThreads ? (
             <div className={styles.chatWrapper}>
