@@ -9,6 +9,7 @@ import { IGetThreads } from 'common/models/threads/IGetThreads';
 import LoaderWrapper from 'components/LoaderWrapper/index';
 import { IUser } from 'common/models/user/IUser';
 import { IFetchedThreads } from 'common/models/threads/IFetchedThreads';
+import { ICommentsInfo } from 'common/models/post/ICommentsInfo';
 
 interface IProps {
   fetchThreads: IBindingCallback1<IGetThreads>;
@@ -19,6 +20,8 @@ interface IProps {
   openUserProfile: IBindingCallback1<IUser>;
   sending?: boolean;
 }
+
+const noInfo: ICommentsInfo = { count: 0, lastAt: new Date(), avatars: [] };
 
 // eslint-disable-next-line
 const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorkspaceId, userId, loading, threads, openUserProfile, sending }) => {
@@ -66,7 +69,8 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
                     text: post.text,
                     createdAt: new Date(post.createdAt),
                     id: post.id,
-                    chatId: post.chat.id
+                    chatId: post.chat.id,
+                    commentsInfo: noInfo
                   }}
                   comments={post.comments}
                   hideCloseBtn={hideCloseBtn}
