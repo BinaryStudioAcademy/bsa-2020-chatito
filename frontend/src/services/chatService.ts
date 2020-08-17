@@ -19,6 +19,7 @@ export async function fetchChatPosts(chatId: string) {
 
 export async function fetchChatUsers(chatId: string) {
   const response = await api.get(`/api/chats/${chatId}/users`);
+  console.log(response);
   return response;
 }
 

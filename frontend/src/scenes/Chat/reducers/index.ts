@@ -69,21 +69,28 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state, loading: true
       };
     case fetchChatUsersRoutine.SUCCESS:
+      console.log('fetchSuccess');
+      console.log(payload);
+      console.log(state);
+      const newChat = { ...state.chat, users: payload };
       return {
-        ...state, users: payload, loading: false
+        ...state, chat: newChat, loading: false
       };
     case fetchChatUsersRoutine.FAILURE:
       return {
         ...state, loading: false
       };
     case removeUserFromChatRoutine.TRIGGER:
+      console.log('RemoveUser');
+      console.log(state);
       return {
         ...state, loading: true
       };
     case removeUserFromChatRoutine.SUCCESS:
-      const newUserList = state.users?.filter(user => user.id !== payload);
+      const newUserList = state.chat?.users?.filter(user => user.id !== payload);
+      const result = { ...state.chat, users: newUserList };
       return {
-        ...state, users: newUserList, loading: false
+        ...state, chat: result, loading: false
       };
     case removeUserFromChatRoutine.FAILURE:
       return {

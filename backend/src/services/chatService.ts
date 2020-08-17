@@ -23,7 +23,6 @@ export const getAllChatPosts = async (chatId: string) => {
 
 export const getAllChatUsers = async (chatId: string) => {
   const chatUsers: IUser[] = await getCustomRepository(ChatRepository).getAllChatUsers(chatId);
-
   return chatUsers.map(user => fromUserToUserClient(user));
 };
 
