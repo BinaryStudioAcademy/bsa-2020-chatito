@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Switch } from 'react-router-dom';
+import { Switch, Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IAppState } from 'common/models/store';
@@ -47,11 +47,13 @@ const Routing: React.FC<IProps> = ({
       <Switch>
         <PublicRoute path={Routes.Auth} component={Auth} />
         <PublicRoute path={Routes.JoinInvitedWorkspace} component={JoinInvitedWorkspace} />
+        <PublicRoute path={Routes.NotExistingPath} restricted={false} component={PageNotFound} />
         <PrivateRoute exact path={Routes.Workspace} component={Workspace} />
         <PrivateRoute exact path={Routes.WorkspaceWithChat} component={Workspace} />
         <PrivateRoute exact path={Routes.AddWorkspace} component={AddWorkspace} />
-        <PrivateRoute path={Routes.NotExistingPath} component={PageNotFound} />
         <PrivateRoute path={Routes.Maintenance} component={Maintenance} />
+        <Redirect exact from={Routes.BaseUrl} to={Routes.SignIn} />
+        <Route component={PageNotFound} />
       </Switch>
     </LoaderWrapper>
   );

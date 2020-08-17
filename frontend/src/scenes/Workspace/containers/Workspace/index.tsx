@@ -77,7 +77,7 @@ const Workspace: React.FC<IProps> = ({
       }
     } else {
       // case error with workspace
-      router(Routes.BaseUrl);
+      router(Routes.NotExistingPath);
     }
   }, [match]);
 
