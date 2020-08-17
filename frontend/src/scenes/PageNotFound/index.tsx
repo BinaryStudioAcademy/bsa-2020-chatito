@@ -1,17 +1,35 @@
 import React, { FunctionComponent } from 'react';
+import { Redirect } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { Routes } from 'common/enums/Routes';
+import { ReactComponent as Upset } from 'img/error404.svg';
+import { Button } from 'react-bootstrap';
 
-const PageNotFound: FunctionComponent = () => (
-  <div className={`${styles.notFoundPage} ${styles.textColor}`}>
-    <div className="d-flex flex-column justify-center align-items-center">
-      <h1 className={`text-center ${styles.title}`}>404: Page Not Found</h1>
-      <span className="text-center">
-        Go to
-        <a className={styles.homeRef} href={Routes.Workspace}>  Home page</a>
-      </span>
+const PageNotFound: FunctionComponent = () => {
+  const onClick = () => <Redirect to={Routes.Workspace} />;
+  return (
+    <div className={styles.notFoundPage}>
+      <div className={styles.centralBlock}>
+        <Upset className={styles.upset} />
+        <div className={styles.messageContainer}>
+          <div className={styles.text}>
+            <p>OOPS!</p>
+            <p>Page not found</p>
+          </div>
+          <div className={`${styles.formFooter} w-100`}>
+            <Button
+              type="submit"
+              variant="primary"
+              className={styles.primaryBtn}
+              onClick={onClick}
+            >
+              Go to Homepage
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default PageNotFound;

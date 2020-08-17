@@ -36,7 +36,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
   if (!activeWorkspaceId || loading) {
     return <div className={styles.headerContainer}><LoaderWrapper loading={loading} /></div>;
   }
-  if (!threads) {
+  if (threads && !threads.length) {
     return (
       <header className={styles.headerContainer}>
         <p className={styles.headerName}>You have no threads yet</p>

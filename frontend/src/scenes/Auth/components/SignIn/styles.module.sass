@@ -1,22 +1,61 @@
-.signIn
-  width: 350px
+.signInHeader
+  height: 66px
 
-.header
-  font-weight: 900
-  text-align: left
+.signIn
+  width: 369px
+  height: 350px
+  display: flex
+  justify-content: space-between
+  flex-direction: column
+  position: relative
 
 .signUpLink
   color: var(--auth-scene-text-secondary-color)
   font-family: var(--secondary-font-family), sans-serif
   font-size: 13px
   font-weight: 500
-  margin-bottom: 30px
+  line-height: 16px 
+
+.header
+  font-weight: 900
+  text-align: left
+  font-size: 34px
+  line-height: 44px
+  margin-bottom: 6px
+
+label
+  font-size: 13px !important
+  line-height: 16px !important
+  margin-bottom: 5px !important
+
+input
+  height: 36px !important
+  margin-bottom: 3px !important
+
+.inputContainer
+  width: 100%
+  min-height: 39px
+  position: absolute
+  &:first-child
+    top: 105px
+  &:nth-child(2)
+    top: 195px
+
+.logInSuggestion
+  font-size: 12px !important
+  line-height: 16px
 
 .authLink
   color: var(--auth-scene-link-color)
 
+.primaryBtn
+  max-width: 146px
+  min-width: 146px
+
 .forgotPasswordLink
   font-size: 11px
+  line-height: 16px
+  margin-bottom: 5px
   color: var(--auth-scene-link-color)
   align-self: center
 
@@ -24,6 +63,7 @@
   display: flex
   justify-content: flex-start
   align-items: center
+  margin-top: 0 !important
 
   .primaryBtn:global(.btn-primary)
     width: 145px
@@ -36,8 +76,10 @@
       border-color: var(--auth-scene-btn-background)
 
 .socialSignInWrapper
-  margin-left: auto
+  width: 100%
+  padding-left: 17px
   display: flex
+  justify-content: space-between
   flex-wrap: nowrap
   align-items: center
 
@@ -45,16 +87,19 @@
     font-size: 13px
     color: var(--auth-scene-text-secondary-color)
 
+.roundButtonsContainer
+  width: 101px
+  display: flex
+  justify-content: space-between
+
 .socialSignIn
   width: 48px
   height: 48px
-  margin-left: 5px
   border-radius: 50%
-  background-color: #EFEDE1
+  background-color: var(--chat-background-secondary)
   border: none
   cursor: pointer
 
   &:active, &:focus
     outline: none
     border: none
-
