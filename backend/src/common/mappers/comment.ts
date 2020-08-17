@@ -21,10 +21,11 @@ const maxAvatarsCount = 3;
 
 export const fromPostCommentsToCommentsInfo = (comments: Comment[]) => {
   const count = comments.length;
+  const lastAt = comments.length > 0 ? comments[0].createdAt : new Date();
   const avatars = [];
   for (let i = 0; i < Math.min(count, maxAvatarsCount); i += 1) {
     const { createdByUser: { imageUrl } } = comments[i];
     avatars.push(imageUrl);
   }
-  return { count, avatars };
+  return { count, lastAt, avatars };
 };
