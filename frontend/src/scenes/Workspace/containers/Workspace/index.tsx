@@ -10,6 +10,8 @@ import { IAppState } from 'common/models/store';
 import ChatScene from 'scenes/Chat';
 import ChatToolbar from '../ChatToolbar';
 import Thread from 'scenes/Workspace/containers/Thread';
+import ThreadsContainer from 'containers/ThreadsContainer/index';
+import DraftsContainer from 'scenes/Drafts';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
@@ -24,8 +26,7 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { IChat } from 'common/models/chat/IChat';
-import ThreadsContainer from 'containers/ThreadsContainer/index';
-import { IThreadsState } from 'containers/ThreadsContainer/reducers/reducer';
+import { WorkspaceMainContent } from 'common/enums/WorkspaceMainContent';
 
 interface IProps {
   currentUserId?: string;
@@ -33,13 +34,13 @@ interface IProps {
     params: {
       whash: string;
       chash: string;
+      subPage: string;
     };
   };
   userWorkspaces: IWorkspace[];
   router: (route: Routes | string) => void;
   selectWorkspace: (workspace: IWorkspace) => void;
   showRightSideMenu: RightMenuTypes;
-  threads: IThreadsState;
   toggleRightMenu: IBindingCallback1<RightMenuTypes>;
   showUserProfile: IBindingCallback1<IUser>;
   toggleActiveThread: IBindingCallback1<IPost>;
@@ -53,7 +54,6 @@ const Workspace: React.FC<IProps> = ({
   userWorkspaces,
   router,
   selectWorkspace,
-  threads,
   showRightSideMenu,
   showUserProfile,
   toggleRightMenu,
@@ -62,6 +62,7 @@ const Workspace: React.FC<IProps> = ({
 }) => {
   if (!currentUserId) return <></>;
   const [userData, setUserData] = useState<IUser | {}>({});
+  const [mainContent, setMainContent] = useState<string>(WorkspaceMainContent.Chat);
 
   useEffect(() => {
     const { whash, chash } = match.params;
@@ -78,6 +79,15 @@ const Workspace: React.FC<IProps> = ({
     } else {
       // case error with workspace
       router(Routes.BaseUrl);
+    }
+  }, [match]);
+
+  useEffect(() => {
+    const { subPage } = match.params;
+    if ((Object.values(WorkspaceMainContent) as string[]).includes(subPage)) {
+      setMainContent(subPage);
+    } else {
+      setMainContent(WorkspaceMainContent.Chat);
     }
   }, [match]);
 
@@ -115,6 +125,17 @@ const Workspace: React.FC<IProps> = ({
     }
   };
 
+  const renderMainContent = (contentType: string) => {
+    switch (contentType) {
+      case WorkspaceMainContent.Threads:
+        return <ThreadsContainer openUserProfile={showUserProfile} />;
+      case WorkspaceMainContent.Drafts:
+        return <DraftsContainer />;
+      default:
+        return <ChatScene />;
+    }
+  };
+
   return (
     <div className={styles.mainContainer}>
       <Header />
@@ -126,17 +147,10 @@ const Workspace: React.FC<IProps> = ({
           <div className={styles.leftPanelWrapper}>
             <ChatToolbar />
           </div>
-          {!threads.goToThreads ? (
-            <div className={styles.chatWrapper}>
-              <ChatScene />
-            </div>
-          ) : (
-            <div className={styles.chatWrapper}>
-              <ThreadsContainer
-                openUserProfile={showUserProfile}
-              />
-            </div>
-          )}
+          <div className={styles.chatWrapper} key={mainContent}>
+            {renderMainContent(mainContent)}
+          </div>
+
           {showRightSideMenu
             ? (
               <div className={styles.rightPanelWrapper}>
@@ -162,8 +176,7 @@ const mapStateToProps = (state: IAppState) => {
     userWorkspaces: state.user.workspaceList,
     showRightSideMenu,
     activeThreadPostId,
-    chats: [...channels, ...directs] as IChat[],
-    threads: state.threads
+    chats: [...channels, ...directs] as IChat[]
   };
 };
 

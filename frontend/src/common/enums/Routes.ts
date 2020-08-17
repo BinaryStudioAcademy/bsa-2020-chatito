@@ -8,6 +8,7 @@ export enum Routes {
   Profile = '/profile',
   Workspace = '/w/:whash',
   WorkspaceWithChat = '/w/:whash/c/:chash',
+  WorkspaceWithSubPage = '/w/:whash/:subPage',
   AddWorkspace = '/add-workspace',
   JoinInvitedWorkspace = '/invite/:token',
   Room = '/room',

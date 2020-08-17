@@ -31,6 +31,7 @@ import CreateDirectModal from 'containers/CreateDirectModal';
 import { push } from 'connected-react-router';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { Routes } from 'common/enums/Routes';
+import { WorkspaceMainContent } from 'common/enums/WorkspaceMainContent';
 
 interface IProps {
   channels: IChat[];
@@ -146,7 +147,15 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   };
 
   const goToThreadsCallBack = () => {
-    goToThreads(true);
+    router(Routes.WorkspaceWithSubPage
+      .replace(':whash', selectedWorkspace.hash)
+      .replace(':subPage', WorkspaceMainContent.Threads));
+  };
+
+  const goToDraftsCallBack = () => {
+    router(Routes.WorkspaceWithSubPage
+      .replace(':whash', selectedWorkspace.hash)
+      .replace(':subPage', WorkspaceMainContent.Drafts));
   };
 
   return (
@@ -154,7 +163,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       {channelSelector('Invite to workspace', faUserFriends, showInvitePopup)}
       {channelSelector('Threads', faClipboardList, goToThreadsCallBack)}
       {channelSelector('Mentions & reactions', faAt)}
-      {channelSelector('Drafts', faListAlt)}
+      {channelSelector('Drafts', faListAlt, goToDraftsCallBack)}
       {channelSelector('Saved Items', faSearch)}
       {channelSelector('File Browser', faDatabase)}
       <hr className={styles.hrr} />
