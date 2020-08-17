@@ -7,7 +7,6 @@ import { appId as facebookAppId, appSecret as facebookAppSecret } from './facebo
 import { IAuthUser } from '../common/models/user/IAuthUser';
 import UserRepository from '../data/repositories/userRepository';
 import { fromFacebookProfileToFacebookUser } from '../common/mappers/user';
-// import CustomError from '../common/models/CustomError';
 
 const validateUser = async (id: string, done: VerifiedCallback) => {
   try {
