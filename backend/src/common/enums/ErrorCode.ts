@@ -6,5 +6,6 @@ export enum ErrorCode {
   InvalidRefreshToken,
   WorkspaceAlreadyExists,
   UserHaveCreatedWorkspace,
-  DraftPostExists
+  DraftPostExists,
+  DraftCommentExists
 }
