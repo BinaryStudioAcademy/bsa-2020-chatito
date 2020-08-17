@@ -34,7 +34,7 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
   const popOver = (
     <Popover id={user.id} className={styles.popOverWindow}>
       <div className={styles.avatarContainer}>
-        <Image className={styles.userAvatar || userLogoDefaultUrl} src={user.imageUrl} alt="User avatar" thumbnail />
+        <Image className={styles.userAvatar} src={user.imageUrl || userLogoDefaultUrl} alt="User avatar" thumbnail />
       </div>
       <Popover.Content>
         {user.status === 'online' ? (
@@ -65,7 +65,7 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
             type="button"
             className={`${styles.arrowButton} ${styles.arrowButton_reset}`}
             onClick={() => onSendMessage()}
-            // need to realise logic to go to the chat with user
+          // need to realise logic to go to the chat with user
           >
             <FontAwesomeIcon
               className={styles.arrowIcon}
@@ -83,12 +83,14 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
         type="button"
         className={styles.link}
       >
-        <img
-          width={64}
-          height={64}
+        <Image
+          src={user.imageUrl || userLogoDefaultUrl}
+          style={{ objectFit: 'cover' }}
+          width={40}
+          height={40}
           className="mr-3 rounded"
-          src={user.imageUrl ? user.imageUrl : 'https://my.throtl.com/assets/icons/user-default-gray'}
           alt={user.fullName}
+          roundedCircle
         />
       </button>
     </OverlayTrigger>

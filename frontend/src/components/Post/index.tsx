@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, Media } from 'react-bootstrap';
+import Card from 'react-bootstrap/Card';
+import Media from 'react-bootstrap/Media';
 import dayjs from 'dayjs';
 import styles from './styles.module.sass';
 import { IPost } from 'common/models/post/IPost';

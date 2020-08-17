@@ -87,35 +87,41 @@ const SignIn: FunctionComponent<IProps> = ({
 
   return (
     <div className={styles.signIn}>
-      <h1 className={styles.header}>
-        Welcome
-        {invitationHeaderText}
-      </h1>
-      <p className={styles.signUpLink}>
-        {'New here? '}
-        <Link className={styles.authLink} to={Routes.SignUp}>Create an account</Link>
-      </p>
+      <header className={styles.signInHeader}>
+        <h1 className={styles.header}>
+          Welcome
+          {invitationHeaderText}
+        </h1>
+        <p className={styles.signUpLink}>
+          {'New here? '}
+          <Link className={styles.authLink} to={Routes.SignUp}>Create an account</Link>
+        </p>
+      </header>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        <Form className="signIn-form d-flex flex-column justify-content-center align-items-center">
-          <InputField
-            label="Email"
-            name="email"
-            type="email"
-            placeholder="user@gmail.com"
-          />
-          <InputField
-            label="Password"
-            name="password"
-            type="password"
-            link={Routes.ForgotPassword}
-            linkDescription="Forgot password?"
-            linkClassName={styles.forgotPasswordLink}
-          />
-          <div className={`${styles.formFooter} mt-4 w-100`}>
+        <Form className={`${styles.inpBlock} signIn-form d-flex flex-column justify-content-center align-items-center`}>
+          <div className={styles.inputContainer}>
+            <InputField
+              label="Email"
+              name="email"
+              type="email"
+              placeholder="user@gmail.com"
+            />
+          </div>
+          <div className={styles.inputContainer}>
+            <InputField
+              label="Password"
+              name="password"
+              type="password"
+              link={Routes.ForgotPassword}
+              linkDescription="Forgot password?"
+              linkClassName={styles.forgotPasswordLink}
+            />
+          </div>
+          <div className={`${styles.formFooter} w-100`}>
             <Button type="submit" variant="primary" className={styles.primaryBtn}>
               Sign In
             </Button>

@@ -9,6 +9,8 @@ import ChatRepository from '../data/repositories/chatRepository';
 import { fromPostToPostClient } from '../common/mappers/post';
 import CommentRepository from '../data/repositories/commentRepository';
 import { fromPostCommentsToPostCommentsClient } from '../common/mappers/comment';
+import { emitToChatRoom } from '../common/utils/socketHelper';
+import { ClientSockets } from '../common/enums/ClientSockets';
 
 export const addPost = async (id: string, post: ICreatePost) => {
   const user = await getCustomRepository(UserRepository).getById(id);
@@ -16,12 +18,14 @@ export const addPost = async (id: string, post: ICreatePost) => {
   const newPost: ICreatePost = { ...post, createdByUser: user, chat };
   const createdPost: IPost = await getCustomRepository(PostRepository).addPost(newPost);
   const clientPost = await fromPostToPostClient(createdPost);
+  emitToChatRoom(clientPost.chatId, ClientSockets.AddPost, clientPost);
   return clientPost;
 };
 
 export const editPost = async ({ id, text }: IEditPost) => {
   const editedPost: IPost = await getCustomRepository(PostRepository).editPost(id, text);
   const clientPost = await fromPostToPostClient(editedPost);
+  emitToChatRoom(clientPost.chatId, ClientSockets.EditPost, clientPost);
   return clientPost;
 };
 
