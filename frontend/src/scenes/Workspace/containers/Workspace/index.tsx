@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
-import { Routine } from 'redux-saga-routines';
 import Header from '../Header';
 import WorkspaceToolbar from '../WorkspaceToolbar';
+import NoChatMessage from '../NoChatMessage';
 import ProfileOverview from 'components/ProfileOverview';
 import { IUser } from 'common/models/user/IUser';
 import { IAppState } from 'common/models/store';
@@ -21,12 +21,11 @@ import {
   showRightSideMenuRoutine,
   showUserProfileRoutine
 } from 'scenes/Workspace/routines';
-import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
-import { IChat } from 'common/models/chat/IChat';
 import { Route, Switch } from 'react-router-dom';
+import LoaderWrapper from 'components/LoaderWrapper';
 
 interface IProps {
   currentUserId?: string;
@@ -34,7 +33,6 @@ interface IProps {
     params: {
       whash: string;
       chash: string;
-      subPage: string;
     };
   };
   userWorkspaces: IWorkspace[];
@@ -44,38 +42,28 @@ interface IProps {
   toggleRightMenu: IBindingCallback1<RightMenuTypes>;
   showUserProfile: IBindingCallback1<IUser>;
   toggleActiveThread: IBindingCallback1<IPost>;
-  chats: IChat[];
-  selectChat: Routine;
+  isLoader: boolean;
 }
 
 const Workspace: React.FC<IProps> = ({
   currentUserId,
   match,
   userWorkspaces,
-  router,
   selectWorkspace,
   showRightSideMenu,
   showUserProfile,
   toggleRightMenu,
-  chats,
-  selectChat
+  isLoader
 }) => {
   if (!currentUserId) return <></>;
   const [userData, setUserData] = useState<IUser | {}>({});
 
   useEffect(() => {
-    const { whash, chash } = match.params;
+    const { whash } = match.params;
     const currWorkspace = userWorkspaces.find(workspaceItem => workspaceItem.hash === whash);
 
     if (currWorkspace) {
       selectWorkspace(currWorkspace);
-      if (chash) {
-        const currChat = chats.find(chatItem => chatItem.hash === chash);
-        if (currChat) selectChat(currChat);
-      }
-    } else {
-      // case error with workspace
-      // router(Routes.NotExistingPath);
     }
   }, [match]);
 
@@ -114,50 +102,52 @@ const Workspace: React.FC<IProps> = ({
   };
 
   return (
-    <div className={styles.mainContainer}>
-      <Header />
-      <div className={styles.contentContainer}>
-        <WorkspaceToolbar />
+    // eslint-disable-next-line
+    <LoaderWrapper loading={isLoader}>
+      <div className={styles.mainContainer}>
+        <Header />
+        <div className={styles.contentContainer}>
+          <WorkspaceToolbar />
 
-        <div className={styles.workspaceViewContainer}>
+          <div className={styles.workspaceViewContainer}>
 
-          <div className={styles.leftPanelWrapper}>
-            <ChatToolbar match={match} />
+            <div className={styles.leftPanelWrapper}>
+              <ChatToolbar />
+            </div>
+            <div className={styles.chatWrapper}>
+              <Switch>
+                <Route path={Routes.Drafts} component={DraftsContainer} />
+                <Route path={Routes.Threads} component={ThreadsContainer} />
+                <Route path={Routes.Chat} component={ChatScene} />
+                <Route component={NoChatMessage} />
+              </Switch>
+            </div>
+
+            {showRightSideMenu
+              ? (
+                <div className={styles.rightPanelWrapper}>
+                  {renderRightMenu()}
+                </div>
+              ) : null}
           </div>
-          <div className={styles.chatWrapper}>
-            <Switch>
-              <Route path={Routes.Drafts} component={DraftsContainer} />
-              <Route path={Routes.Threads} component={ThreadsContainer} />
-              <Route component={ChatScene} />
-            </Switch>
-          </div>
 
-          {showRightSideMenu
-            ? (
-              <div className={styles.rightPanelWrapper}>
-                {renderRightMenu()}
-              </div>
-            ) : null}
         </div>
-
       </div>
-    </div>
+    </LoaderWrapper>
   );
 };
 
 const mapStateToProps = (state: IAppState) => {
   const { user } = state.user;
   const id = user ? user.id : '';
-  const { showRightSideMenu } = state.workspace;
-  const channels = state.workspace.channels || [];
-  const directs = state.workspace.directMessages || [];
+  const { showRightSideMenu, workspace } = state.workspace;
   const activeThreadPostId = state.workspace.activeThread?.post.id;
   return {
     currentUserId: id,
     userWorkspaces: state.user.workspaceList,
     showRightSideMenu,
     activeThreadPostId,
-    chats: [...channels, ...directs] as IChat[]
+    isLoader: !workspace.id
   };
 };
 
@@ -166,8 +156,7 @@ const mapDispatchToProps = {
   selectWorkspace: selectWorkspaceRoutine,
   toggleActiveThread: setActiveThreadRoutine,
   toggleRightMenu: showRightSideMenuRoutine,
-  showUserProfile: showUserProfileRoutine,
-  selectChat: setCurrentChatRoutine
+  showUserProfile: showUserProfileRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Workspace);

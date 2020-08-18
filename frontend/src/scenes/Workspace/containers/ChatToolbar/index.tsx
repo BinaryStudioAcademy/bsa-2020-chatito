@@ -43,28 +43,16 @@ interface IProps {
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
   goToThreads: Routine;
-  match: {
-    params: {
-      whash: string;
-      chash: string;
-    };
-  };
-  selectChat: Routine;
-  isLoading: boolean;
 }
 
 const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
-  match,
-  isLoading,
   selectedChat,
   fetchChats,
   showModal,
   router,
-  selectedWorkspace,
-  goToThreads,
-  selectChat
+  selectedWorkspace
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
@@ -78,7 +66,6 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     } else {
       router(Routes.AddWorkspace);
     }
-    goToThreads(false);
   };
 
   const getClassNameDiv = (state: boolean) => (state ? styles.listBoxHidden : styles.listBox);
@@ -88,15 +75,6 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   useEffect(() => {
     fetchChats();
   }, []);
-
-  useEffect(() => {
-    console.log('S');
-    const { chash } = match.params;
-    if (chash) {
-      const currChat = [...channels, ...directMessages].find(chatItem => chatItem.hash === chash);
-      if (currChat) selectChat(currChat);
-    }
-  }, [isLoading]);
 
   const getChannelSelect = (chat: IChat) => {
     if (selectedChat && selectedChat.id === chat.id) {

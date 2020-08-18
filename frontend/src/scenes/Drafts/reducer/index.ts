@@ -20,10 +20,6 @@ const initialState: IDraftState = {
 const reducer = (state: IDraftState = initialState, { type, payload }: Routine<any>) => {
   switch (type) {
     case fetchDraftsRoutine.SUCCESS:
-      const chat = payload ? { ...payload } : null;
-      console.log('Payload');
-      console.log(payload);
-
       return {
         ...state,
         posts: payload.posts || [],

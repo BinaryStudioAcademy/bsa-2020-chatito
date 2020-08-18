@@ -7,13 +7,7 @@ import { fetchDrafts } from 'services/draftsService';
 
 function* fetchDraftsRequest(): Routine<any> {
   try {
-    console.log('saga');
-
     const response: IDraftRequest = yield call(fetchDrafts);
-    console.log('response');
-
-    console.log(response);
-
     yield put(fetchDraftsRoutine.success(response));
   } catch (error) {
     yield call(toastrError, error.message);

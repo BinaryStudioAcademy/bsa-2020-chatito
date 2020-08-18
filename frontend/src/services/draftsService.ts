@@ -1,10 +1,9 @@
 import api from 'common/helpers/apiHelper';
-import { IDraftRequest } from 'common/models/draft/IDraftRequest';
+import { IDraftRequest } from 'common/models/draft/IDraftRequest'; // eslint-disable-line
 
 export async function fetchDrafts() {
-  // const response = await api.get(`/api/draft`);
-  // return response;
-  return Promise.resolve({
+  let response = await api.get('/api/draft');
+  response = Promise.resolve({
     posts: [
       {
         id: '0',
@@ -40,4 +39,5 @@ export async function fetchDrafts() {
       }
     ]
   });
+  return response;
 }
