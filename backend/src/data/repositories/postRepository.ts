@@ -18,13 +18,14 @@ class PostRepository extends Repository<Post> {
     from: skip = undefined,
     count: take = undefined
   }: IGetChatPosts): Promise<Post[]> {
-    return this.find({
+    const posts = await this.find({
       relations: ['createdByUser'],
       where: { chat },
       order: { createdAt: 'DESC' },
       skip,
       take
     });
+    return posts.reverse();
   }
 
   addPost(post: ICreatePost): Promise<Post> {

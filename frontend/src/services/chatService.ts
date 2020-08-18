@@ -1,6 +1,7 @@
 import api from 'common/helpers/apiHelper';
 import { ICreateChat } from 'common/models/chat/ICreateChat';
 import { ICreatePost } from 'common/models/post/ICreatePost';
+import { IFetchMorePosts } from 'common/models/post/IFetchMorePosts';
 
 export async function createChat(payload: ICreateChat) {
   const response = await api.post('/api/chats', payload);
@@ -12,8 +13,8 @@ export async function fetchUserChats() {
   return response;
 }
 
-export async function fetchChatPosts(chatId: string) {
-  const response = await api.get(`/api/chats/${chatId}/posts`);
+export async function fetchChatPosts({ chatId, from, count }: IFetchMorePosts) {
+  const response = await api.get(`/api/chats/${chatId}/posts`, { from, count });
   return response;
 }
 
