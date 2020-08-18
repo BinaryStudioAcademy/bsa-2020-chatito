@@ -21,6 +21,7 @@ import { sendResetPasswordMail } from './mailService';
 import { ErrorCode } from '../common/enums/ErrorCode';
 import { ILoginWithGoogle } from '../common/models/user/ILoginWithGoogle';
 import { getGoogleUserPayload } from '../common/utils/googleAuthHelper';
+import { addWorkspaceToUser } from './userService';
 import { ILoginWithFacebook } from '../common/models/user/ILoginWithFacebook';
 import { IFacebookUser } from '../common/models/user/IFacebookUser';
 
@@ -39,15 +40,6 @@ const createRefreshToken = async (user: User): Promise<IRefreshToken> => {
   const refreshToken = await getCustomRepository(RefreshTokenRepository).addToken(refreshTokenData);
 
   return refreshToken;
-};
-
-const addWorkspaceToUser = async (userId: string, workspaceId: string) => {
-  try {
-    const user = await getCustomRepository(UserRepository).addWorkspace(userId, workspaceId);
-    return user;
-  } catch (error) {
-    throw new CustomError(409, 'User already exists in workspace. Please, sign in.', ErrorCode.UserExistsInWorkspace);
-  }
 };
 
 export const register = async ({ password, workspaceId, ...userData }: IRegisterUser) => {

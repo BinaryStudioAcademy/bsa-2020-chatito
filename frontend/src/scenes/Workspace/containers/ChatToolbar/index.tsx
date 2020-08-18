@@ -31,7 +31,6 @@ import CreateDirectModal from 'containers/CreateDirectModal';
 import { push } from 'connected-react-router';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { Routes } from 'common/enums/Routes';
-import { WorkspaceMainContent } from 'common/enums/WorkspaceMainContent';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 
 interface IProps {

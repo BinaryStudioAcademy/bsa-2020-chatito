@@ -15,6 +15,7 @@ import {
 import { IUser } from 'common/models/user/IUser';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { addWorkspaceRoutine } from 'scenes/Workspace/routines';
+import { addInviteWorkspaceRoutine } from 'containers/JoinInvitedWorkspace/routines';
 
 export interface IUserState {
   user?: IUser;
@@ -40,6 +41,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         ...state,
         isLoading: true
       };
+    case addInviteWorkspaceRoutine.SUCCESS:
     case addNewUserRoutine.SUCCESS:
     case fetchUserRoutine.SUCCESS:
     case loginUserRoutine.SUCCESS:
