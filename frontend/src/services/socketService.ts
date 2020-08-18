@@ -37,6 +37,6 @@ export const connectSockets = () => {
   });
   chatSocket.on(ClientSockets.AddChat, (chat: IChat) => {
     store.dispatch(addChatWithSocketRoutine(chat));
-    store.dispatch(push(Routes.WorkspaceWithChat.replace(':whash', chat.workspace.hash).replace(':chash', chat.hash)));
+    store.dispatch(push(Routes.Chat.replace(':whash', chat.workspace.hash).replace(':chash', chat.hash)));
   });
 };

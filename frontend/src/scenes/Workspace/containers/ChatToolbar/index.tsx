@@ -71,7 +71,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 
   const doSelectChannel = (chat: IChat) => {
     if (selectedWorkspace && chat) {
-      router(Routes.WorkspaceWithChat.replace(':whash', selectedWorkspace.hash)
+      router(Routes.Chat.replace(':whash', selectedWorkspace.hash)
         .replace(':chash', chat.hash));
     } else if (selectedWorkspace) {
       router(Routes.Workspace.replace(':whash', selectedWorkspace.hash));
@@ -168,13 +168,13 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   };
 
   const goToThreadsCallBack = () => {
-    router(Routes.WorkspaceWithSubPage
+    router(Routes.WorkspaceSubPage
       .replace(':whash', selectedWorkspace.hash)
       .replace(':subPage', WorkspaceMainContent.Threads));
   };
 
   const goToDraftsCallBack = () => {
-    router(Routes.WorkspaceWithSubPage
+    router(Routes.WorkspaceSubPage
       .replace(':whash', selectedWorkspace.hash)
       .replace(':subPage', WorkspaceMainContent.Drafts));
   };

@@ -26,7 +26,7 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { IChat } from 'common/models/chat/IChat';
-import { WorkspaceMainContent } from 'common/enums/WorkspaceMainContent';
+import { Route, Switch } from 'react-router-dom';
 
 interface IProps {
   currentUserId?: string;
@@ -62,7 +62,6 @@ const Workspace: React.FC<IProps> = ({
 }) => {
   if (!currentUserId) return <></>;
   const [userData, setUserData] = useState<IUser | {}>({});
-  const [mainContent, setMainContent] = useState<string>(WorkspaceMainContent.Chat);
 
   useEffect(() => {
     const { whash, chash } = match.params;
@@ -76,16 +75,7 @@ const Workspace: React.FC<IProps> = ({
       }
     } else {
       // case error with workspace
-      router(Routes.NotExistingPath);
-    }
-  }, [match]);
-
-  useEffect(() => {
-    const { subPage } = match.params;
-    if ((Object.values(WorkspaceMainContent) as string[]).includes(subPage)) {
-      setMainContent(subPage);
-    } else {
-      setMainContent(WorkspaceMainContent.Chat);
+      // router(Routes.NotExistingPath);
     }
   }, [match]);
 
@@ -123,17 +113,6 @@ const Workspace: React.FC<IProps> = ({
     }
   };
 
-  const renderMainContent = (contentType: string) => {
-    switch (contentType) {
-      case WorkspaceMainContent.Threads:
-        return <ThreadsContainer openUserProfile={showUserProfile} />;
-      case WorkspaceMainContent.Drafts:
-        return <DraftsContainer />;
-      default:
-        return <ChatScene />;
-    }
-  };
-
   return (
     <div className={styles.mainContainer}>
       <Header />
@@ -145,8 +124,12 @@ const Workspace: React.FC<IProps> = ({
           <div className={styles.leftPanelWrapper}>
             <ChatToolbar match={match} />
           </div>
-          <div className={styles.chatWrapper} key={mainContent}>
-            {renderMainContent(mainContent)}
+          <div className={styles.chatWrapper}>
+            <Switch>
+              <Route path={Routes.Drafts} component={DraftsContainer} />
+              <Route path={Routes.Threads} component={ThreadsContainer} />
+              <Route component={ChatScene} />
+            </Switch>
           </div>
 
           {showRightSideMenu
