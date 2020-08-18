@@ -30,6 +30,7 @@ export const upsertDraftPost = async (id: string, draftPost: IUpsertDraftPost) =
 
 export const deleteDraftPost = async (id: string, { chatId }: IDeleteDraftPost) => {
   await getCustomRepository(DraftPostRepository).deleteDraftPost(id, chatId);
+  return { result: true };
 };
 
 export const upsertDraftComment = async (id: string, draftComment: IUpsertDraftComment) => {

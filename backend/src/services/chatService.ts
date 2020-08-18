@@ -20,13 +20,14 @@ import { fromDraftPostToDraftPostClient } from '../common/mappers/draft';
 
 export const getAllChatPosts = async (userId: string, filter: IGetChatPosts) => {
   const chatPosts: IPost[] = await getCustomRepository(PostRepository).getAllChatPosts(filter);
-  const mappedChatPosts = Promise.all(chatPosts.map(async post => fromPostToPostClient(post)));
+  const mappedChatPosts = await Promise.all(chatPosts.map(async post => fromPostToPostClient(post)));
 
   const draftPost = await getCustomRepository(DraftPostRepository).getDraftPost(userId, filter.chatId);
+  const mappedDraftPost = draftPost ? fromDraftPostToDraftPostClient(draftPost) : null;
 
   return {
     posts: mappedChatPosts,
-    draftPost: fromDraftPostToDraftPostClient(draftPost)
+    draftPost: mappedDraftPost
   };
 };
 
