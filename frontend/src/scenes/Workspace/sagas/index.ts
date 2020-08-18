@@ -10,14 +10,14 @@ import { addWorkspace } from 'services/workspaceService';
 import { fetchPostComments } from 'services/threadsService';
 import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
-import { fetchUserChats } from 'services/chatServise';
+import { fetchUserChats } from 'services/chatService';
 import { toastrError } from 'services/toastrService';
 
 function* addWorkspaceReq({ payload }: Routine<any>) {
   try {
     const workspace = yield call(addWorkspace, payload);
     yield put(addWorkspaceRoutine.success(workspace));
-    yield put(push(Routes.Workspace.replace(':hash', workspace.hash)));
+    yield put(push(Routes.Workspace.replace(':whash', workspace.hash)));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(addWorkspaceRoutine.failure(error));

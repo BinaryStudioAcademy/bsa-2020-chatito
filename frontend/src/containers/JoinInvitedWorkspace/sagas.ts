@@ -5,7 +5,8 @@ import { setInvitedUserRoutine } from 'routines/user';
 import { checkInvitedUserRegisteredRoutine } from './routines';
 import { checkInvitedUserRegistered } from 'services/inviteLinkService';
 import { IInvitedUserRegisteredResponse } from 'common/models/inviteLink/IInvitedUserRegisteredResponse';
-import { toastrError } from 'services/toastrService';
+import { push } from 'connected-react-router';
+import { Routes } from 'common/enums/Routes';
 
 function* checkInvitedUserRegisteredRequest({ payload }: Routine<any>) {
   try {
@@ -20,8 +21,8 @@ function* checkInvitedUserRegisteredRequest({ payload }: Routine<any>) {
 
     yield put(checkInvitedUserRegisteredRoutine.success());
   } catch (error) {
-    yield call(toastrError, 'Error occured, please try again.');
     yield put(checkInvitedUserRegisteredRoutine.failure());
+    yield put(push(Routes.NotExistingPath));
   }
 }
 

@@ -14,6 +14,11 @@ import { IChat } from 'common/models/chat/IChat';
 import { IUser } from 'common/models/user/IUser';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
 import { connect } from 'react-redux';
+import { showModalRoutine } from 'routines/modal';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import ChatMembers from 'containers/ChatMembers';
 
 const privateChannelIcon = (
   <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
@@ -21,9 +26,10 @@ const privateChannelIcon = (
 
 interface IProps {
   chat?: IChat;
+  showModal: IBindingCallback1<IModalRoutine>;
 }
 
-const ChatHeader: React.FC<IProps> = ({ chat }) => {
+const ChatHeader: React.FC<IProps> = ({ chat, showModal }) => {
   const maxAvatarsDisplayed = 5;
   const userAvatars = (users: IUser[]) => {
     const initVal: string[] = [];
@@ -42,6 +48,10 @@ const ChatHeader: React.FC<IProps> = ({ chat }) => {
     return null;
   }
 
+  const showChatMembers = () => {
+    showModal({ modalType: ModalTypes.ChatMembers, show: true });
+  };
+
   return (
     <div className={styles.chatContainer} key={chat.id}>
 
@@ -56,7 +66,13 @@ const ChatHeader: React.FC<IProps> = ({ chat }) => {
       </div>
 
       <div className={styles.rightHeaderBlock}>
-        <div className={styles.memberAvatarBlock}>
+        <div
+          role="button"
+          className={styles.memberAvatarBlock}
+          onClick={showChatMembers}
+          onKeyDown={showChatMembers}
+          tabIndex={0}
+        >
           {userAvatars(chat.users)}
           <div className={styles.memberCounter}>{chat.users.length || 0}</div>
         </div>
@@ -64,6 +80,7 @@ const ChatHeader: React.FC<IProps> = ({ chat }) => {
         <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
         <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
       </div>
+      <ChatMembers />
     </div>
   );
 };
@@ -73,4 +90,8 @@ const mapStateToProps = (state: IAppState) => {
   return { chat };
 };
 
-export default connect(mapStateToProps, null)(ChatHeader);
+const mapDispatchToProps = {
+  showModal: showModalRoutine
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatHeader);

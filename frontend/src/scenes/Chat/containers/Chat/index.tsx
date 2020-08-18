@@ -3,7 +3,7 @@ import styles from './styles.module.sass';
 
 import ChatHeader from '../ChatHeader';
 import ChatBody from '../ChatBody';
-import ChatFooter from '../ChatFooter';
+import NoChatReminder from '../NoChatReminder';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import { IChat } from 'common/models/chat/IChat';
@@ -15,7 +15,9 @@ interface IProps {
 const ChatContainer: React.FC<IProps> = ({ chat }) => {
   if (!chat) {
     return (
-      <div className={styles.chatContainer}> Select chat </div>
+      <div className={styles.chatContainerMessage}>
+        <NoChatReminder />
+      </div>
     );
   }
 
@@ -23,7 +25,6 @@ const ChatContainer: React.FC<IProps> = ({ chat }) => {
     <div className={styles.chatContainer}>
       <ChatHeader />
       <ChatBody />
-      <ChatFooter />
     </div>
   );
 };

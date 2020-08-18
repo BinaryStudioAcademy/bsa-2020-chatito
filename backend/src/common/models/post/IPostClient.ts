@@ -1,5 +1,6 @@
 import { IUserClient } from '../user/IUserClient';
 import { IPostReactionClient } from '../postReaction/IPostReactionClient';
+import { ICommentsInfo } from './ICommentsInfo';
 
 export interface IPostClient {
   id: string;
@@ -8,4 +9,5 @@ export interface IPostClient {
   chatId: string;
   createdByUser: IUserClient;
   postReactions: IPostReactionClient[];
+  commentsInfo: ICommentsInfo;
 }

@@ -19,7 +19,7 @@ interface IProps {
   width?: number | string;
   post: IPost;
   maxThreadHeight?: number | string;
-  comments: IPost[];
+  comments: Array<IPost>;
   sendComment: IBindingCallback1<ICreateComment>;
   onHide?: IBindingAction;
   hideCloseBtn?: boolean;
@@ -38,16 +38,20 @@ const Thread: FunctionComponent<IProps> = ({
   openUserProfile
 }) => {
   const [showAll, setShowAll] = useState(false);
-  const participants = Array.from(new Set(comments.map(comment => comment.createdByUser.id)));
-
+  const participants = Array.from(new Set(comments.map((comment: IPost) => comment.createdByUser.id)));
   const sendCommentHandler = (text: string) => {
     const { id: postId } = post;
     sendComment({ postId, text });
   };
+
+  const maxComment = showOnlyTwoComments && !showAll ? 2 : 10000;
+
   return (
     <div className={styles.threadContainer} style={{ width }}>
       <header>
-        {chatName ? <p className={styles.threadChatName}>{chatName}</p> : 'Thread'}
+        {chatName
+          ? <p className={styles.threadChatName}>{chatName}</p>
+          : <p className={styles.threadChatName}>Thread</p>}
         <p>
           {'Participants '}
           {participants.length}
@@ -57,49 +61,39 @@ const Thread: FunctionComponent<IProps> = ({
       <div className={styles.threadPost}>
         <Post post={post} openUserProfile={openUserProfile} type={PostType.Post} />
       </div>
-      <div className={styles.threadComments} style={{ maxHeight: '100%' }}>
-        <div className={styles.commentsWrapper}>
-          {showOnlyTwoComments && !showAll ? (
-            <div>
-              {comments.length > 2 ? (
-                <button
-                  type="button"
-                  onClick={() => setShowAll(!showAll)}
-                  className={styles.link}
-                >
-                  Show other replies
-                </button>
-              ) : (
-                ''
-              )}
-              {comments.slice(-2).map(comment => (
-                <div className={styles.comment} key={comment.id}>
-                  <Post
-                    key={comment.id}
-                    post={comment}
-                    openUserProfile={openUserProfile}
-                    type={PostType.Comment}
-                  />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div>
-              {comments.map(comment => (
-                <div className={styles.comment} key={comment.id}>
-                  <Post
-                    key={comment.id}
-                    post={comment}
-                    openUserProfile={openUserProfile}
-                    type={PostType.Comment}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+      {showOnlyTwoComments
+        ? (
+          <button
+            type="button"
+            onClick={() => setShowAll(!showAll)}
+            className={styles.link}
+          >
+            Show other replies
+          </button>
+        ) : ('')}
+      <div className={styles.threadComments}>
+        {comments.map((comment, index) => (
+          index < maxComment
+            ? (
+              <Post
+                key={comment.id}
+                post={comment}
+                openUserProfile={openUserProfile}
+                type={PostType.Comment}
+              />
+            )
+            : null
+        ))}
       </div>
-      <TextEditor placeholder="write a comment!" onSend={sendCommentHandler} height={130} />
+      {comments.length > maxComment
+        ? (
+          <div className={styles.commentsMore}>
+            {`And ${comments.length - maxComment} more comments`}
+          </div>
+        ) : ('')}
+      <div className={styles.textEditor}>
+        <TextEditor placeholder="write a comment!" onSend={sendCommentHandler} height={130} />
+      </div>
     </div>
   );
 };
