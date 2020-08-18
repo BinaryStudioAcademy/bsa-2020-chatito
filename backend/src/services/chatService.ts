@@ -15,11 +15,19 @@ import { ChatType } from '../common/enums/ChatType';
 import { fromPostToPostClient } from '../common/mappers/post';
 import { IUser } from '../common/models/user/IUser';
 import { IGetChatPosts } from '../common/models/chat/IGetChatPosts';
+import DraftPostRepository from '../data/repositories/draftPostRepository';
+import { fromDraftPostToDraftPostClient } from '../common/mappers/draft';
 
-export const getAllChatPosts = async (filter: IGetChatPosts) => {
+export const getAllChatPosts = async (userId: string, filter: IGetChatPosts) => {
   const chatPosts: IPost[] = await getCustomRepository(PostRepository).getAllChatPosts(filter);
   const mappedChatPosts = Promise.all(chatPosts.map(async post => fromPostToPostClient(post)));
-  return mappedChatPosts;
+
+  const draftPost = await getCustomRepository(DraftPostRepository).getDraftPost(userId, filter.chatId);
+
+  return {
+    posts: mappedChatPosts,
+    draftPost: fromDraftPostToDraftPostClient(draftPost)
+  };
 };
 
 export const getAllChatUsers = async (chatId: string) => {
