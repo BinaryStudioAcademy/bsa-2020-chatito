@@ -3,7 +3,7 @@ import styles from './styles.module.sass';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import { IPost } from 'common/models/post/IPost';
-import Post from 'components/Post/index';
+import Post from 'containers/Post';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { showUserProfileRoutine, setActiveThreadRoutine } from 'scenes/Workspace/routines';
@@ -12,6 +12,7 @@ import { Spinner } from 'react-bootstrap';
 import { setPostsRoutine } from 'scenes/Chat/routines';
 import { IFetchMorePosts } from 'common/models/post/IFetchMorePosts';
 import LoaderWrapper from 'components/LoaderWrapper';
+import { PostType } from 'common/enums/PostType';
 
 interface IProps {
   chatId: string | undefined;
@@ -72,7 +73,15 @@ const ChatBody: React.FC<IProps> = ({
           loader={<Spinner animation="border" role="status" key={0} />}
           useWindow={false}
         >
-          {messages.map(m => <Post post={m} key={m.id} openThread={handleOpenThread} openUserProfile={openProfile} />)}
+          {messages.map(m => (
+            <Post
+              post={m}
+              key={m.id}
+              openThread={handleOpenThread}
+              openUserProfile={openProfile}
+              type={PostType.Post}
+            />
+          ))}
         </InfiniteScroll>
       </div>
     </LoaderWrapper>

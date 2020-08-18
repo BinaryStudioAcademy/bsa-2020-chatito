@@ -70,6 +70,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
                     createdAt: new Date(post.createdAt),
                     id: post.id,
                     chatId: post.chat.id,
+                    postReactions: post.postReactions,
                     commentsInfo: noInfo
                   }}
                   comments={post.comments}

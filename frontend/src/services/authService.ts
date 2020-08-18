@@ -3,6 +3,7 @@ import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
 import { IRegisterUser } from 'common/models/auth/IRegisterUser';
 import { ILoginUser } from 'common/models/auth/ILoginUser';
 import { ILoginWithGoogle } from 'common/models/auth/ILoginWithGoogle';
+import { ILoginWithFacebook } from 'common/models/auth/ILoginWithFacebook';
 
 type ServerResponse = IAuthServerResponse & Response;
 
@@ -20,6 +21,13 @@ export const loginWithGoogle = async ({ token, workspace }: ILoginWithGoogle) =>
   const payload = { token, workspaceId: workspace.id };
 
   const response = await api.post<ServerResponse>('/api/auth/login/google', payload);
+  return response;
+};
+
+export const loginWithFacebook = async ({ accessToken, workspace }: ILoginWithFacebook) => {
+  const payload = { accessToken, workspaceId: workspace.id };
+
+  const response = await api.post<ServerResponse>('/api/auth/login/facebook', payload);
   return response;
 };
 

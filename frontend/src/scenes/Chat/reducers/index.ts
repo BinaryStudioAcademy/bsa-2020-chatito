@@ -1,4 +1,5 @@
 import { Routine } from 'redux-saga-routines';
+import { addPostReactionRoutine, deletePostReactionRoutine } from 'containers/Post/routines';
 import { setCurrentChatRoutine,
   setPostsRoutine,
   createChatRoutine,
@@ -71,6 +72,26 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     case createChatRoutine.FAILURE:
       return {
         ...state, loading: false
+      };
+    case addPostReactionRoutine.SUCCESS:
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (payload.id === post.id) {
+            return payload;
+          }
+          return post;
+        })
+      };
+    case deletePostReactionRoutine.SUCCESS:
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (payload.id === post.id) {
+            return payload;
+          }
+          return post;
+        })
       };
     case addPostWithSocketRoutine.TRIGGER: {
       const posts = [...state.posts];
