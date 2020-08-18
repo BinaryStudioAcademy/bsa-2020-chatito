@@ -145,17 +145,9 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     showModal({ modalType: ModalTypes.InvitePopup, show: true });
   };
 
-  const goToThreadsCallBack = () => {
-    router(Routes.WorkspaceSubPage
-      .replace(':whash', selectedWorkspace.hash)
-      .replace(':subPage', WorkspaceMainContent.Threads));
-  };
+  const goToThreadsCallBack = () => router(Routes.Threads.replace(':whash', selectedWorkspace.hash));
 
-  const goToDraftsCallBack = () => {
-    router(Routes.WorkspaceSubPage
-      .replace(':whash', selectedWorkspace.hash)
-      .replace(':subPage', WorkspaceMainContent.Drafts));
-  };
+  const goToDraftsCallBack = () => router(Routes.Drafts.replace(':whash', selectedWorkspace.hash));
 
   return (
     <div className={styles.leftToolbar}>

@@ -10,7 +10,6 @@ export enum Routes {
   Chat = '/w/:whash/c/:chash',
   Threads = '/w/:hash/threads',
   Drafts = '/w/:hash/drafts',
-  WorkspaceSubPage = '/w/:whash/:subPage',
   AddWorkspace = '/add-workspace',
   JoinInvitedWorkspace = '/invite/:token',
   Room = '/room',

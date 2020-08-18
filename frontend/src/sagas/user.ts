@@ -30,11 +30,6 @@ function* fetchUserRequest({ payload }: Routine<any>) {
 
     yield put(fetchUserRoutine.success(user));
 
-    // eslint-disable-next-line
-    if (payload.workspace.id) {
-      put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)));
-    }
-
     if (payload.workspace.id) {
       put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)));
     }
@@ -56,6 +51,7 @@ function* loginUserRequest({ payload }: Routine<any>) {
     setTokens({ accessToken, refreshToken });
 
     yield put(loginUserRoutine.success(user));
+    console.log('rerender2');
 
     // eslint-disable-next-line
     yield payload.workspace.id // selected workspace exists (when login through invite link)
