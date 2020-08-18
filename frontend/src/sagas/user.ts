@@ -30,16 +30,9 @@ function* fetchUserRequest({ payload }: Routine<any>) {
 
     yield put(fetchUserRoutine.success(user));
 
-    // eslint-disable-next-line
     if (payload.workspace.id) {
       put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)));
     }
-
-    // yield payload.workspace.id // selected workspace exists (when login through invite link)
-    //   ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
-    //   : (user && user.workspaces.length > 0)
-    //     ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
-    //     : put(push(Routes.AddWorkspace));
 
     yield call(connectSockets);
   } catch (error) {
@@ -58,16 +51,14 @@ function* loginUserRequest({ payload }: Routine<any>) {
     setTokens({ accessToken, refreshToken });
 
     yield put(loginUserRoutine.success(user));
+    console.log('rerender2');
 
     // eslint-disable-next-line
-    if (payload.workspace.id) {
-      put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)));
-    }
-    // yield payload.workspace.id // selected workspace exists (when login through invite link)
-    //   ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
-    //   : (user && user.workspaces.length > 0)
-    //     ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
-    //     : put(push(Routes.AddWorkspace));
+    yield payload.workspace.id // selected workspace exists (when login through invite link)
+      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
+      : (user && user.workspaces.length > 0)
+        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
+        : put(push(Routes.AddWorkspace));
 
     yield call(connectSockets);
   } catch (error) {

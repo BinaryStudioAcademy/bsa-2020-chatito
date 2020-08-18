@@ -31,6 +31,7 @@ import CreateDirectModal from 'containers/CreateDirectModal';
 import { push } from 'connected-react-router';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { Routes } from 'common/enums/Routes';
+import { WorkspaceMainContent } from 'common/enums/WorkspaceMainContent';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 
 interface IProps {
@@ -42,42 +43,29 @@ interface IProps {
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
   goToThreads: Routine;
-  match: {
-    params: {
-      whash: string;
-      chash: string;
-    };
-  };
-  selectChat: Routine;
-  isLoading: boolean;
 }
 
 const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
-  match,
-  isLoading,
   selectedChat,
   fetchChats,
   showModal,
   router,
-  selectedWorkspace,
-  goToThreads,
-  selectChat
+  selectedWorkspace
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
 
   const doSelectChannel = (chat: IChat) => {
     if (selectedWorkspace && chat) {
-      router(Routes.WorkspaceWithChat.replace(':whash', selectedWorkspace.hash)
+      router(Routes.Chat.replace(':whash', selectedWorkspace.hash)
         .replace(':chash', chat.hash));
     } else if (selectedWorkspace) {
       router(Routes.Workspace.replace(':whash', selectedWorkspace.hash));
     } else {
       router(Routes.AddWorkspace);
     }
-    goToThreads(false);
   };
 
   const getClassNameDiv = (state: boolean) => (state ? styles.listBoxHidden : styles.listBox);
@@ -87,15 +75,6 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   useEffect(() => {
     fetchChats();
   }, []);
-
-  useEffect(() => {
-    console.log('S');
-    const { chash } = match.params;
-    if (chash) {
-      const currChat = [...channels, ...directMessages].find(chatItem => chatItem.hash === chash);
-      if (currChat) selectChat(currChat);
-    }
-  }, [isLoading]);
 
   const getChannelSelect = (chat: IChat) => {
     if (selectedChat && selectedChat.id === chat.id) {
@@ -166,16 +145,16 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     showModal({ modalType: ModalTypes.InvitePopup, show: true });
   };
 
-  const goToThreadsCallBack = () => {
-    goToThreads(true);
-  };
+  const goToThreadsCallBack = () => router(Routes.Threads.replace(':whash', selectedWorkspace.hash));
+
+  const goToDraftsCallBack = () => router(Routes.Drafts.replace(':whash', selectedWorkspace.hash));
 
   return (
     <div className={styles.leftToolbar}>
       {channelSelector('Invite to workspace', faUserFriends, showInvitePopup)}
       {channelSelector('Threads', faClipboardList, goToThreadsCallBack)}
       {channelSelector('Mentions & reactions', faAt)}
-      {channelSelector('Drafts', faListAlt)}
+      {channelSelector('Drafts', faListAlt, goToDraftsCallBack)}
       {channelSelector('Saved Items', faSearch)}
       {channelSelector('File Browser', faDatabase)}
       <hr className={styles.hrr} />
