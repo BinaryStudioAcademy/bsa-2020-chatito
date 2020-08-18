@@ -20,7 +20,7 @@ const rootReducer = () => combineReducers({
   errorBoundary,
   toastr: toastrReducer,
   threads: threadsReducer,
-  drafts
+  drafts,
   inviteWorkspace: joinInvitedWorkspaceReducer
 });
 
