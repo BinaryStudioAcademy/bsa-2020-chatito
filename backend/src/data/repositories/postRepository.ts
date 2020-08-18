@@ -1,6 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Post } from '../entities/Post';
 import { ICreatePost } from '../../common/models/post/ICreatePost';
+import { IGetChatPosts } from '../../common/models/chat/IGetChatPosts';
 
 @EntityRepository(Post)
 class PostRepository extends Repository<Post> {
@@ -12,11 +13,17 @@ class PostRepository extends Repository<Post> {
     return this.findOne(id);
   }
 
-  async getAllChatPosts(chatId: string): Promise<Post[]> {
+  async getAllChatPosts({
+    chatId: chat,
+    from: skip = undefined,
+    count: take = undefined
+  }: IGetChatPosts): Promise<Post[]> {
     return this.find({
       relations: ['createdByUser'],
-      where: { chat: chatId },
-      order: { createdAt: 'ASC' }
+      where: { chat },
+      order: { createdAt: 'DESC' },
+      skip,
+      take
     });
   }
 
