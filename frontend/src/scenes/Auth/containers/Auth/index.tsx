@@ -20,14 +20,17 @@ import {
   loginWithGoogleRoutine,
   addNewUserRoutine,
   forgotPasswordRoutine,
-  resetPasswordRoutine
+  resetPasswordRoutine,
+  loginWithFacebookRoutine
 } from 'routines/user';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { ILoginWithGoogle } from 'common/models/auth/ILoginWithGoogle';
+import { ILoginWithFacebook } from 'common/models/auth/ILoginWithFacebook';
 
 interface IProps {
   loginUser: IBindingCallback1<ILoginUser>;
   loginWithGoogle: IBindingCallback1<ILoginWithGoogle>;
+  loginWithFacebook: IBindingCallback1<ILoginWithFacebook>;
   addNewUser: IBindingCallback1<IRegisterUser>;
   forgotPassword: IBindingCallback1<IForgotPasswordInput>;
   resetPassword: IBindingCallback1<IResetPasswordInput>;
@@ -38,6 +41,7 @@ interface IProps {
 const Auth = ({
   loginUser,
   loginWithGoogle,
+  loginWithFacebook,
   addNewUser,
   forgotPassword,
   resetPassword,
@@ -59,6 +63,7 @@ const Auth = ({
               loginWithGoogle={loginWithGoogle}
               workspace={workspace}
               invitedUserEmail={invitedUserEmail}
+              loginWithFacebook={loginWithFacebook}
             />
           )}
           key={Routes.SignIn}
@@ -102,7 +107,8 @@ const mapDispatchToProps = {
   addNewUser: addNewUserRoutine,
   forgotPassword: forgotPasswordRoutine,
   resetPassword: resetPasswordRoutine,
-  loginWithGoogle: loginWithGoogleRoutine
+  loginWithGoogle: loginWithGoogleRoutine,
+  loginWithFacebook: loginWithFacebookRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);

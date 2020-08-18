@@ -14,5 +14,9 @@ export const env = {
   googleAuth: {
     clientId: getOsEnv('GOOGLE_AUTH_CLIENT_ID'),
     clientSecret: getOsEnv('GOOGLE_AUTH_CLIENT_SECRET')
+  },
+  facebookAuth: {
+    appId: getOsEnv('FACEBOOK_LOGIN_APP_ID'),
+    appSecret: getOsEnv('FACEBOOK_LOGIN_APP_SECRET')
   }
 };

@@ -1,10 +1,9 @@
 /* eslint-disable */
-import { IAuthUser } from "../../models/user/IAuthUser";
 import { Server } from "socket.io";
-
+import { IUser } from "../../models/user/IUser";
 declare global {
   namespace Express {
-    interface User extends IAuthUser { }
+    interface User extends IUser { }
 
     interface Request {
       user?: User;
