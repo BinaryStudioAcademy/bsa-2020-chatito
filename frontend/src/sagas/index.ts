@@ -6,6 +6,7 @@ import invitePopupSaga from 'containers/InvitePopup/sagas';
 import joinInvitedWorkspaceSaga from 'containers/JoinInvitedWorkspace/sagas';
 import workspaceUsersSaga from 'containers/CreateDirectForm/sagas/sagas';
 import threadSaga from 'containers/Thread/sagas';
+import postSaga from 'containers/Post/sagas';
 import threadsSaga from 'containers/ThreadsContainer/sagas/sagas';
 
 export default function* rootSaga() {
@@ -16,7 +17,8 @@ export default function* rootSaga() {
     workspaceSaga(),
     invitePopupSaga(),
     joinInvitedWorkspaceSaga(),
-    threadsSaga(),
-    threadSaga()
+    threadSaga(),
+    postSaga(),
+    threadsSaga()
   ]);
 }

@@ -1,10 +1,11 @@
 import { getCustomRepository } from 'typeorm';
 import PostRepository from '../data/repositories/postRepository';
+import UserRepository from '../data/repositories/userRepository';
+import PostReactionRepository from '../data/repositories/postReactionRepository';
 import { ICreatePost } from '../common/models/post/ICreatePost';
 import { IEditPost } from '../common/models/post/IEditPost';
 import { IPost } from '../common/models/post/IPost';
 import { ICreateComment } from '../common/models/comment/ICreateComment';
-import UserRepository from '../data/repositories/userRepository';
 import ChatRepository from '../data/repositories/chatRepository';
 import { fromPostToPostClient } from '../common/mappers/post';
 import CommentRepository from '../data/repositories/commentRepository';
@@ -44,3 +45,15 @@ export const getPostComments = async (postId: string) => {
   const comments = await getCustomRepository(CommentRepository).getAllPostComments(postId);
   return fromPostCommentsToPostCommentsClient(comments);
 };
+
+export const addReaction = (reaction: string, postId: string, userId: string) => (
+  getCustomRepository(PostReactionRepository).addReaction({
+    reaction,
+    post: { id: postId },
+    user: { id: userId }
+  })
+);
+
+export const deleteReaction = (reaction: string, postId: string, userId: string) => (
+  getCustomRepository(PostReactionRepository).deleteReaction({ reaction, postId, userId })
+);

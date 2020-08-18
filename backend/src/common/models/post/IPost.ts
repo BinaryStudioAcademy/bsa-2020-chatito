@@ -1,3 +1,5 @@
+import { IPostReaction } from '../postReaction/IPostReaction';
+
 export interface IPost {
   id: string;
   createdAt: Date;
@@ -5,4 +7,5 @@ export interface IPost {
   createdByUserId: string;
   chatId: string;
   text: string;
+  postReactions: IPostReaction[];
 }

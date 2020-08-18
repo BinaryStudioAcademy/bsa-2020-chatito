@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/posts
+Content-Type: application/json
+Authorization: Bearer token
+
+{
+  "text": "Hello!",
+  "chatId": "1"
+}
