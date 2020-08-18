@@ -6,7 +6,8 @@ import {
   createChatRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
-  addUsersToChatRoutine
+  addUsersToChatRoutine,
+  upsertDraftPostRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import { fetchChatPosts, addPost, createChat, fetchChatUsers,
@@ -15,11 +16,13 @@ import { IPost } from 'common/models/post/IPost';
 import { toastrError, toastrSuccess } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
 import { IUser } from 'common/models/user/IUser';
+import { upsertDraftPost, deleteDraftPost } from 'services/draftService';
 
 function* fetchChatPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
-    const responce: IPost[] = yield call(fetchChatPosts, payload);
-    yield put(setPostsRoutine.success(responce));
+    const { posts, draftPost } = yield call(fetchChatPosts, payload);
+
+    yield put(setPostsRoutine.success({ posts, draftPost }));
   } catch (error) {
     yield call(toastrError, error.message);
   }
@@ -29,9 +32,27 @@ function* watchPostsRequest() {
   yield takeEvery(setPostsRoutine.TRIGGER, fetchChatPostsRequest);
 }
 
+function* upsertDraftPostRequest({ payload }: Routine<any>) {
+  try {
+    const response = yield call(upsertDraftPost, payload);
+
+    yield put(upsertDraftPostRoutine.success(response));
+  } catch (error) {
+    yield call(toastrError, error.message);
+  }
+}
+
+function* watchUpsertDraftPostRequest() {
+  yield takeEvery(upsertDraftPostRoutine.TRIGGER, upsertDraftPostRequest);
+}
+
 function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
   try {
     yield call(addPost, payload);
+
+    yield call(deleteDraftPost, { chatId: payload.chatId });
+
+    yield put(addPostRoutine.success());
   } catch (error) {
     yield call(toastrError, error.message);
   }
@@ -119,6 +140,7 @@ export default function* chatSaga() {
     watchPostsRequest(),
     watchCurrChat(),
     watchAddPostRequest(),
+    watchUpsertDraftPostRequest(),
     watchCreateChatRequest(),
     watchToggleCreateChatModal(),
     watchAddUsersToChat(),

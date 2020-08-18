@@ -7,19 +7,18 @@ import { IDeleteDraftComment } from 'common/models/draft/IDeleteDraftComment';
 export const upsertDraftPost = async (payload: IUpsertDraftPost) => {
   const response = await api.post('/api/draft/posts', payload);
   return response;
-}
+};
 
 export const deleteDraftPost = async (payload: IDeleteDraftPost) => {
-  const response = await api.delete('/api/draft/posts', payload);
-  return response;
-}
+  await api.delete('/api/draft/posts', payload);
+};
 
 export const upsertDraftComment = async (payload: IUpsertDraftComment) => {
   const response = await api.post('/api/draft/comments', payload);
   return response;
-}
+};
 
 export const deleteDraftComment = async (payload: IDeleteDraftComment) => {
   const response = await api.delete('/api/draft/comments', payload);
   return response;
-}
+};
