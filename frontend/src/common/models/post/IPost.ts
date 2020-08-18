@@ -1,4 +1,5 @@
 import { IUser } from '../user/IUser';
+import { ICommentsInfo } from './ICommentsInfo';
 
 export interface IPost {
   createdByUser: IUser;
@@ -6,4 +7,5 @@ export interface IPost {
   createdAt: Date;
   id: string;
   chatId?: string;
+  commentsInfo: ICommentsInfo;
 }

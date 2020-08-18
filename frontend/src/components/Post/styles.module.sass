@@ -1,5 +1,15 @@
+$color: var(--workspace-toolbar-select-background)
+$fontColor: var(--workspace-toolbar-font-color)
+$fontColorSecond: var(--workspace-toolbar-font-color-second)
+
 .postWrapper
-  margin: 10px 0
+  padding: 5px
+  background: $color
+  border-radius: 15px
+  margin-bottom: 5px
+
+.postWrapper:hover
+	background: #fafafa
 
 .body
   overflow: hidden
@@ -8,35 +18,67 @@
 .author
   display: inline-block
   font-size: 1rem
-  color: rgb(29, 28, 29)
+  color: $fontColor
   font-weight: 900
+  margin: 5px 0
+
+.status
+  display: inline-block
+  font-size: 16px
+  color: $fontColorSecond
+  margin-bottom: 5px
 
 .author:hover
-  color: rgb(29, 28, 29)
+  color: $fontColor
 
 .metadata
   display: inline-block
   font-weight: 400
-  color: rgb(29, 28, 29)
+  color: $fontColor
   font-size: .75rem
   font-family: var(--secondary-font-family), sans-serif
 
 .metadata:hover
-  color: rgb(29, 28, 29)
+  color: $fontColor
 
 .text
   text-align: left
-  padding: 10px
-  margin: 5px 0
+  margin: 15px 0
   overflow-wrap: break-word
-
-.text:hover
-	background: var(--chat-background-secondary)
 
 .footer
   display: flex
+
+.footerKey  
+  font-size: 0.9rem
+  font-weight: 900
+  color: var(--workspace-icon-background)
+
+.footerData
+  font-size: 0.85rem
 
 .openThreadBtn
   cursor: pointer
   font-size: 13px
   text-decoration: underline
+  color: $fontColorSecond
+  margin-right: 5px
+
+.commentWrapper
+  display: flex
+  justify-content: flex-start
+  align-items: center
+  margin-top: 10px
+
+.commentImage
+  width: 32px
+  height: 32px
+  border-radius: 16px
+  overflow: hidden
+
+.commentUser
+  margin: 10px
+  font-size: 0.9rem
+  color: $fontColor
+  font-weight: 700
+  
