@@ -12,7 +12,6 @@ import {
 import { getUserById } from '../../services/userService';
 import { jwtBodyMiddleware } from '../middlewares/jwtMiddleware';
 import facebookAuthMiddleware from '../middlewares/facebookAuthMiddleware';
-import { IFacebookUser } from '../../common/models/user/IFacebookUser';
 
 const router = Router();
 
@@ -21,9 +20,7 @@ router
   .post('/register', run((req: Request) => register(req.body.user)))
   .post('/login', run((req: Request) => login(req.body)))
   .post('/login/google', run((req: Request) => loginWithGoogle(req.body)))
-  .post('/login/facebook', facebookAuthMiddleware, run(
-    (req: Request) => loginWithFacebook(req.user as unknown as IFacebookUser, req.body)
-  ))
+  .post('/login/facebook', facebookAuthMiddleware, run((req: Request) => loginWithFacebook(req.user, req.body)))
   .post('/tokens', run((req: Request) => refreshTokens(req.body.refreshToken)))
   .put('/forgotpass', run((req: Request) => forgotPassword(req.body)))
   .put('/resetpass', jwtBodyMiddleware, run((req: Request) => resetPassword(req.user.id, req.body.password)))
