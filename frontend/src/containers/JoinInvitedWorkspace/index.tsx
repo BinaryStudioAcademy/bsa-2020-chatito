@@ -47,11 +47,9 @@ const JoinInvitedWorkspace = ({
   return (
     <>
       <LoaderWrapper loading={loading || invitedUserRegistered === undefined}>
-        {invitedUserRegistered ? (
-          <Redirect to={{ pathname: Routes.SignIn }} />
-        ) : (
-          <Redirect to={{ pathname: Routes.SignUp }} />
-        )}
+        {invitedUserRegistered
+          ? <Redirect to={{ pathname: Routes.SignIn }} />
+          : <Redirect to={{ pathname: Routes.SignUp }} />}
       </LoaderWrapper>
     </>
   );
@@ -72,7 +70,4 @@ const mapDispatchToProps = {
   addInviteWorkspace: addInviteWorkspaceRoutine
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(JoinInvitedWorkspace);
+export default connect(mapStateToProps, mapDispatchToProps)(JoinInvitedWorkspace);
