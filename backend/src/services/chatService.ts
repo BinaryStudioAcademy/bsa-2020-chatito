@@ -14,9 +14,10 @@ import WorkspaceRepository from '../data/repositories/workspaceRepository';
 import { ChatType } from '../common/enums/ChatType';
 import { fromPostToPostClient } from '../common/mappers/post';
 import { IUser } from '../common/models/user/IUser';
+import { IGetChatPosts } from '../common/models/chat/IGetChatPosts';
 
-export const getAllChatPosts = async (chatId: string) => {
-  const chatPosts: IPost[] = await getCustomRepository(PostRepository).getAllChatPosts(chatId);
+export const getAllChatPosts = async (filter: IGetChatPosts) => {
+  const chatPosts: IPost[] = await getCustomRepository(PostRepository).getAllChatPosts(filter);
   const mappedChatPosts = Promise.all(chatPosts.map(async post => fromPostToPostClient(post)));
   return mappedChatPosts;
 };
