@@ -28,6 +28,7 @@
     "@types/jsonwebtoken": "8.5.0",
     "@types/node": "14.0.27",
     "@types/passport": "1.0.4",
+    "@types/passport-facebook-token": "0.4.34",
     "@types/passport-jwt": "3.0.3",
     "@types/socket.io": "2.1.11",
     "@types/socketio-jwt-auth": "0.0.0",
@@ -47,6 +48,7 @@
     "jsonwebtoken": "8.5.1",
     "nodemon": "2.0.4",
     "passport": "0.4.1",
+    "passport-facebook-token": "4.0.0",
     "passport-jwt": "4.0.0",
     "pg": "8.3.0",
     "socket.io": "2.3.0",
@@ -55,5 +57,6 @@
     "ts-node-dev": "1.0.0-pre.44",
     "typeorm": "0.2.25",
     "typescript": "3.9.7"
-  }
+  },
+  "devDependencies": {}
 }
