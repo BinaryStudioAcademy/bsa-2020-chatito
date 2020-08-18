@@ -51,7 +51,6 @@ function* loginUserRequest({ payload }: Routine<any>) {
     setTokens({ accessToken, refreshToken });
 
     yield put(loginUserRoutine.success(user));
-    console.log('rerender2');
 
     // eslint-disable-next-line
     yield payload.workspace.id // selected workspace exists (when login through invite link)
