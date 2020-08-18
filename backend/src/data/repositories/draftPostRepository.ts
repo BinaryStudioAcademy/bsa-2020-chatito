@@ -16,6 +16,15 @@ class DraftPostRepository extends Repository<DraftPost> {
     return draftPost.raw[0];
   }
 
+  async getDraftPost(userId: string, chatId: string) {
+    return this.createQueryBuilder()
+      .select('draft_post')
+      .from(DraftPost, 'draft_post')
+      .where('draft_post."createdByUserId" = :userId', { userId })
+      .andWhere('draft_post."chatId" = :chatId', { chatId })
+      .getOne();
+  }
+
   async deleteDraftPost(userId: string, chatId: string) {
     await this.createQueryBuilder()
       .delete()
