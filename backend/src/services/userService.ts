@@ -8,6 +8,8 @@ import { ICheckInvitedUserRegistered } from '../common/models/user/ICheckRegiste
 import { IDecodedInviteLinkToken } from '../common/models/inviteLink/IDecodedInviteLinkToken';
 import { fromCreatedWorkspaceToClient } from '../common/mappers/workspace';
 import { verifyToken } from '../common/utils/tokenHelper';
+import CustomError from '../common/models/CustomError';
+import { ErrorCode } from '../common/enums/ErrorCode';
 
 export const getUsers = async () => {
   const users = await getCustomRepository(UserRepository).getAll();
@@ -45,3 +47,13 @@ export const checkInvitedUserRegistered = async ({ token }: ICheckInvitedUserReg
     workspace: fromCreatedWorkspaceToClient(workspace)
   };
 };
+
+export const addWorkspaceToUser = async (userId: string, workspaceId: string) => {
+  try {
+    const user = await getCustomRepository(UserRepository).addWorkspace(userId, workspaceId);
+    return user;
+  } catch (error) {
+    throw new CustomError(409, 'User already exists in workspace. ', ErrorCode.UserExistsInWorkspace);
+  }
+};
+
