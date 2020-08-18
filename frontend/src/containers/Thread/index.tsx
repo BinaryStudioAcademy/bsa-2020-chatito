@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
-import dayjs from 'dayjs';
 import TextEditor from 'components/TextEditor';
-import Post from 'components/Post';
+import Post from 'containers/Post';
 import styles from './styles.module.sass';
 import { IPost } from 'common/models/post/IPost';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
@@ -12,7 +11,7 @@ import { IUser } from 'common/models/user/IUser';
 import { ICreateComment } from 'common/models/post/ICreateComment';
 import { addCommentRoutine } from './routines';
 import { connect } from 'react-redux';
-import { getUserImgLink } from 'common/helpers/imageHelper';
+import { PostType } from 'common/enums/PostType';
 
 interface IProps {
   showOnlyTwoComments?: boolean;
@@ -47,23 +46,6 @@ const Thread: FunctionComponent<IProps> = ({
 
   const maxComment = showOnlyTwoComments && !showAll ? 2 : 10000;
 
-  const commentBox = (comment: IPost) => (
-    <div className={styles.commentsWrapper}>
-      <img
-        className={styles.commentImage}
-        src={getUserImgLink(comment.createdByUser.imageUrl as string)}
-        alt={comment.createdByUser.fullName}
-      />
-      <div className={styles.commentData}>
-        <span className={styles.commentAuthor}>{comment.createdByUser.displayName}</span>
-        <br />
-        <span className={styles.commentData}>{dayjs(comments[0].createdAt).format('DD:MM:YYYY hh:mm A')}</span>
-        <br />
-        <br />
-        <span className={styles.commentText}>{comment.text}</span>
-      </div>
-    </div>
-  );
   return (
     <div className={styles.threadContainer} style={{ width }}>
       <header>
@@ -77,7 +59,7 @@ const Thread: FunctionComponent<IProps> = ({
         {!hideCloseBtn && <FontAwesomeIcon onClick={onHide} icon={faTimes} className={styles.closeBtn} />}
       </header>
       <div className={styles.threadPost}>
-        <Post post={post} openUserProfile={openUserProfile} />
+        <Post post={post} openUserProfile={openUserProfile} type={PostType.Post} />
       </div>
       {showOnlyTwoComments
         ? (
@@ -92,7 +74,14 @@ const Thread: FunctionComponent<IProps> = ({
       <div className={styles.threadComments}>
         {comments.map((comment, index) => (
           index < maxComment
-            ? commentBox(comment)
+            ? (
+              <Post
+                key={comment.id}
+                post={comment}
+                openUserProfile={openUserProfile}
+                type={PostType.Comment}
+              />
+            )
             : null
         ))}
       </div>

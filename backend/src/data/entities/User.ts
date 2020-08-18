@@ -5,6 +5,7 @@ import { Chat } from './Chat';
 import { Post } from './Post';
 import { Comment } from './Comment';
 import { RefreshToken } from './RefreshToken';
+import { PostReaction } from './PostReaction';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -43,6 +44,9 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => Workspace, wp => wp.createdByUser)
   workspacesCreated: Workspace[];
+
+  @OneToMany(() => PostReaction, postReaction => postReaction.user)
+  postReactions: PostReaction[];
 
   @ManyToMany(() => Workspace, workspace => workspace.users)
   @JoinTable()

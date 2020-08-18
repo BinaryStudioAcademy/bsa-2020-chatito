@@ -1,0 +1,70 @@
+.postWrapper
+  padding: 10px
+  color: var(--main-text)
+  border-radius: 15px
+  margin-bottom: 5px
+  background: var(--post-bg)
+
+.body
+  overflow: hidden
+  padding: 5px
+
+.author
+  display: inline-block
+  font-size: 1rem
+  color: var(--title-text)
+  font-weight: 900
+  margin-bottom: 2px
+
+.metadata
+  display: inline-block
+  font-weight: 400
+  color: var(--secondary-text)
+  font-size: .75rem
+  font-family: var(--secondary-font-family), sans-serif
+  margin-bottom: 14px
+
+.text
+  text-align: left
+  margin-bottom: 15px
+  overflow-wrap: break-word
+
+.emojiStats
+  display: flex
+  flex-wrap: wrap
+
+.emojiStatItem
+  margin-right: 5px
+  margin-bottom: 5px
+  padding: 2px 4px
+  border: 1px solid transparent
+  cursor: pointer
+  background-color: var(--post-emoji-bg)
+  border-radius: 20px
+
+.emojiStatItem:hover
+  border: 1px solid var(--border)
+  border-radius: 20px
+  background-color: var(--post-emoji-bg-hover)
+
+.emojiStatItem.active
+  background-color: var(--post-active-emoji-bg)
+  border-color: var(--post-active-emoji-border)
+
+.emoji
+  margin-right: 3px
+  font-size: 14px
+
+.footer
+  display: flex
+
+.postWrapper .openThreadBtn,
+.reactBtn
+  font-size: 12px
+  line-height: 14px
+  margin-right: 18px
+  cursor: pointer
+
+.postWrapper .openThreadBtn:hover,
+.reactBtn:hover
+  text-decoration: underline
