@@ -31,11 +31,16 @@ function* fetchUserRequest({ payload }: Routine<any>) {
     yield put(fetchUserRoutine.success(user));
 
     // eslint-disable-next-line
-    yield payload.workspace.id // selected workspace exists (when login through invite link)
-      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
-      : (user && user.workspaces.length > 0)
-        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
-        : put(push(Routes.AddWorkspace));
+    if (payload.workspace.id) {
+      put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)));
+    }
+
+    // yield payload.workspace.id // selected workspace exists (when login through invite link)
+    //   ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
+    //   : (user && user.workspaces.length > 0)
+    //     ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
+    //     : put(push(Routes.AddWorkspace));
+
     yield call(connectSockets);
   } catch (error) {
     yield call(toastrError, error.message);
@@ -55,11 +60,15 @@ function* loginUserRequest({ payload }: Routine<any>) {
     yield put(loginUserRoutine.success(user));
 
     // eslint-disable-next-line
-    yield payload.workspace.id // selected workspace exists (when login through invite link)
-      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
-      : (user && user.workspaces.length > 0)
-        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
-        : put(push(Routes.AddWorkspace));
+    if (payload.workspace.id) {
+      put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)));
+    }
+    // yield payload.workspace.id // selected workspace exists (when login through invite link)
+    //   ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
+    //   : (user && user.workspaces.length > 0)
+    //     ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
+    //     : put(push(Routes.AddWorkspace));
+
     yield call(connectSockets);
   } catch (error) {
     yield call(toastrError, error.message);
@@ -79,11 +88,14 @@ function* loginWithGoogleRequest({ payload }: Routine<any>) {
     yield put(loginWithGoogleRoutine.success(user));
 
     // eslint-disable-next-line
-    yield payload.workspace.id // selected workspace exists (when login through invite link)
-      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
-      : (user && user.workspaces.length > 0)
-        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
-        : put(push(Routes.AddWorkspace));
+    if (payload.workspace.id) {
+      put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)));
+    }
+    // yield payload.workspace.id // selected workspace exists (when login through invite link)
+    //   ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
+    //   : (user && user.workspaces.length > 0)
+    //     ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
+    //     : put(push(Routes.AddWorkspace));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(loginWithGoogleRoutine.failure(error.message));

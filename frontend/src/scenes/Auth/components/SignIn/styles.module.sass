@@ -1,13 +1,10 @@
 .signInHeader
-  height: 66px
+  min-height: 66px
+  margin-bottom: 40px
 
 .signIn
   width: 369px
-  height: 350px
-  display: flex
-  justify-content: space-between
-  flex-direction: column
-  position: relative
+  min-height: 350px
 
 .signUpLink
   color: var(--auth-scene-text-secondary-color)
@@ -23,6 +20,9 @@
   line-height: 44px
   margin-bottom: 6px
 
+.workspace
+  word-wrap: break-word
+
 label
   font-size: 13px !important
   line-height: 16px !important
@@ -33,13 +33,14 @@ input
   margin-bottom: 3px !important
 
 .inputContainer
+  position: relative
+  width: 100%
+  height: 90px
+
+.input
   width: 100%
   min-height: 39px
   position: absolute
-  &:first-child
-    top: 105px
-  &:nth-child(2)
-    top: 195px
 
 .logInSuggestion
   font-size: 12px !important
@@ -60,10 +61,10 @@ input
   align-self: center
 
 .formFooter
+  margin-top: 15px !important
   display: flex
   justify-content: flex-start
   align-items: center
-  margin-top: 0 !important
 
   .primaryBtn:global(.btn-primary)
     width: 145px

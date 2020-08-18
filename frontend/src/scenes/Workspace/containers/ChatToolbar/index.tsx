@@ -31,6 +31,7 @@ import CreateDirectModal from 'containers/CreateDirectModal';
 import { push } from 'connected-react-router';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { Routes } from 'common/enums/Routes';
+import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 
 interface IProps {
   channels: IChat[];
@@ -41,17 +42,28 @@ interface IProps {
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
   goToThreads: Routine;
+  match: {
+    params: {
+      whash: string;
+      chash: string;
+    };
+  };
+  selectChat: Routine;
+  isLoading: boolean;
 }
 
 const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
+  match,
+  isLoading,
   selectedChat,
   fetchChats,
   showModal,
   router,
   selectedWorkspace,
-  goToThreads
+  goToThreads,
+  selectChat
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
@@ -75,6 +87,15 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   useEffect(() => {
     fetchChats();
   }, []);
+
+  useEffect(() => {
+    console.log('S');
+    const { chash } = match.params;
+    if (chash) {
+      const currChat = [...channels, ...directMessages].find(chatItem => chatItem.hash === chash);
+      if (currChat) selectChat(currChat);
+    }
+  }, [isLoading]);
 
   const getChannelSelect = (chat: IChat) => {
     if (selectedChat && selectedChat.id === chat.id) {
@@ -193,6 +214,7 @@ const mapStateToProps = (state: IAppState) => ({
   channels: state.workspace.channels || [],
   directMessages: state.workspace.directMessages || [],
   selectedWorkspace: state.workspace.workspace,
+  isLoading: state.workspace.loading,
   selectedChat: state.chat.chat! // eslint-disable-line
 });
 
@@ -200,7 +222,8 @@ const mapDispatchToProps = {
   goToThreads: goToThreadsRoutine,
   fetchChats: fetchUserChatsRoutine,
   showModal: showModalRoutine,
-  router: push
+  router: push,
+  selectChat: setCurrentChatRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatToolbar);
