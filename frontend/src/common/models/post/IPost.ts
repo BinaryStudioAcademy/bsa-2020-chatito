@@ -1,4 +1,5 @@
 import { IUser } from '../user/IUser';
+import { IPostReaction } from '../postReaction/IPostReaction';
 import { ICommentsInfo } from './ICommentsInfo';
 
 export interface IPost {
@@ -7,5 +8,6 @@ export interface IPost {
   createdAt: Date;
   id: string;
   chatId?: string;
+  postReactions: IPostReaction[];
   commentsInfo: ICommentsInfo;
 }
