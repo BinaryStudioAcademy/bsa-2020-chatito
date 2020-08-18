@@ -20,25 +20,39 @@ const Post: React.FC<IProps> = ({ post, openThread, openUserProfile }) => {
   const onSend = () => {
     console.log('Send text message'); // eslint-disable-line
   };
+
   return (
     <Media className={styles.postWrapper}>
       <ProfilePreview user={createdByUser} onSend={onSend} openProfile={openUserProfile} />
       <Media.Body bsPrefix={styles.body}>
         <a href="/" className={styles.author}>{createdByUser.fullName}</a>
         <br />
-        <a href="/" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</a>
+        <div className={styles.status}>{createdByUser.status}</div>
+        <br />
+        <a href="/" className={styles.metadata}>{dayjs(createdAt).format('DD:MM:YYYY hh:mm A')}</a>
         {/* eslint-disable-next-line */}
         <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
-        <div className={styles.footer}>
-          { openThread && (
-            <Card.Link
-              bsPrefix={styles.openThreadBtn}
-              onClick={() => openThread(post)}
-            >
-              Reply
-            </Card.Link>
-          )}
-        </div>
+        {openThread && (
+          <>
+            <div className={styles.footer}>
+              <div className={styles.footerKey}>
+                <Card.Link
+                  bsPrefix={styles.openThreadBtn}
+                  onClick={() => openThread(post)}
+                >
+                  Reply
+                </Card.Link>
+              </div>
+              <div className={styles.footerKey}>
+                <Card.Link
+                  bsPrefix={styles.openThreadBtn}
+                >
+                  React
+                </Card.Link>
+              </div>
+            </div>
+          </>
+        )}
       </Media.Body>
     </Media>
   );
