@@ -17,20 +17,29 @@ const PublicRoute: React.FC<IProps> = ({
   isAuthorized,
   workspaces,
   ...rest
-}) => (
-  <Route
-    {...rest}
-    render={props => (
-      isAuthorized
-        ? (
-          <Redirect
-            to={{ pathname: Routes.Workspace.replace(':whash', workspaces[0].hash), state: { from: props.location } }}
-          />
-        )
-        : <Component {...props} />
-    )}
-  />
-);
+}) => {
+  const selectPathname = () => {
+    if (workspaces[0]) {
+      return Routes.Workspace.replace(':whash', workspaces[0].hash);
+    }
+    return Routes.AddWorkspace;
+  };
+
+  return (
+    <Route
+      {...rest}
+      render={props => (
+        isAuthorized
+          ? (
+            <Redirect
+              to={{ pathname: selectPathname(), state: { from: props.location } }}
+            />
+          )
+          : <Component {...props} />
+      )}
+    />
+  );
+};
 
 const mapStateToProps = (state: IAppState) => {
   const { user: { isAuthorized, workspaceList } } = state;
