@@ -5,6 +5,7 @@ import { IUserState } from 'reducers/user';
 import { IWorkspaceState } from 'scenes/Workspace/reducers';
 import { IChatState } from 'scenes/Chat/reducers';
 import { IThreadsState } from 'containers/ThreadsContainer/reducers/reducer'
+import { IDraftState } from 'scenes/Drafts/reducer';
 import { IJoinInvitedWorkspaceState } from 'containers/JoinInvitedWorkspace/reducer';
 
 export interface IAppState {
@@ -15,5 +16,6 @@ export interface IAppState {
   chat: IChatState;
   threads: IThreadsState;
   errorBoundary: IErrorBoundaryState;
+  drafts: IDraftState;
   inviteWorkspace: IJoinInvitedWorkspaceState;
 }

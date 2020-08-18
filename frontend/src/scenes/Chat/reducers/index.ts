@@ -1,4 +1,5 @@
 import { Routine } from 'redux-saga-routines';
+import { addPostReactionRoutine, deletePostReactionRoutine } from 'containers/Post/routines';
 import { setCurrentChatRoutine,
   setPostsRoutine,
   createChatRoutine,
@@ -16,27 +17,49 @@ export interface IChatState {
   users?: IUser[];
   loading: boolean;
   error: any;
+  hasMorePosts: boolean;
+  fetchFrom: number;
+  fetchCount: number;
 }
 
 const initialState: IChatState = {
   posts: [],
   loading: false,
-  error: ''
+  error: '',
+  hasMorePosts: true,
+  fetchFrom: 0,
+  fetchCount: 10
 };
 
 const reducer = (state: IChatState = initialState, { type, payload }: Routine<any>) => {
   switch (type) {
+    case setCurrentChatRoutine.TRIGGER:
+      return {
+        ...state,
+        chat: undefined,
+        posts: [],
+        fetchFrom: 0,
+        fetchCount: 10
+      };
     case setCurrentChatRoutine.SUCCESS:
       const chat = payload ? { ...payload } : null;
       return {
         ...state,
-        chat
+        chat,
+        loading: true
       };
-
+    case setPostsRoutine.TRIGGER:
+      return {
+        ...state,
+        hasMorePosts: false
+      };
     case setPostsRoutine.SUCCESS:
       return {
         ...state,
-        posts: payload
+        posts: [...payload, ...(state.posts || [])],
+        loading: false,
+        hasMorePosts: Boolean(payload.length),
+        fetchFrom: state.fetchFrom + state.fetchCount
       };
     case createChatRoutine.TRIGGER:
       return {
@@ -49,6 +72,26 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     case createChatRoutine.FAILURE:
       return {
         ...state, loading: false
+      };
+    case addPostReactionRoutine.SUCCESS:
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (payload.id === post.id) {
+            return payload;
+          }
+          return post;
+        })
+      };
+    case deletePostReactionRoutine.SUCCESS:
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (payload.id === post.id) {
+            return payload;
+          }
+          return post;
+        })
       };
     case addPostWithSocketRoutine.TRIGGER: {
       const posts = [...state.posts];

@@ -9,11 +9,13 @@ import {
   resetPasswordRoutine,
   editStatusRoutine,
   setInvitedUserRoutine,
-  loginWithGoogleRoutine
+  loginWithGoogleRoutine,
+  loginWithFacebookRoutine
 } from 'routines/user';
 import { IUser } from 'common/models/user/IUser';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { addWorkspaceRoutine } from 'scenes/Workspace/routines';
+import { addInviteWorkspaceRoutine } from 'containers/JoinInvitedWorkspace/routines';
 
 export interface IUserState {
   user?: IUser;
@@ -39,10 +41,12 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         ...state,
         isLoading: true
       };
+    case addInviteWorkspaceRoutine.SUCCESS:
     case addNewUserRoutine.SUCCESS:
     case fetchUserRoutine.SUCCESS:
     case loginUserRoutine.SUCCESS:
-    case loginWithGoogleRoutine.SUCCESS: {
+    case loginWithGoogleRoutine.SUCCESS:
+    case loginWithFacebookRoutine.SUCCESS: {
       const { id, fullName, displayName, email, imageUrl, title, workspaces } = payload;
 
       return {
@@ -93,6 +97,7 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
       };
     case loginUserRoutine.FAILURE:
     case loginWithGoogleRoutine.FAILURE:
+    case loginWithFacebookRoutine.FAILURE:
       return {
         ...state,
         isLoading: false,
