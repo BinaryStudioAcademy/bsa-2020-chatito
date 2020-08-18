@@ -7,8 +7,9 @@ import { IUserWithWorkspaces } from '../models/user/IUserWithWorkspaces';
 import { fromCreatedWorkspaceToClient } from './workspace';
 import { IGoogleUser } from '../models/user/IGoogleUser';
 import { IFacebookUser } from '../models/user/IFacebookUser';
+import { IUser } from '../models/user/IUser';
 
-export const fromUserToUserClient = (user: IUserWithWorkspaces): IUserClient => {
+export const fromUserToUserClient = (user: IUserWithWorkspaces | IUser): IUserClient => {
   const { id, fullName, displayName, email, imageUrl, title, status } = user;
 
   return {

@@ -12,13 +12,18 @@ export async function fetchUserChats() {
   return response;
 }
 
-export async function fetchUserChannels() {
-  const response = await api.get('/api/chats');
+export async function fetchChatPosts(chatId: string) {
+  const response = await api.get(`/api/chats/${chatId}/posts`);
   return response;
 }
 
-export async function fetchCnannelPosts(channelId: string) {
-  const response = await api.get(`/api/chats/${channelId}/posts`);
+export async function fetchChatUsers(chatId: string) {
+  const response = await api.get(`/api/chats/${chatId}/users`);
+  return response;
+}
+
+export async function removeUserFromChat(chatId: string, userId: string) {
+  const response = await api.delete(`/api/chats/${chatId}/users/${userId}`);
   return response;
 }
 
