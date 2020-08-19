@@ -6,10 +6,12 @@
   flex-direction: column
   justify-content: center
   align-items: center
-  cursor: pointer
+  &:hover
+    cursor: pointer
 
 .item
   background-color: var(--workspace-toolbar-background)
+  padding: 0 !important
   &:hover
     transition: all .2s
     background-color: var(--workspace-toolbar-select-background)
@@ -23,6 +25,7 @@
 
 .selectedItem
   background-color: var(--workspace-toolbar-select-background)
+  padding: 0 !important
 
 .itemWithAvatar, .itemWithoutAvatar
   height: 50px
@@ -38,6 +41,8 @@
   font-weight: bolder
 
 .avatar, .selectedAvatar
+  width: 66px
+  max-height: 66px
   padding: 8px
   border-radius: 50%
 
@@ -52,7 +57,14 @@
 
 .itemName
   color: var(--workspace-toolbar-font-color-primary)
+  text-overflow: ellipsis
+  white-space: nowrap
+  overflow: hidden
+  width: 90px
 
 .selectedItemName
   color: var(--workspace-toolbar-font-color-secondary)
-
+  text-overflow: ellipsis
+  white-space: nowrap
+  overflow: hidden
+  width: 90px

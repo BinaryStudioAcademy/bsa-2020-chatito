@@ -32,7 +32,11 @@ const ModalWindow: React.FC<IProps> = ({
     show={isShown}
     onHide={onHide}
   >
-    {!hideCloseBtn && <FontAwesomeIcon onClick={onHide} icon={faTimes} className={styles.closeBtn} />}
+    {!hideCloseBtn && (
+      <button type="button" className={styles.closeContainer}>
+        <FontAwesomeIcon onClick={onHide} icon={faTimes} className={styles.closeBtn} />
+      </button>
+    )}
     <Modal.Body bsPrefix={modalBody}>
       {children}
     </Modal.Body>

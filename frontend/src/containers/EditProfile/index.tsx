@@ -9,6 +9,7 @@ import { IUser } from 'common/models/user/IUser';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { getUserImgLink } from 'common/helpers/imageHelper';
+import ModalWindow from 'components/ModalWindow';
 
 interface IProps {
   showModal: ({ modalType, show }: IModalRoutine) => void;
@@ -62,85 +63,81 @@ const EditProfile: FunctionComponent<IProps> = ({
         break;
     }
   };
-
-  return (
+  const modalChildren = (
     <>
-      <Modal show={isShown} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit your profile</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="d-flex flex-row">
-          <Form>
-            <Form.Group controlId="formEditFullName">
-              <Form.Label>Full name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Your full name"
-                value={fullName}
-                onChange={handleChange}
-              />
-            </Form.Group>
+      <header>Edit your profile</header>
+      <Form>
+        <Form.Group controlId="formEditFullName">
+          <Form.Label>Full name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Your full name"
+            value={fullName}
+            onChange={handleChange}
+          />
+        </Form.Group>
 
-            <Form.Group controlId="formEditDisplayName">
-              <Form.Label>Display name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Display name"
-                value={displayName}
-                onChange={handleChange}
-              />
-              <Form.Text className="text-muted small">
-                This could be your nickname — however you’d like people to refer
-                to you in Chatito.
-              </Form.Text>
-            </Form.Group>
+        <Form.Group controlId="formEditDisplayName">
+          <Form.Label>Display name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Display name"
+            value={displayName}
+            onChange={handleChange}
+          />
+          <Form.Text className="text-muted small">
+            This could be your nickname — however you’d like people to refer
+            to you in Chatito.
+          </Form.Text>
+        </Form.Group>
 
-            <Form.Group controlId="formEditTitle">
-              <Form.Label>Live position</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Live position"
-                value={title}
-                onChange={handleChange}
-              />
-              <Form.Text className="text-muted small">
-                Let people know what you do at this channel.
-              </Form.Text>
-            </Form.Group>
-          </Form>
-          <div
-            className={`d-flex flex-column align-items-center ${styles.imageEditBlock}`}
-          >
-            <span className={styles.imageLabel}>Profile photo</span>
-            <Image
-              className={styles.image}
-              height={150}
-              src={getUserImgLink(user.imageUrl as string)}
-              rounded
-            />
-            <Button variant="light" className={styles.imageEditButton}>
-              Upload an Image
-            </Button>
-            {user.imageUrl ? (
-              <Button variant="link" className={styles.imageEditButton}>
-                Remove photo
-              </Button>
-            ) : null}
-            <Button variant="light" className={styles.deleteAccountButton} onClick={handleDeleteAccount}>
-              Delete account
-            </Button>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
+        <Form.Group controlId="formEditTitle">
+          <Form.Label>Live position</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Live position"
+            value={title}
+            onChange={handleChange}
+          />
+          <Form.Text className="text-muted small">
+            Let people know what you do at this channel.
+          </Form.Text>
+        </Form.Group>
+      </Form>
+      <div
+        className={`d-flex flex-column align-items-center ${styles.imageEditBlock}`}
+      >
+        <span className={styles.imageLabel}>Profile photo</span>
+        <Image
+          className={styles.image}
+          height={150}
+          src={getUserImgLink(user.imageUrl as string)}
+          rounded
+        />
+        <Button variant="light" className={styles.imageEditButton}>
+          Upload an Image
+        </Button>
+        {user.imageUrl ? (
+          <Button variant="link" className={styles.imageEditButton}>
+            Remove photo
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        ) : null}
+        <Button variant="light" className={styles.deleteAccountButton} onClick={handleDeleteAccount}>
+          Delete account
+        </Button>
+      </div>
+      <Button variant="secondary" onClick={handleClose}>
+        Cancel
+      </Button>
+      <Button variant="primary" onClick={handleSubmit}>
+        Save Changes
+      </Button>
     </>
+  );
+  return (
+    <ModalWindow isShown={isShown} onHide={handleClose}>
+      {modalChildren}
+    </ModalWindow>
   );
 };
 
