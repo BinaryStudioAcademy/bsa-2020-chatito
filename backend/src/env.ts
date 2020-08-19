@@ -8,8 +8,11 @@ export const env = {
     port: getOsEnv('APP_SERVER_PORT'),
     secret: getOsEnv('SECRET_KEY'),
     sendgrid: getOsEnv('SENDGRID_API_KEY'),
-    mail: getOsEnv('SENDGRID_MAIL'),
     client: getOsEnv('APP_CLIENT_URL')
+  },
+  mail: {
+    mail: getOsEnv('NODEMAILER_MAIL'),
+    password: getOsEnv('NODEMAIL_PASS')
   },
   googleAuth: {
     clientId: getOsEnv('GOOGLE_AUTH_CLIENT_ID'),
