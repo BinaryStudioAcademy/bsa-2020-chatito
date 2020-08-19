@@ -22,8 +22,17 @@ export const getUserById = async (id: string) => {
   return fromUserToUserWithWorkspaces(user);
 };
 
-export const deleteUser = async (id: string): Promise<void> => {
+export const deleteUser = async (id: string): Promise<unknown> => {
+  const user = await getCustomRepository(UserRepository).getById(id);
+  if (user.workspacesCreated.length !== 0) {
+    throw new CustomError(
+      500,
+      'Cannot delete user with active workspace, created by this user.',
+      ErrorCode.UserHaveCreatedWorkspace
+    );
+  }
   await getCustomRepository(UserRepository).deleteUser(id);
+  return {};
 };
 
 export const editProfile = async (user: IUserClient) => {
