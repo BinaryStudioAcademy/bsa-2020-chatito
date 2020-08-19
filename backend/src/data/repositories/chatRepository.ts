@@ -23,6 +23,14 @@ class ChatRepository extends Repository<Chat> {
       where: { createdByUser: userId }
     });
   }
+
+  addUsersToChat(chatId: string, userIds: string[]) {
+    return this
+      .createQueryBuilder()
+      .relation(Chat, 'users')
+      .of(chatId)
+      .add(userIds);
+  }
 }
 
 export default ChatRepository;

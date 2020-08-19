@@ -4,8 +4,7 @@ import styles from './styles.module.sass';
 import ModalWindow from 'components/ModalWindow';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
-import { InputGroup, FormControl, Button, Popover, OverlayTrigger, Image } from 'react-bootstrap';
-import { showModalRoutine } from 'routines/modal';
+import { InputGroup, FormControl, Button, Popover, OverlayTrigger } from 'react-bootstrap';
 import { IAppState } from 'common/models/store';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { IUser } from 'common/models/user/IUser';
@@ -14,19 +13,22 @@ import { searchUsers } from 'common/helpers/searchHelper';
 import { addUsersToChatRoutine } from 'scenes/Chat/routines';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { IAddUsersToChat } from 'common/models/chat/IAddUsersToChat';
 
 interface IProps {
   isShown: boolean;
   users: IUser[];
   loading: boolean;
   chatName: string;
+  chatId: string;
   toggleModal: IBindingCallback1<IModalRoutine>;
-  addUsersToChat: () => void;
+  addUsersToChat: IBindingCallback1<IAddUsersToChat>;
 }
 
 let timer: NodeJS.Timeout;
 
-const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName, toggleModal, addUsersToChat }) => {
+const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
+  chatId, toggleModal, addUsersToChat }) => {
   const [text, setText] = useState('');
   const [searchedUsers, setSearchedUsers] = useState<IUser[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
@@ -64,7 +66,8 @@ const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName, 
   };
 
   const onAdd = () => {
-    addUsersToChat();
+    const userIds = selectedUsers.map(user => user.id);
+    addUsersToChat({ chatId, userIds });
     onHide();
   };
 
@@ -130,7 +133,6 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  toggleModal: showModalRoutine,
   addUsersToChat: addUsersToChatRoutine
 };
 

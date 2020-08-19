@@ -1,9 +1,10 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
-import { setCurrentChatRoutine, setPostsRoutine, addPostRoutine, createChatRoutine } from '../routines';
+import { setCurrentChatRoutine, setPostsRoutine, addPostRoutine, createChatRoutine,
+  addUsersToChatRoutine } from '../routines';
 import { Routine } from 'redux-saga-routines';
-import { fetchCnannelPosts, addPost, createChat } from 'services/chatServise';
+import { fetchCnannelPosts, addPost, createChat, addUsersToChat } from 'services/chatServise';
 import { IPost } from 'common/models/post/IPost';
-import { toastrError } from 'services/toastrService';
+import { toastrError, toastrSuccess } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
 
 function* fetchChannelsPostsRequest({ payload }: Routine<any>): Routine<any> {
@@ -65,12 +66,26 @@ function* watchCreateChatRequest() {
   yield takeEvery(createChatRoutine.TRIGGER, createChatRequest);
 }
 
+function* addUsersToChatRequest({ payload }: Routine<any>) {
+  try {
+    yield call(addUsersToChat, payload);
+    yield call(toastrSuccess, 'Users have been added successfully.');
+  } catch (error) {
+    yield call(toastrError, 'Adding users was failed. Please try again later.');
+  }
+}
+
+function* watchAddUsersToChat() {
+  yield takeEvery(addUsersToChatRoutine.TRIGGER, addUsersToChatRequest);
+}
+
 export default function* chatSaga() {
   yield all([
     watchPostsRequest(),
     watchCurrChat(),
     watchAddPostRequest(),
     watchCreateChatRequest(),
-    watchToggleCreateChatModal()
+    watchToggleCreateChatModal(),
+    watchAddUsersToChat()
   ]);
 }

@@ -80,7 +80,7 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
         </button>
         <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
 
-        <InviteChatModal chatName={chat.name} />
+        <InviteChatModal chatName={chat.name} chatId={chat.id} toggleModal={showModal} />
       </div>
     </div>
   );
