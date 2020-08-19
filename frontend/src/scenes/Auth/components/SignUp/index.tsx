@@ -51,45 +51,28 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspace, invit
         onSubmit={onSubmit}
       >
         <Form className="signUp-form d-flex flex-column justify-content-center align-items-center">
-          <div className={styles.inputContainer}>
-            <div className={styles.input}>
-              <InputField
-                label="Full Name"
-                name="fullName"
-                type="text"
-                placeholder="John Brown"
-              />
-            </div>
-          </div>
-          <div className={styles.inputContainer}>
-            <div className={styles.input}>
-              <InputField
-                label="Email"
-                name="email"
-                type="email"
-                placeholder="example@gmail.com"
-              />
-            </div>
-          </div>
-          <div className={styles.inputContainer}>
-            <div className={styles.input}>
-              <InputField
-                label="Password"
-                name="password"
-                type="password"
-              />
-            </div>
-          </div>
-          <div className={styles.inputContainer}>
-            <div className={styles.input}>
-              <InputField
-                label="Confirm Password"
-                name="confirmPassword"
-                type="password"
-              />
-            </div>
-          </div>
-
+          <InputField
+            label="Full Name"
+            name="fullName"
+            type="text"
+            placeholder="John Brown"
+          />
+          <InputField
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="example@gmail.com"
+          />
+          <InputField
+            label="Password"
+            name="password"
+            type="password"
+          />
+          <InputField
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+          />
           <div className={`${styles.formFooter} w-100`}>
             <Button className={styles.primaryBtn} type="submit" variant="primary">
               Sign Up

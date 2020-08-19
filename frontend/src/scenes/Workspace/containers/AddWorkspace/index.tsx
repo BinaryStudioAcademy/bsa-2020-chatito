@@ -38,14 +38,12 @@ const AddWorkspace: FunctionComponent<IProps> = ({ addWorkspace, activeWorkspace
             <Form
               className={`${styles.inpBlock} signIn-form d-flex flex-column justify-content-center align-items-center`}
             >
-              <div className={styles.inputContainer}>
-                <InputField
-                  label="Workspace name"
-                  name="workspaceName"
-                  type="workspaceName"
-                  placeholder="workspace"
-                />
-              </div>
+              <InputField
+                label="Workspace name"
+                name="workspaceName"
+                type="workspaceName"
+                placeholder="workspace"
+              />
               <div className={`${styles.formFooter} w-100`}>
                 <Link className={styles.backButtonWrapper} to={`/w/${activeWorkspace}`}>
                   <Button type="submit" variant="primary" className={styles.primaryBtnBack}>

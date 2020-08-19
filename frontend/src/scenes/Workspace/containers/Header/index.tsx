@@ -8,13 +8,12 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IUser } from 'common/models/user/IUser';
 import { IAppState } from 'common/models/store';
-import EditProfile from 'containers/EditProfile';
+import EditProfile from 'containers/EditProfileModal';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ReactComponent as Logo } from 'img/logo-icon.svg';
 import { Link } from 'react-router-dom';
-import { Routes } from 'common/enums/Routes';
 
 interface IProps {
   user?: IUser;
