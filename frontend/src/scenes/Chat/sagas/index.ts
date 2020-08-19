@@ -5,7 +5,8 @@ import {
   addPostRoutine,
   createChatRoutine,
   fetchChatUsersRoutine,
-  removeUserFromChatRoutine
+  removeUserFromChatRoutine,
+  addReminderRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import { fetchChatPosts, addPost, createChat, fetchChatUsers, removeUserFromChat } from 'services/chatService';
@@ -13,6 +14,7 @@ import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
 import { IUser } from 'common/models/user/IUser';
+import { addReminder } from 'services/reminderService';
 
 function* fetchChatPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
@@ -96,7 +98,22 @@ function* removeUserFromChatRequest({ payload }: Routine<any>) {
 }
 
 function* watchRemoveUserFromChat() {
-  yield takeEvery(removeUserFromChatRoutine.TRIGGER, removeUserFromChatRequest);
+  yield takeEvery(addReminderRoutine.TRIGGER, removeUserFromChatRequest);
+}
+
+function* createReminderRequest({ payload }: Routine<any>) {
+  try {
+    const chat = yield call(addReminder, payload);
+    yield put(addReminderRoutine.success(chat));
+    yield put(showModalRoutine({ modalType: payload.type, show: false }));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(addReminderRoutine.failure());
+  }
+}
+
+function* watchCreateReminderRequest() {
+  yield takeEvery(addReminderRoutine.TRIGGER, createReminderRequest);
 }
 
 export default function* chatSaga() {
@@ -107,6 +124,7 @@ export default function* chatSaga() {
     watchCreateChatRequest(),
     watchToggleCreateChatModal(),
     watchFetchChatUsersRequest(),
-    watchRemoveUserFromChat()
+    watchRemoveUserFromChat(),
+    watchCreateReminderRequest()
   ]);
 }

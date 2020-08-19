@@ -18,6 +18,7 @@ router
     const chat = await addChat(req.user.id, req.body);
     req.io.of('/chat').emit('joinChat', chat.id);
     return chat;
-  }));
+  }))
+  .post('/:id/reminders', run((req: Request) => addReminder({ chatId: req.params.id, body: req.body })));
 
 export default router;

@@ -17,6 +17,7 @@ import Auth from 'scenes/Auth/containers/Auth';
 import JoinInvitedWorkspace from 'containers/JoinInvitedWorkspace';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IFetchUser } from 'common/models/fetch/IFetchUser';
+import CustomReminderForm from 'containers/CustomReminderForm';
 
 interface IProps {
   isLoading: boolean;
@@ -51,7 +52,7 @@ const Routing: React.FC<IProps> = ({
         <PrivateRoute exact path={Routes.AddWorkspace} component={AddWorkspace} />
         <PrivateRoute path={Routes.Maintenance} component={Maintenance} />
         <Redirect exact from={Routes.BaseUrl} to={Routes.SignIn} />
-        <Route component={PageNotFound} />
+        <Route component={CustomReminderForm} />
       </Switch>
     </LoaderWrapper>
   );

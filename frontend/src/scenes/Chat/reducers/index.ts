@@ -6,7 +6,8 @@ import { setCurrentChatRoutine,
   addPostWithSocketRoutine,
   editPostWithSocketRoutine,
   fetchChatUsersRoutine,
-  removeUserFromChatRoutine } from '../routines';
+  removeUserFromChatRoutine,
+  addReminderRoutine } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 import { IUser } from 'common/models/user/IUser';
@@ -15,6 +16,7 @@ export interface IChatState {
   chat?: IChat;
   posts: IPost[];
   users?: IUser[];
+  reminders?: IReminder[];
   loading: boolean;
   error: any;
   hasMorePosts: boolean;
@@ -24,6 +26,7 @@ export interface IChatState {
 
 const initialState: IChatState = {
   posts: [],
+  reminders: [],
   loading: false,
   error: '',
   hasMorePosts: true,
@@ -131,6 +134,18 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state, chat: result, loading: false
       };
     case removeUserFromChatRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
+    case addReminderRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case addReminderRoutine.SUCCESS:
+      return {
+        ...state, reminders: { ...state.reminders, payload }, loading: false
+      };
+    case addReminderRoutine.FAILURE:
       return {
         ...state, loading: false
       };
