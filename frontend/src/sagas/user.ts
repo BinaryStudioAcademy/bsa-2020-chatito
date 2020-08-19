@@ -16,7 +16,7 @@ import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser, loginWithGoogle, loginWithFacebook } from 'services/authService';
-import { setTokens } from 'common/helpers/storageHelper';
+import { setTokens, clearStorage } from 'common/helpers/storageHelper';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
 import { toastrError, toastrSuccess } from 'services/toastrService';
 import { push } from 'connected-react-router';
@@ -24,19 +24,16 @@ import { IUserWithWorkspaces } from 'common/models/user/IUserWithWorkspaces';
 import { Routes } from 'common/enums/Routes';
 import { connectSockets } from 'services/socketService';
 
-function* fetchUserRequest({ payload }: Routine<any>) {
+function* fetchUserRequest() {
   try {
     const user: IUserWithWorkspaces = yield call(fetchUser);
 
     yield put(fetchUserRoutine.success(user));
 
-    if (payload.workspace.id) {
-      put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)));
-    }
-
     yield call(connectSockets);
   } catch (error) {
     yield call(toastrError, error.message);
+    yield call(clearStorage);
     yield put(fetchUserRoutine.failure(error.message));
   }
 }
@@ -51,13 +48,6 @@ function* loginUserRequest({ payload }: Routine<any>) {
     setTokens({ accessToken, refreshToken });
 
     yield put(loginUserRoutine.success(user));
-
-    // eslint-disable-next-line
-    yield payload.workspace.id // selected workspace exists (when login through invite link)
-      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
-      : (user && user.workspaces.length > 0)
-        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
-        : put(push(Routes.AddWorkspace));
 
     yield call(connectSockets);
   } catch (error) {
@@ -76,16 +66,6 @@ function* loginWithGoogleRequest({ payload }: Routine<any>) {
     setTokens({ accessToken, refreshToken });
 
     yield put(loginWithGoogleRoutine.success(user));
-
-    // eslint-disable-next-line
-    if (payload.workspace.id) {
-      put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)));
-    }
-    // yield payload.workspace.id // selected workspace exists (when login through invite link)
-    //   ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
-    //   : (user && user.workspaces.length > 0)
-    //     ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
-    //     : put(push(Routes.AddWorkspace));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(loginWithGoogleRoutine.failure(error.message));
@@ -103,12 +83,6 @@ function* loginWithFacebookRequest({ payload }: Routine<any>) {
 
     yield put(loginWithFacebookRoutine.success(user));
 
-    // eslint-disable-next-line
-    yield payload.workspace.id // selected workspace exists (when login through invite link)
-      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
-      : (user && user.workspaces.length > 0)
-        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
-        : put(push(Routes.AddWorkspace));
     yield call(connectSockets);
   } catch (error) {
     yield call(toastrError, error.message);
@@ -161,9 +135,6 @@ function* addNewUserRequest({ payload }: any): Routine<any> {
 
     yield put(addNewUserRoutine.success(user));
 
-    yield payload.workspace.id // selected workspace exists (when register through invite link)
-      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
-      : put(push(Routes.AddWorkspace));
     yield call(connectSockets);
   } catch (error) {
     yield call(toastrError, error.message);
