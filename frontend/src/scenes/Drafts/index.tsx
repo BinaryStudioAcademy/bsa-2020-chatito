@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import styles from './styles.module.sass';
 import { connect } from 'react-redux';
 import { IAppState } from 'common/models/store';
+import { fetchDraftsRoutine } from './routines';
+import DraftCard from './components/DraftCard';
 import { IDraftPost } from 'common/models/draft/IDraftPost';
 import { IDraftComment } from 'common/models/draft/IDraftComment';
-import { fetchDraftsRoutine } from './routines';
 
 interface IProps {
   posts: IDraftPost[];
@@ -13,9 +14,7 @@ interface IProps {
 }
 
 const createCards = (drafts: (IDraftComment | IDraftPost)[]) => drafts.map(d => (
-  <div className={styles.card} key={d.id}>
-    hello
-  </div>
+  <DraftCard draft={d} />
 ));
 
 const Drafts: React.FC<IProps> = ({ posts, comments, fetchDrafts }) => {

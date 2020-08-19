@@ -1,0 +1,26 @@
+.card
+  margin: 10px 0
+  background-color: var(--chat-background-secondary)
+  border-radius: 20px
+  padding: 30px
+  position: relative
+  box-sizing: border-box
+  border: 1px solid transparent
+
+  .buttons
+    position: absolute
+    display: none
+    top: 10px
+    right: 20px
+
+    .button
+      margin: 0 5px
+      cursor: pointer
+      opacity: 0.3
+
+      &:hover
+        opacity: 0.8
+  &:hover
+    border: 1px solid var(--user-detector-border)
+    .buttons
+      display: block
