@@ -16,7 +16,7 @@ import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { Routine } from 'redux-saga-routines';
 import { registration, login, fetchUser, loginWithGoogle, loginWithFacebook } from 'services/authService';
-import { setTokens } from 'common/helpers/storageHelper';
+import { setTokens, clearStorage } from 'common/helpers/storageHelper';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
 import { toastrError, toastrSuccess } from 'services/toastrService';
 import { push } from 'connected-react-router';
@@ -33,6 +33,7 @@ function* fetchUserRequest() {
     yield call(connectSockets);
   } catch (error) {
     yield call(toastrError, error.message);
+    yield call(clearStorage);
     yield put(fetchUserRoutine.failure(error.message));
   }
 }
