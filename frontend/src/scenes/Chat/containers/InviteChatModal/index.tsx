@@ -21,6 +21,7 @@ interface IProps {
   loading: boolean;
   chatName: string;
   chatId: string;
+  chatUsers: IUser[];
   toggleModal: IBindingCallback1<IModalRoutine>;
   addUsersToChat: IBindingCallback1<IAddUsersToChat>;
 }
@@ -28,16 +29,16 @@ interface IProps {
 let timer: NodeJS.Timeout;
 
 const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
-  chatId, toggleModal, addUsersToChat }) => {
+  chatId, toggleModal, addUsersToChat, chatUsers }) => {
   const [text, setText] = useState('');
   const [searchedUsers, setSearchedUsers] = useState<IUser[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
 
-  const searchUserHandler = () => {
+  const searchUserHandler = (str: string) => {
     clearTimeout(timer);
 
     timer = setTimeout(() => {
-      const result = searchUsers(text, users);
+      const result = searchUsers(str, users);
       setSearchedUsers(result);
     }, 200);
   };
@@ -45,7 +46,7 @@ const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setText(value);
-    searchUserHandler();
+    searchUserHandler(value);
   };
 
   const onHide = () => {
@@ -55,6 +56,9 @@ const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
   };
 
   const onSelectUser = (user: IUser) => {
+    if (chatUsers.find(chatUser => chatUser.id === user.id)) {
+      return;
+    }
     if (!selectedUsers.find(selUser => selUser.id === user.id)) {
       setSelectedUsers(state => [...state, user]);
     }
@@ -66,8 +70,10 @@ const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
   };
 
   const onAdd = () => {
-    const userIds = selectedUsers.map(user => user.id);
-    addUsersToChat({ chatId, userIds });
+    if (selectedUsers.length) {
+      const userIds = selectedUsers.map(user => user.id);
+      addUsersToChat({ chatId, userIds });
+    }
     onHide();
   };
 
@@ -76,17 +82,15 @@ const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
       <Popover.Content className={styles.content}>
         {searchedUsers.length
           ? searchedUsers.map(user => {
+            const isUserInChat = !!chatUsers.find(chatUser => chatUser.id === user.id);
             const statusCls = [styles.status, styles.online];
+            const btnCls = [isUserInChat ? styles.chatUser : '', styles.userItem, 'button-unstyled', 'noselect'];
             return (
-              <button
-                type="button"
-                key={user.id}
-                className={`${styles.userItem} button-unstyled noselect`}
-                onClick={() => onSelectUser(user)}
-              >
+              <button className={btnCls.join(' ')} onClick={() => onSelectUser(user)} type="button" key={user.id}>
                 <span className={styles.fullName}>{user.fullName}</span>
                 <i className={statusCls.join(' ')} />
                 <span className={styles.displayName}>{user.displayName}</span>
+                {isUserInChat && <span className={styles.additional}>Already in this channel</span>}
               </button>
             );
           })

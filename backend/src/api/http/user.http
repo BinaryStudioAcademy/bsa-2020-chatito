@@ -34,13 +34,3 @@ Content-Type: application/json
 {
     "token": "token"
 }
-###
-
-POST http://localhost:3001/api/chats/invite-users
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFlNjMwMDk1LWI3NjYtNDUwMy1hZDYyLWUzZGNlZjU3OTk4YiIsImlhdCI6MTU5NzgzMDg0OCwiZXhwIjoxNTk3OTE3MjQ4fQ.8XTaCQuKJOjn46k70KwVk6y3qHle4gkHbyS9UsEk42Q
-
-{
-  "chatId": "515fb400-2cd4-4097-acdf-77a732ade951",
-  "userIds": ["c299a2d5-fb10-44e9-adff-99081a026702", "b7d321c7-1546-4523-8e31-86d3d8314b36"]
-}
