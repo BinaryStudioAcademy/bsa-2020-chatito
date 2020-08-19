@@ -20,6 +20,7 @@ import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
 import { fetchWorkspaceUsersRoutine } from 'scenes/Workspace/routines';
+import ChatMembers from 'containers/ChatMembers';
 
 const privateChannelIcon = (
   <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
@@ -56,6 +57,10 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
     return null;
   }
 
+  const showChatMembers = () => {
+    showModal({ modalType: ModalTypes.ChatMembers, show: true });
+  };
+
   return (
     <div className={styles.chatContainer} key={chat.id}>
 
@@ -70,7 +75,13 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
       </div>
 
       <div className={styles.rightHeaderBlock}>
-        <div className={styles.memberAvatarBlock}>
+        <div
+          role="button"
+          className={styles.memberAvatarBlock}
+          onClick={showChatMembers}
+          onKeyDown={showChatMembers}
+          tabIndex={0}
+        >
           {userAvatars(chat.users)}
           <div className={styles.memberCounter}>{chat.users.length || 0}</div>
         </div>
@@ -82,6 +93,7 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
 
         <InviteChatModal chatName={chat.name} chatId={chat.id} toggleModal={showModal} chatUsers={chat.users} />
       </div>
+      <ChatMembers />
     </div>
   );
 };

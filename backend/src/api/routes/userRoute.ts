@@ -7,6 +7,7 @@ import {
   editProfile,
   editStatus,
   checkInvitedUserRegistered,
+  addWorkspaceToUser
 } from '../../services/userService';
 
 const router = Router();
@@ -17,6 +18,7 @@ router
   .delete('/', run((req: Request) => deleteUser(req.user.id)))
   .put('/', run((req: Request) => editProfile(req.body)))
   .put('/edit-status', run((req: Request) => editStatus({ id: req.body.id, status: req.body.status })))
-  .post('/invite', run((req: Request) => checkInvitedUserRegistered(req.body)));
-  
+  .post('/invite', run((req: Request) => checkInvitedUserRegistered(req.body)))
+  .post('/add-to-workspace', run((req: Request) => addWorkspaceToUser(req.user.id, req.body.workspaceId)));
+
 export default router;
