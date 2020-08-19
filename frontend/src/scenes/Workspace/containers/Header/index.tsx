@@ -8,19 +8,21 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IUser } from 'common/models/user/IUser';
 import { IAppState } from 'common/models/store';
-import EditProfile from 'containers/EditProfile';
+import EditProfile from 'containers/EditProfileModal';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ReactComponent as Logo } from 'img/logo-icon.svg';
+import { Link } from 'react-router-dom';
 
 interface IProps {
   user?: IUser;
   showModal: ({ modalType, show }: IModalRoutine) => void;
+  activeWorkspace: string;
 }
 
 // eslint-disable-next-line
-const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
+const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showModal }) => {
   const toggleButtonClick = () => {
     // @todo decide which button to trigger
   };
@@ -47,10 +49,10 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
 
   return (
     <header className={styles.headerContainer}>
-      <div className={styles.logoWrapper}>
+      <Link className={styles.logoWrapper} to={`/w/${activeWorkspace}`}>
         <Logo className={styles.logoImg} />
         <h1 className={styles.logoText}>Chatito</h1>
-      </div>
+      </Link>
 
       <div className={styles.rightAlignContainer}>
         <SearchInput
@@ -77,7 +79,10 @@ const Header: FunctionComponent<IProps> = ({ user, showModal }) => {
   );
 };
 
-const mapStateToProps = (state: IAppState) => ({ user: state.user.user });
+const mapStateToProps = (state: IAppState) => ({
+  user: state.user.user,
+  activeWorkspace: state.workspace.workspace.hash
+});
 
 const mapDispatchToProps = {
   showModal: showModalRoutine

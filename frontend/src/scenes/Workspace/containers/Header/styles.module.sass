@@ -1,3 +1,13 @@
+$colorText: var(--title-text)
+
+@mixin unSelectable
+  -webkit-touch-callout: none
+  -webkit-user-select: none
+  -khtml-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+
 .headerContainer
   width: 100%
   padding: 5px
@@ -5,11 +15,10 @@
   padding-right: 15px
   color: black
   height: 91px
+  min-height: 91px
   display: flex
   align-items: center
   justify-content: space-between
-
-  border-bottom: 1px solid black
 
 .rightAlignContainer
   display: flex
@@ -22,6 +31,7 @@
   display: flex
   align-items: center
   justify-content: space-between
+  margin-left: 20px
 
 .popUpWrapper
   position: relative
@@ -37,6 +47,13 @@
 
 .logoWrapper
   display: flex
+  @include unSelectable
+  &:hover
+    text-decoration: none
+    color: $colorText
+    cursor: pointer
+  &:visited
+    color: $colorText
 
 .logoImg
   height: 50px

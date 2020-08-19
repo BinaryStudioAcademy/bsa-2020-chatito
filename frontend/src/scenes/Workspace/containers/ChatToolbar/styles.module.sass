@@ -10,7 +10,11 @@ $coloractive: #CECCC0 // цвет активной строки
   background-color: $color
   overflow-y: auto
   min-width: 250px
-
+  
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+  &::-webkit-scrollbar
+    display: none;  /* Safari and Chrome */
 
 .channelSelect
   display: flex

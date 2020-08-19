@@ -23,7 +23,7 @@ const InputField = ({
 }: IProps) => {
   const [field, meta] = useField(props);
   return (
-    <div className="mb-4 w-100">
+    <div className={`${styles.inputContainer} w-100`}>
       <div className={styles.labelRow}>
         <label className={styles.inputLabel} htmlFor={label}>{label}</label>
         {link
