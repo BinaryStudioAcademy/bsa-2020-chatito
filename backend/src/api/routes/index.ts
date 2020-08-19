@@ -1,5 +1,5 @@
 import { Express } from 'express';
-import userRoute from './userRoute';
+import userRoute from './userRoutes';
 import authRoutes from './authRoutes';
 import workspaceRoutes from './workspaceRoutes';
 import postRoutes from './postRoutes';
