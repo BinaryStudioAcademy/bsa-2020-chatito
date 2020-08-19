@@ -106,16 +106,16 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
     <Media className={styles.postWrapper}>
       <ProfilePreview user={createdByUser} onSend={onSend} openProfile={openUserProfile} />
       <Media.Body bsPrefix={styles.body}>
-        <a href="/" className={styles.author}>{createdByUser.fullName}</a>
+        <button type="button" className={styles.author}>{createdByUser.fullName}</button>
         <br />
-        <a href="/" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</a>
+        <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
         {/* eslint-disable-next-line */}
         <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
         <div className={styles.emojiStats}>
           {type === PostType.Post && renderEmojis()}
         </div>
         <div className={styles.footer}>
-          { openThread && (
+          {openThread && (
             <Card.Link
               bsPrefix={styles.openThreadBtn}
               onClick={() => openThread(post)}
