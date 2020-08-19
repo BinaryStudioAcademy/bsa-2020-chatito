@@ -5,6 +5,10 @@ import { ICreateComment } from '../../common/models/comment/ICreateComment';
 
 @EntityRepository(Comment)
 class CommentRepository extends Repository<Comment> {
+  getById(id: string): Promise<Comment> {
+    return this.findOne({ where: { id }, relations: ['createdByUser'] });
+  }
+
   addComment(comment: ICreateComment): Promise<Comment> {
     const newComment = this.create(comment);
 

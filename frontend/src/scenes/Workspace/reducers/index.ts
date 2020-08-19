@@ -6,7 +6,8 @@ import {
   showRightSideMenuRoutine,
   showUserProfileRoutine,
   fetchUserChatsRoutine,
-  incUnreadCountRoutine } from '../routines';
+  incUnreadCountRoutine,
+  addActiveCommentWithSocketRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
@@ -39,7 +40,7 @@ const initialState: IWorkspaceState = {
   userProfile: { id: '', email: '', fullName: '', displayName: '' }
 };
 
-const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>) => {
+const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>): IWorkspaceState => {
   switch (type) {
     case selectWorkspaceRoutine.TRIGGER:
       return {
@@ -71,7 +72,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return {
         ...state,
         showRightSideMenu: RightMenuTypes.Thread,
-        activeThread: { post: payload }
+        activeThread: { ...state.activeThread, post: payload, comments: [] }
       };
     case showUserProfileRoutine.TRIGGER:
       return {
@@ -79,11 +80,15 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         showRightSideMenu: RightMenuTypes.Profile,
         userProfile: { ...payload }
       };
-    case fetchPostCommentsRoutine.SUCCESS:
-      return {
-        ...state,
-        activeThread: { ...state.activeThread, comments: payload }
-      };
+    case fetchPostCommentsRoutine.SUCCESS: {
+      if (state.activeThread) {
+        return {
+          ...state,
+          activeThread: { ...state.activeThread, comments: payload }
+        };
+      }
+      return { ...state };
+    }
     case incUnreadCountRoutine.TRIGGER: {
       const { chatId } = payload;
       const channels = [...state.channels].map(channel => (
@@ -109,6 +114,15 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         const directMessages = [...state.directMessages];
         directMessages.push(newChat);
         return { ...state, directMessages };
+      }
+      return state;
+    }
+    case addActiveCommentWithSocketRoutine.TRIGGER: {
+      const thread = state.activeThread;
+      if (thread) {
+        const comments = [...thread.comments];
+        comments.push(payload);
+        return { ...state, activeThread: { ...thread, comments } };
       }
       return state;
     }
