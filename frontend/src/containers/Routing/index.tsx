@@ -14,7 +14,6 @@ import Maintenance from 'containers/Maintenance';
 import Workspace from 'scenes/Workspace/containers/Workspace';
 import Auth from 'scenes/Auth/containers/Auth';
 import JoinInvitedWorkspace from 'containers/JoinInvitedWorkspace';
-import CustomReminderForm from 'containers/CustomReminderForm';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 
 interface IProps {
@@ -45,7 +44,7 @@ const Routing: React.FC<IProps> = ({
         <PrivateRoute exact path={Routes.AddWorkspace} component={AddWorkspace} />
         <PrivateRoute path={Routes.Maintenance} component={Maintenance} />
         <Redirect exact from={Routes.BaseUrl} to={Routes.SignIn} />
-        <Route component={CustomReminderForm} />
+        <Route component={PageNotFound} />
       </Switch>
     </LoaderWrapper>
   );
