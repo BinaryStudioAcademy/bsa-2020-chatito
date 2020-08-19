@@ -8,18 +8,16 @@ import { setCurrentChatRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
   upsertDraftPostRoutine,
-  addPostRoutine
+  deleteDraftPostRoutine
 } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 import { IUser } from 'common/models/user/IUser';
-import { IDraftPost } from 'common/models/draft/IDraftPost';
 
 export interface IChatState {
   chat?: IChat;
   posts: IPost[];
   users?: IUser[];
-  draftPost: IDraftPost;
   loading: boolean;
   error: any;
   hasMorePosts: boolean;
@@ -29,9 +27,6 @@ export interface IChatState {
 
 const initialState: IChatState = {
   posts: [],
-  draftPost: {
-    text: ''
-  },
   loading: false,
   error: '',
   hasMorePosts: true,
@@ -64,16 +59,28 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     case setPostsRoutine.SUCCESS:
       return {
         ...state,
-        posts: [...payload.posts, ...(state.posts || [])],
+        posts: [...payload, ...(state.posts || [])],
         loading: false,
-        hasMorePosts: Boolean(payload.posts.length),
-        fetchFrom: state.fetchFrom + state.fetchCount,
-        draftPost: payload.draftPost ? payload.draftPost : { text: '' }
+        hasMorePosts: Boolean(payload.length),
+        fetchFrom: state.fetchFrom + state.fetchCount
       };
     case upsertDraftPostRoutine.SUCCESS:
       return {
         ...state,
-        draftPost: payload
+        chat: {
+          ...state.chat,
+          draftPosts: [
+            payload
+          ]
+        }
+      };
+    case deleteDraftPostRoutine.SUCCESS:
+      return {
+        ...state,
+        chat: {
+          ...state.chat,
+          draftPosts: []
+        }
       };
     case createChatRoutine.TRIGGER:
       return {
@@ -106,13 +113,6 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
           }
           return post;
         })
-      };
-    case addPostRoutine.SUCCESS:
-      return {
-        ...state,
-        draftPost: {
-          text: ''
-        }
       };
     case addPostWithSocketRoutine.TRIGGER: {
       const posts = [...state.posts];

@@ -32,16 +32,15 @@ interface IProps {
 const ChatHeader: React.FC<IProps> = ({ chat, showModal }) => {
   const maxAvatarsDisplayed = 5;
   const userAvatars = (users: IUser[]) => {
-    const initVal: string[] = [];
-    users.reduce((prevValue, currUser, currIndex) => {
-      if (currIndex >= maxAvatarsDisplayed) {
-        return prevValue;
-      }
-      prevValue.push(currUser.imageUrl || userLogoDefaultUrl);
-      return prevValue;
-    }, initVal);
-
-    return initVal.map(url => (<Image src={url} key={url} rounded className={styles.memberAvatarIcon} />));
+    const usersToDisplay = users.slice(0, maxAvatarsDisplayed);
+    return usersToDisplay.map(user => (
+      <Image
+        src={user.imageUrl || userLogoDefaultUrl}
+        key={user.id}
+        rounded
+        className={styles.memberAvatarIcon}
+      />
+    ));
   };
 
   if (!chat) {

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import debounce from 'debounce';
 import { env } from 'env';
@@ -8,14 +8,17 @@ import { IDraftPost } from 'common/models/draft/IDraftPost';
 import { IUpsertDraftPost } from 'common/models/draft/IUpsertDraftPost';
 import { IUpsertDraftComment } from 'common/models/draft/IUpsertDraftComment';
 import { IDraftComment } from 'common/models/draft/IDraftComment';
+import { IDeleteDraftPost } from 'common/models/draft/IDeleteDraftPost';
+import { IDeleteDraftComment } from 'common/models/draft/IDeleteDraftComment';
 
 interface IProps {
   placeholder: string;
   height: number | string | 'auto';
-  draftPayload: any; // set types chatId or postId
+  draftPayload: IDeleteDraftPost | IDeleteDraftComment | any; // TODO: remove any, fix types
   draftInput: IDraftPost | IDraftComment;
   onSend: (text: string) => void;
-  upsertDraft: IBindingCallback1<IUpsertDraftPost> | IBindingCallback1<IUpsertDraftComment>;
+  upsertDraft: IBindingCallback1<IUpsertDraftPost | IUpsertDraftComment | any>;
+  deleteDraft: IBindingCallback1<IDeleteDraftPost | IDeleteDraftComment | any>;
 }
 
 const TextEditor: FunctionComponent<IProps> = ({
@@ -24,7 +27,8 @@ const TextEditor: FunctionComponent<IProps> = ({
   draftPayload,
   draftInput,
   onSend,
-  upsertDraft
+  upsertDraft,
+  deleteDraft
 }) => {
   const onSendMessage = (editor: any) => {
     const content = editor.getContent();
@@ -35,12 +39,18 @@ const TextEditor: FunctionComponent<IProps> = ({
   };
 
   const onInputChange = (editor: any) => {
-    const payload = {
-      ...draftPayload,
-      id: draftInput.id,
-      text: editor.getContent({ format: 'text' })
-    };
-    upsertDraft(payload);
+    const inputText = editor.getContent();
+
+    if (!inputText) {
+      deleteDraft(draftPayload);
+    } else {
+      const payload = {
+        ...draftPayload,
+        id: draftInput.id ? draftInput.id : undefined,
+        text: inputText
+      };
+      upsertDraft(payload);
+    }
   };
 
   return (
@@ -70,13 +80,11 @@ const TextEditor: FunctionComponent<IProps> = ({
             });
 
             editor.on('init', () => {
-              editor.setContent(draftInput.text);
+              editor.setContent(draftInput.text ? draftInput.text : '');
             });
 
-            editor.on('keyup change', debounce((event: KeyboardEvent) => {
+            editor.on('keyup', debounce((event: KeyboardEvent) => {
               if (event.keyCode !== 13) {
-                console.log(event.keyCode);
-
                 onInputChange(editor);
               }
             }, 1000));
