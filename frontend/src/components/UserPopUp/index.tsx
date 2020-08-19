@@ -39,21 +39,21 @@ const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditPr
 
   const popOver = (
     <Popover id={id} className={styles.panepPopUp}>
-      <a href="#0" className={styles.panelSelect}>
+      <button type="button" className={styles.panelSelect}>
         Preferenses
-      </a>
-      <a href="#0" className={styles.panelSelect} onClick={onEditProfileClick}>
+      </button>
+      <button type="button" className={styles.panelSelect} onClick={onEditProfileClick}>
         View Profile
-      </a>
-      <a href="#0" className={styles.panelSelect} onClick={showInvitePopup}>
+      </button>
+      <button type="button" className={styles.panelSelect} onClick={showInvitePopup}>
         Invite People
-      </a>
-      <a href="#0" className={styles.panelSelect} onClick={onAddWorkspaceClick}>
+      </button>
+      <button type="button" className={styles.panelSelect} onClick={onAddWorkspaceClick}>
         Add workspace
-      </a>
-      <a href="#0" className={styles.panelSelect} onClick={onSingOut}>
+      </button>
+      <button type="button" className={styles.panelSelect} onClick={onSingOut}>
         Sign Out
-      </a>
+      </button>
     </Popover>
   );
 
