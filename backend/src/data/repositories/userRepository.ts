@@ -22,7 +22,7 @@ class UserRepository extends Repository<User> {
   }
 
   getById(id: string): Promise<User> {
-    return this.findOne({ where: { id }, relations: ['workspaces', 'chats'] });
+    return this.findOne({ where: { id }, relations: ['workspaces', 'workspacesCreated', 'chats'] });
   }
 
   async getAllUserChats(id: string): Promise<Chat[]> {
