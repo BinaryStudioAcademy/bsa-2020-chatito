@@ -15,20 +15,12 @@ import { ChatType } from '../common/enums/ChatType';
 import { fromPostToPostClient } from '../common/mappers/post';
 import { IUser } from '../common/models/user/IUser';
 import { IGetChatPosts } from '../common/models/chat/IGetChatPosts';
-import DraftPostRepository from '../data/repositories/draftPostRepository';
-import { fromDraftPostToDraftPostClient } from '../common/mappers/draft';
 
-export const getAllChatPosts = async (userId: string, filter: IGetChatPosts) => {
+export const getAllChatPosts = async (filter: IGetChatPosts) => {
   const chatPosts: IPost[] = await getCustomRepository(PostRepository).getAllChatPosts(filter);
   const mappedChatPosts = await Promise.all(chatPosts.map(async post => fromPostToPostClient(post)));
 
-  const draftPost = await getCustomRepository(DraftPostRepository).getDraftPost(userId, filter.chatId);
-  const mappedDraftPost = draftPost ? fromDraftPostToDraftPostClient(draftPost) : null;
-
-  return {
-    posts: mappedChatPosts,
-    draftPost: mappedDraftPost
-  };
+  return mappedChatPosts;
 };
 
 export const getAllChatUsers = async (chatId: string) => {
@@ -38,8 +30,10 @@ export const getAllChatUsers = async (chatId: string) => {
 
 export const getAllUserChats = async (userId: string) => {
   const chats: IChat[] = await getCustomRepository(ChatRepository).getAllByUser(userId);
+
   const directs = chats.filter(({ type }) => type === ChatType.DirectMessage);
   const channels = chats.filter(({ type }) => type === ChatType.Channel);
+
   return { directs, channels };
 };
 

@@ -3,3 +3,9 @@ Content-Type: application/json
 Authorization: Bearer <insert token here>
 
 ###
+
+GET http://localhost:3001/api/chats/
+Content-Type: application/json
+Authorization: Bearer <insert token here>
+
+###
