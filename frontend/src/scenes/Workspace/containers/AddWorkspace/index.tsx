@@ -8,14 +8,16 @@ import { ReactComponent as Logo } from 'img/logo.svg';
 import { Formik, Form } from 'formik';
 import { Button } from 'react-bootstrap';
 import { createWorkspaceValSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
+import { Link } from 'react-router-dom';
+import { IAppState } from 'common/models/store';
 
 type IFetchWorkspace<T, S> = (name: T) => S;
 
 interface IProps {
   addWorkspace: IFetchWorkspace<string, void>;
+  activeWorkspace: string;
 }
-
-const AddWorkspace: FunctionComponent<IProps> = ({ addWorkspace }) => {
+const AddWorkspace: FunctionComponent<IProps> = ({ addWorkspace, activeWorkspace }) => {
   const onSubmit = (values: IInitialValues): void => {
     addWorkspace(values.workspaceName);
   };
@@ -36,15 +38,18 @@ const AddWorkspace: FunctionComponent<IProps> = ({ addWorkspace }) => {
             <Form
               className={`${styles.inpBlock} signIn-form d-flex flex-column justify-content-center align-items-center`}
             >
-              <div className={styles.inputContainer}>
-                <InputField
-                  label="Workspace name"
-                  name="workspaceName"
-                  type="workspaceName"
-                  placeholder="workspace"
-                />
-              </div>
+              <InputField
+                label="Workspace name"
+                name="workspaceName"
+                type="workspaceName"
+                placeholder="workspace"
+              />
               <div className={`${styles.formFooter} w-100`}>
+                <Link className={styles.backButtonWrapper} to={`/w/${activeWorkspace}`}>
+                  <Button type="submit" variant="primary" className={styles.primaryBtnBack}>
+                    Back
+                  </Button>
+                </Link>
                 <Button type="submit" variant="primary" className={styles.primaryBtn}>
                   Next
                 </Button>
@@ -61,8 +66,12 @@ const AddWorkspace: FunctionComponent<IProps> = ({ addWorkspace }) => {
   );
 };
 
+const mapStateToProps = (state: IAppState) => ({
+  activeWorkspace: state.workspace.workspace.hash
+});
+
 const mapDispatchToProps = {
   addWorkspace: addWorkspaceRoutine
 };
 
-export default connect(null, mapDispatchToProps)(AddWorkspace);
+export default connect(mapStateToProps, mapDispatchToProps)(AddWorkspace);
