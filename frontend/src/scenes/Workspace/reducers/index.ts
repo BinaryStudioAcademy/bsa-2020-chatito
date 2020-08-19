@@ -8,7 +8,8 @@ import {
   fetchWorkspaceChatsRoutine,
   incUnreadCountRoutine,
   fetchWorkspaceUsersRoutine,
-  addActiveCommentWithSocketRoutine } from '../routines';
+  addActiveCommentWithSocketRoutine,
+  updateChatDraftPostRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
@@ -16,6 +17,7 @@ import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { IUser } from 'common/models/user/IUser';
 import { addChatWithSocketRoutine } from 'scenes/Chat/routines';
 import { ChatType } from 'common/enums/ChatType';
+import { upsertDraftCommentRoutine, deleteDraftCommentRoutine } from 'containers/Thread/routines';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
@@ -74,6 +76,51 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state,
         showRightSideMenu: RightMenuTypes.Thread,
         activeThread: { ...state.activeThread, post: payload, comments: [] }
+      };
+    case upsertDraftCommentRoutine.SUCCESS:
+      return {
+        ...state,
+        activeThread: {
+          ...state.activeThread,
+          post: {
+            ...state.activeThread?.post,
+            draftComments: [
+              payload
+            ]
+          }
+        }
+      };
+    case deleteDraftCommentRoutine.SUCCESS:
+      return {
+        ...state,
+        activeThread: {
+          ...state.activeThread,
+          post: {
+            ...state.activeThread?.post,
+            draftComments: []
+          }
+        }
+      };
+    case updateChatDraftPostRoutine.TRIGGER:
+      const { chatId: updateChatId, id, text } = payload;
+      const draftPosts = id ? [{ id, text }] : [];
+
+      const updatedChannels = state.channels.map(channel => (
+        channel.id === updateChatId
+          ? { ...channel, draftPosts }
+          : channel
+      ));
+
+      const updatedDirectMessages = state.directMessages.map(directMessage => (
+        directMessage.id === updateChatId
+          ? { ...directMessage, draftPosts }
+          : directMessage
+      ));
+
+      return {
+        ...state,
+        channels: updatedChannels,
+        directMessages: updatedDirectMessages
       };
     case showUserProfileRoutine.TRIGGER:
       return {

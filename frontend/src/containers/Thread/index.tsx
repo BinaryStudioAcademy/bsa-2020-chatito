@@ -9,11 +9,13 @@ import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ICreateComment } from 'common/models/post/ICreateComment';
-import { addCommentRoutine } from './routines';
+import { addCommentRoutine, upsertDraftCommentRoutine, deleteDraftCommentRoutine } from './routines';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
 import { PostType } from 'common/enums/PostType';
+import { IUpsertDraftComment } from 'common/models/draft/IUpsertDraftComment';
+import { IDeleteDraftComment } from 'common/models/draft/IDeleteDraftComment';
 import { IAppState } from 'common/models/store';
 
 interface IProps {
@@ -27,6 +29,10 @@ interface IProps {
   hideCloseBtn?: boolean;
   currChatHash: string;
   router: (route: string) => void;
+  draftCommentId?: string;
+  draftCommentText?: string;
+  upsertDraftComment: IBindingCallback1<IUpsertDraftComment>;
+  deleteDraftComment: IBindingCallback1<IDeleteDraftComment>;
 }
 
 const Thread: FunctionComponent<IProps> = ({
@@ -38,7 +44,11 @@ const Thread: FunctionComponent<IProps> = ({
   onHide,
   hideCloseBtn,
   currChatHash,
-  router
+  router,
+  draftCommentId,
+  draftCommentText,
+  upsertDraftComment,
+  deleteDraftComment
 }) => {
   const { whash } = useParams();
   const [showAll, setShowAll] = useState(false);
@@ -107,19 +117,39 @@ const Thread: FunctionComponent<IProps> = ({
           </div>
         ) : ('')}
       <div className={styles.textEditor}>
-        {/* <TextEditor placeholder="write a comment!" onSend={sendCommentHandler} height={130} /> */}
+        <TextEditor
+          key={draftCommentId}
+          placeholder="write a comment!"
+          height={130}
+          draftPayload={{ postId: post.id }}
+          draftInput={{
+            id: draftCommentId,
+            text: draftCommentText
+          }}
+          upsertDraft={upsertDraftComment}
+          deleteDraft={deleteDraftComment}
+          onSend={sendCommentHandler}
+        />
       </div>
     </div>
   );
 };
 
-const mapStateToProps = (state: IAppState) => ({
-  // eslint-disable-next-line
-  currChatHash: state.chat.chat!.hash
-});
+const mapStateToProps = (state: IAppState) => {
+  const draftComments = state.workspace.activeThread?.post.draftComments;
+
+  return {
+    // eslint-disable-next-line
+    currChatHash: state.chat.chat!.hash,
+    draftCommentId: draftComments?.length ? draftComments[0].id : undefined,
+    draftCommentText: draftComments?.length ? draftComments[0].text : undefined
+  };
+};
 
 const mapDispatchToProps = {
   sendComment: addCommentRoutine,
+  upsertDraftComment: upsertDraftCommentRoutine,
+  deleteDraftComment: deleteDraftCommentRoutine,
   router: push
 };
 

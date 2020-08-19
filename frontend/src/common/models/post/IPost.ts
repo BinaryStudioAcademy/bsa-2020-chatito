@@ -1,6 +1,7 @@
 import { IUser } from '../user/IUser';
 import { IPostReaction } from '../postReaction/IPostReaction';
 import { ICommentsInfo } from './ICommentsInfo';
+import { IDraftComment } from '../draft/IDraftComment';
 
 export interface IPost {
   createdByUser: IUser;
@@ -14,4 +15,5 @@ export interface IPost {
     name: string;
     hash?: string;
   }
+  draftComments?: IDraftComment[];
 }

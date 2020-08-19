@@ -25,7 +25,7 @@ import { toastrError, toastrSuccess } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
 import { IUser } from 'common/models/user/IUser';
 import { upsertDraftPost, deleteDraftPost } from 'services/draftService';
-import { fetchUserChatsRoutine } from 'scenes/Workspace/routines';
+import { updateChatDraftPostRoutine } from 'scenes/Workspace/routines';
 
 function* fetchChatPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
@@ -42,9 +42,8 @@ function* watchPostsRequest() {
 
 function* upsertDraftPostRequest({ payload }: Routine<any>) {
   try {
-    console.log('upsert payload', payload);
-
     const response = yield call(upsertDraftPost, payload);
+    yield put(updateChatDraftPostRoutine.trigger(payload));
 
     yield put(upsertDraftPostRoutine.success(response));
   } catch (error) {
@@ -58,9 +57,8 @@ function* watchUpsertDraftPostRequest() {
 
 function* deleteDraftPostRequest({ payload }: Routine<any>) {
   try {
-    console.log('delete triggered saga');
-
     yield call(deleteDraftPost, payload);
+    yield put(updateChatDraftPostRoutine.trigger(payload));
 
     yield put(deleteDraftPostRoutine.success());
   } catch (error) {
@@ -87,12 +85,6 @@ function* watchAddPostRequest() {
 }
 
 function* setCurrChat({ payload }: Routine<any>): Routine<any> {
-  // TODO: rewrite to load additional indo for current chat (like users[])
-
-  // trigger chats fetch to see draft chats
-  const { channels, directMessages } = yield call(fetchUserChats);
-  yield put(fetchUserChatsRoutine.success({ channels, directMessages }));
-
   yield put(setCurrentChatRoutine.success(payload));
 }
 
