@@ -1,6 +1,16 @@
+import { getCustomRepository } from 'typeorm';
 import { IReminder } from '../common/models/reminder/IReminder';
+import ReminderRepository from '../data/repositories/reminderRepository';
+import { ICreateReminder } from '../common/models/reminder/ICreateReminder';
+import ChatRepository from '../data/repositories/chatRepository';
+import UserRepository from '../data/repositories/userRepository';
+import { ICreateReminderData } from '../common/models/reminder/ICreateReminderData';
 
-export const addReminder = async (chatId: string, body: IReminder) => {
-  const reminder: IReminder = await getCustomRepository(ReminderRepository).addReminder(body);
+export const addReminder = async ({ chatId, userId, body }: ICreateReminderData) => {
+  const { day, time, note } = body;
+  const chat = await getCustomRepository(ChatRepository).getById(chatId);
+  const user = await getCustomRepository(UserRepository).getById(userId);
+  const createdReminder: ICreateReminder = { chat, createdByUser: user, day, time, note };
+  const reminder: IReminder = await getCustomRepository(ReminderRepository).addReminder(createdReminder);
   return reminder;
-}
+};

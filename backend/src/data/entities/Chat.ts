@@ -4,6 +4,7 @@ import { Post } from './Post';
 import { User } from './User';
 import { Workspace } from './Workspace';
 import { ChatType } from '../../common/enums/ChatType';
+import { Reminder } from './Reminder';
 
 @Entity()
 export class Chat extends AbstractEntity {
@@ -21,6 +22,9 @@ export class Chat extends AbstractEntity {
 
   @OneToMany(() => Post, post => post.chat)
   posts: Post[];
+
+  @OneToMany(() => Reminder, reminder => reminder.chat)
+  reminders: Reminder[];
 
   @ManyToOne(() => User, user => user.chatsCreated)
   @JoinColumn({ name: 'createdByUserId' })

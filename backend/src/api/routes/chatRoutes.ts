@@ -6,6 +6,7 @@ import {
   getAllUserChats,
   getAllChatUsers,
   removeUserFromChat } from '../../services/chatService';
+import { addReminder } from '../../services/reminderService';
 
 const router = Router();
 
@@ -19,6 +20,12 @@ router
     req.io.of('/chat').emit('joinChat', chat.id);
     return chat;
   }))
-  .post('/:id/reminders', run((req: Request) => addReminder({ chatId: req.params.id, body: req.body })));
+  .post('/:id/reminders', run((req: Request) => addReminder(
+    {
+      chatId: req.params.id,
+      userId: req.user.id,
+      body: req.body
+    }
+  )));
 
 export default router;
