@@ -6,7 +6,10 @@ import { setCurrentChatRoutine,
   addPostWithSocketRoutine,
   editPostWithSocketRoutine,
   fetchChatUsersRoutine,
-  removeUserFromChatRoutine } from '../routines';
+  removeUserFromChatRoutine,
+  upsertDraftPostRoutine,
+  deleteDraftPostRoutine
+} from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 import { IUser } from 'common/models/user/IUser';
@@ -60,6 +63,24 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         loading: false,
         hasMorePosts: Boolean(payload.length),
         fetchFrom: state.fetchFrom + state.fetchCount
+      };
+    case upsertDraftPostRoutine.SUCCESS:
+      return {
+        ...state,
+        chat: {
+          ...state.chat,
+          draftPosts: [
+            payload
+          ]
+        }
+      };
+    case deleteDraftPostRoutine.SUCCESS:
+      return {
+        ...state,
+        chat: {
+          ...state.chat,
+          draftPosts: []
+        }
       };
     case createChatRoutine.TRIGGER:
       return {

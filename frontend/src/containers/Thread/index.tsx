@@ -92,7 +92,7 @@ const Thread: FunctionComponent<IProps> = ({
           </div>
         ) : ('')}
       <div className={styles.textEditor}>
-        <TextEditor placeholder="write a comment!" onSend={sendCommentHandler} height={130} />
+        {/* <TextEditor placeholder="write a comment!" onSend={sendCommentHandler} height={130} /> */}
       </div>
     </div>
   );

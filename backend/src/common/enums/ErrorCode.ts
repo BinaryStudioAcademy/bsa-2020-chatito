@@ -4,5 +4,7 @@ export enum ErrorCode {
   UserExistsInWorkspace,
   InvalidAccessToken,
   InvalidRefreshToken,
-  WorkspaceAlreadyExists
+  WorkspaceAlreadyExists,
+  DraftPostExists,
+  DraftCommentExists
 }
