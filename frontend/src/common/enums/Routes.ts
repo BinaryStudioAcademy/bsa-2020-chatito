@@ -7,12 +7,14 @@ export enum Routes {
   ResetPassword = '/auth/reset/:token',
   Profile = '/profile',
   Workspace = '/w/:whash',
-  WorkspaceWithChat = '/w/:whash/c/:chash',
+  Chat = '/w/:whash/c/:chash',
+  Threads = '/w/:hash/threads',
+  Drafts = '/w/:hash/drafts',
   AddWorkspace = '/add-workspace',
   JoinInvitedWorkspace = '/invite/:token',
   Room = '/room',
   Channel = '/channel/:name',
   Direct = '/direct',
-  NotExistingPath = '*',
+  NotExistingPath = '/not-found',
   Maintenance='/maintenance'
 }

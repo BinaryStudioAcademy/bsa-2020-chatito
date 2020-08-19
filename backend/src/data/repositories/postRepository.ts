@@ -1,6 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Post } from '../entities/Post';
 import { ICreatePost } from '../../common/models/post/ICreatePost';
+import { IGetChatPosts } from '../../common/models/chat/IGetChatPosts';
 
 @EntityRepository(Post)
 class PostRepository extends Repository<Post> {
@@ -12,12 +13,19 @@ class PostRepository extends Repository<Post> {
     return this.findOne(id);
   }
 
-  async getAllChatPosts(chatId: string): Promise<Post[]> {
-    return this.find({
-      relations: ['createdByUser'],
-      where: { chat: chatId },
-      order: { createdAt: 'ASC' }
+  async getAllChatPosts({
+    chatId: chat,
+    from: skip = undefined,
+    count: take = undefined
+  }: IGetChatPosts): Promise<Post[]> {
+    const posts = await this.find({
+      relations: ['createdByUser', 'postReactions'],
+      where: { chat },
+      order: { createdAt: 'DESC' },
+      skip,
+      take
     });
+    return posts.reverse();
   }
 
   addPost(post: ICreatePost): Promise<Post> {
@@ -35,8 +43,8 @@ class PostRepository extends Repository<Post> {
     return editedPost;
   }
 
-  getPostsByUserId(activeworkspaceid: string, id: string) {
-    const posts = this.createQueryBuilder('post')
+  async getPostsByUserId(activeworkspaceid: string, id: string) {
+    const posts = await this.createQueryBuilder('post')
       .select([
         'post.createdByUser',
         'post.text',
@@ -61,10 +69,12 @@ class PostRepository extends Repository<Post> {
         'user.status'
       ])
 
+      .leftJoinAndSelect('post.postReactions', 'reactions')
+
       .leftJoin('post.comments', 'comments')
       .addSelect([
         'comments.id',
-        'comments.\"createdByUserId\"',
+        'comments."createdByUserId"',
         'comments.text',
         'comments.createdAt'
       ])
@@ -77,19 +87,19 @@ class PostRepository extends Repository<Post> {
         'commentuser.displayName',
         'commentuser.imageUrl',
         'commentuser.title',
-        'commentuser.status',
+        'commentuser.status'
       ])
 
       .leftJoin('comments.post', 'commentsPost')
 
       .leftJoin('commentsPost.chat', 'commentsPostChat')
-      .where('post.\"createdByUserId\" = :id', { id })
-      .andWhere('chat.\"workspaceId\" = :activeworkspaceid', { activeworkspaceid })
-      .orWhere('comments.\"createdByUserId\" = :id', { id } )
-      .andWhere('\"commentsPostChat\".\"workspaceId\" = :activeworkspaceid', { activeworkspaceid })
-      .orderBy('comments.\"createdAt\"', 'ASC')
+      .where('post."createdByUserId" = :id', { id })
+      .andWhere('chat."workspaceId" = :activeworkspaceid', { activeworkspaceid })
+      .orWhere('comments."createdByUserId" = :id', { id })
+      .andWhere('"commentsPostChat"."workspaceId" = :activeworkspaceid', { activeworkspaceid })
+      .orderBy('comments."createdAt"', 'ASC')
       .getMany();
-    return posts
+    return posts;
   }
 }
 

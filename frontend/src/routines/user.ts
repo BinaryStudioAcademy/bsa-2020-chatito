@@ -6,6 +6,7 @@ export const editProfileRoutine = createRoutine('EDIT_PROFILE');
 export const deleteAccountRoutine = createRoutine('DELETE_ACCOUNT');
 export const loginUserRoutine = createRoutine('LOGIN_USER');
 export const loginWithGoogleRoutine = createRoutine('LOGIN_WITH_GOOGLE');
+export const loginWithFacebookRoutine = createRoutine('LOGIN_WITH_FACEBOOK');
 export const forgotPasswordRoutine = createRoutine('FORGOT_PASSWORD');
 export const resetPasswordRoutine = createRoutine('RESET_PASSWORD');
 export const editStatusRoutine = createRoutine('EDIT_STATUS');

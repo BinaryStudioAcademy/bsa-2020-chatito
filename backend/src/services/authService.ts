@@ -9,7 +9,8 @@ import { ILoginUser } from '../common/models/user/ILoginUser';
 import {
   fromRegisterUserToCreateUser,
   fromUserToUserWithWorkspaces,
-  fromGoogleUserToCreateUser
+  fromGoogleUserToCreateUser,
+  fromFacebookUserToCreateUser
 } from '../common/mappers/user';
 import { createToken } from '../common/utils/tokenHelper';
 import { IRefreshToken } from '../common/models/refreshToken/IRefreshToken';
@@ -20,6 +21,9 @@ import { sendResetPasswordMail } from './mailService';
 import { ErrorCode } from '../common/enums/ErrorCode';
 import { ILoginWithGoogle } from '../common/models/user/ILoginWithGoogle';
 import { getGoogleUserPayload } from '../common/utils/googleAuthHelper';
+import { addWorkspaceToUser } from './userService';
+import { ILoginWithFacebook } from '../common/models/user/ILoginWithFacebook';
+import { IFacebookUser } from '../common/models/user/IFacebookUser';
 
 const createRefreshTokenData = (user: User) => {
   const cur = new Date();
@@ -36,15 +40,6 @@ const createRefreshToken = async (user: User): Promise<IRefreshToken> => {
   const refreshToken = await getCustomRepository(RefreshTokenRepository).addToken(refreshTokenData);
 
   return refreshToken;
-};
-
-const addWorkspaceToUser = async (userId: string, workspaceId: string) => {
-  try {
-    const user = await getCustomRepository(UserRepository).addWorkspace(userId, workspaceId);
-    return user;
-  } catch (error) {
-    throw new CustomError(409, 'User already exists in workspace. Please, sign in.', ErrorCode.UserExistsInWorkspace);
-  }
 };
 
 export const register = async ({ password, workspaceId, ...userData }: IRegisterUser) => {
@@ -94,6 +89,28 @@ export const loginWithGoogle = async ({ token, workspaceId }: ILoginWithGoogle) 
     user = await getCustomRepository(UserRepository).addUser(createUserData);
   }
 
+  user = workspaceId ? await addWorkspaceToUser(user.id, workspaceId) : user;
+
+  const refreshToken = await createRefreshToken(user);
+
+  return {
+    user: fromUserToUserWithWorkspaces(user),
+    accessToken: createToken({ id: user.id }),
+    refreshToken: encrypt(refreshToken.id)
+  };
+};
+
+export const loginWithFacebook = async (
+  facebookUser: IFacebookUser,
+  { workspaceId }: ILoginWithFacebook
+) => {
+  let user = await getCustomRepository(UserRepository).getByEmail(facebookUser.email);
+  if (!user) {
+    const createUserData = fromFacebookUserToCreateUser(facebookUser);
+    user = await getCustomRepository(UserRepository).addUser(createUserData);
+    user.imageUrl = facebookUser.imageUrl;
+    user = await getCustomRepository(UserRepository).editUser(user.id, user);
+  }
   user = workspaceId ? await addWorkspaceToUser(user.id, workspaceId) : user;
 
   const refreshToken = await createRefreshToken(user);

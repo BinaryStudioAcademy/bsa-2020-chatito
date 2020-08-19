@@ -8,14 +8,15 @@ import {
   forgotPasswordRoutine,
   resetPasswordRoutine,
   editStatusRoutine,
-  loginWithGoogleRoutine
+  loginWithGoogleRoutine,
+  loginWithFacebookRoutine
 } from '../routines/user';
 import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { Routine } from 'redux-saga-routines';
-import { registration, login, fetchUser, loginWithGoogle } from 'services/authService';
-import { setTokens } from 'common/helpers/storageHelper';
+import { registration, login, fetchUser, loginWithGoogle, loginWithFacebook } from 'services/authService';
+import { setTokens, clearStorage } from 'common/helpers/storageHelper';
 import { editStatus, deleteUser, editUser, forgotPassword, resetPassword } from 'services/userService';
 import { toastrError, toastrSuccess } from 'services/toastrService';
 import { push } from 'connected-react-router';
@@ -29,15 +30,14 @@ function* fetchUserRequest({ payload }: Routine<any>) {
 
     yield put(fetchUserRoutine.success(user));
 
-    // eslint-disable-next-line
-    yield payload.workspace.id // selected workspace exists (when login through invite link)
-      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
-      : (user && user.workspaces.length > 0)
-        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
-        : put(push(Routes.AddWorkspace));
+    if (payload.workspace.id) {
+      put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)));
+    }
+
     yield call(connectSockets);
   } catch (error) {
     yield call(toastrError, error.message);
+    yield call(clearStorage);
     yield put(fetchUserRoutine.failure(error.message));
   }
 }
@@ -59,6 +59,7 @@ function* loginUserRequest({ payload }: Routine<any>) {
       : (user && user.workspaces.length > 0)
         ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
         : put(push(Routes.AddWorkspace));
+
     yield call(connectSockets);
   } catch (error) {
     yield call(toastrError, error.message);
@@ -78,11 +79,14 @@ function* loginWithGoogleRequest({ payload }: Routine<any>) {
     yield put(loginWithGoogleRoutine.success(user));
 
     // eslint-disable-next-line
-    yield payload.workspace.id // selected workspace exists (when login through invite link)
-      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
-      : (user && user.workspaces.length > 0)
-        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
-        : put(push(Routes.AddWorkspace));
+    if (payload.workspace.id) {
+      put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)));
+    }
+    // yield payload.workspace.id // selected workspace exists (when login through invite link)
+    //   ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
+    //   : (user && user.workspaces.length > 0)
+    //     ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
+    //     : put(push(Routes.AddWorkspace));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(loginWithGoogleRoutine.failure(error.message));
@@ -91,6 +95,30 @@ function* loginWithGoogleRequest({ payload }: Routine<any>) {
 
 function* watchLoginWithGoogleRequest() {
   yield takeEvery(loginWithGoogleRoutine.TRIGGER, loginWithGoogleRequest);
+}
+
+function* loginWithFacebookRequest({ payload }: Routine<any>) {
+  try {
+    const { accessToken, refreshToken, user }: IAuthServerResponse = yield call(loginWithFacebook, payload);
+    setTokens({ accessToken, refreshToken });
+
+    yield put(loginWithFacebookRoutine.success(user));
+
+    // eslint-disable-next-line
+    yield payload.workspace.id // selected workspace exists (when login through invite link)
+      ? put(push(Routes.Workspace.replace(':whash', payload.workspace.hash)))
+      : (user && user.workspaces.length > 0)
+        ? put(push(Routes.Workspace.replace(':whash', user.workspaces[0].hash)))
+        : put(push(Routes.AddWorkspace));
+    yield call(connectSockets);
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(loginWithFacebookRoutine.failure(error.message));
+  }
+}
+
+function* watchLoginWithFacebookRequest() {
+  yield takeEvery(loginWithFacebookRoutine.TRIGGER, loginWithFacebookRequest);
 }
 
 function* updateProfile({ payload }: Routine<any>) {
@@ -201,6 +229,7 @@ export default function* userSaga() {
     watchForgotPasswordRequest(),
     watchLoginUserRequest(),
     watchLoginWithGoogleRequest(),
+    watchLoginWithFacebookRequest(),
     watchDeleteAccount(),
     watchResetPasswordRequest(),
     watchEditStatusRequest()
