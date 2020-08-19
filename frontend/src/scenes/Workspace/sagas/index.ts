@@ -2,7 +2,8 @@ import {
   addWorkspaceRoutine,
   setActiveThreadRoutine,
   fetchUserChatsRoutine,
-  fetchPostCommentsRoutine
+  fetchPostCommentsRoutine,
+  fetchWorkspaceUsersRoutine
 } from 'scenes/Workspace/routines';
 import { Routine } from 'redux-saga-routines';
 import { takeEvery, put, call, all } from 'redux-saga/effects';
@@ -12,7 +13,6 @@ import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
 import { fetchUserChats } from 'services/chatServise';
 import { toastrError } from 'services/toastrService';
-import { fetchWorkspaceUsersRoutine } from 'containers/CreateDirectForm/routines';
 
 function* addWorkspaceReq({ payload }: Routine<any>) {
   try {

@@ -6,7 +6,8 @@ import {
   showRightSideMenuRoutine,
   showUserProfileRoutine,
   fetchUserChatsRoutine,
-  incUnreadCountRoutine } from '../routines';
+  incUnreadCountRoutine,
+  fetchWorkspaceUsersRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
@@ -14,7 +15,6 @@ import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { IUser } from 'common/models/user/IUser';
 import { addChatWithSocketRoutine } from 'scenes/Chat/routines';
 import { ChatType } from 'common/enums/ChatType';
-import { fetchWorkspaceUsersRoutine } from 'containers/CreateDirectForm/routines';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
