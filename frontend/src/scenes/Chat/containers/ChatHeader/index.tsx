@@ -14,7 +14,12 @@ import { IChat } from 'common/models/chat/IChat';
 import { IUser } from 'common/models/user/IUser';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
 import { connect } from 'react-redux';
-import InviteChatModal from 'scenes/Workspace/containers/InviteChatModal';
+import InviteChatModal from 'scenes/Chat/containers/InviteChatModal';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import { showModalRoutine } from 'routines/modal';
+import { fetchWorkspaceUsersRoutine } from 'scenes/Workspace/routines';
 
 const privateChannelIcon = (
   <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
@@ -22,9 +27,12 @@ const privateChannelIcon = (
 
 interface IProps {
   chat?: IChat;
+  showModal: IBindingCallback1<IModalRoutine>;
+  workspaceId: string;
+  fetchWorkspaceUsers: (workspaceId: string) => void;
 }
 
-const ChatHeader: React.FC<IProps> = ({ chat }) => {
+const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorkspaceUsers }) => {
   const maxAvatarsDisplayed = 5;
   const userAvatars = (users: IUser[]) => {
     const initVal: string[] = [];
@@ -37,6 +45,11 @@ const ChatHeader: React.FC<IProps> = ({ chat }) => {
     }, initVal);
 
     return initVal.map(url => (<Image src={url} key={url} rounded className={styles.memberAvatarIcon} />));
+  };
+
+  const onInviteUser = () => {
+    fetchWorkspaceUsers(workspaceId);
+    showModal({ modalType: ModalTypes.InviteChat, show: true });
   };
 
   if (!chat) {
@@ -62,10 +75,12 @@ const ChatHeader: React.FC<IProps> = ({ chat }) => {
           <div className={styles.memberCounter}>{chat.users.length || 0}</div>
         </div>
 
-        <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
+        <button type="button" className="button-unstyled" onClick={onInviteUser}>
+          <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
+        </button>
         <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
 
-        <InviteChatModal />
+        <InviteChatModal chatName={chat.name} />
       </div>
     </div>
   );
@@ -73,7 +88,15 @@ const ChatHeader: React.FC<IProps> = ({ chat }) => {
 
 const mapStateToProps = (state: IAppState) => {
   const { chat } = state.chat;
-  return { chat };
+  return {
+    chat,
+    workspaceId: state.workspace.workspace.id
+  };
 };
 
-export default connect(mapStateToProps, null)(ChatHeader);
+const mapDispatchToProps = {
+  showModal: showModalRoutine,
+  fetchWorkspaceUsers: fetchWorkspaceUsersRoutine
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatHeader);

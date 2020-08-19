@@ -24,3 +24,7 @@ export const forgotPassword = async (forgotpassword: IForgotPasswordInput) => {
 export const resetPassword = async (password: string, token: string) => {
   await api.put('/api/auth/resetpass', { password, token });
 };
+
+export const addUsersToChat = async () => {
+  await api.post('/api/', { });
+};

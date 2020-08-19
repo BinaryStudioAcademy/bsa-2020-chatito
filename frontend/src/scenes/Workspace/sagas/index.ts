@@ -6,12 +6,13 @@ import {
 } from 'scenes/Workspace/routines';
 import { Routine } from 'redux-saga-routines';
 import { takeEvery, put, call, all } from 'redux-saga/effects';
-import { addWorkspace } from 'services/workspaceService';
+import { addWorkspace, getWorkspaceUsers } from 'services/workspaceService';
 import { fetchPostComments } from 'services/threadsService';
 import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
 import { fetchUserChats } from 'services/chatServise';
 import { toastrError } from 'services/toastrService';
+import { fetchWorkspaceUsersRoutine } from 'containers/CreateDirectForm/routines';
 
 function* addWorkspaceReq({ payload }: Routine<any>) {
   try {
@@ -70,11 +71,26 @@ function* watchFetchUserChatsRequest() {
   yield takeEvery(fetchUserChatsRoutine.TRIGGER, fetchUserChatsRequest);
 }
 
+function* fetchWorkspaceUsers({ payload }: Routine<any>) {
+  try {
+    const users = yield call(getWorkspaceUsers, payload);
+    yield put(fetchWorkspaceUsersRoutine.success(users));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(fetchWorkspaceUsersRoutine.failure(error));
+  }
+}
+
+function* watchFetchWorkspaceUsers() {
+  yield takeEvery(fetchWorkspaceUsersRoutine.TRIGGER, fetchWorkspaceUsers);
+}
+
 export default function* workspaceSaga() {
   yield all([
     watchPostWorkspaceName(),
     watchFetchPostCommentsRequest(),
     watchSetActiveThread(),
-    watchFetchUserChatsRequest()
+    watchFetchUserChatsRequest(),
+    watchFetchWorkspaceUsers()
   ]);
 }

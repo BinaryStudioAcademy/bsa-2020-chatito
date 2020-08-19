@@ -15,7 +15,7 @@ const initialState: IModalState = {
   createChannel: false,
   createDirect: false,
   invitePopup: false,
-  inviteChat: true
+  inviteChat: false
 };
 
 export default (state = initialState, action: Routine<any>) => {
