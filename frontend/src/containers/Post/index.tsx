@@ -107,7 +107,13 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
     <Media className={styles.postWrapper}>
       <ProfilePreview user={createdByUser} onSend={onSend} openProfile={showUserProfile} />
       <Media.Body bsPrefix={styles.body}>
-        <a href="/" className={styles.author}>{createdByUser.fullName}</a>
+        <button
+          onClick={() => showUserProfile(createdByUser)}
+          className={`${styles.author} button-unstyled`}
+          type="button"
+        >
+          {createdByUser.fullName}
+        </button>
         <br />
         <a href="/" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</a>
         {/* eslint-disable-next-line */}
