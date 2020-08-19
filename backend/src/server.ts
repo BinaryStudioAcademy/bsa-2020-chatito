@@ -11,7 +11,7 @@ import jwtSocketMiddleware from './api/middlewares/socketAuthorizationMiddleware
 import errorHandlerMiddleware from './api/middlewares/errorHandlerMiddleware';
 import routesWhiteList from './config/routesWhiteListConfig';
 import './config/passportConfig';
-import './config/sendgridConfig';
+import './config/nodeMailer';
 import socketInjector from './socket/injector';
 import { registerSockets } from './socket/connectNamespaces';
 

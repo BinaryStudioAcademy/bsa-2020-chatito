@@ -1,15 +1,30 @@
-import sgMail from '@sendgrid/mail';
 import { env } from '../env';
+import { transporter } from '../config/nodeMailer';
 import { IMessage } from '../common/models/sendgrid/IMessage';
 import { IResetPasswordMessage } from '../common/models/sendgrid/IResetPasswordMessage';
 import { IInviteLinkMessage } from '../common/models/sendgrid/IInviteLinkMessage';
 
-const { mail, client } = env.app;
+const { client } = env.app;
+const { mail } = env.mail;
 
-export const sendMail = async ({ from = mail, to, subject, text }: IMessage) => {
-  const message = { from, to, subject, text };
+export const sendMail = async ({ from = mail, html = '', to, subject, text }: IMessage) => {
+  const mailOptions = {
+    from,
+    to,
+    subject,
+    text,
+    html
+  };
 
-  await sgMail.send(message);
+  return new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(info);
+      }
+    });
+  });
 };
 
 export const sendResetPasswordMail = async ({ to, token }: IResetPasswordMessage) => {
@@ -19,8 +34,7 @@ export const sendResetPasswordMail = async ({ to, token }: IResetPasswordMessage
     text: `Please use the following link to reset your password: ${client}/auth/reset/${token}`
   };
   // eslint-disable-next-line
-  console.log(message);
-
+  // console.log(message);
   await sendMail(message);
 };
 
@@ -32,7 +46,6 @@ export const sendInviteLinkMail = async ({ to, token }: IInviteLinkMessage) => {
           Follow the link and quickly join us: ${client}/invite/${token}`
   };
   // eslint-disable-next-line
-  console.log(message);
-
+  // console.log(message);
   await sendMail(message);
 };
