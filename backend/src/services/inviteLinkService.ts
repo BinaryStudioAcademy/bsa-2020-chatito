@@ -8,9 +8,11 @@ import { ErrorCode } from '../common/enums/ErrorCode';
 
 export const sendInviteLink = async ({ email, workspaceId }: ISendInviteLink) => {
   const user = await getCustomRepository(UserRepository).getByEmail(email);
-  const userWorkspaces = user.workspaces.some(workspace => workspace.id === workspaceId);
-  if (userWorkspaces) {
-    throw new CustomError(409, 'User is already in workspace.', ErrorCode.UserExistsInWorkspace);
+  if (user) {
+    const userWorkspaces = user.workspaces.some(workspace => workspace.id === workspaceId);
+    if (userWorkspaces) {
+      throw new CustomError(409, 'User is already in workspace.', ErrorCode.UserExistsInWorkspace);
+    }
   }
   const inviteLinkToken = createInviteToken({ email, workspaceId });
 
