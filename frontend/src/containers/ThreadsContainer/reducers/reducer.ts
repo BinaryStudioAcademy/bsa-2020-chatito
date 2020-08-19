@@ -1,14 +1,14 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchThreadsRoutine, goToThreadsRoutine } from '../routines';
+import { fetchThreadsRoutine, goToThreadsRoutine, addCommentWithSocketRoutine } from '../routines';
 import { IFetchedThreads } from 'common/models/threads/IFetchedThreads';
 import { addCommentRoutine } from 'containers/Thread/routines';
 
 export interface IThreadsState {
   loading: boolean;
   error: string;
-  threads?: IFetchedThreads;
+  threads?: IFetchedThreads[];
   goToThreads?: boolean;
-  sendingComment?: false;
+  sendingComment?: boolean;
 }
 
 const initialState = {
@@ -46,6 +46,22 @@ const threadsReducer = (state: IThreadsState = initialState, { type, payload }: 
       return {
         ...state, sendingComment: false
       };
+    case addCommentWithSocketRoutine.TRIGGER: {
+      const { postId } = payload;
+      if (state.threads) {
+        const threads = [...state.threads];
+        const newThreads = threads.map(thread => {
+          if (thread.id === postId) {
+            const comments = [...thread.comments];
+            comments.push(payload);
+            return { ...thread, comments };
+          }
+          return thread;
+        });
+        return { ...state, threads: newThreads };
+      }
+      return state;
+    }
     default:
       return state;
   }
