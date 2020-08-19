@@ -36,16 +36,16 @@ const ForgotPassword: FunctionComponent<IProps> = ({ resetPassword, match }) => 
         onSubmit={onSubmit}
       >
         <Form className={`${styles.inputForms} d-flex flex-column justify-content-center align-items-center`}>
-          <div className={styles.inputContainer}>
-            <InputField label="Password" name="password" type="password" />
-          </div>
-          <div className={styles.inputContainer}>
-            <InputField
-              label="Confirm Password"
-              name="confirmPassword"
-              type="password"
-            />
-          </div>
+          <InputField
+            label="Password"
+            name="password"
+            type="password"
+          />
+          <InputField
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+          />
           <div className={`${styles.formFooter} w-100`}>
             <Button type="submit" className={styles.primaryBtn}>
               Reset password
