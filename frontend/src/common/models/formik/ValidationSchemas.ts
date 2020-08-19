@@ -5,10 +5,21 @@ export const signInValSchema = Yup.object().shape({
     .email('Email is invalid')
     .required('Email is required'),
   password: Yup.string()
-    .min(3, 'Password must be at least 3 characters')
+    .min(8, 'Password must be at least 8 characters')
     .required('Password is required')
+    .matches(
+      /^.*((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+      'Password must include both uppercase and lowercase letters'
+    )
+    .matches(
+      /^.*(?=.*\d).*$/,
+      'Password must include numbers'
+    )
+    .matches(
+      /^.*((?=.*[!/@#$%^&*()\-_=+{};:,<.>]){1}).*$/,
+      'Password must include special symbols'
+    )
 });
-
 export const signUpValSchema = Yup.object().shape({
   fullName: Yup.string()
     .required('Full Name is required')
@@ -17,8 +28,20 @@ export const signUpValSchema = Yup.object().shape({
     .email('Email is invalid')
     .required('Email is required'),
   password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
+    .min(8, 'Password must be at least 8 characters')
+    .required('Password is required')
+    .matches(
+      /^.*((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+      'Password must include both uppercase and lowercase letters'
+    )
+    .matches(
+      /^.*(?=.*\d).*$/,
+      'Password must include numbers'
+    )
+    .matches(
+      /^.*((?=.*[!/@#$%^&*()\-_=+{};:,<.>]){1}).*$/,
+      'Password must include special symbols'
+    ),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), ''], 'Passwords must match')
     .required('Confirm Password is required')
@@ -32,8 +55,20 @@ export const forgotPasswordSchema = Yup.object().shape({
 
 export const resetPasswordSchema = Yup.object().shape({
   password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
+    .min(8, 'Password must be at least 8 characters')
+    .required('Password is required')
+    .matches(
+      /^.*((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+      'Password must include both uppercase and lowercase letters'
+    )
+    .matches(
+      /^.*(?=.*\d).*$/,
+      'Password must include numbers'
+    )
+    .matches(
+      /^.*((?=.*[!/@#$%^&*()\-_=+{};:,<.>]){1}).*$/,
+      'Password must include special symbols'
+    ),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), ''], 'Passwords must match')
     .required('Confirm Password is required')

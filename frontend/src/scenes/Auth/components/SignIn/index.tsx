@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import FacebookLogin, { ReactFacebookLoginInfo, ReactFacebookFailureResponse } from 'react-facebook-login';
 import styles from './styles.module.sass';
-
 import InputField from 'components/InputField/InputField';
 import { signInValSchema as validationSchema } from 'common/models/formik/ValidationSchemas';
 import { ILoginUser } from 'common/models/auth/ILoginUser';
