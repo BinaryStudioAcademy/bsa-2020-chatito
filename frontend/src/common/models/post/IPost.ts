@@ -10,4 +10,8 @@ export interface IPost {
   chatId?: string;
   postReactions: IPostReaction[];
   commentsInfo: ICommentsInfo;
+  chat?: {
+    name: string;
+    hash?: string;
+  }
 }
