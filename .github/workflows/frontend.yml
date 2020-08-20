@@ -1,0 +1,44 @@
+name: Stage - Frontend Build
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [dev]
+    paths: 'frontend/**/*.*'
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      env:
+        FONT_AWESOME_TOKEN: ${{ secrets.FONT_AWESOME_TOKEN }}
+      run: |
+        cd frontend
+        npm install
+    - name: Build
+      env:
+        REACT_APP_SERVER: https://api.stage.kodiakhr.com
+        REACT_APP_USER_POOL_URL: https://authstage.kodiakhr.com
+        REACT_APP_USER_POOL_RESPONSE_TYPE: code
+        REACT_APP_USER_POOL_CLIENT_ID: 1dfcof3j709nm7akjtsj78aa8j
+        REACT_APP_USER_POOL_REDIRECT_URI: https://app.stage.kodiakhr.com/callback
+        FONT_AWESOME_TOKEN: ${{ secrets.FONT_AWESOME_TOKEN }}
+      run: |
+        cd frontend
+        npm run build
+        
+    - name: Deploy to S3
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read --delete
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_NAME_STAGE }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        SOURCE_DIR: 'frontend/build'
