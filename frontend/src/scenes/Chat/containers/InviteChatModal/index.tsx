@@ -111,7 +111,7 @@ const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
         <p className={styles.chatName}>{chatName}</p>
         <div className={styles.selectedUsersWrp}>
           {selectedUsers.map(selUser => (
-            <div className={styles.selectedUser}>
+            <div className={styles.selectedUser} key={selUser.id}>
               <div className={`${styles.selectedUsername} noselect`}>{selUser.fullName}</div>
               <FontAwesomeIcon onClick={() => onUnselectUser(selUser.id)} icon={faTimes} className={styles.closeBtn} />
             </div>

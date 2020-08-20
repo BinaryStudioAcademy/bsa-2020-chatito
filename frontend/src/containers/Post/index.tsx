@@ -114,7 +114,9 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
         >
           {createdByUser.fullName}
         </button>
+
         <br />
+
         <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
         {/* eslint-disable-next-line */}
         <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
