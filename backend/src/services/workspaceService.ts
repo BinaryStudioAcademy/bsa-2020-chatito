@@ -25,8 +25,7 @@ export const createWorkspace = async (data: IClientCreateWorkspace): Promise<IWo
 };
 
 export const getWorkspaceUsers = async (id: string): Promise<IUser[]> => {
-  const workspace = await getCustomRepository(WorkspaceRepository).getById(id);
-
+  const workspace = await getCustomRepository(WorkspaceRepository).getByIdWithUsers(id);
   return workspace.users;
 };
 

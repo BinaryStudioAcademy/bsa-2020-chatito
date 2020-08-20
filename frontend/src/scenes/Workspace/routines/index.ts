@@ -11,3 +11,4 @@ export const showUserProfileRoutine = createRoutine('SHOW_USER_PROFILE');
 export const fetchPostCommentsRoutine = createRoutine('FETCH_POST_COMMENTS');
 export const fetchUserChatsRoutine = createRoutine('FETCH_USER_CHATS');
 export const incUnreadCountRoutine = createRoutine('INC_UNREAD_COUNT');
+export const fetchWorkspaceUsersRoutine = createRoutine('FETCH_WORKSPACE_USERS');

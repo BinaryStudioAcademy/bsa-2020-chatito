@@ -20,6 +20,10 @@ class WorkspaceRepository extends Repository<Workspace> {
   getById(id: string): Promise<Workspace> {
     return this.findOne(id);
   }
+
+  getByIdWithUsers(id: string) {
+    return this.findOne({ where: { id }, relations: ['users'] });
+  }
 }
 
 export default WorkspaceRepository;
