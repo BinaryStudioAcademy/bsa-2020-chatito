@@ -45,11 +45,13 @@ const AddWorkspace: FunctionComponent<IProps> = ({ addWorkspace, activeWorkspace
                 placeholder="workspace"
               />
               <div className={`${styles.formFooter} w-100`}>
-                <Link className={styles.backButtonWrapper} to={`/w/${activeWorkspace}`}>
-                  <Button type="submit" variant="primary" className={styles.primaryBtnBack}>
-                    Back
-                  </Button>
-                </Link>
+                { activeWorkspace ? (
+                  <Link className={styles.backButtonWrapper} to={`/w/${activeWorkspace}`}>
+                    <Button variant="primary" className={styles.primaryBtnBack}>
+                      Back
+                    </Button>
+                  </Link>
+                ) : null}
                 <Button type="submit" variant="primary" className={styles.primaryBtn}>
                   Next
                 </Button>

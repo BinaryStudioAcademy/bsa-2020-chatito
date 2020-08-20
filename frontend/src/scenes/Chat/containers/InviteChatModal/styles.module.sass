@@ -1,0 +1,97 @@
+.modalWrp
+  display: flex
+  flex-direction: column
+
+.title
+  color: var(--title-text)
+  font-weight: bold
+  margin-bottom: 4px
+
+.chatName
+  font-size: 14px
+  color: var(--secondary-text)
+  margin-bottom: 20px
+
+.addBtn
+  align-self: flex-end
+
+.selectedUsersWrp
+  display: flex
+  flex-wrap: wrap
+  font-size: 14px
+  font-weight: 600
+
+.selectedUser
+  display: flex
+  align-items: center
+  background-color: var(--selected-user-bg)
+  padding: 5px
+  margin-bottom: 8px
+  margin-right: 8px
+  border-radius: 5px
+
+.selectedUsername
+  margin-right: 5px
+
+.closeBtn
+  cursor: pointer
+  color: var(--close-button)
+  font-size: 16px
+
+.closeBtn:hover
+  color: var(--close-button-hover)
+
+.popover
+  max-width: 480px
+
+.content
+  padding: 10px 0
+  overflow-y: auto
+  max-height: 200px
+  width: 480px
+
+.userItem
+  position: relative
+  padding: 5px 15px
+  cursor: pointer
+  width: 100%
+
+.userItem:hover
+  color: var(--invite-user-text-hover)
+  background-color: var(--invite-user-bg-hover)
+
+.userItem.chatUser
+  cursor: default
+
+.userItem.chatUser:hover
+  background-color: unset
+  color: var(--main-text)
+
+.fullName
+  margin-right: 10px
+  font-weight: bold
+
+.status
+  display: inline-block
+  height: 9px
+  width: 9px
+  border-radius: 50%
+  margin-right: 10px
+
+.status.online
+  background-color: var(--presence-online)
+
+.status.offline
+  background-color: var(--presence-offline)
+
+.additional
+  position: absolute
+  right: 15px
+  font-size: 12px
+  color: var(--secondary-text)
+
+.notFound
+  padding: 5px 15px
+
+.notFound span
+  margin-right: 5px

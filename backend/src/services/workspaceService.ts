@@ -9,6 +9,9 @@ import { IWorkspaceResponse } from '../common/models/workspace/IWorkspaceRespons
 import { fromCreatedWorkspaceToClient, fromClientCreateWorkspaceToCreateWorkspace } from '../common/mappers/workspace';
 import { IUser } from '../common/models/user/IUser';
 import CustomError from '../common/models/CustomError';
+import ChatRepository from '../data/repositories/chatRepository';
+import { fromChatToClientChat } from '../common/mappers/chat';
+import { ChatType } from '../common/enums/ChatType';
 
 export const createWorkspace = async (data: IClientCreateWorkspace): Promise<IWorkspaceResponse> => {
   const { name } = data;
@@ -25,12 +28,19 @@ export const createWorkspace = async (data: IClientCreateWorkspace): Promise<IWo
 };
 
 export const getWorkspaceUsers = async (id: string): Promise<IUser[]> => {
-  const workspace = await getCustomRepository(WorkspaceRepository).getById(id);
-
+  const workspace = await getCustomRepository(WorkspaceRepository).getByIdWithUsers(id);
   return workspace.users;
 };
 
 export const getThreads = async (workspaceId: string, userId: string) => {
   const posts = await getCustomRepository(PostRepository).getPostsByUserId(workspaceId, userId);
   return posts;
+};
+
+export const getWorkspaceUserChats = async (workspaceId: string, userId: string): Promise<any> => {
+  const chats = await (await getCustomRepository(ChatRepository).getAllByWorkspaceIdAndUserId(workspaceId, userId));
+  const clientChats = chats.map(chat => fromChatToClientChat(chat));
+  const channels = clientChats.filter(chat => chat.type === ChatType.Channel);
+  const directMessages = clientChats.filter(chat => chat.type === ChatType.DirectMessage);
+  return { channels, directMessages };
 };

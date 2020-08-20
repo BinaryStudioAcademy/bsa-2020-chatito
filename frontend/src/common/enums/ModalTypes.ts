@@ -4,5 +4,6 @@ export enum ModalTypes {
   CreateDirect,
   InvitePopup,
   ChatMembers,
-  SetReminder
+  SetReminder,
+  InviteChat
 }

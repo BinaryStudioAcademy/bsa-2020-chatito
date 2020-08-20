@@ -5,8 +5,9 @@ import {
   fetchPostCommentsRoutine,
   showRightSideMenuRoutine,
   showUserProfileRoutine,
-  fetchUserChatsRoutine,
+  fetchWorkspaceChatsRoutine,
   incUnreadCountRoutine,
+  fetchWorkspaceUsersRoutine,
   addActiveCommentWithSocketRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
@@ -22,7 +23,7 @@ export interface IWorkspaceState {
   error: string;
   channels: Array<IChat>;
   directMessages: Array<IChat>;
-  users?: Array<IUser>;
+  users: Array<IUser>;
   showRightSideMenu: RightMenuTypes;
   activeThread: IActiveThread | null;
   userProfile: IUser;
@@ -47,18 +48,18 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state,
         workspace: payload
       };
-    case fetchUserChatsRoutine.TRIGGER:
+    case fetchWorkspaceChatsRoutine.TRIGGER:
       return {
         ...state, loading: true
       };
-    case fetchUserChatsRoutine.SUCCESS:
+    case fetchWorkspaceChatsRoutine.SUCCESS:
       return {
         ...state,
         channels: payload.channels || [],
         directMessages: payload.directMessages || [],
         loading: false
       };
-    case fetchUserChatsRoutine.FAILURE:
+    case fetchWorkspaceChatsRoutine.FAILURE:
       return {
         ...state, loading: false
       };
@@ -78,7 +79,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return {
         ...state,
         showRightSideMenu: RightMenuTypes.Profile,
-        activeThread: null
+        userProfile: { ...payload }
       };
     case fetchPostCommentsRoutine.SUCCESS: {
       if (state.activeThread) {
@@ -117,6 +118,18 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       }
       return state;
     }
+    case fetchWorkspaceUsersRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case fetchWorkspaceUsersRoutine.SUCCESS:
+      return {
+        ...state, users: payload, loading: false
+      };
+    case fetchWorkspaceUsersRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
     case addActiveCommentWithSocketRoutine.TRIGGER: {
       const thread = state.activeThread;
       if (thread) {

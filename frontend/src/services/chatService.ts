@@ -1,6 +1,7 @@
 import api from 'common/helpers/apiHelper';
 import { ICreateChat } from 'common/models/chat/ICreateChat';
 import { ICreatePost } from 'common/models/post/ICreatePost';
+import { IAddUsersToChat } from 'common/models/chat/IAddUsersToChat';
 import { IFetchMorePosts } from 'common/models/post/IFetchMorePosts';
 
 export async function createChat(payload: ICreateChat) {
@@ -8,8 +9,8 @@ export async function createChat(payload: ICreateChat) {
   return response;
 }
 
-export async function fetchUserChats() {
-  const response = await api.get('/api/chats');
+export async function fetchWorkspaceChats(workspaceId: string) {
+  const response = await api.get(`/api/workspaces/${workspaceId}/chats`);
   return response;
 }
 
@@ -32,3 +33,7 @@ export async function addPost({ chatId, text }: ICreatePost) {
   const response = await api.post('/api/posts', { text, chatId });
   return response;
 }
+
+export const addUsersToChat = async (payload: IAddUsersToChat) => {
+  await api.post('/api/chats/invite-users', payload);
+};

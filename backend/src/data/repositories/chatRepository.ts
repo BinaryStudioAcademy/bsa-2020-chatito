@@ -19,11 +19,28 @@ class ChatRepository extends Repository<Chat> {
     return this.findOne({ where: { id }, relations: ['posts', 'users', 'workspace'] });
   }
 
+  getAllByWorkspaceIdAndUserId(workspaceId: string, userId: string) {
+    return this.createQueryBuilder('chat')
+      .leftJoinAndSelect('chat.users', 'users')
+      .where('users.id = :userId', { userId })
+      .leftJoinAndSelect('chat.workspace', 'workspace')
+      .where('workspace.id = :workspaceId', { workspaceId })
+      .getMany();
+  }
+
   getAllByUser(userId: string): Promise<Chat[]> {
     return this.find({
       relations: ['users'],
       where: { createdByUser: userId }
     });
+  }
+
+  addUsersToChat(chatId: string, userIds: string[]) {
+    return this
+      .createQueryBuilder()
+      .relation(Chat, 'users')
+      .of(chatId)
+      .add(userIds);
   }
 
   async getAllChatUsers(id: string): Promise<User[]> {

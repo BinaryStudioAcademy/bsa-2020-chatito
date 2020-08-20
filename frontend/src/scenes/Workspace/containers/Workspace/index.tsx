@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
 import Header from '../Header';
@@ -19,13 +19,14 @@ import {
   selectWorkspaceRoutine,
   setActiveThreadRoutine,
   showRightSideMenuRoutine,
-  showUserProfileRoutine
+  fetchWorkspaceChatsRoutine
 } from 'scenes/Workspace/routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { Route, Switch } from 'react-router-dom';
 import LoaderWrapper from 'components/LoaderWrapper';
+import { IFetchWorkspaceChat } from 'common/models/chat/IFetchWorkspaceChat';
 
 interface IProps {
   currentUserId?: string;
@@ -40,9 +41,11 @@ interface IProps {
   selectWorkspace: (workspace: IWorkspace) => void;
   showRightSideMenu: RightMenuTypes;
   toggleRightMenu: IBindingCallback1<RightMenuTypes>;
-  showUserProfile: IBindingCallback1<IUser>;
   toggleActiveThread: IBindingCallback1<IPost>;
   isLoader: boolean;
+  userProfile: IUser;
+  selectedHash: string;
+  fetchWorkspaceChats: IBindingCallback1<IFetchWorkspaceChat>;
 }
 
 const Workspace: React.FC<IProps> = ({
@@ -51,44 +54,38 @@ const Workspace: React.FC<IProps> = ({
   userWorkspaces,
   selectWorkspace,
   showRightSideMenu,
-  showUserProfile,
   toggleRightMenu,
-  isLoader
+  isLoader,
+  userProfile,
+  selectedHash,
+  fetchWorkspaceChats
 }) => {
   if (!currentUserId) return <></>;
-  const [userData, setUserData] = useState<IUser | {}>({});
 
   useEffect(() => {
     const { whash } = match.params;
-    const currWorkspace = userWorkspaces.find(workspaceItem => workspaceItem.hash === whash);
-
-    if (currWorkspace) {
-      selectWorkspace(currWorkspace);
+    if (selectedHash !== whash) {
+      const currWorkspace = userWorkspaces.find(workspaceItem => workspaceItem.hash === whash);
+      if (currWorkspace) {
+        selectWorkspace(currWorkspace);
+        fetchWorkspaceChats({ workspaceId: currWorkspace.id });
+      }
     }
   }, [match]);
-
-  const setShowProfileHandler = (user: IUser) => {
-    showUserProfile(user);
-  };
 
   const hideRightMenu = () => {
     toggleRightMenu(RightMenuTypes.None);
   };
 
-  const setUserDataHandler = (user: IUser | {}) => {
-    setUserData(user);
-  };
-
   const renderProfile = () => (
     <ProfileOverview
-      user={userData as IUser}
+      user={userProfile}
       currentUserId={currentUserId}
-      setShowProfileHandler={hideRightMenu}
-      setUserDataHandler={setUserDataHandler}
+      hideRightMenu={hideRightMenu}
     />
   );
 
-  const renderThread = () => <Thread onHide={hideRightMenu} openUserProfile={setShowProfileHandler} />;
+  const renderThread = () => <Thread onHide={hideRightMenu} />;
 
   const renderRightMenu = () => {
     switch (showRightSideMenu) {
@@ -102,7 +99,6 @@ const Workspace: React.FC<IProps> = ({
   };
 
   return (
-    // eslint-disable-next-line
     <LoaderWrapper loading={isLoader}>
       <div className={styles.mainContainer}>
         <Header />
@@ -147,7 +143,9 @@ const mapStateToProps = (state: IAppState) => {
     userWorkspaces: state.user.workspaceList,
     showRightSideMenu,
     activeThreadPostId,
-    isLoader: !workspace.id
+    isLoader: !workspace.id,
+    selectedHash: workspace.hash,
+    userProfile: state.workspace.userProfile
   };
 };
 
@@ -156,7 +154,7 @@ const mapDispatchToProps = {
   selectWorkspace: selectWorkspaceRoutine,
   toggleActiveThread: setActiveThreadRoutine,
   toggleRightMenu: showRightSideMenuRoutine,
-  showUserProfile: showUserProfileRoutine
+  fetchWorkspaceChats: fetchWorkspaceChatsRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Workspace);

@@ -18,21 +18,22 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import CustomReminderModal from 'containers/CustomReminderModal';
+import { showUserProfileRoutine } from 'scenes/Workspace/routines';
 
 interface IProps {
   post: IPost;
   userId: string;
   type: PostType;
   openThread?: IBindingCallback1<IPost>;
-  openUserProfile: IBindingCallback1<IUser>;
   addPostReaction: IBindingCallback1<IPostReactionRoutine>;
   deletePostReaction: IBindingCallback1<IPostReactionRoutine>;
   showModal: IBindingCallback1<IModalRoutine>;
   isShown: boolean;
+  showUserProfile: IBindingCallback1<IUser>;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
-  openUserProfile, addPostReaction, deletePostReaction, showModal, isShown }) => {
+  showUserProfile, addPostReaction, deletePostReaction, showModal, isShown }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
 
@@ -160,7 +161,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
   return (
     <>
       <Media className={styles.postWrapper}>
-        <ProfilePreview user={createdByUser} onSend={onSend} openProfile={openUserProfile} />
+        <ProfilePreview user={createdByUser} onSend={onSend} openProfile={showUserProfile} />
         <Media.Body bsPrefix={styles.body}>
           <button type="button" className={styles.author}>{createdByUser.fullName}</button>
           <br />
@@ -197,7 +198,7 @@ const mapStateToProps = (state: IAppState) => ({
 const mapDispatchToProps = {
   addPostReaction: addPostReactionRoutine,
   deletePostReaction: deletePostReactionRoutine,
-  showModal: showModalRoutine
+  showUserProfile: showUserProfileRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

@@ -5,7 +5,8 @@ import {
   addChat,
   getAllUserChats,
   getAllChatUsers,
-  removeUserFromChat } from '../../services/chatService';
+  removeUserFromChat,
+  addUsersToChat } from '../../services/chatService';
 import { addReminder } from '../../services/reminderService';
 
 const router = Router();
@@ -26,6 +27,7 @@ router
       userId: req.user.id,
       body: req.body
     }
-  )));
+  )))
+  .post('/invite-users', run((req: Request) => addUsersToChat(req.body.chatId, req.body.userIds)));
 
 export default router;
