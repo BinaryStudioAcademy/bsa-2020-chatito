@@ -6,7 +6,8 @@ import {
   createChatRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
-  addUsersToChatRoutine
+  addUsersToChatRoutine,
+  createChatAndAddPostRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import { fetchChatPosts, addPost, createChat, fetchChatUsers,
@@ -15,6 +16,8 @@ import { IPost } from 'common/models/post/IPost';
 import { toastrError, toastrSuccess } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
 import { IUser } from 'common/models/user/IUser';
+import { push } from 'connected-react-router';
+import { Routes } from 'common/enums/Routes';
 
 function* fetchChatPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
@@ -114,6 +117,21 @@ function* watchRemoveUserFromChat() {
   yield takeEvery(removeUserFromChatRoutine.TRIGGER, removeUserFromChatRequest);
 }
 
+function* createChatAndAddPost({ payload }: Routine<any>) {
+  try {
+    const chat = yield call(createChat, payload.chat);
+    yield put(createChatRoutine.success(chat));
+    yield call(addPost, { chatId: chat.id, text: payload.text });
+    yield put(push(Routes.Chat.replace(':whash', chat.workspace.hash).replace(':chash', chat.hash)));
+  } catch (error) {
+    yield call(toastrError, 'Sending message failed. Please try again later.');
+  }
+}
+
+function* watchCreateChatAndAddPost() {
+  yield takeEvery(createChatAndAddPostRoutine.TRIGGER, createChatAndAddPost);
+}
+
 export default function* chatSaga() {
   yield all([
     watchPostsRequest(),
@@ -123,6 +141,7 @@ export default function* chatSaga() {
     watchToggleCreateChatModal(),
     watchAddUsersToChat(),
     watchFetchChatUsersRequest(),
-    watchRemoveUserFromChat()
+    watchRemoveUserFromChat(),
+    watchCreateChatAndAddPost
   ]);
 }

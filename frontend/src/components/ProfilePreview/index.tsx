@@ -55,7 +55,6 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
           className={styles.sendMessageBlock}
         >
           <Form.Control
-            // onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => keycheck(e)}
             ref={inputRef}
             className={styles.textField}
             type="text"

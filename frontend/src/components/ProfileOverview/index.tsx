@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { connect } from 'react-redux';
 import styles from './styles.module.sass';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
@@ -7,16 +8,34 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faEdit, faEllipsisH, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { IUser } from 'common/models/user/IUser';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
+import { useKey } from 'common/hooks/onInputSubmit';
+import { addPostRoutine, createChatAndAddPostRoutine } from 'scenes/Chat/routines';
+import { ICreatePost } from 'common/models/post/ICreatePost';
+import { IAppState } from 'common/models/store';
+import { IChat } from 'common/models/chat/IChat';
+import { push } from 'connected-react-router';
+import { Routes } from 'common/enums/Routes';
+import { ICreateChat } from 'common/models/chat/ICreateChat';
+import { ChatType } from 'common/enums/ChatType';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { ICreateChatAndAddPost } from 'common/models/chat/ICreateChatAndAddPost';
 
 interface IProps {
   user: IUser;
-  currentUserId: string;
+  currentUser: IUser;
+  channels: IChat[];
+  workspaceName: string;
   hideRightMenu: IBindingAction;
+  addPost: IBindingCallback1<ICreatePost>;
+  createChatAndAddPost: IBindingCallback1<ICreateChatAndAddPost>;
+  router: (route: string) => void;
 }
 
-const ProfileOverview: React.FC<IProps> = ({ user, currentUserId, hideRightMenu }) => {
+const ProfileOverview: React.FC<IProps> = ({ user, currentUser, channels, workspaceName,
+  hideRightMenu, addPost, createChatAndAddPost, router }) => {
   const [showAbout, setShowAbout] = useState(false);
   const [message, setMessage] = useState('');
+  const inputRef = useRef(null);
 
   const isOnline = true; // mock data
   const imgUrl = 'https://cdn.boldomatic.com/resource/web/v2/images/profile-dummy-2x.png?width=34&height=34&format=jpg&quality=90'; // eslint-disable-line max-len
@@ -26,21 +45,36 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUserId, hideRightMenu 
   };
 
   const onSend = () => {
-    // if (!message.trim()) return;
+    if (!message.trim()) return;
 
-    // send message
+    const chat = channels.find(channel => (
+      channel.isPrivate && channel.users.find(channelUsers => channelUsers.id === user.id)
+    ));
+
+    if (chat) {
+      addPost({ chatId: chat.id, text: message });
+      router(Routes.Chat.replace(':whash', chat.workspace.hash).replace(':chash', chat.hash));
+    } else {
+      const newChat: ICreateChat = {
+        name: `${currentUser.displayName}, ${user.displayName}`,
+        isPrivate: true,
+        type: ChatType.DirectMessage,
+        workspaceName,
+        users: [currentUser, user]
+      };
+      createChatAndAddPost({ chat: newChat, text: message });
+    }
 
     hideRightMenu();
   };
+  useKey({ key: 'enter', callback: onSend, ref: inputRef });
 
   const onEdit = () => {
     // show edit modal
   };
 
-  const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      onSend();
-    }
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
   };
 
   const renderAbout = () => (
@@ -77,25 +111,16 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUserId, hideRightMenu 
       {user.status && <div className={styles.status}>{user.status}</div>}
 
       <InputGroup className={styles.inputWrp}>
-        <FormControl
-          placeholder="Write a message"
-          value={message}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMessage(e.target.value)}
-          onKeyDown={onKeyDown}
-        />
+        <FormControl ref={inputRef} placeholder="Write a message" value={message} onChange={onChange} />
         <InputGroup.Append>
-          <button
-            type="button"
-            className="button-unstyled"
-            onClick={onSend}
-          >
+          <button type="button" className="button-unstyled" onClick={onSend}>
             <FontAwesomeIcon icon={faPaperPlane} />
           </button>
         </InputGroup.Append>
       </InputGroup>
 
       <div className={styles.toolbar}>
-        {user.id === currentUserId && (
+        {user.id === currentUser.id && (
         <button type="button" className="button-unstyled" onClick={onEdit}>
           <FontAwesomeIcon icon={faEdit} />
         </button>
@@ -118,4 +143,16 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUserId, hideRightMenu 
   );
 };
 
-export default ProfileOverview;
+const mapStateToProps = (state: IAppState) => ({
+  channels: state.workspace.channels,
+  workspaceName: state.workspace.workspace.name,
+  currentUser: state.user.user as IUser
+});
+
+const mapDispatchToProps = {
+  addPost: addPostRoutine,
+  createChatAndAddPost: createChatAndAddPostRoutine,
+  router: push
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileOverview);
