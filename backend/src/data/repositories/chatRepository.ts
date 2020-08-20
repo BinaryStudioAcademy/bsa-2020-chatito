@@ -19,13 +19,39 @@ class ChatRepository extends Repository<Chat> {
     return this.findOne({ where: { id }, relations: ['posts', 'users', 'workspace'] });
   }
 
-  getAllByWorkspaceIdAndUserId(workspaceId: string, userId: string) {
-    return this.createQueryBuilder('chat')
-      .leftJoinAndSelect('chat.users', 'users')
-      .where('users.id = :userId', { userId })
-      .leftJoinAndSelect('chat.workspace', 'workspace')
-      .where('workspace.id = :workspaceId', { workspaceId })
+  async getAllByWorkspaceIdAndUserId(workspaceId: string, userId: string) {
+    const chats = await this.createQueryBuilder('chat')
+      .select([
+        'chat.id',
+        'chat.name',
+        'chat.type',
+        'chat.hash',
+        'chat.isPrivate',
+        'user.id',
+        'user.imageUrl',
+        'draft_post.id',
+        'draft_post.text'
+      ])
+      .leftJoin(
+        'chat.workspace',
+        'workspace',
+        'workspace.id = :workspaceId',
+        { workspaceId }
+      )
+      .leftJoin(
+        'chat.draftPosts',
+        'draft_post',
+        'draft_post."chatId" = chat.id AND draft_post."createdByUserId" = :userId',
+        { userId }
+      )
+      .leftJoin(
+        'chat.users',
+        'user'
+      )
+      .where('chat."createdByUserId" = :userId', { userId })
       .getMany();
+
+    return chats;
   }
 
   async getAllByUser(userId: string): Promise<any> {
