@@ -19,6 +19,9 @@ import { ICreateChat } from 'common/models/chat/ICreateChat';
 import { ChatType } from 'common/enums/ChatType';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { ICreateChatAndAddPost } from 'common/models/chat/ICreateChatAndAddPost';
+import { showModalRoutine } from 'routines/modal';
+import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
+import { ModalTypes } from 'common/enums/ModalTypes';
 
 interface IProps {
   user: IUser;
@@ -29,10 +32,11 @@ interface IProps {
   addPost: IBindingCallback1<ICreatePost>;
   createChatAndAddPost: IBindingCallback1<ICreateChatAndAddPost>;
   router: (route: string) => void;
+  showModal: IBindingCallback1<IModalRoutine>;
 }
 
 const ProfileOverview: React.FC<IProps> = ({ user, currentUser, channels, workspaceName,
-  hideRightMenu, addPost, createChatAndAddPost, router }) => {
+  hideRightMenu, addPost, createChatAndAddPost, router, showModal }) => {
   const [showAbout, setShowAbout] = useState(false);
   const [message, setMessage] = useState('');
   const inputRef = useRef(null);
@@ -70,7 +74,7 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, channels, worksp
   useKey({ key: 'enter', callback: onSend, ref: inputRef });
 
   const onEdit = () => {
-    // show edit modal
+    showModal({ modalType: ModalTypes.EditProfile, show: true });
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -152,7 +156,8 @@ const mapStateToProps = (state: IAppState) => ({
 const mapDispatchToProps = {
   addPost: addPostRoutine,
   createChatAndAddPost: createChatAndAddPostRoutine,
-  router: push
+  router: push,
+  showModal: showModalRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileOverview);
