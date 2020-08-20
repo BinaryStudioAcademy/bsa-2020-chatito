@@ -73,7 +73,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 
   useEffect(() => {
     fetchChats();
-  }, [channels, directMessages]);
+  }, []);
 
   const getChannelSelect = (chat: IChat) => {
     if (selectedChat && selectedChat.id === chat.id) {
