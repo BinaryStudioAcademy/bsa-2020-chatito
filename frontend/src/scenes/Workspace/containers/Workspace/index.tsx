@@ -18,13 +18,15 @@ import { Routes } from 'common/enums/Routes';
 import {
   selectWorkspaceRoutine,
   setActiveThreadRoutine,
-  showRightSideMenuRoutine
+  showRightSideMenuRoutine,
+  fetchWorkspaceChatsRoutine
 } from 'scenes/Workspace/routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { Route, Switch } from 'react-router-dom';
 import LoaderWrapper from 'components/LoaderWrapper';
+import { IFetchWorkspaceChat } from 'common/models/chat/IFetchWorkspaceChat';
 
 interface IProps {
   currentUserId?: string;
@@ -43,6 +45,7 @@ interface IProps {
   isLoader: boolean;
   userProfile: IUser;
   selectedHash: string;
+  fetchWorkspaceChats: IBindingCallback1<IFetchWorkspaceChat>;
 }
 
 const Workspace: React.FC<IProps> = ({
@@ -54,7 +57,8 @@ const Workspace: React.FC<IProps> = ({
   toggleRightMenu,
   isLoader,
   userProfile,
-  selectedHash
+  selectedHash,
+  fetchWorkspaceChats
 }) => {
   if (!currentUserId) return <></>;
 
@@ -64,6 +68,7 @@ const Workspace: React.FC<IProps> = ({
       const currWorkspace = userWorkspaces.find(workspaceItem => workspaceItem.hash === whash);
       if (currWorkspace) {
         selectWorkspace(currWorkspace);
+        fetchWorkspaceChats({ workspaceId: currWorkspace.id });
       }
     }
   }, [match]);
@@ -148,7 +153,8 @@ const mapDispatchToProps = {
   router: push,
   selectWorkspace: selectWorkspaceRoutine,
   toggleActiveThread: setActiveThreadRoutine,
-  toggleRightMenu: showRightSideMenuRoutine
+  toggleRightMenu: showRightSideMenuRoutine,
+  fetchWorkspaceChats: fetchWorkspaceChatsRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Workspace);
