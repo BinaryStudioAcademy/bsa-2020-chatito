@@ -5,13 +5,13 @@ import styles from './styles.module.sass';
 import { IUser } from 'common/models/user/IUser';
 import MultiSelect from 'react-multi-select-component';
 import { IAppState } from 'common/models/store';
-import { fetchWorkspaceUsersRoutine } from './routines';
+import { fetchWorkspaceUsersRoutine } from 'scenes/Workspace/routines';
 import { connect } from 'react-redux';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 interface IProps {
   createDirect: IBindingCallback1<any>;
-  getUsers: IBindingCallback1<any>;
+  getUsers: (workspaceId: string) => void;
   workspace: IWorkspace;
   users?: IUser[];
 }

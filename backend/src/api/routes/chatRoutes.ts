@@ -5,7 +5,8 @@ import {
   addChat,
   getAllUserChats,
   getAllChatUsers,
-  removeUserFromChat } from '../../services/chatService';
+  removeUserFromChat,
+  addUsersToChat } from '../../services/chatService';
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router
     const chat = await addChat(req.user.id, req.body);
     req.io.of('/chat').emit('joinChat', chat.id);
     return chat;
-  }));
+  }))
+  .post('/invite-users', run((req: Request) => addUsersToChat(req.body.chatId, req.body.userIds)));
 
 export default router;

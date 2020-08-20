@@ -28,6 +28,10 @@ class PostRepository extends Repository<Post> {
     return posts.reverse();
   }
 
+  getByIdWithChat(id: string): Promise<Post> {
+    return this.findOne({ where: { id }, relations: ['chat'] });
+  }
+
   addPost(post: ICreatePost): Promise<Post> {
     const newPost = this.create(post);
     return newPost.save();

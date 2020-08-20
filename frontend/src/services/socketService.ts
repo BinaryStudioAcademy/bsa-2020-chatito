@@ -4,12 +4,14 @@ import { getAccessToken } from 'common/helpers/storageHelper';
 import { store } from 'store';
 import { IPost } from 'common/models/post/IPost';
 import { addPostWithSocketRoutine, editPostWithSocketRoutine, addChatWithSocketRoutine } from 'scenes/Chat/routines';
-import { incUnreadCountRoutine } from 'scenes/Workspace/routines';
+import { incUnreadCountRoutine, addActiveCommentWithSocketRoutine } from 'scenes/Workspace/routines';
 import { IChat } from 'common/models/chat/IChat';
 import { ClientSockets } from 'common/enums/ClientSockets';
 import { ServerSockets } from 'common/enums/ServerSockets';
 import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
+import { addCommentWithSocketRoutine } from 'containers/ThreadsContainer/routines';
+import { IServerComment } from 'common/models/post/IServerComment';
 
 const { server } = env.urls;
 
@@ -38,5 +40,15 @@ export const connectSockets = () => {
   chatSocket.on(ClientSockets.AddChat, (chat: IChat) => {
     store.dispatch(addChatWithSocketRoutine(chat));
     store.dispatch(push(Routes.Chat.replace(':whash', chat.workspace.hash).replace(':chash', chat.hash)));
+  });
+  chatSocket.on(ClientSockets.AddReply, (comment: IServerComment) => {
+    const state = store.getState();
+    if (state.threads.threads) {
+      store.dispatch(addCommentWithSocketRoutine(comment));
+    }
+    const { activeThread } = state.workspace;
+    if (activeThread && activeThread.post.id === comment.postId) {
+      store.dispatch(addActiveCommentWithSocketRoutine(comment));
+    }
   });
 };

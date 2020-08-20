@@ -7,7 +7,6 @@ import Thread from 'containers/Thread/index';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IGetThreads } from 'common/models/threads/IGetThreads';
 import LoaderWrapper from 'components/LoaderWrapper/index';
-import { IUser } from 'common/models/user/IUser';
 import { IFetchedThreads } from 'common/models/threads/IFetchedThreads';
 import { ICommentsInfo } from 'common/models/post/ICommentsInfo';
 
@@ -17,14 +16,12 @@ interface IProps {
   activeWorkspaceId: string;
   userId: string;
   threads: any;
-  openUserProfile: IBindingCallback1<IUser>;
-  sending?: boolean;
 }
 
 const noInfo: ICommentsInfo = { count: 0, lastAt: new Date(), avatars: [] };
 
 // eslint-disable-next-line
-const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorkspaceId, userId, loading, threads, openUserProfile, sending }) => {
+const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorkspaceId, userId, loading, threads }) => {
   let fetchedThreads: IFetchedThreads[] = [];
   const hideCloseBtn = true;
   const showOnlyTwoComments = true;
@@ -32,7 +29,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
     if (activeWorkspaceId) {
       fetchThreads({ userId, activeWorkspaceId });
     }
-  }, [activeWorkspaceId, sending]);
+  }, [activeWorkspaceId]);
   if (threads) {
     fetchedThreads = [...threads];
   }
@@ -74,7 +71,6 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
                   }}
                   comments={post.comments}
                   hideCloseBtn={hideCloseBtn}
-                  openUserProfile={openUserProfile}
                 />
               </div>
             ) : ''}
@@ -90,8 +86,7 @@ const mapStateToProps = (state: IAppState) => ({
   // eslint-disable-next-line
   userId: state.user.user!.id,
   activeWorkspaceId: state.workspace.workspace.id,
-  threads: state.threads.threads,
-  sending: state.threads.sendingComment
+  threads: state.threads.threads
 });
 
 const mapDispatchToProps = {
