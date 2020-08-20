@@ -79,7 +79,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return {
         ...state,
         showRightSideMenu: RightMenuTypes.Profile,
-        activeThread: null
+        userProfile: { ...payload }
       };
     case fetchPostCommentsRoutine.SUCCESS: {
       if (state.activeThread) {

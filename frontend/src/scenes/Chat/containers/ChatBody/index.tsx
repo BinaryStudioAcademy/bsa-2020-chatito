@@ -4,9 +4,8 @@ import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import { IPost } from 'common/models/post/IPost';
 import Post from 'containers/Post';
-import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
-import { showUserProfileRoutine, setActiveThreadRoutine } from 'scenes/Workspace/routines';
+import { setActiveThreadRoutine } from 'scenes/Workspace/routines';
 import InfiniteScroll from 'react-infinite-scroller';
 import { Spinner } from 'react-bootstrap';
 import { setPostsRoutine } from 'scenes/Chat/routines';
@@ -17,7 +16,6 @@ import { PostType } from 'common/enums/PostType';
 interface IProps {
   chatId: string | undefined;
   messages: IPost[];
-  openProfile: IBindingAction;
   openThread: IBindingCallback1<IPost>;
   activeThreadPostId: string | undefined;
   loadMorePosts: IBindingCallback1<IFetchMorePosts>;
@@ -30,7 +28,6 @@ interface IProps {
 const ChatBody: React.FC<IProps> = ({
   chatId = '',
   messages,
-  openProfile,
   openThread,
   activeThreadPostId = '',
   loadMorePosts,
@@ -78,7 +75,6 @@ const ChatBody: React.FC<IProps> = ({
               post={m}
               key={m.id}
               openThread={handleOpenThread}
-              openUserProfile={openProfile}
               type={PostType.Post}
             />
           ))}
@@ -99,7 +95,6 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  openProfile: showUserProfileRoutine,
   openThread: setActiveThreadRoutine,
   loadMorePosts: setPostsRoutine
 };

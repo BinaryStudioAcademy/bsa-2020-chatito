@@ -19,6 +19,7 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
   const inputRef = useRef(null);
   const onViewProfile = () => {
     openProfile(user);
+    document.body.click();
   };
   const onSendMessage = () => {
     if (text.trim()) {

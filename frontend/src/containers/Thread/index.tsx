@@ -7,7 +7,6 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { IUser } from 'common/models/user/IUser';
 import { ICreateComment } from 'common/models/post/ICreateComment';
 import { addCommentRoutine } from './routines';
 import { connect } from 'react-redux';
@@ -23,7 +22,6 @@ interface IProps {
   sendComment: IBindingCallback1<ICreateComment>;
   onHide?: IBindingAction;
   hideCloseBtn?: boolean;
-  openUserProfile: IBindingCallback1<IUser>;
 }
 
 const Thread: FunctionComponent<IProps> = ({
@@ -34,8 +32,7 @@ const Thread: FunctionComponent<IProps> = ({
   comments,
   sendComment,
   onHide,
-  hideCloseBtn,
-  openUserProfile
+  hideCloseBtn
 }) => {
   const [showAll, setShowAll] = useState(false);
   const participants = Array.from(new Set(comments.map((comment: IPost) => comment.createdByUser.id)));
@@ -59,7 +56,7 @@ const Thread: FunctionComponent<IProps> = ({
         {!hideCloseBtn && <FontAwesomeIcon onClick={onHide} icon={faTimes} className={styles.closeBtn} />}
       </header>
       <div className={styles.threadPost}>
-        <Post post={post} openUserProfile={openUserProfile} type={PostType.Post} />
+        <Post post={post} type={PostType.Post} />
       </div>
       {showOnlyTwoComments
         ? (
@@ -78,7 +75,6 @@ const Thread: FunctionComponent<IProps> = ({
               <Post
                 key={comment.id}
                 post={comment}
-                openUserProfile={openUserProfile}
                 type={PostType.Comment}
               />
             )
