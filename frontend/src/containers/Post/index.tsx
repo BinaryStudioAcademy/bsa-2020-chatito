@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Card, Media } from 'react-bootstrap';
+import { Card, Media, Popover, Button, OverlayTrigger, ListGroup } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import styles from './styles.module.sass';
 import { IPost } from 'common/models/post/IPost';
@@ -14,6 +14,10 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPostReactionRoutine } from 'common/models/postReaction/IPostReactionRoutine';
 import { IAppState } from 'common/models/store';
 import { PostType } from 'common/enums/PostType';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import { showModalRoutine } from 'routines/modal';
+import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
+import CustomReminderModal from 'containers/CustomReminderModal';
 
 interface IProps {
   post: IPost;
@@ -23,10 +27,12 @@ interface IProps {
   openUserProfile: IBindingCallback1<IUser>;
   addPostReaction: IBindingCallback1<IPostReactionRoutine>;
   deletePostReaction: IBindingCallback1<IPostReactionRoutine>;
+  showModal: IBindingCallback1<IModalRoutine>;
+  isShown: boolean;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
-  openUserProfile, addPostReaction, deletePostReaction }) => {
+  openUserProfile, addPostReaction, deletePostReaction, showModal, isShown }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
 
@@ -102,41 +108,96 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
     console.log('Send text message'); // eslint-disable-line
   };
 
+  const popoverRemindOptions = (
+    <Popover id="popover-basic" className={isShown ? styles.dNone : ''}>
+      <Popover.Content>
+        <ListGroup>
+          <ListGroup.Item action>
+            In 20 minutes
+          </ListGroup.Item>
+          <ListGroup.Item action>
+            In 1 hour
+          </ListGroup.Item>
+          <ListGroup.Item action>
+            In 3 hours
+          </ListGroup.Item>
+          <ListGroup.Item action>
+            Tomorrow
+          </ListGroup.Item>
+          <ListGroup.Item action onClick={() => showModal({ modalType: ModalTypes.SetReminder, show: true })}>
+            Custom...
+          </ListGroup.Item>
+        </ListGroup>
+      </Popover.Content>
+    </Popover>
+  );
+
+  const popoverMore = (
+    <Popover id="popover-basic">
+      <Popover.Title as="h3">More actions</Popover.Title>
+      <Popover.Content>
+        <ListGroup>
+          <OverlayTrigger trigger="click" placement="right" overlay={popoverRemindOptions}>
+            <ListGroup.Item action>
+              Remind me about that &gt;
+            </ListGroup.Item>
+          </OverlayTrigger>
+        </ListGroup>
+      </Popover.Content>
+    </Popover>
+  );
+
+  const ButtonMore = () => (
+    <OverlayTrigger trigger="click" placement="top" overlay={popoverMore}>
+      <Card.Link
+        bsPrefix={styles.openThreadBtn}
+      >
+        More
+      </Card.Link>
+    </OverlayTrigger>
+  );
+
   return (
-    <Media className={styles.postWrapper}>
-      <ProfilePreview user={createdByUser} onSend={onSend} openProfile={openUserProfile} />
-      <Media.Body bsPrefix={styles.body}>
-        <button type="button" className={styles.author}>{createdByUser.fullName}</button>
-        <br />
-        <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
-        {/* eslint-disable-next-line */}
-        <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
-        <div className={styles.emojiStats}>
-          {type === PostType.Post && renderEmojis()}
-        </div>
-        <div className={styles.footer}>
-          {openThread && (
-            <Card.Link
-              bsPrefix={styles.openThreadBtn}
-              onClick={() => openThread(post)}
-            >
-              Reply
-            </Card.Link>
-          )}
-          {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
-        </div>
-      </Media.Body>
-    </Media>
+    <>
+      <Media className={styles.postWrapper}>
+        <ProfilePreview user={createdByUser} onSend={onSend} openProfile={openUserProfile} />
+        <Media.Body bsPrefix={styles.body}>
+          <button type="button" className={styles.author}>{createdByUser.fullName}</button>
+          <br />
+          <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
+          {/* eslint-disable-next-line */}
+          <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
+          <div className={styles.emojiStats}>
+            {type === PostType.Post && renderEmojis()}
+          </div>
+          <div className={styles.footer}>
+            {openThread && (
+              <Card.Link
+                bsPrefix={styles.openThreadBtn}
+                onClick={() => openThread(post)}
+              >
+                Reply
+              </Card.Link>
+            )}
+            {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
+            <ButtonMore />
+          </div>
+        </Media.Body>
+      </Media>
+      <CustomReminderModal />
+    </>
   );
 };
 
 const mapStateToProps = (state: IAppState) => ({
-  userId: state.user.user?.id as string
+  userId: state.user.user?.id as string,
+  isShown: state.modal.setReminder
 });
 
 const mapDispatchToProps = {
   addPostReaction: addPostReactionRoutine,
-  deletePostReaction: deletePostReactionRoutine
+  deletePostReaction: deletePostReactionRoutine,
+  showModal: showModalRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

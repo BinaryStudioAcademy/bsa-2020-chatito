@@ -7,9 +7,14 @@ import ModalWindow from 'components/ModalWindow';
 import { connect } from 'react-redux';
 import { IAppState } from 'common/models/store';
 import { showModalRoutine } from 'routines/modal';
+import { addReminderRoutine } from 'scenes/Chat/routines';
+import { IChat } from 'common/models/chat/IChatWithUnread';
 
 interface IProps {
   toggleModal: IBindingCallback1<any>;
+  addReminder: IBindingCallback1<any>;
+  isShown: boolean;
+  chatId?: string;
 }
 
 const getCurrentDateData = () => {
@@ -36,7 +41,7 @@ const getCurrentDateData = () => {
   };
 };
 
-const CustomReminderForm = ({ toggleModal }: IProps) => {
+const CustomReminderModal = ({ toggleModal, isShown, addReminder, chatId }: IProps) => {
   const { currentFullDate, currentTime, currentDate } = getCurrentDateData();
 
   const [day, setReminderDay] = useState<string>(currentFullDate);
@@ -44,7 +49,6 @@ const CustomReminderForm = ({ toggleModal }: IProps) => {
   const [note, setNote] = useState<string>('');
 
   const isInitial = (day === currentFullDate && time === currentTime);
-
   const validateFormData = () => {
     const reminderDate = new Date(`${day} ${time}`);
     if (currentDate > reminderDate) {
@@ -56,13 +60,13 @@ const CustomReminderForm = ({ toggleModal }: IProps) => {
   const isValidDate = validateFormData();
 
   const handleSubmit = () => {
-    // createChannel({
-    //   day,
-    //   time,
-    //   note
-    // });
     if (validateFormData()) {
-      console.log(day, time, note);
+      addReminder({
+        chatId,
+        day,
+        time,
+        note
+      });
     }
   };
 
@@ -152,12 +156,12 @@ const CustomReminderForm = ({ toggleModal }: IProps) => {
   );
 
   const handleCloseModal = () => {
-    toggleModal({ modalType: ModalTypes.CreateChannel, show: false });
+    toggleModal({ modalType: ModalTypes.SetReminder, show: false });
   };
 
   return (
     <ModalWindow
-      isShown={!false}
+      isShown={isShown}
       onHide={handleCloseModal}
     >
       {formHeader}
@@ -169,16 +173,18 @@ const CustomReminderForm = ({ toggleModal }: IProps) => {
 
 const mapStateToProps = (state: IAppState) => {
   const {
-    modal: { createChannel }
+    modal: { setReminder }
   } = state;
 
   return {
-    isShown: createChannel
+    isShown: setReminder,
+    chatId: state.chat?.chat?.id
   };
 };
 
 const mapDispatchToProps = {
-  toggleModal: showModalRoutine
+  toggleModal: showModalRoutine,
+  addReminder: addReminderRoutine
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CustomReminderForm);
+export default connect(mapStateToProps, mapDispatchToProps)(CustomReminderModal);

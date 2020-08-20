@@ -1,3 +1,4 @@
+import { ModalTypes } from 'common/enums/ModalTypes';
 import { all, put, call, takeEvery } from 'redux-saga/effects';
 import {
   setCurrentChatRoutine,
@@ -105,7 +106,7 @@ function* createReminderRequest({ payload }: Routine<any>) {
   try {
     const chat = yield call(addReminder, payload);
     yield put(addReminderRoutine.success(chat));
-    yield put(showModalRoutine({ modalType: payload.type, show: false }));
+    yield put(showModalRoutine({ modalType: ModalTypes.SetReminder, show: false }));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(addReminderRoutine.failure());
