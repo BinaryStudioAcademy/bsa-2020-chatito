@@ -9,8 +9,8 @@ export async function createChat(payload: ICreateChat) {
   return response;
 }
 
-export async function fetchUserChats() {
-  const response = await api.get('/api/chats');
+export async function fetchWorkspaceChats(workspaceId: string) {
+  const response = await api.get(`/api/workspaces/${workspaceId}/chats`);
   return response;
 }
 

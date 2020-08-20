@@ -5,7 +5,7 @@ import {
   fetchPostCommentsRoutine,
   showRightSideMenuRoutine,
   showUserProfileRoutine,
-  fetchUserChatsRoutine,
+  fetchWorkspaceChatsRoutine,
   incUnreadCountRoutine,
   fetchWorkspaceUsersRoutine,
   addActiveCommentWithSocketRoutine } from '../routines';
@@ -48,18 +48,18 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state,
         workspace: payload
       };
-    case fetchUserChatsRoutine.TRIGGER:
+    case fetchWorkspaceChatsRoutine.TRIGGER:
       return {
         ...state, loading: true
       };
-    case fetchUserChatsRoutine.SUCCESS:
+    case fetchWorkspaceChatsRoutine.SUCCESS:
       return {
         ...state,
         channels: payload.channels || [],
         directMessages: payload.directMessages || [],
         loading: false
       };
-    case fetchUserChatsRoutine.FAILURE:
+    case fetchWorkspaceChatsRoutine.FAILURE:
       return {
         ...state, loading: false
       };

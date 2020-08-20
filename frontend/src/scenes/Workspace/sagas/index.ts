@@ -1,7 +1,7 @@
 import {
   addWorkspaceRoutine,
   setActiveThreadRoutine,
-  fetchUserChatsRoutine,
+  fetchWorkspaceChatsRoutine,
   fetchPostCommentsRoutine,
   fetchWorkspaceUsersRoutine
 } from 'scenes/Workspace/routines';
@@ -11,7 +11,7 @@ import { addWorkspace, getWorkspaceUsers } from 'services/workspaceService';
 import { fetchPostComments } from 'services/threadsService';
 import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
-import { fetchUserChats } from 'services/chatService';
+import { fetchWorkspaceChats } from 'services/chatService';
 import { toastrError } from 'services/toastrService';
 
 function* addWorkspaceReq({ payload }: Routine<any>) {
@@ -57,18 +57,18 @@ function* watchSetActiveThread() {
   yield takeEvery(setActiveThreadRoutine.TRIGGER, setActiveThread);
 }
 
-function* fetchUserChatsRequest() {
+function* fetchWorkspaceChatsRequest({ payload }: Routine<any>) {
   try {
-    const response = yield call(fetchUserChats);
-    yield put(fetchUserChatsRoutine.success(response));
+    const response = yield call(fetchWorkspaceChats, payload.workspaceId);
+    yield put(fetchWorkspaceChatsRoutine.success(response));
   } catch (error) {
     yield call(toastrError, error.message);
-    yield put(fetchUserChatsRoutine.failure(error.message));
+    yield put(fetchWorkspaceChatsRoutine.failure(error.message));
   }
 }
 
 function* watchFetchUserChatsRequest() {
-  yield takeEvery(fetchUserChatsRoutine.TRIGGER, fetchUserChatsRequest);
+  yield takeEvery(fetchWorkspaceChatsRoutine.TRIGGER, fetchWorkspaceChatsRequest);
 }
 
 function* fetchWorkspaceUsers({ payload }: Routine<any>) {
