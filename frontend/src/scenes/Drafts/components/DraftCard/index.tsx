@@ -23,6 +23,7 @@ const DraftCard: React.FC<IProps> = ({ draft, whash, router }) => {
   return (
     <div className={styles.card}>
       <button type="button" className={styles.cardHeader} onClick={onGoToChat}>{draft.chat.name}</button>
+      {/* eslint-disable-next-line */}
       <p dangerouslySetInnerHTML={{ __html: draft.text }} />
       <div className={styles.buttons}>
         <FontAwesomeIcon className={styles.button} icon={faPaperPlane} />

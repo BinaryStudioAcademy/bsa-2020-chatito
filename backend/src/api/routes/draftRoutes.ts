@@ -1,9 +1,6 @@
 import { Router, Request } from 'express';
 import { run } from '../../common/utils/routeHelper';
-import { upsertDraftPost,
-  deleteDraftPost,
-  upsertDraftComment,
-  deleteDraftComment } from '../../services/draftService';
+import { upsertDraftPost, deleteDraftPost, upsertDraftComment, deleteDraftComment } from '../../services/draftService';
 
 const router = Router();
 

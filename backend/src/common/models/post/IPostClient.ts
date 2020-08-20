@@ -10,4 +10,8 @@ export interface IPostClient {
   createdByUser: IUserClient;
   postReactions: IPostReactionClient[];
   commentsInfo: ICommentsInfo;
+  chat?: {
+    name: string;
+    hash: string;
+  }
 }

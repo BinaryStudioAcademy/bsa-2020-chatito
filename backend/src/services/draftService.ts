@@ -51,6 +51,7 @@ export const upsertDraftComment = async (id: string, draftComment: IUpsertDraftC
 
 export const deleteDraftComment = async (id: string, { postId }: IDeleteDraftComment) => {
   await getCustomRepository(DraftCommentRepository).deleteDraftComment(id, postId);
+  return { result: true };
 };
 
 export const getAll = async (userId: string, wpId: string) => {

@@ -1,4 +1,4 @@
-import React, { useState, FunctionComponent, useEffect } from 'react';
+import React, { useState, FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -12,15 +12,14 @@ import {
   faSearch,
   faDatabase,
   faPlay,
-  faPlus
+  faPlus,
+  faPencilAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
-import { IBindingAction } from 'common/models/callback/IBindingActions';
 import styles from './styles.module.sass';
 import { goToThreadsRoutine } from 'containers/ThreadsContainer/routines';
 import { Routine } from 'redux-saga-routines';
-import { fetchUserChatsRoutine } from '../../routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { showModalRoutine } from 'routines/modal';
@@ -38,7 +37,6 @@ interface IProps {
   directMessages: IChat[];
   selectedChat: IChat;
   selectedWorkspace: IWorkspace;
-  fetchChats: IBindingAction;
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
   goToThreads: Routine;
@@ -48,7 +46,6 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
   selectedChat,
-  fetchChats,
   showModal,
   router,
   selectedWorkspace
@@ -71,10 +68,6 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 
   const getClassNameImg = (state: boolean) => (state ? styles.chanelsImgRotate : styles.chanelsImg);
 
-  useEffect(() => {
-    fetchChats();
-  }, []);
-
   const getChannelSelect = (chat: IChat) => {
     if (selectedChat && selectedChat.id === chat.id) {
       return `${styles.channelSelect} ${styles.channelCurrent}`;
@@ -91,17 +84,32 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   );
 
   const userChannel = (channel: IChat) => {
-    const { name, isPrivate, id } = channel;
+    const { name, isPrivate, id, draftPosts } = channel;
+    const draftPostText = draftPosts?.length ? draftPosts[0].text : undefined;
+
     return (
       <button type="button" key={id} className={getChannelSelect(channel)} onClick={() => doSelectChannel(channel)}>
-        <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} color="black" />
-        <span className={styles.buttonText}>{name}</span>
+        <div className={styles.chatBlock}>
+          <div>
+            <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} color="black" />
+            <span className={styles.buttonText}>{name}</span>
+          </div>
+
+          {
+            draftPostText && !(selectedChat && selectedChat.id === channel.id)
+              ? <FontAwesomeIcon icon={faPencilAlt} color="black" />
+              : null
+          }
+
+        </div>
       </button>
     );
   };
 
   const directChannel = (directMessage: IChat) => {
-    const { name, id } = directMessage;
+    const { name, id, draftPosts } = directMessage;
+    const draftPostText = draftPosts?.length ? draftPosts[0].text : undefined;
+
     return (
       <button
         type="button"
@@ -109,8 +117,19 @@ const ChatToolbar: FunctionComponent<IProps> = ({
         className={getChannelSelect(directMessage)}
         onClick={() => doSelectChannel(directMessage)}
       >
-        <div className={styles.metkaOnLine} />
-        <span className={styles.buttonText}>{name}</span>
+        <div className={styles.chatBlock}>
+          <div>
+            <div className={styles.metkaOnLine} />
+            <span className={styles.buttonText}>{name}</span>
+          </div>
+
+          {
+            draftPostText && !(selectedChat && selectedChat.id === directMessage.id)
+              ? <FontAwesomeIcon icon={faPencilAlt} color="black" />
+              : null
+          }
+
+        </div>
       </button>
     );
   };
@@ -203,7 +222,6 @@ const mapStateToProps = (state: IAppState) => ({
 
 const mapDispatchToProps = {
   goToThreads: goToThreadsRoutine,
-  fetchChats: fetchUserChatsRoutine,
   showModal: showModalRoutine,
   router: push,
   selectChat: setCurrentChatRoutine

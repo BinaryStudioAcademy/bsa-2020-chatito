@@ -9,7 +9,11 @@ Authorization: Bearer <insert token here>
 }
 ###
 
+<<<<<<< HEAD
 DELETE http://localhost:3001/api/drafts/posts
+=======
+DELETE http://localhost:3001/api/draft/posts
+>>>>>>> b5efeb775066304a085cafa9f313765af1ddffba
 Content-Type: application/json
 Authorization: Bearer <insert token here>
 
@@ -18,7 +22,11 @@ Authorization: Bearer <insert token here>
 }
 ###
 
+<<<<<<< HEAD
 POST http://localhost:3001/api/drafts/comments
+=======
+POST http://localhost:3001/api/draft/comments
+>>>>>>> b5efeb775066304a085cafa9f313765af1ddffba
 Content-Type: application/json
 Authorization: Bearer <insert token here>
 
@@ -31,7 +39,11 @@ Authorization: Bearer <insert token here>
 }
 ###
 
+<<<<<<< HEAD
 DELETE http://localhost:3001/api/drafts/comments
+=======
+DELETE http://localhost:3001/api/draft/comments
+>>>>>>> b5efeb775066304a085cafa9f313765af1ddffba
 Content-Type: application/json
 Authorization: Bearer <insert token here>
 
