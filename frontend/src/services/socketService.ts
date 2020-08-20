@@ -18,7 +18,7 @@ const { server } = env.urls;
 // eslint-disable-next-line
 
 export const connectSockets = () => {
-  const chatSocket = io(`${server!}/chat`, { query: `auth_token=${getAccessToken()}` });
+  const chatSocket = io(`${server}/chat`, { query: `auth_token=${getAccessToken()}` });
   chatSocket.on(ClientSockets.AddPost, (post: IPost) => {
     const state = store.getState();
     if (post.chatId === state.chat.chat.id) {
