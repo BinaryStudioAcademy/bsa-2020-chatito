@@ -11,12 +11,15 @@ import ModalWindow from 'components/ModalWindow';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { ChatType } from 'common/enums/ChatType';
 import { createChatRoutine } from 'scenes/Chat/routines';
+import { IChat } from 'common/models/chat/IChat';
+import { toastrError } from 'services/toastrService';
 
 interface IProps {
   isShown: boolean;
   createChannel: IBindingCallback1<ICreateChat>;
   toggleModal: IBindingCallback1<IModalRoutine>;
   workspace: IWorkspace;
+  chats: Array<IChat>;
 }
 
 interface IChannelModalData {
@@ -29,13 +32,18 @@ const CreateChannelModal: FunctionComponent<IProps> = ({
   isShown,
   createChannel,
   toggleModal,
-  workspace
+  workspace,
+  chats
 }: IProps) => {
   const handleCloseModal = () => {
     toggleModal({ modalType: ModalTypes.CreateChannel, show: false });
   };
 
   const getNewChannelData = ({ name, description, isPrivate }: IChannelModalData) => {
+    if (chats.find(c => c.name === name)) {
+      toastrError('Chat with such a name already exists');
+      return;
+    }
     const newChannel: ICreateChat = {
       name,
       description,
@@ -60,12 +68,13 @@ const CreateChannelModal: FunctionComponent<IProps> = ({
 const mapStateToProps = (state: IAppState) => {
   const {
     modal: { createChannel },
-    workspace: { workspace }
+    workspace: { workspace, channels }
   } = state;
 
   return {
     isShown: createChannel,
-    workspace
+    workspace,
+    chats: channels
   };
 };
 

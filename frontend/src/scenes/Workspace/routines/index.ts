@@ -9,6 +9,6 @@ export const setActiveThreadRoutine = createRoutine('SET_ACTIVE_THREAD');
 export const addActiveCommentWithSocketRoutine = createRoutine('ADD_ACTIVE_COMMENT_WITH_SOCKET');
 export const showUserProfileRoutine = createRoutine('SHOW_USER_PROFILE');
 export const fetchPostCommentsRoutine = createRoutine('FETCH_POST_COMMENTS');
-export const fetchUserChatsRoutine = createRoutine('FETCH_USER_CHATS');
+export const fetchWorkspaceChatsRoutine = createRoutine('FETCH_WORKSPACE_CHATS');
 export const incUnreadCountRoutine = createRoutine('INC_UNREAD_COUNT');
 export const fetchWorkspaceUsersRoutine = createRoutine('FETCH_WORKSPACE_USERS');

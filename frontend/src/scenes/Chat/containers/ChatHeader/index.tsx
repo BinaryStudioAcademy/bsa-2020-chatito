@@ -45,7 +45,8 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
       return prevValue;
     }, initVal);
 
-    return initVal.map(url => (<Image src={url} key={url} rounded className={styles.memberAvatarIcon} />));
+    return initVal.map((url, index) =>
+      (<Image src={url} key={url + index} rounded className={styles.memberAvatarIcon} />)); // eslint-disable-line
   };
 
   const onInviteUser = () => {

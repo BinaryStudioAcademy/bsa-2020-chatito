@@ -1,0 +1,30 @@
+name: Backend Build
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [dev]
+    paths: 'backend/**/*.*'
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Generate deployment package
+      run: |
+        cd backend
+        zip -r ../deploy.zip .
+    - name: Deploy to EB
+      uses: einaregilsson/beanstalk-deploy@v7
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: ${{ secrets.APP_NAME }}
+        environment_name: ${{ secrets.APP_ENV_NAME }}
+        region: ${{ secrets.AWS_REGION }}
+        version_label: ${{ github.sha }}
+        deployment_package: deploy.zip

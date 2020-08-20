@@ -12,7 +12,7 @@ export const fromReactionToReactionClient = ({ reaction, userId }: IPostReaction
 });
 
 export const fromPostToPostClient = async (post: IPost): Promise<IPostClient> => {
-  const { id, createdAt, text, createdByUserId, chatId, postReactions } = post;
+  const { id, createdAt, text, createdByUserId, chatId, postReactions, chat } = post;
   const user = await getUserById(createdByUserId);
   const userClient = fromUserToUserClient(user);
   const postReactionsClient = postReactions
@@ -26,6 +26,10 @@ export const fromPostToPostClient = async (post: IPost): Promise<IPostClient> =>
     chatId,
     createdByUser: userClient,
     postReactions: postReactionsClient,
-    commentsInfo: fromPostCommentsToCommentsInfo(comments)
+    commentsInfo: fromPostCommentsToCommentsInfo(comments),
+    chat: {
+      name: chat.name,
+      hash: chat.hash
+    }
   };
 };

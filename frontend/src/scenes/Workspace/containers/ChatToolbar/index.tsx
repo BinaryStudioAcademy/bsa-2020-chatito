@@ -1,4 +1,4 @@
-import React, { useState, FunctionComponent, useEffect } from 'react';
+import React, { useState, FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -16,11 +16,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
-import { IBindingAction } from 'common/models/callback/IBindingActions';
 import styles from './styles.module.sass';
 import { goToThreadsRoutine } from 'containers/ThreadsContainer/routines';
 import { Routine } from 'redux-saga-routines';
-import { fetchUserChatsRoutine } from '../../routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { showModalRoutine } from 'routines/modal';
@@ -38,7 +36,6 @@ interface IProps {
   directMessages: IChat[];
   selectedChat: IChat;
   selectedWorkspace: IWorkspace;
-  fetchChats: IBindingAction;
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
   goToThreads: Routine;
@@ -48,7 +45,6 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
   selectedChat,
-  fetchChats,
   showModal,
   router,
   selectedWorkspace
@@ -70,10 +66,6 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   const getClassNameDiv = (state: boolean) => (state ? styles.listBoxHidden : styles.listBox);
 
   const getClassNameImg = (state: boolean) => (state ? styles.chanelsImgRotate : styles.chanelsImg);
-
-  useEffect(() => {
-    fetchChats();
-  }, []);
 
   const getChannelSelect = (chat: IChat) => {
     if (selectedChat && selectedChat.id === chat.id) {
@@ -203,7 +195,6 @@ const mapStateToProps = (state: IAppState) => ({
 
 const mapDispatchToProps = {
   goToThreads: goToThreadsRoutine,
-  fetchChats: fetchUserChatsRoutine,
   showModal: showModalRoutine,
   router: push,
   selectChat: setCurrentChatRoutine

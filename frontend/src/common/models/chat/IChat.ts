@@ -8,6 +8,7 @@ export interface IChat {
   type: ChatType;
   isPrivate: boolean;
   workspace: IWorkspace;
+  workspaceId: string;
   createdByUserId: string;
   users: IUser[]
   unreadCount?: number;

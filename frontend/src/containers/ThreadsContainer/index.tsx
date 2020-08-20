@@ -58,7 +58,6 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
               >
                 <Thread
                   showOnlyTwoComments={showOnlyTwoComments}
-                  chatName={post.chat.name}
                   key={post.id}
                   width="100%"
                   post={{
@@ -74,7 +73,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
                   hideCloseBtn={hideCloseBtn}
                 />
               </div>
-            ) : '' }
+            ) : ''}
           </div>
         ))}
       </div>
