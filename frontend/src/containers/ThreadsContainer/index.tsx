@@ -61,7 +61,6 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
               >
                 <Thread
                   showOnlyTwoComments={showOnlyTwoComments}
-                  chatName={post.chat.name}
                   key={post.id}
                   width="100%"
                   post={{
@@ -78,7 +77,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
                   openUserProfile={openUserProfile}
                 />
               </div>
-            ) : '' }
+            ) : ''}
           </div>
         ))}
       </div>
@@ -92,7 +91,8 @@ const mapStateToProps = (state: IAppState) => ({
   userId: state.user.user!.id,
   activeWorkspaceId: state.workspace.workspace.id,
   threads: state.threads.threads,
-  sending: state.threads.sendingComment });
+  sending: state.threads.sendingComment
+});
 
 const mapDispatchToProps = {
   fetchThreads: fetchThreadsRoutine

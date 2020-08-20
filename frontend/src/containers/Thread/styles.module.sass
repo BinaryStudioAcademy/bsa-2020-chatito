@@ -24,6 +24,10 @@ $colorBackground: var(--workspace-toolbar-select-background-second)
   z-index: 1000
   top: 25px
   right: 25px
+  opacity: 0.4
+  cursor: pointer
+  &:hover
+    opacity: 1
 
 .threadContainer
   background-color: var(--chat-background-secondary)
@@ -47,6 +51,16 @@ $colorBackground: var(--workspace-toolbar-select-background-second)
   font-size: 1.5em
   font-weight: bold
   margin-bottom: 5px
+
+.threadChatNameButton
+  font-size: 1.5em
+  font-weight: bold
+  margin-bottom: 5px
+  background: none
+  border: none
+  cursor: pointer
+  &:hover
+    text-decoration: underline
 
 .threadPost
   padding: 10px

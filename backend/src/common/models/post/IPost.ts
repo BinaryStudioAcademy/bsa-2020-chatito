@@ -1,4 +1,5 @@
 import { IPostReaction } from '../postReaction/IPostReaction';
+import { IChat } from '../chat/IChat';
 
 export interface IPost {
   id: string;
@@ -8,4 +9,5 @@ export interface IPost {
   chatId: string;
   text: string;
   postReactions: IPostReaction[];
+  chat?: IChat;
 }

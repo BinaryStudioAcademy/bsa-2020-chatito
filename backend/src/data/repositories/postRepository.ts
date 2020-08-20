@@ -19,7 +19,7 @@ class PostRepository extends Repository<Post> {
     count: take = undefined
   }: IGetChatPosts): Promise<Post[]> {
     const posts = await this.find({
-      relations: ['createdByUser', 'postReactions'],
+      relations: ['createdByUser', 'postReactions', 'chat'],
       where: { chat },
       order: { createdAt: 'DESC' },
       skip,
