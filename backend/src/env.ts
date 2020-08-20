@@ -5,7 +5,7 @@ dotenv.config();
 
 export const env = {
   app: {
-    port: getOsEnv('APP_SERVER_PORT'),
+    port: getOsEnv('PORT'),
     secret: getOsEnv('SECRET_KEY'),
     sendgrid: getOsEnv('SENDGRID_API_KEY'),
     client: getOsEnv('APP_CLIENT_URL')
