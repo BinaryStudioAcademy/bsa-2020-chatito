@@ -7,7 +7,8 @@ import {
   createChatRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
-  addReminderRoutine
+  addReminderRoutine,
+  postReminderDataRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import { fetchChatPosts, addPost, createChat, fetchChatUsers, removeUserFromChat } from 'services/chatService';
@@ -28,6 +29,18 @@ function* fetchChatPostsRequest({ payload }: Routine<any>): Routine<any> {
 
 function* watchPostsRequest() {
   yield takeEvery(setPostsRoutine.TRIGGER, fetchChatPostsRequest);
+}
+
+function* postReminderData({ payload }: Routine<any>): Routine<any> {
+  try {
+    yield put(postReminderDataRoutine.success(payload));
+  } catch (error) {
+    yield call(toastrError, error.message);
+  }
+}
+
+function* watchPostReminderDataRequest() {
+  yield takeEvery(setPostsRoutine.TRIGGER, postReminderData);
 }
 
 function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
@@ -126,6 +139,7 @@ export default function* chatSaga() {
     watchToggleCreateChatModal(),
     watchFetchChatUsersRequest(),
     watchRemoveUserFromChat(),
-    watchCreateReminderRequest()
+    watchCreateReminderRequest(),
+    watchPostReminderDataRequest()
   ]);
 }

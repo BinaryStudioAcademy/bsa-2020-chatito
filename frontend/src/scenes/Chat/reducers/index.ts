@@ -7,16 +7,18 @@ import { setCurrentChatRoutine,
   editPostWithSocketRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
-  addReminderRoutine } from '../routines';
+  addReminderRoutine,
+  postReminderDataRoutine } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 import { IUser } from 'common/models/user/IUser';
+import { ICreateReminder } from 'common/models/reminder/ICreateReminder';
 
 export interface IChatState {
   chat?: IChat;
   posts: IPost[];
   users?: IUser[];
-  reminders?: IReminder[];
+  reminders?: ICreateReminder[];
   loading: boolean;
   error: any;
   hasMorePosts: boolean;
@@ -149,6 +151,13 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
       return {
         ...state, loading: false
       };
+    case postReminderDataRoutine.SUCCESS: {
+      const posts = [...state.posts];
+      posts.push(payload);
+      return {
+        ...state, posts
+      };
+    }
     default:
       return state;
   }
