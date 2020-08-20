@@ -42,6 +42,7 @@ interface IProps {
   toggleActiveThread: IBindingCallback1<IPost>;
   isLoader: boolean;
   userProfile: IUser;
+  selectedHash: string;
 }
 
 const Workspace: React.FC<IProps> = ({
@@ -52,16 +53,18 @@ const Workspace: React.FC<IProps> = ({
   showRightSideMenu,
   toggleRightMenu,
   isLoader,
-  userProfile
+  userProfile,
+  selectedHash
 }) => {
   if (!currentUserId) return <></>;
 
   useEffect(() => {
     const { whash } = match.params;
-    const currWorkspace = userWorkspaces.find(workspaceItem => workspaceItem.hash === whash);
-
-    if (currWorkspace) {
-      selectWorkspace(currWorkspace);
+    if (selectedHash !== whash) {
+      const currWorkspace = userWorkspaces.find(workspaceItem => workspaceItem.hash === whash);
+      if (currWorkspace) {
+        selectWorkspace(currWorkspace);
+      }
     }
   }, [match]);
 
@@ -91,7 +94,6 @@ const Workspace: React.FC<IProps> = ({
   };
 
   return (
-    // eslint-disable-next-line
     <LoaderWrapper loading={isLoader}>
       <div className={styles.mainContainer}>
         <Header />
@@ -137,6 +139,7 @@ const mapStateToProps = (state: IAppState) => {
     showRightSideMenu,
     activeThreadPostId,
     isLoader: !workspace.id,
+    selectedHash: workspace.hash,
     userProfile: state.workspace.userProfile
   };
 };
