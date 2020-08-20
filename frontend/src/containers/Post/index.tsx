@@ -27,9 +27,9 @@ interface IProps {
   openThread?: IBindingCallback1<IPost>;
   addPostReaction: IBindingCallback1<IPostReactionRoutine>;
   deletePostReaction: IBindingCallback1<IPostReactionRoutine>;
+  showUserProfile: IBindingCallback1<IUser>;
   showModal: IBindingCallback1<IModalRoutine>;
   isShown: boolean;
-  showUserProfile: IBindingCallback1<IUser>;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
@@ -159,34 +159,40 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
   );
 
   return (
-    <>
-      <Media className={styles.postWrapper}>
-        <ProfilePreview user={createdByUser} onSend={onSend} openProfile={showUserProfile} />
-        <Media.Body bsPrefix={styles.body}>
-          <button type="button" className={styles.author}>{createdByUser.fullName}</button>
-          <br />
-          <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
-          {/* eslint-disable-next-line */}
-          <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
-          <div className={styles.emojiStats}>
-            {type === PostType.Post && renderEmojis()}
-          </div>
-          <div className={styles.footer}>
-            {openThread && (
-              <Card.Link
-                bsPrefix={styles.openThreadBtn}
-                onClick={() => openThread(post)}
-              >
-                Reply
-              </Card.Link>
-            )}
-            {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
-            <ButtonMore />
-          </div>
-        </Media.Body>
-      </Media>
+    <Media className={styles.postWrapper}>
+      <ProfilePreview user={createdByUser} onSend={onSend} openProfile={showUserProfile} />
+      <Media.Body bsPrefix={styles.body}>
+        <button
+          onClick={() => showUserProfile(createdByUser)}
+          className={`${styles.author} button-unstyled`}
+          type="button"
+        >
+          {createdByUser.fullName}
+        </button>
+
+        <br />
+
+        <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
+        {/* eslint-disable-next-line */}
+        <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
+        <div className={styles.emojiStats}>
+          {type === PostType.Post && renderEmojis()}
+        </div>
+        <div className={styles.footer}>
+          {openThread && (
+            <Card.Link
+              bsPrefix={styles.openThreadBtn}
+              onClick={() => openThread(post)}
+            >
+              Reply
+            </Card.Link>
+          )}
+          {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
+          <ButtonMore />
+        </div>
+      </Media.Body>
       <CustomReminderModal />
-    </>
+    </Media>
   );
 };
 
@@ -198,6 +204,7 @@ const mapStateToProps = (state: IAppState) => ({
 const mapDispatchToProps = {
   addPostReaction: addPostReactionRoutine,
   deletePostReaction: deletePostReactionRoutine,
+  showModal: showModalRoutine,
   showUserProfile: showUserProfileRoutine
 };
 
