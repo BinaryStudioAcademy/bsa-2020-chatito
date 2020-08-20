@@ -46,7 +46,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
     }
   }, [post]);
 
-  const { createdByUser, text, postReactions } = post;
+  const { createdByUser, text, postReactions = [] } = post;
   const createdAt = new Date(post.createdAt);
 
   const trigger = () => (

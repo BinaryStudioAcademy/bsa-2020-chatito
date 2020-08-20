@@ -78,29 +78,35 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         activeThread: { ...state.activeThread, post: payload, comments: [] }
       };
     case upsertDraftCommentRoutine.SUCCESS:
-      return {
-        ...state,
-        activeThread: {
-          ...state.activeThread,
-          post: {
-            ...state.activeThread?.post,
-            draftComments: [
-              payload
-            ]
+      if (state.activeThread) {
+        return {
+          ...state,
+          activeThread: {
+            ...state.activeThread,
+            post: {
+              ...state.activeThread.post,
+              draftComments: [
+                payload
+              ]
+            }
           }
-        }
-      };
+        };
+      }
+      return { ...state };
     case deleteDraftCommentRoutine.SUCCESS:
-      return {
-        ...state,
-        activeThread: {
-          ...state.activeThread,
-          post: {
-            ...state.activeThread?.post,
-            draftComments: []
+      if (state.activeThread) {
+        return {
+          ...state,
+          activeThread: {
+            ...state.activeThread,
+            post: {
+              ...state.activeThread?.post,
+              draftComments: []
+            }
           }
-        }
-      };
+        };
+      }
+      return { ...state };
     case updateChatDraftPostRoutine.TRIGGER:
       const { chatId: updateChatId, id, text } = payload;
       const draftPosts = id ? [{ id, text }] : [];

@@ -17,8 +17,7 @@ import {
   createChat,
   fetchChatUsers,
   removeUserFromChat,
-  addUsersToChat,
-  fetchUserChats
+  addUsersToChat
 } from 'services/chatService';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError, toastrSuccess } from 'services/toastrService';
@@ -43,7 +42,7 @@ function* watchPostsRequest() {
 function* upsertDraftPostRequest({ payload }: Routine<any>) {
   try {
     const response = yield call(upsertDraftPost, payload);
-    yield put(updateChatDraftPostRoutine.trigger(payload));
+    yield put(updateChatDraftPostRoutine.trigger({ ...response, chatId: payload.chatId }));
 
     yield put(upsertDraftPostRoutine.success(response));
   } catch (error) {

@@ -25,7 +25,7 @@ function* watchAddCommentRequest() {
 function* upsertDraftCommentRequest({ payload }: Routine<any>) {
   try {
     const response = yield call(upsertDraftComment, payload);
-    yield put(updatePostDraftCommentRoutine.trigger(payload));
+    yield put(updatePostDraftCommentRoutine.trigger({ ...response, postId: payload.postId }));
 
     yield put(upsertDraftCommentRoutine.success(response));
   } catch (error) {
