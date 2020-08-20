@@ -7,7 +7,8 @@ import {
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
   upsertDraftPostRoutine,
-  deleteDraftPostRoutine
+  deleteDraftPostRoutine,
+  addUsersToChatRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import {
@@ -16,10 +17,11 @@ import {
   createChat,
   fetchChatUsers,
   removeUserFromChat,
-  fetchUserChats
+  fetchUserChats,
+  addUsersToChat
 } from 'services/chatService';
 import { IPost } from 'common/models/post/IPost';
-import { toastrError } from 'services/toastrService';
+import { toastrError, toastrSuccess } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
 import { IUser } from 'common/models/user/IUser';
 import { upsertDraftPost, deleteDraftPost } from 'services/draftService';
@@ -121,6 +123,19 @@ function* watchCreateChatRequest() {
   yield takeEvery(createChatRoutine.TRIGGER, createChatRequest);
 }
 
+function* addUsersToChatRequest({ payload }: Routine<any>) {
+  try {
+    yield call(addUsersToChat, payload);
+    yield call(toastrSuccess, 'Users have been added successfully.');
+  } catch (error) {
+    yield call(toastrError, 'Adding users was failed. Please try again later.');
+  }
+}
+
+function* watchAddUsersToChat() {
+  yield takeEvery(addUsersToChatRoutine.TRIGGER, addUsersToChatRequest);
+}
+
 function* fetchChatUsersRequest({ payload }: Routine<any>) {
   try {
     const users: IUser[] = yield call(fetchChatUsers, payload);
@@ -159,6 +174,7 @@ export default function* chatSaga() {
     watchDeleteDraftPostRequest(),
     watchCreateChatRequest(),
     watchToggleCreateChatModal(),
+    watchAddUsersToChat(),
     watchFetchChatUsersRequest(),
     watchRemoveUserFromChat()
   ]);

@@ -53,8 +53,10 @@ export const deleteDraftComment = async (id: string, { postId }: IDeleteDraftCom
   await getCustomRepository(DraftCommentRepository).deleteDraftComment(id, postId);
 };
 
-export const getAll = async (userId: string) => {
-  const comments = await getCustomRepository(DraftCommentRepository).getByUser(userId);
-  console.log(comments);
-  return comments;
+export const getAll = async (userId: string, wpId: string) => {
+  const comments = await getCustomRepository(DraftCommentRepository).getByUserAndWorkspace(userId, wpId);
+  const posts = await getCustomRepository(DraftPostRepository).getByUserAndWorkspace(userId, wpId);
+  const clientPosts = await Promise.all(posts.map(async p => fromDraftPostToDraftPostClient(p)));
+  const clientComments = await Promise.all(comments.map(async c => fromDraftCommentToDraftCommentClient(c)));
+  return { comments: clientComments, posts: clientPosts };
 };

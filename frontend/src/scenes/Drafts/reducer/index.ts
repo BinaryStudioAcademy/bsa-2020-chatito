@@ -1,11 +1,10 @@
 import { Routine } from 'redux-saga-routines';
 import { fetchDraftsRoutine } from '../routines';
-import { IDraftPost } from 'common/models/draft/IDraftPost';
-import { IDraftComment } from 'common/models/draft/IDraftComment';
+import { IDraftClient } from 'common/models/draft/IDraftClient';
 
 export interface IDraftState {
-  posts: IDraftPost[];
-  comments: IDraftComment[];
+  posts: IDraftClient[];
+  comments: IDraftClient[];
   loading: boolean;
   error: any;
 }

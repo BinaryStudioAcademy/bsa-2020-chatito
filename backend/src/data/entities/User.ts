@@ -38,7 +38,7 @@ export class User extends AbstractEntity {
   @OneToMany(() => DraftPost, draftPost => draftPost.createdByUser)
   draftPosts: DraftPost[];
 
-  @OneToMany(() => RefreshToken, token => token.user)
+  @OneToMany(() => RefreshToken, token => token.user, { onDelete: 'CASCADE' })
   refreshTokens: RefreshToken[];
 
   @OneToMany(() => Comment, comment => comment.createdByUser)
@@ -47,7 +47,7 @@ export class User extends AbstractEntity {
   @OneToMany(() => DraftComment, draftComment => draftComment.createdByUser)
   draftComments: DraftComment[];
 
-  @OneToMany(() => Chat, chat => chat.createdByUser)
+  @OneToMany(() => Chat, chat => chat.createdByUser, { onDelete: 'SET NULL' })
   chatsCreated: Chat[];
 
   @OneToMany(() => Workspace, wp => wp.createdByUser)

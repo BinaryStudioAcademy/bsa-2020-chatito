@@ -12,6 +12,7 @@ import CommentRepository from '../data/repositories/commentRepository';
 import { fromPostCommentsToPostCommentsClient } from '../common/mappers/comment';
 import { emitToChatRoom } from '../common/utils/socketHelper';
 import { ClientSockets } from '../common/enums/ClientSockets';
+import { fromUserToUserClient } from '../common/mappers/user';
 
 export const addPost = async (id: string, post: ICreatePost) => {
   const user = await getCustomRepository(UserRepository).getById(id);
@@ -36,9 +37,13 @@ export const addComment = async (userId: string, postId: string, { text }: { tex
     text,
     createdByUser: { id: userId }
   };
-  const newComment = await getCustomRepository(CommentRepository).addComment(createComment);
-
-  return newComment;
+  const comment = await getCustomRepository(CommentRepository).addComment(createComment);
+  const newComment = await getCustomRepository(CommentRepository).getById(comment.id);
+  const user = fromUserToUserClient(newComment.createdByUser);
+  const newClientComment = { ...newComment, createdByUser: user };
+  const chatId = (await getCustomRepository(PostRepository).getByIdWithChat(newClientComment.postId)).chat.id;
+  emitToChatRoom(chatId, ClientSockets.AddReply, newClientComment);
+  return newClientComment;
 };
 
 export const getPostComments = async (postId: string) => {

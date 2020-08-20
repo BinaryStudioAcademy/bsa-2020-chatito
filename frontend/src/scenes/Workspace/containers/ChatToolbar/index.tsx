@@ -84,29 +84,34 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 
   // eslint-disable-next-line
   const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => { }) => (
-    <a href="#0" className={styles.channelSelect} onClick={onClick}>
+    <button type="button" className={styles.channelSelect} onClick={onClick}>
       <FontAwesomeIcon icon={iconFa} color="black" />
       <span className={styles.buttonText}>{text}</span>
-    </a>
+    </button>
   );
 
   const userChannel = (channel: IChat) => {
     const { name, isPrivate, id } = channel;
     return (
-      <a href="#0" key={id} className={getChannelSelect(channel)} onClick={() => doSelectChannel(channel)}>
+      <button type="button" key={id} className={getChannelSelect(channel)} onClick={() => doSelectChannel(channel)}>
         <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} color="black" />
         <span className={styles.buttonText}>{name}</span>
-      </a>
+      </button>
     );
   };
 
   const directChannel = (directMessage: IChat) => {
     const { name, id } = directMessage;
     return (
-      <a href="#0" key={id} className={getChannelSelect(directMessage)} onClick={() => doSelectChannel(directMessage)}>
+      <button
+        type="button"
+        key={id}
+        className={getChannelSelect(directMessage)}
+        onClick={() => doSelectChannel(directMessage)}
+      >
         <div className={styles.metkaOnLine} />
         <span className={styles.buttonText}>{name}</span>
-      </a>
+      </button>
     );
   };
 

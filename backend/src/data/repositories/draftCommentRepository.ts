@@ -25,30 +25,15 @@ class DraftCommentRepository extends Repository<DraftComment> {
       .execute();
   }
 
-  async getByUser(userId: string): Promise<any[]> {
-    // const posts = await this.find({
-    //   relations: ['createdByUser', 'postReactions'],
-    //   where: { chat },
-    //   order: { createdAt: 'DESC' }
-    // });
-    const drafts = await this.createQueryBuilder('draft_comment')
-      .select([
-        'draft_comment.id',
-        'draft_comment.text'
-      ])
-      // .leftJoin(
-      //   'chat.draftPosts',
-      //   'draft_post',
-      //   'draft_post."chatId" = chat.id AND draft_post."createdByUserId" = :userId',
-      //   { userId }
-      // )
-      // .leftJoin(
-      //   'chat.users',
-      //   'user'
-      // )
+  async getByUserAndWorkspace(userId: string, workspaceId: string): Promise<DraftComment[]> {
+    return this.createQueryBuilder()
+      .select('draft_comment')
+      .from(DraftComment, 'draft_comment')
       .where('draft_comment."createdByUserId" = :userId', { userId })
+      .leftJoinAndSelect('draft_comment.post', 'post')
+      .leftJoinAndSelect('post.chat', 'chat')
+      .where('chat."workspaceId" = :workspaceId', { workspaceId })
       .getMany();
-    return drafts;
   }
 }
 

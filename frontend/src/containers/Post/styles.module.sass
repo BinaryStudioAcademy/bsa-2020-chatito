@@ -3,7 +3,6 @@
   color: var(--main-text)
   border-radius: 15px
   margin-bottom: 5px
-  background: var(--post-bg)
 
 .body
   overflow: hidden
@@ -13,8 +12,15 @@
   display: inline-block
   font-size: 1rem
   color: var(--title-text)
-  font-weight: 900
+  font-weight: 600
   margin-bottom: 2px
+  background: none
+  border: none
+  &:hover
+    text-decoration: underline
+
+.author:hover
+  text-decoration: underline
 
 .metadata
   display: inline-block
@@ -23,6 +29,10 @@
   font-size: .75rem
   font-family: var(--secondary-font-family), sans-serif
   margin-bottom: 14px
+  background: none
+  border: none
+  &:hover
+    text-decoration: underline
 
 .text
   text-align: left

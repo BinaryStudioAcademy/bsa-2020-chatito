@@ -6,26 +6,23 @@ import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faEdit, faEllipsisH, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { IUser } from 'common/models/user/IUser';
+import { IBindingAction } from 'common/models/callback/IBindingActions';
 
 interface IProps {
   user: IUser;
   currentUserId: string;
-  setShowProfileHandler: () => void;
-  setUserDataHandler: (user: IUser | {}) => void;
+  hideRightMenu: IBindingAction;
 }
 
-const ProfileOverview: React.FC<IProps> = ({ user, currentUserId,
-  setShowProfileHandler, setUserDataHandler }: IProps) => {
+const ProfileOverview: React.FC<IProps> = ({ user, currentUserId, hideRightMenu }) => {
   const [showAbout, setShowAbout] = useState(false);
   const [message, setMessage] = useState('');
 
   const isOnline = true; // mock data
-  const status = 'In a meeting'; // mock data
   const imgUrl = 'https://cdn.boldomatic.com/resource/web/v2/images/profile-dummy-2x.png?width=34&height=34&format=jpg&quality=90'; // eslint-disable-line max-len
 
   const onClose = () => {
-    setShowProfileHandler();
-    setUserDataHandler({});
+    hideRightMenu();
   };
 
   const onSend = () => {
@@ -33,8 +30,7 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUserId,
 
     // send message
 
-    setShowProfileHandler();
-    setUserDataHandler({});
+    hideRightMenu();
   };
 
   const onEdit = () => {
@@ -78,7 +74,7 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUserId,
         <span className={styles.fullName}>{user.fullName}</span>
       </div>
       {user.title && <div className={styles.title}>{user.title}</div>}
-      {status && <div className={styles.status}>{status}</div>}
+      {user.status && <div className={styles.status}>{user.status}</div>}
 
       <InputGroup className={styles.inputWrp}>
         <FormControl

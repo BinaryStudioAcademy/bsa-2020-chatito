@@ -52,6 +52,10 @@ export const addChat = async (userId: string, body: IChatData) => {
   return chat;
 };
 
+export const addUsersToChat = (chatId: string, userIds: string[]) => (
+  getCustomRepository(ChatRepository).addUsersToChat(chatId, userIds)
+);
+
 export const removeUserFromChat = async (chatId: string, userId: string): Promise<unknown> => {
   await getCustomRepository(ChatRepository).removeUser(chatId, userId);
   return {}; // In search for a better solution

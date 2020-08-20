@@ -39,24 +39,21 @@ const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditPr
 
   const popOver = (
     <Popover id={id} className={styles.panepPopUp}>
-      <a href="#0" className={styles.panelSelect}>
-        <span className={styles.panelText}>Preferenses</span>
-      </a>
-      <a href="#0" className={styles.panelSelect} onClick={onEditProfileClick}>
-        <span className={styles.panelText}>View Profile</span>
-      </a>
-      <a href="#0" className={styles.panelSelect} onClick={showInvitePopup}>
-        <span className={styles.panelText}>Invite People</span>
-      </a>
-      <a href="#0" className={styles.panelSelect} onClick={onAddWorkspaceClick}>
-        <span className={styles.panelText}>Add workspace</span>
-      </a>
-      <a href="#0" className={styles.panelSelect}>
-        <span className={styles.panelText}>Switch workspace</span>
-      </a>
-      <a href="#0" className={styles.panelSelect} onClick={onSingOut}>
-        <span className={styles.panelText}>Sign Out</span>
-      </a>
+      <button type="button" className={styles.panelSelect}>
+        Preferenses
+      </button>
+      <button type="button" className={styles.panelSelect} onClick={onEditProfileClick}>
+        View Profile
+      </button>
+      <button type="button" className={styles.panelSelect} onClick={showInvitePopup}>
+        Invite People
+      </button>
+      <button type="button" className={styles.panelSelect} onClick={onAddWorkspaceClick}>
+        Add workspace
+      </button>
+      <button type="button" className={styles.panelSelect} onClick={onSingOut}>
+        Sign Out
+      </button>
     </Popover>
   );
 

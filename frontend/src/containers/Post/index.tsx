@@ -14,19 +14,20 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPostReactionRoutine } from 'common/models/postReaction/IPostReactionRoutine';
 import { IAppState } from 'common/models/store';
 import { PostType } from 'common/enums/PostType';
+import { showUserProfileRoutine } from 'scenes/Workspace/routines';
 
 interface IProps {
   post: IPost;
   userId: string;
   type: PostType;
   openThread?: IBindingCallback1<IPost>;
-  openUserProfile: IBindingCallback1<IUser>;
   addPostReaction: IBindingCallback1<IPostReactionRoutine>;
   deletePostReaction: IBindingCallback1<IPostReactionRoutine>;
+  showUserProfile: IBindingCallback1<IUser>;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
-  openUserProfile, addPostReaction, deletePostReaction }) => {
+  addPostReaction, deletePostReaction, showUserProfile }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
 
@@ -104,18 +105,24 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
 
   return (
     <Media className={styles.postWrapper}>
-      <ProfilePreview user={createdByUser} onSend={onSend} openProfile={openUserProfile} />
+      <ProfilePreview user={createdByUser} onSend={onSend} openProfile={showUserProfile} />
       <Media.Body bsPrefix={styles.body}>
-        <a href="/" className={styles.author}>{createdByUser.fullName}</a>
+        <button
+          onClick={() => showUserProfile(createdByUser)}
+          className={`${styles.author} button-unstyled`}
+          type="button"
+        >
+          {createdByUser.fullName}
+        </button>
         <br />
-        <a href="/" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</a>
+        <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
         {/* eslint-disable-next-line */}
         <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
         <div className={styles.emojiStats}>
           {type === PostType.Post && renderEmojis()}
         </div>
         <div className={styles.footer}>
-          { openThread && (
+          {openThread && (
             <Card.Link
               bsPrefix={styles.openThreadBtn}
               onClick={() => openThread(post)}
@@ -136,7 +143,8 @@ const mapStateToProps = (state: IAppState) => ({
 
 const mapDispatchToProps = {
   addPostReaction: addPostReactionRoutine,
-  deletePostReaction: deletePostReactionRoutine
+  deletePostReaction: deletePostReactionRoutine,
+  showUserProfile: showUserProfileRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

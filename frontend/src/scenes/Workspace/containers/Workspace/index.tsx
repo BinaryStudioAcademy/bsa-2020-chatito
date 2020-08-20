@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
 import Header from '../Header';
@@ -18,8 +18,7 @@ import { Routes } from 'common/enums/Routes';
 import {
   selectWorkspaceRoutine,
   setActiveThreadRoutine,
-  showRightSideMenuRoutine,
-  showUserProfileRoutine
+  showRightSideMenuRoutine
 } from 'scenes/Workspace/routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
@@ -40,9 +39,9 @@ interface IProps {
   selectWorkspace: (workspace: IWorkspace) => void;
   showRightSideMenu: RightMenuTypes;
   toggleRightMenu: IBindingCallback1<RightMenuTypes>;
-  showUserProfile: IBindingCallback1<IUser>;
   toggleActiveThread: IBindingCallback1<IPost>;
   isLoader: boolean;
+  userProfile: IUser;
 }
 
 const Workspace: React.FC<IProps> = ({
@@ -51,12 +50,11 @@ const Workspace: React.FC<IProps> = ({
   userWorkspaces,
   selectWorkspace,
   showRightSideMenu,
-  showUserProfile,
   toggleRightMenu,
-  isLoader
+  isLoader,
+  userProfile
 }) => {
   if (!currentUserId) return <></>;
-  const [userData, setUserData] = useState<IUser | {}>({});
 
   useEffect(() => {
     const { whash } = match.params;
@@ -67,28 +65,19 @@ const Workspace: React.FC<IProps> = ({
     }
   }, [match]);
 
-  const setShowProfileHandler = (user: IUser) => {
-    showUserProfile(user);
-  };
-
   const hideRightMenu = () => {
     toggleRightMenu(RightMenuTypes.None);
   };
 
-  const setUserDataHandler = (user: IUser | {}) => {
-    setUserData(user);
-  };
-
   const renderProfile = () => (
     <ProfileOverview
-      user={userData as IUser}
+      user={userProfile}
       currentUserId={currentUserId}
-      setShowProfileHandler={hideRightMenu}
-      setUserDataHandler={setUserDataHandler}
+      hideRightMenu={hideRightMenu}
     />
   );
 
-  const renderThread = () => <Thread onHide={hideRightMenu} openUserProfile={setShowProfileHandler} />;
+  const renderThread = () => <Thread onHide={hideRightMenu} />;
 
   const renderRightMenu = () => {
     switch (showRightSideMenu) {
@@ -147,7 +136,8 @@ const mapStateToProps = (state: IAppState) => {
     userWorkspaces: state.user.workspaceList,
     showRightSideMenu,
     activeThreadPostId,
-    isLoader: !workspace.id
+    isLoader: !workspace.id,
+    userProfile: state.workspace.userProfile
   };
 };
 
@@ -155,8 +145,7 @@ const mapDispatchToProps = {
   router: push,
   selectWorkspace: selectWorkspaceRoutine,
   toggleActiveThread: setActiveThreadRoutine,
-  toggleRightMenu: showRightSideMenuRoutine,
-  showUserProfile: showUserProfileRoutine
+  toggleRightMenu: showRightSideMenuRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Workspace);

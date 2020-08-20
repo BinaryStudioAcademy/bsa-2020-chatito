@@ -4,32 +4,32 @@ import { connect } from 'react-redux';
 import { IAppState } from 'common/models/store';
 import { fetchDraftsRoutine } from './routines';
 import DraftCard from './components/DraftCard';
-import { IDraftPost } from 'common/models/draft/IDraftPost';
-import { IDraftComment } from 'common/models/draft/IDraftComment';
+import { IDraftClient } from 'common/models/draft/IDraftClient';
 
 interface IProps {
-  posts: IDraftPost[];
-  comments: IDraftComment[];
-  fetchDrafts: () => void;
+  posts: IDraftClient[];
+  comments: IDraftClient[];
+  fetchDrafts: (wpId: string) => void;
+  workspaceId: string;
+  whash: string;
 }
 
-const createCards = (drafts: (IDraftComment | IDraftPost)[]) => drafts.map(d => (
-  <DraftCard draft={d} />
-));
-
-const Drafts: React.FC<IProps> = ({ posts, comments, fetchDrafts }) => {
+const Drafts: React.FC<IProps> = ({ posts, comments, fetchDrafts, workspaceId, whash }) => {
   useEffect(() => {
-    fetchDrafts();
+    if (workspaceId) {
+      fetchDrafts(workspaceId);
+    }
   }, []);
+
+  const createCards = (drafts: (IDraftClient)[]) => drafts.map(d => (
+    <DraftCard draft={d} key={d.id} whash={whash} />
+  ));
 
   return (
     <div className={styles.body}>
 
       <div className={styles.wrapper}>
         {createCards([...posts, ...comments])}
-        {createCards([...posts, ...comments])}
-
-        {/* {console.log([...posts, ...comments])} */}
       </div>
     </div>
   );
@@ -37,7 +37,9 @@ const Drafts: React.FC<IProps> = ({ posts, comments, fetchDrafts }) => {
 
 const mapStateToProps = (state: IAppState) => ({
   posts: state.drafts.posts,
-  comments: state.drafts.comments
+  comments: state.drafts.comments,
+  workspaceId: state.workspace.workspace.id,
+  whash: state.workspace.workspace.hash
 });
 
 const mapDispatchToProps = {

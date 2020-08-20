@@ -2,26 +2,26 @@ $colorText: var(--title-text) // цвет текста
 $coloractive: #CECCC0 // цвет активной строки
 
 .panepPopUp
+  margin-top: 20px
   padding-top: 20px
   padding-bottom: 20px
 
 .panelSelect
+  background: none
+  font-size: 16px
   display: flex
   flex-direction: row
   align-items: center
   border: 0
-  padding: 8px
-  padding-left: 23px
-  padding-right: 35px
-  margin-top: 5px
+  padding: 4px 23px
+  margin: 5px auto
   align-content: left
   outline: none
   width: 100%
   color: $colorText
   cursor: pointer
+  &:hover
+    text-decoration: underline
+  &:visited
+    color: $colorText
 
-.panelSelect:hover
-  background: $coloractive
-
-.panelText
-  font-size: 18px

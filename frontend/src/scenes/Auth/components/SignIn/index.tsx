@@ -103,28 +103,20 @@ const SignIn: FunctionComponent<IProps> = ({
         onSubmit={onSubmit}
       >
         <Form className={`${styles.inpBlock} signIn-form d-flex flex-column justify-content-center align-items-center`}>
-          <div className={styles.inputContainer}>
-            <div className={styles.input}>
-              <InputField
-                label="Email"
-                name="email"
-                type="email"
-                placeholder="user@gmail.com"
-              />
-            </div>
-          </div>
-          <div className={styles.inputContainer}>
-            <div className={styles.input}>
-              <InputField
-                label="Password"
-                name="password"
-                type="password"
-                link={Routes.ForgotPassword}
-                linkDescription="Forgot password?"
-                linkClassName={styles.forgotPasswordLink}
-              />
-            </div>
-          </div>
+          <InputField
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="user@gmail.com"
+          />
+          <InputField
+            label="Password"
+            name="password"
+            type="password"
+            link={Routes.ForgotPassword}
+            linkDescription="Forgot password?"
+            linkClassName={styles.forgotPasswordLink}
+          />
           <div className={`${styles.formFooter} w-100`}>
             <Button type="submit" variant="primary" className={styles.primaryBtn}>
               Sign In

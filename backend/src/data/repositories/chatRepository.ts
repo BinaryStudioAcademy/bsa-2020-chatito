@@ -48,6 +48,14 @@ class ChatRepository extends Repository<Chat> {
     return chats;
   }
 
+  addUsersToChat(chatId: string, userIds: string[]) {
+    return this
+      .createQueryBuilder()
+      .relation(Chat, 'users')
+      .of(chatId)
+      .add(userIds);
+  }
+
   async getAllChatUsers(id: string): Promise<User[]> {
     const chat = await this.findOne({
       where: { id },
