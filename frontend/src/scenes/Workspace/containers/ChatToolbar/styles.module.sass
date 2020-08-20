@@ -10,13 +10,14 @@ $coloractive: #CECCC0 // цвет активной строки
   background-color: $color
   overflow-y: auto
   min-width: 250px
-  
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
+
+  -ms-overflow-style: none
+  scrollbar-width
   &::-webkit-scrollbar
-    display: none;  /* Safari and Chrome */
+    display: none
 
 .channelSelect
+  background: none
   display: flex
   flex-direction: row
   align-items: center
@@ -30,11 +31,14 @@ $coloractive: #CECCC0 // цвет активной строки
   color: $colorText
   cursor: pointer
 
+  &:hover
+    text-decoration: underline
+
 .channelCurrent
   background-color: $coloractive
 
 .iconBorder
-  display: flex;
+  display: flex
   justify-content: center
   align-items: center
   width: 30px

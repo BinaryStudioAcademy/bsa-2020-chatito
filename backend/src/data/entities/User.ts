@@ -33,13 +33,13 @@ export class User extends AbstractEntity {
   @OneToMany(() => Post, post => post.createdByUser)
   posts: Post[];
 
-  @OneToMany(() => RefreshToken, token => token.user)
+  @OneToMany(() => RefreshToken, token => token.user, { onDelete: 'CASCADE' })
   refreshTokens: RefreshToken[];
 
   @OneToMany(() => Comment, comment => comment.createdByUser)
   comments: Comment[];
 
-  @OneToMany(() => Chat, chat => chat.createdByUser)
+  @OneToMany(() => Chat, chat => chat.createdByUser, { onDelete: 'SET NULL' })
   chatsCreated: Chat[];
 
   @OneToMany(() => Workspace, wp => wp.createdByUser)

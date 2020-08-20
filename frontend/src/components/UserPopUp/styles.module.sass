@@ -7,23 +7,21 @@ $coloractive: #CECCC0 // цвет активной строки
   padding-bottom: 20px
 
 .panelSelect
-  font-size: 18px
+  background: none
+  font-size: 16px
   display: flex
   flex-direction: row
   align-items: center
   border: 0
   padding: 4px 23px
-  margin-top: 5px
+  margin: 5px auto
   align-content: left
   outline: none
   width: 100%
   color: $colorText
   cursor: pointer
   &:hover
-    text-decoration: none
-    color: $colorText
+    text-decoration: underline
   &:visited
     color: $colorText
 
-.panelSelect:hover
-  background: $coloractive
