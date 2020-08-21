@@ -6,20 +6,30 @@ import {
   createChatRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
-  addUsersToChatRoutine
+  addUsersToChatRoutine,
+  upsertDraftPostRoutine,
+  deleteDraftPostRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
-import { fetchChatPosts, addPost, createChat, fetchChatUsers,
-  removeUserFromChat, addUsersToChat } from 'services/chatService';
+import {
+  fetchChatPosts,
+  addPost,
+  createChat,
+  fetchChatUsers,
+  removeUserFromChat,
+  addUsersToChat
+} from 'services/chatService';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError, toastrSuccess } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
 import { IUser } from 'common/models/user/IUser';
+import { upsertDraftPost, deleteDraftPost } from 'services/draftService';
+import { updateChatDraftPostRoutine } from 'scenes/Workspace/routines';
 
 function* fetchChatPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
-    const responce: IPost[] = yield call(fetchChatPosts, payload);
-    yield put(setPostsRoutine.success(responce));
+    const response: IPost[] = yield call(fetchChatPosts, payload);
+    yield put(setPostsRoutine.success(response));
   } catch (error) {
     yield call(toastrError, error.message);
   }
@@ -29,9 +39,41 @@ function* watchPostsRequest() {
   yield takeEvery(setPostsRoutine.TRIGGER, fetchChatPostsRequest);
 }
 
+function* upsertDraftPostRequest({ payload }: Routine<any>) {
+  try {
+    const response = yield call(upsertDraftPost, payload);
+    yield put(updateChatDraftPostRoutine.trigger({ ...response, chatId: payload.chatId }));
+
+    yield put(upsertDraftPostRoutine.success(response));
+  } catch (error) {
+    yield call(toastrError, error.message);
+  }
+}
+
+function* watchUpsertDraftPostRequest() {
+  yield takeEvery(upsertDraftPostRoutine.TRIGGER, upsertDraftPostRequest);
+}
+
+function* deleteDraftPostRequest({ payload }: Routine<any>) {
+  try {
+    yield call(deleteDraftPost, payload);
+    yield put(updateChatDraftPostRoutine.trigger(payload));
+
+    yield put(deleteDraftPostRoutine.success());
+  } catch (error) {
+    yield call(toastrError, error.message);
+  }
+}
+
+function* watchDeleteDraftPostRequest() {
+  yield takeEvery(deleteDraftPostRoutine.TRIGGER, deleteDraftPostRequest);
+}
+
 function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
   try {
     yield call(addPost, payload);
+
+    yield put(deleteDraftPostRoutine.trigger({ chatId: payload.chatId }));
   } catch (error) {
     yield call(toastrError, error.message);
   }
@@ -119,6 +161,8 @@ export default function* chatSaga() {
     watchPostsRequest(),
     watchCurrChat(),
     watchAddPostRequest(),
+    watchUpsertDraftPostRequest(),
+    watchDeleteDraftPostRequest(),
     watchCreateChatRequest(),
     watchToggleCreateChatModal(),
     watchAddUsersToChat(),

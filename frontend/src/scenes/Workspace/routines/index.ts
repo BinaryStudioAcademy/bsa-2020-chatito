@@ -12,3 +12,4 @@ export const fetchPostCommentsRoutine = createRoutine('FETCH_POST_COMMENTS');
 export const fetchWorkspaceChatsRoutine = createRoutine('FETCH_WORKSPACE_CHATS');
 export const incUnreadCountRoutine = createRoutine('INC_UNREAD_COUNT');
 export const fetchWorkspaceUsersRoutine = createRoutine('FETCH_WORKSPACE_USERS');
+export const updateChatDraftPostRoutine = createRoutine('UPDATE_CHAT_DRAFT_POST');
