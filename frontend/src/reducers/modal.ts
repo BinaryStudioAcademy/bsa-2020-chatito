@@ -24,24 +24,31 @@ export default (state = initialState, action: Routine<any>) => {
   switch (action.type) {
     case showModalRoutine.TRIGGER: {
       const { modalType, show } = action.payload;
+      const stateToSet: {[key: string]: boolean} = { ...state };
+      const stateKeys = Object.keys(state);
+      stateKeys.forEach((element: string) => {
+        if (element) {
+          stateToSet[element] = false;
+        }
+      });
       switch (modalType) {
         case ModalTypes.EditProfile: {
-          return { ...state, editProfile: show };
+          return { ...stateToSet, editProfile: show };
         }
         case ModalTypes.CreateChannel: {
-          return { ...state, createChannel: show };
+          return { ...stateToSet, createChannel: show };
         }
         case ModalTypes.CreateDirect: {
-          return { ...state, createDirect: show };
+          return { ...stateToSet, createDirect: show };
         }
         case ModalTypes.InvitePopup: {
-          return { ...state, invitePopup: show };
+          return { ...stateToSet, invitePopup: show };
         }
         case ModalTypes.InviteChat: {
           return { ...state, inviteChat: show };
         }
         case ModalTypes.ChatMembers: {
-          return { ...state, chatMembers: show };
+          return { ...stateToSet, chatMembers: show };
         }
         default:
           return state;
