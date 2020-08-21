@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
 import ModalWindow from 'components/ModalWindow';
@@ -14,11 +14,13 @@ import { addUsersToChatRoutine } from 'scenes/Chat/routines';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { IAddUsersToChat } from 'common/models/chat/IAddUsersToChat';
+import { getWorkspaceUsers } from 'services/workspaceService';
 
 interface IProps {
+  workspaceId: string;
   isShown: boolean;
-  users: IUser[];
   loading: boolean;
+  postsLoading: boolean;
   chatName: string;
   chatId: string;
   chatUsers: IUser[];
@@ -28,12 +30,15 @@ interface IProps {
 
 let timer: NodeJS.Timeout;
 
-const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
+const InviteChatModal: React.FC<IProps> = ({ workspaceId, isShown, loading, postsLoading, chatName,
   chatId, toggleModal, addUsersToChat, chatUsers }) => {
   const [text, setText] = useState('');
   const [searchedUsers, setSearchedUsers] = useState<IUser[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
-
+  const [users, setUsers] = useState<IUser[]>([]);
+  useEffect(() => {
+    getWorkspaceUsers(workspaceId).then(usersArr => setUsers(usersArr));
+  }, []);
   const searchUserHandler = (str: string) => {
     clearTimeout(timer);
 
@@ -105,7 +110,7 @@ const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
   );
 
   return (
-    <ModalWindow isShown={isShown} onHide={onHide}>
+    <ModalWindow isShown={!postsLoading && isShown} onHide={onHide}>
       <div className={styles.modalWrp}>
         <h4 className={styles.title}>Add people</h4>
         <p className={styles.chatName}>{chatName}</p>
@@ -132,8 +137,9 @@ const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
 
 const mapStateToProps = (state: IAppState) => ({
   isShown: state.modal.inviteChat,
-  users: state.workspace.users,
-  loading: state.workspace.loading
+  loading: state.workspace.loading,
+  postsLoading: state.chat.loading,
+  workspaceId: state.workspace.workspace.id
 });
 
 const mapDispatchToProps = {

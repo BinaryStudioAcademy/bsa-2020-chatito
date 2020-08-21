@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
 import { IUser } from 'common/models/user/IUser';
 import MultiSelect from 'react-multi-select-component';
 import { IAppState } from 'common/models/store';
-import { fetchWorkspaceUsersRoutine } from 'scenes/Workspace/routines';
 import { connect } from 'react-redux';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
+import { getWorkspaceUsers } from 'services/workspaceService';
 
 interface IProps {
   createDirect: IBindingCallback1<any>;
-  getUsers: (workspaceId: string) => void;
   workspace: IWorkspace;
-  users?: IUser[];
 }
 
 interface IOption {
@@ -21,10 +19,12 @@ interface IOption {
   label: string;
 }
 
-const CreateDirect = ({ createDirect, workspace, users = [], getUsers }: IProps) => {
+const CreateDirect = ({ createDirect, workspace }: IProps) => {
   const [DirectUsers, setDirectUsers] = useState([]);
-
-  getUsers(workspace.id);
+  const [users, setUsers] = useState<IUser[]>([]);
+  useEffect(() => {
+    getWorkspaceUsers(workspace.id).then(usersArr => setUsers(usersArr));
+  }, []);
   const mapOptionsToUsers = (options: IOption[]) => users
     .filter(user => options.map(({ value }) => value).indexOf(user.id) !== -1);
 
@@ -96,17 +96,12 @@ const CreateDirect = ({ createDirect, workspace, users = [], getUsers }: IProps)
 
 const mapStateToProps = (state: IAppState) => {
   const {
-    workspace: { workspace, users }
+    workspace: { workspace }
   } = state;
 
   return {
-    workspace,
-    users
+    workspace
   };
 };
 
-const mapDispatchToProps = {
-  getUsers: fetchWorkspaceUsersRoutine
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateDirect);
+export default connect(mapStateToProps)(CreateDirect);
