@@ -10,7 +10,8 @@ export const addReminder = async ({ chatId, userId, body }: ICreateReminderData)
   const { day, time, note } = body;
   const chat = await getCustomRepository(ChatRepository).getById(chatId);
   const user = await getCustomRepository(UserRepository).getById(userId);
-  const createdReminder: ICreateReminder = { chat, createdByUser: user, day, time, note };
+  const date = new Date(`${day} ${time}`);
+  const createdReminder: ICreateReminder = { chat, createdByUser: user, date, note };
   const reminder: IReminder = await getCustomRepository(ReminderRepository).addReminder(createdReminder);
   return reminder;
 };

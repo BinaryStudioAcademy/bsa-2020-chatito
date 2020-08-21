@@ -120,8 +120,8 @@ function* watchRemoveUserFromChat() {
 
 function* createReminderRequest({ payload }: Routine<any>) {
   try {
-    const chat = yield call(addReminder, payload);
-    yield put(addReminderRoutine.success(chat));
+    const reminder = yield call(addReminder, payload);
+    yield put(addReminderRoutine.success(reminder));
     yield put(showModalRoutine({ modalType: ModalTypes.SetReminder, show: false }));
     yield put(addReminderSuccessPostRoutine.success(payload));
   } catch (error) {

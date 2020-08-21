@@ -6,10 +6,7 @@ import { Chat } from './Chat';
 @Entity()
 export class Reminder extends AbstractEntity {
   @Column()
-  day: string;
-
-  @Column()
-  time: string;
+  date: Date;
 
   @Column()
   note: string;

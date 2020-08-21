@@ -21,8 +21,8 @@ const ReminderItem = ({ text, addedTime, addReminder, chatId }: IProps) => (
     onClick={() => {
       const { currentDate } = getCurrentDateData();
       const newDate = new Date(currentDate.getTime() + addedTime);
-      const { currentFullDate, currentTime } = fromDateToReminderData(newDate);
-      addReminder({ day: currentFullDate, time: currentTime, note: '', chatId });
+      const { fullDate, time } = fromDateToReminderData(newDate);
+      addReminder({ day: fullDate, time, note: '', chatId });
     }}
   >
     <span>{text}</span>

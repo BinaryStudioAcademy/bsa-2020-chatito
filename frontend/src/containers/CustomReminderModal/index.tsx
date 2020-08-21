@@ -18,24 +18,24 @@ interface IProps {
 }
 
 export const fromDateToReminderData = (date: Date) => {
-  const currentDay = date.getDate();
-  const currentMonth = date.getMonth() + 1;
-  const currentYear = date.getFullYear();
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
 
-  const currentHours = date.getHours();
-  const currentMinutes = date.getMinutes() + 1;
+  const hours = date.getHours();
+  const minutes = date.getMinutes() + 1;
 
-  const currentFullDate = `${currentYear}-${currentMonth}-${currentDay}`;
-  const currentTime = `${currentHours}:${currentMinutes}`;
+  const fullDate = `${year}-${month}-${day}`;
+  const time = `${hours}:${minutes}`;
 
   return {
-    currentFullDate,
-    currentTime,
-    currentDay,
-    currentMonth,
-    currentYear,
-    currentHours,
-    currentMinutes
+    fullDate,
+    time,
+    day,
+    month,
+    year,
+    hours,
+    minutes
   };
 };
 
@@ -50,7 +50,7 @@ export const getCurrentDateData = () => {
 };
 
 const CustomReminderModal = ({ toggleModal, isShown, addReminder, chatId }: IProps) => {
-  const { currentFullDate, currentTime, currentDate } = getCurrentDateData();
+  const { fullDate: currentFullDate, time: currentTime, currentDate } = getCurrentDateData();
 
   const [day, setReminderDay] = useState<string>(currentFullDate);
   const [time, setReminderTime] = useState<string>(currentTime);
