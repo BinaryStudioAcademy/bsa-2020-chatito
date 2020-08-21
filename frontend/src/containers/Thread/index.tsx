@@ -27,7 +27,7 @@ interface IProps {
   sendComment: IBindingCallback1<ICreateComment>;
   onHide?: IBindingAction;
   hideCloseBtn?: boolean;
-  currChatHash: string;
+  currChatHash: string | null;
   router: (route: string) => void;
   draftCommentId?: string;
   draftCommentText?: string;
@@ -61,7 +61,7 @@ const Thread: FunctionComponent<IProps> = ({
   const maxComment = showOnlyTwoComments && !showAll ? 2 : 10000;
 
   const redirectToChat = () => {
-    if (whash && post.chat && post.chat?.hash !== currChatHash) {
+    if (whash && currChatHash && post.chat && post.chat?.hash !== currChatHash) {
       router(Routes.Chat
         .replace(':whash', whash)
         .replace(':chash', post.chat.hash || currChatHash));
@@ -137,10 +137,10 @@ const Thread: FunctionComponent<IProps> = ({
 
 const mapStateToProps = (state: IAppState) => {
   const draftComments = state.workspace.activeThread?.post.draftComments;
-
+  const currChatHash = state.chat.chat ? state.chat.chat!.hash : null;
   return {
     // eslint-disable-next-line
-    currChatHash: state.chat.chat!.hash,
+    currChatHash,
     draftCommentId: draftComments?.length ? draftComments[0].id : undefined,
     draftCommentText: draftComments?.length ? draftComments[0].text : undefined
   };
