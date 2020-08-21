@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import styles from './styles.module.sass';
 import { IPost } from 'common/models/post/IPost';
 import { IUser } from 'common/models/user/IUser';
-import ProfilePreview from 'components/ProfilePreview/index';
+import ProfilePreview from 'containers/ProfilePreview/index';
 import EmojiPopUp from 'components/EmojiPopUp';
 import { countBy, toLower } from 'ramda';
 import { IEmojiData } from 'emoji-picker-react';
@@ -99,13 +99,9 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
     });
   };
 
-  const onSend = () => {
-    console.log('Send text message'); // eslint-disable-line
-  };
-
   return (
     <Media className={styles.postWrapper}>
-      <ProfilePreview user={createdByUser} onSend={onSend} openProfile={showUserProfile} />
+      <ProfilePreview user={createdByUser} openProfile={showUserProfile} />
       <Media.Body bsPrefix={styles.body}>
         <button
           onClick={() => showUserProfile(createdByUser)}

@@ -4,7 +4,7 @@ import styles from './styles.module.sass';
 import Header from '../Header';
 import WorkspaceToolbar from '../WorkspaceToolbar';
 import NoChatMessage from '../NoChatMessage';
-import ProfileOverview from 'components/ProfileOverview';
+import ProfileOverview from 'containers/ProfileOverview';
 import { IUser } from 'common/models/user/IUser';
 import { IAppState } from 'common/models/store';
 import ChatScene from 'scenes/Chat';

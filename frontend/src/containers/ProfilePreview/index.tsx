@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useState, useRef } from 'react';
+import { connect } from 'react-redux';
 import { OverlayTrigger, Image, Popover, Form } from 'react-bootstrap';
 import { IUser } from 'common/models/user/IUser';
 import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
@@ -7,30 +8,63 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
 import { useKey } from 'common/hooks/onInputSubmit';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
+import { IAppState } from 'common/models/store';
+import { IChat } from 'common/models/chat/IChat';
+import { ICreatePost } from 'common/models/post/ICreatePost';
+import { ICreateChatAndAddPost } from 'common/models/chat/ICreateChatAndAddPost';
+import { Routes } from 'common/enums/Routes';
+import { ICreateChat } from 'common/models/chat/ICreateChat';
+import { addPostRoutine, createChatAndAddPostRoutine } from 'scenes/Chat/routines';
+import { push } from 'connected-react-router';
+import { ChatType } from 'common/enums/ChatType';
 
 interface IProps {
   user: IUser;
-  onSend: () => void;
+  currentUser: IUser;
+  directMessages: IChat[];
+  workspaceName: string;
+  workspaceHash: string;
   openProfile: IBindingCallback1<IUser>;
+  addPost: IBindingCallback1<ICreatePost>;
+  createChatAndAddPost: IBindingCallback1<ICreateChatAndAddPost>;
+  router: (route: string) => void;
 }
 
-const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }) => {
-  const [text, setText] = useState('');
+const ProfilePreview: FunctionComponent<IProps> = ({ user, currentUser, directMessages, workspaceName,
+  workspaceHash, addPost, createChatAndAddPost, router, openProfile }) => {
+  const [message, setMessage] = useState('');
   const inputRef = useRef(null);
   const onViewProfile = () => {
     openProfile(user);
     document.body.click();
   };
-  const onSendMessage = () => {
-    if (text.trim()) {
-      onSend();
-      setText('');
+  const onSend = () => {
+    if (!message.trim()) return;
+
+    const chat = user.id === currentUser.id
+      ? directMessages.find(directMessage => directMessage.users.length === 1)
+      : directMessages.find(directMessage => (
+        directMessage.users.find(directUser => directUser.id === user.id)
+      ));
+
+    if (chat) {
+      addPost({ chatId: chat.id, text: message });
+      router(Routes.Chat.replace(':whash', workspaceHash).replace(':chash', chat.hash));
+    } else {
+      const newChat: ICreateChat = {
+        name: `${currentUser.displayName}, ${user.displayName}`,
+        isPrivate: true,
+        type: ChatType.DirectMessage,
+        workspaceName,
+        users: user.id === currentUser.id ? [currentUser] : [currentUser, user]
+      };
+      createChatAndAddPost({ chat: newChat, text: message });
     }
   };
-  useKey({ key: 'enter', callback: onSendMessage, ref: inputRef });
+  useKey({ key: 'enter', callback: onSend, ref: inputRef });
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setText(e.target.value);
+    setMessage(e.target.value);
   };
   const popOver = (
     <Popover id={user.id} className={styles.popOverWindow}>
@@ -58,14 +92,13 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
             ref={inputRef}
             className={styles.textField}
             type="text"
-            value={text}
+            value={message}
             onChange={onChange}
           />
           <button
             type="button"
             className={`${styles.arrowButton} ${styles.arrowButton_reset}`}
-            onClick={() => onSendMessage()}
-          // need to realise logic to go to the chat with user
+            onClick={onSend}
           >
             <FontAwesomeIcon
               className={styles.arrowIcon}
@@ -96,4 +129,18 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, onSend, openProfile }
     </OverlayTrigger>
   );
 };
-export default ProfilePreview;
+
+const mapStateToProps = (state: IAppState) => ({
+  directMessages: state.workspace.directMessages,
+  workspaceName: state.workspace.workspace.name,
+  workspaceHash: state.workspace.workspace.hash,
+  currentUser: state.user.user as IUser
+});
+
+const mapDispatchToProps = {
+  addPost: addPostRoutine,
+  createChatAndAddPost: createChatAndAddPostRoutine,
+  router: push
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfilePreview);
