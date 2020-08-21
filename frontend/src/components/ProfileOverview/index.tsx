@@ -26,8 +26,9 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 interface IProps {
   user: IUser;
   currentUser: IUser;
-  channels: IChat[];
+  directMessages: IChat[];
   workspaceName: string;
+  workspaceHash: string;
   hideRightMenu: IBindingAction;
   addPost: IBindingCallback1<ICreatePost>;
   createChatAndAddPost: IBindingCallback1<ICreateChatAndAddPost>;
@@ -35,8 +36,8 @@ interface IProps {
   showModal: IBindingCallback1<IModalRoutine>;
 }
 
-const ProfileOverview: React.FC<IProps> = ({ user, currentUser, channels, workspaceName,
-  hideRightMenu, addPost, createChatAndAddPost, router, showModal }) => {
+const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, workspaceName,
+  workspaceHash, hideRightMenu, addPost, createChatAndAddPost, router, showModal }) => {
   const [showAbout, setShowAbout] = useState(false);
   const [message, setMessage] = useState('');
   const inputRef = useRef(null);
@@ -51,26 +52,29 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, channels, worksp
   const onSend = () => {
     if (!message.trim()) return;
 
-    const chat = channels.find(channel => (
-      channel.isPrivate && channel.users.find(channelUsers => channelUsers.id === user.id)
-    ));
+    const chat = user.id === currentUser.id
+      ? directMessages.find(directMessage => directMessage.users.length === 1)
+      : directMessages.find(directMessage => (
+        directMessage.users.find(directUser => directUser.id === user.id)
+      ));
 
     if (chat) {
       addPost({ chatId: chat.id, text: message });
-      router(Routes.Chat.replace(':whash', chat.workspace.hash).replace(':chash', chat.hash));
+      router(Routes.Chat.replace(':whash', workspaceHash).replace(':chash', chat.hash));
     } else {
       const newChat: ICreateChat = {
         name: `${currentUser.displayName}, ${user.displayName}`,
         isPrivate: true,
         type: ChatType.DirectMessage,
         workspaceName,
-        users: [currentUser, user]
+        users: user.id === currentUser.id ? [currentUser] : [currentUser, user]
       };
       createChatAndAddPost({ chat: newChat, text: message });
     }
 
     hideRightMenu();
   };
+
   useKey({ key: 'enter', callback: onSend, ref: inputRef });
 
   const onEdit = () => {
@@ -148,8 +152,9 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, channels, worksp
 };
 
 const mapStateToProps = (state: IAppState) => ({
-  channels: state.workspace.channels,
+  directMessages: state.workspace.directMessages,
   workspaceName: state.workspace.workspace.name,
+  workspaceHash: state.workspace.workspace.hash,
   currentUser: state.user.user as IUser
 });
 

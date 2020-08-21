@@ -17,8 +17,6 @@ import {
 import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
 import styles from './styles.module.sass';
-import { goToThreadsRoutine } from 'containers/ThreadsContainer/routines';
-import { Routine } from 'redux-saga-routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { showModalRoutine } from 'routines/modal';
@@ -38,7 +36,6 @@ interface IProps {
   selectedWorkspace: IWorkspace;
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
-  goToThreads: Routine;
 }
 
 const ChatToolbar: FunctionComponent<IProps> = ({
@@ -194,7 +191,6 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  goToThreads: goToThreadsRoutine,
   showModal: showModalRoutine,
   router: push,
   selectChat: setCurrentChatRoutine

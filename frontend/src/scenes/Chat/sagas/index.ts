@@ -120,10 +120,11 @@ function* watchRemoveUserFromChat() {
 function* createChatAndAddPost({ payload }: Routine<any>) {
   try {
     const chat = yield call(createChat, payload.chat);
-    yield put(createChatRoutine.success(chat));
     yield call(addPost, { chatId: chat.id, text: payload.text });
+    yield put(createChatRoutine.success(chat));
     yield put(push(Routes.Chat.replace(':whash', chat.workspace.hash).replace(':chash', chat.hash)));
   } catch (error) {
+    yield put(createChatAndAddPostRoutine.failure());
     yield call(toastrError, 'Sending message failed. Please try again later.');
   }
 }
@@ -142,6 +143,6 @@ export default function* chatSaga() {
     watchAddUsersToChat(),
     watchFetchChatUsersRequest(),
     watchRemoveUserFromChat(),
-    watchCreateChatAndAddPost
+    watchCreateChatAndAddPost()
   ]);
 }
