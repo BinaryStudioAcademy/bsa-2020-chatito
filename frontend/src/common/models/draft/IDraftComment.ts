@@ -1,6 +1,4 @@
 export interface IDraftComment {
-  id: string;
-  text: string;
-  createdByUserId: string;
-  postId: string;
+  id?: string;
+  text?: string;
 }

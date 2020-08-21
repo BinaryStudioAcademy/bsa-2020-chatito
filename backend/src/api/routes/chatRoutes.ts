@@ -12,7 +12,11 @@ import { addReminder } from '../../services/reminderService';
 const router = Router();
 
 router
-  .get('/:id/posts', run((req: Request) => getAllChatPosts({ chatId: req.params.id, ...req.query })))
+  .get('/:id/posts', run((req: Request) => getAllChatPosts({
+    chatId: req.params.id,
+    userId: req.user.id,
+    ...req.query
+  })))
   .get('/', run((req: Request) => getAllUserChats(req.user.id)))
   .get('/:id/users', run((req: Request) => getAllChatUsers(req.params.id)))
   .delete('/:id/users/:userId', run((req: Request) => removeUserFromChat(req.params.id, req.params.userId)))

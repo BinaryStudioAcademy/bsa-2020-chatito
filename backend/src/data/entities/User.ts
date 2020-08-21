@@ -7,6 +7,8 @@ import { Comment } from './Comment';
 import { RefreshToken } from './RefreshToken';
 import { PostReaction } from './PostReaction';
 import { Reminder } from './Reminder';
+import { DraftPost } from './DraftPost';
+import { DraftComment } from './DraftComment';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -37,11 +39,17 @@ export class User extends AbstractEntity {
   @OneToMany(() => Reminder, reminder => reminder.createdByUser)
   reminders: Reminder[];
 
+  @OneToMany(() => DraftPost, draftPost => draftPost.createdByUser)
+  draftPosts: DraftPost[];
+
   @OneToMany(() => RefreshToken, token => token.user, { onDelete: 'CASCADE' })
   refreshTokens: RefreshToken[];
 
   @OneToMany(() => Comment, comment => comment.createdByUser)
   comments: Comment[];
+
+  @OneToMany(() => DraftComment, draftComment => draftComment.createdByUser)
+  draftComments: DraftComment[];
 
   @OneToMany(() => Chat, chat => chat.createdByUser, { onDelete: 'SET NULL' })
   chatsCreated: Chat[];

@@ -2,6 +2,7 @@ import { User } from '../../../data/entities/User';
 import { Workspace } from '../../../data/entities/Workspace';
 import { ChatType } from '../../enums/ChatType';
 import { Post } from '../../../data/entities/Post';
+import { DraftPost } from '../../../data/entities/DraftPost';
 
 export interface IChat {
   id: string;
@@ -13,4 +14,5 @@ export interface IChat {
   users: User[];
   hash: string;
   posts: Post[];
+  draftPosts?: DraftPost[];
 }
