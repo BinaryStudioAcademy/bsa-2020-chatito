@@ -10,6 +10,8 @@ import { fromCreatedWorkspaceToClient } from '../common/mappers/workspace';
 import { verifyToken } from '../common/utils/tokenHelper';
 import CustomError from '../common/models/CustomError';
 import { ErrorCode } from '../common/enums/ErrorCode';
+import { getPublicChats } from './workspaceService';
+import { addUsersToChat } from './chatService';
 
 export const getUsers = async () => {
   const users = await getCustomRepository(UserRepository).getAll();
@@ -60,6 +62,8 @@ export const checkInvitedUserRegistered = async ({ token }: ICheckInvitedUserReg
 export const addWorkspaceToUser = async (userId: string, workspaceId: string) => {
   try {
     const user = await getCustomRepository(UserRepository).addWorkspace(userId, workspaceId);
+    const publicChats = await getPublicChats(workspaceId);
+    publicChats.forEach(chat => addUsersToChat(chat.id, [userId]));
     return user;
   } catch (error) {
     throw new CustomError(409, 'User already exists in workspace. ', ErrorCode.UserExistsInWorkspace);

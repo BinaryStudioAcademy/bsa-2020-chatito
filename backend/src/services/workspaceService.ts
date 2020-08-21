@@ -1,6 +1,5 @@
 import { getCustomRepository } from 'typeorm';
 import { ErrorCode } from '../common/enums/ErrorCode';
-
 import WorkspaceRepository from '../data/repositories/workspaceRepository';
 import UserRepository from '../data/repositories/userRepository';
 import PostRepository from '../data/repositories/postRepository';
@@ -12,6 +11,7 @@ import CustomError from '../common/models/CustomError';
 import ChatRepository from '../data/repositories/chatRepository';
 import { fromChatToClientChat } from '../common/mappers/chat';
 import { ChatType } from '../common/enums/ChatType';
+import { IChat } from '../common/models/chat/IChat';
 
 export const createWorkspace = async (data: IClientCreateWorkspace): Promise<IWorkspaceResponse> => {
   const { name } = data;
@@ -43,4 +43,10 @@ export const getWorkspaceUserChats = async (workspaceId: string, userId: string)
   const channels = clientChats.filter(chat => chat.type === ChatType.Channel);
   const directMessages = clientChats.filter(chat => chat.type === ChatType.DirectMessage);
   return { channels, directMessages };
+};
+
+export const getPublicChats = async (workspaceId: string): Promise<IChat[]> => {
+  const chats = await getCustomRepository(WorkspaceRepository).getWorkspaceChats(workspaceId);
+  const publicChats = chats.filter((chat: IChat) => !chat.isPrivate && chat.type === ChatType.Channel);
+  return publicChats;
 };
