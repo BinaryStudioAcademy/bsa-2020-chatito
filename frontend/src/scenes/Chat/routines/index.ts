@@ -11,3 +11,4 @@ export const editPostWithSocketRoutine = createRoutine('EDIT_POST_WITH_SOCKET');
 export const addChatWithSocketRoutine = createRoutine('ADD_CHAT_WITH_SOCKET');
 export const addReminderRoutine = createRoutine('ADD_REMINDER');
 export const addUsersToChatRoutine = createRoutine('ADD_USERS_TO_CHAT');
+export const addReminderSuccessPostRoutine = createRoutine('ADD_REMINDER_SUCCESS_POST');

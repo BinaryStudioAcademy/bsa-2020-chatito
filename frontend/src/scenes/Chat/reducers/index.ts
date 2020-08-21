@@ -7,7 +7,8 @@ import { setCurrentChatRoutine,
   editPostWithSocketRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
-  addReminderRoutine } from '../routines';
+  addReminderRoutine,
+  addReminderSuccessPostRoutine } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 import { IUser } from 'common/models/user/IUser';
@@ -149,6 +150,28 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     case addReminderRoutine.FAILURE:
       return {
         ...state, loading: false
+      };
+    case addReminderSuccessPostRoutine.SUCCESS:
+      const { day, time, note, chatId } = payload;
+      const chatitoBotMock = {
+        id: '0',
+        fullName: 'Chatito Bot',
+        displayName: 'Chatito Bot',
+        email: 'chatito@gmail.com'
+      };
+      const newPost: IPost = {
+        createdByUser: chatitoBotMock,
+        text: `I'll remind you about this message ${note ? `with note "${note}"` : ''} at ${day} ${time}.`,
+        createdAt: new Date(),
+        id: '0',
+        postReactions: [],
+        commentsInfo: { count: 0, lastAt: new Date(), avatars: [] },
+        chatId
+      };
+      const posts = [...state.posts];
+      posts.push(newPost);
+      return {
+        ...state, posts
       };
     default:
       return state;

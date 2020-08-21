@@ -17,14 +17,13 @@ interface IProps {
   chatId?: string;
 }
 
-const getCurrentDateData = () => {
-  const currentDate = new Date();
-  const currentDay = currentDate.getDate();
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentYear = currentDate.getFullYear();
+export const fromDateToReminderData = (date: Date) => {
+  const currentDay = date.getDate();
+  const currentMonth = date.getMonth() + 1;
+  const currentYear = date.getFullYear();
 
-  const currentHours = currentDate.getHours();
-  const currentMinutes = currentDate.getMinutes() + 1;
+  const currentHours = date.getHours();
+  const currentMinutes = date.getMinutes() + 1;
 
   const currentFullDate = `${currentYear}-${currentMonth}-${currentDay}`;
   const currentTime = `${currentHours}:${currentMinutes}`;
@@ -36,8 +35,17 @@ const getCurrentDateData = () => {
     currentMonth,
     currentYear,
     currentHours,
-    currentMinutes,
-    currentDate
+    currentMinutes
+  };
+};
+
+export const getCurrentDateData = () => {
+  const currentDate = new Date();
+  const res = fromDateToReminderData(currentDate);
+
+  return {
+    currentDate,
+    ...res
   };
 };
 

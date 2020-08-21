@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Card, Media, Popover, Button, OverlayTrigger, ListGroup } from 'react-bootstrap';
+import { Card, Media, Popover, OverlayTrigger } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import styles from './styles.module.sass';
 import { IPost } from 'common/models/post/IPost';
@@ -19,6 +19,7 @@ import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import CustomReminderModal from 'containers/CustomReminderModal';
 import { showUserProfileRoutine } from 'scenes/Workspace/routines';
+import ReminderItem from 'components/ReminderItem/ReminderItem';
 
 interface IProps {
   post: IPost;
@@ -54,6 +55,12 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
 
   const { createdByUser, text, postReactions } = post;
   const createdAt = new Date(post.createdAt);
+
+  const twentyMinutes = 20 * 60000;
+  const oneHour = twentyMinutes * 3;
+  const threeHours = oneHour * 3;
+  const oneDay = oneHour * 24;
+  const oneWeek = oneDay * 7;
 
   const trigger = () => (
     <button type="button" className={`${styles.reactBtn} button-unstyled`}>React</button>
@@ -112,23 +119,33 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
   const popoverRemindOptions = (
     <Popover id="popover-basic" className={isShown ? styles.dNone : ''}>
       <Popover.Content>
-        <ListGroup>
-          <ListGroup.Item action>
-            In 20 minutes
-          </ListGroup.Item>
-          <ListGroup.Item action>
-            In 1 hour
-          </ListGroup.Item>
-          <ListGroup.Item action>
-            In 3 hours
-          </ListGroup.Item>
-          <ListGroup.Item action>
-            Tomorrow
-          </ListGroup.Item>
-          <ListGroup.Item action onClick={() => showModal({ modalType: ModalTypes.SetReminder, show: true })}>
-            Custom...
-          </ListGroup.Item>
-        </ListGroup>
+        <ReminderItem
+          text="In 20 minutes"
+          addedTime={twentyMinutes}
+        />
+        <ReminderItem
+          text="In 1 hour"
+          addedTime={oneHour}
+        />
+        <ReminderItem
+          text="In 3 hours"
+          addedTime={threeHours}
+        />
+        <ReminderItem
+          text="Tomorrow"
+          addedTime={oneDay}
+        />
+        <ReminderItem
+          text="Next week"
+          addedTime={oneWeek}
+        />
+        <button
+          type="button"
+          className={styles.optionsSelect}
+          onClick={() => showModal({ modalType: ModalTypes.SetReminder, show: true })}
+        >
+          <span>Custom</span>
+        </button>
       </Popover.Content>
     </Popover>
   );
@@ -137,13 +154,11 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
     <Popover id="popover-basic">
       <Popover.Title as="h3">More actions</Popover.Title>
       <Popover.Content>
-        <ListGroup>
-          <OverlayTrigger trigger="click" placement="right" overlay={popoverRemindOptions}>
-            <ListGroup.Item action>
-              Remind me about that &gt;
-            </ListGroup.Item>
-          </OverlayTrigger>
-        </ListGroup>
+        <OverlayTrigger trigger="click" placement="right" overlay={popoverRemindOptions}>
+          <button type="button" className={styles.optionsSelect}>
+            <span>Remind me about that &gt;</span>
+          </button>
+        </OverlayTrigger>
       </Popover.Content>
     </Popover>
   );

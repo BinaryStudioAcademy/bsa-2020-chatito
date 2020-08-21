@@ -8,7 +8,8 @@ import {
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
   addReminderRoutine,
-  addUsersToChatRoutine
+  addUsersToChatRoutine,
+  addReminderSuccessPostRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import { fetchChatPosts, addPost, createChat, fetchChatUsers,
@@ -122,6 +123,7 @@ function* createReminderRequest({ payload }: Routine<any>) {
     const chat = yield call(addReminder, payload);
     yield put(addReminderRoutine.success(chat));
     yield put(showModalRoutine({ modalType: ModalTypes.SetReminder, show: false }));
+    yield put(addReminderSuccessPostRoutine.success(payload));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(addReminderRoutine.failure());
