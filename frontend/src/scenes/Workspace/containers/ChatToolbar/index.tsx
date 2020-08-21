@@ -28,12 +28,14 @@ import { push } from 'connected-react-router';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { Routes } from 'common/enums/Routes';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
+import { IUser } from 'common/models/user/IUser';
 
 interface IProps {
   channels: IChat[];
   directMessages: IChat[];
   selectedChat: IChat;
   selectedWorkspace: IWorkspace;
+  currentUserId: string;
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
 }
@@ -42,6 +44,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
   selectedChat,
+  currentUserId,
   showModal,
   router,
   selectedWorkspace
@@ -89,8 +92,17 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     );
   };
 
+  const createDirectChannelName = (users: IUser[]) => {
+    const [firstUser, secondUser] = users;
+    if (!secondUser) {
+      return `${firstUser.displayName} (you)`;
+    }
+    return firstUser.id === currentUserId ? secondUser.displayName : firstUser.displayName;
+  };
+
   const directChannel = (directMessage: IChat) => {
-    const { name, id } = directMessage;
+    const { users, id } = directMessage;
+    const channelName = createDirectChannelName(users);
     return (
       <button
         type="button"
@@ -99,7 +111,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
         onClick={() => doSelectChannel(directMessage)}
       >
         <div className={styles.metkaOnLine} />
-        <span className={styles.buttonText}>{name}</span>
+        <span className={styles.buttonText}>{channelName}</span>
       </button>
     );
   };
@@ -187,7 +199,7 @@ const mapStateToProps = (state: IAppState) => ({
   directMessages: state.workspace.directMessages || [],
   selectedWorkspace: state.workspace.workspace,
   isLoading: state.workspace.loading,
-  selectedChat: state.chat.chat! // eslint-disable-line
+  selectedChat: state.chat.chat as IChat
 });
 
 const mapDispatchToProps = {

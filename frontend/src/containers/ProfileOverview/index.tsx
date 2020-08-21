@@ -22,6 +22,7 @@ import { ICreateChatAndAddPost } from 'common/models/chat/ICreateChatAndAddPost'
 import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
+import { userLogoDefaultUrl } from 'common/configs/defaults';
 
 interface IProps {
   user: IUser;
@@ -41,9 +42,6 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, 
   const [showAbout, setShowAbout] = useState(false);
   const [message, setMessage] = useState('');
   const inputRef = useRef(null);
-
-  const isOnline = true; // mock data
-  const imgUrl = 'https://cdn.boldomatic.com/resource/web/v2/images/profile-dummy-2x.png?width=34&height=34&format=jpg&quality=90'; // eslint-disable-line max-len
 
   const onClose = () => {
     hideRightMenu();
@@ -109,10 +107,10 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, 
       </div>
 
       <div className={styles.avatar}>
-        <Image src={user.imageUrl || imgUrl} alt="avatar" roundedCircle />
+        <Image src={user.imageUrl || userLogoDefaultUrl} alt="avatar" roundedCircle />
       </div>
       <div className={styles.nameWrp}>
-        <i className={isOnline ? styles.online : styles.offline} />
+        <i className={styles.online} />
         <span className={styles.fullName}>{user.fullName}</span>
       </div>
       {user.title && <div className={styles.title}>{user.title}</div>}
