@@ -24,6 +24,11 @@ class WorkspaceRepository extends Repository<Workspace> {
   getByIdWithUsers(id: string) {
     return this.findOne({ where: { id }, relations: ['users'] });
   }
+
+  async getWorkspaceChats(id: string) {
+    const workspace = await this.findOne({ where: { id }, relations: ['chats'] });
+    return workspace.chats;
+  }
 }
 
 export default WorkspaceRepository;
