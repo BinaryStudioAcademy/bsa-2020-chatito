@@ -18,7 +18,8 @@ import { IGetChatPosts } from '../common/models/chat/IGetChatPosts';
 
 export const getAllChatPosts = async (filter: IGetChatPosts) => {
   const chatPosts: IPost[] = await getCustomRepository(PostRepository).getAllChatPosts(filter);
-  const mappedChatPosts = Promise.all(chatPosts.map(async post => fromPostToPostClient(post)));
+  const mappedChatPosts = await Promise.all(chatPosts.map(async post => fromPostToPostClient(post)));
+
   return mappedChatPosts;
 };
 
@@ -29,8 +30,10 @@ export const getAllChatUsers = async (chatId: string) => {
 
 export const getAllUserChats = async (userId: string) => {
   const chats: IChat[] = await getCustomRepository(ChatRepository).getAllByUser(userId);
+
   const directs = chats.filter(({ type }) => type === ChatType.DirectMessage);
   const channels = chats.filter(({ type }) => type === ChatType.Channel);
+
   return { directs, channels };
 };
 

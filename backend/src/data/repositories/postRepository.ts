@@ -14,17 +14,51 @@ class PostRepository extends Repository<Post> {
   }
 
   async getAllChatPosts({
-    chatId: chat,
+    userId,
+    chatId,
     from: skip = undefined,
     count: take = undefined
   }: IGetChatPosts): Promise<Post[]> {
-    const posts = await this.find({
-      relations: ['createdByUser', 'postReactions', 'chat'],
-      where: { chat },
-      order: { createdAt: 'DESC' },
-      skip,
-      take
-    });
+    const posts = await this.createQueryBuilder('post')
+      .select([
+        'post.id',
+        'post.createdAt',
+        'post.text',
+        'user.id',
+        'user.fullName',
+        'user.displayName',
+        'user.imageUrl',
+        'draft_comment.id',
+        'draft_comment.text',
+        'post_reaction.reaction',
+        'post_reaction."userId"',
+        'chat.name',
+        'chat.hash'
+      ])
+      .leftJoin(
+        'post.draftComments',
+        'draft_comment',
+        'draft_comment."postId" = post.id AND draft_comment."createdByUserId" = :userId',
+        { userId }
+      )
+      .leftJoin(
+        'post.createdByUser',
+        'user'
+      )
+      .leftJoin(
+        'post.postReactions',
+        'post_reaction'
+      )
+      .leftJoin(
+        'post.chat',
+        'chat'
+      )
+      .where('post.chat = :chatId', { chatId })
+      .orderBy('post.createdAt', 'DESC')
+      .skip(skip)
+      .take(take)
+      .getMany();
+
     return posts.reverse();
   }
 

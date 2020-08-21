@@ -61,7 +61,7 @@ const ChatBody: React.FC<IProps> = ({
       loading={!chatId.length}
       height="auto"
     >
-      <div className={styles.chatBody} key="chatBody" ref={chatBody}>
+      <div className={styles.chatBody} key={chatId} ref={chatBody}>
         <InfiniteScroll
           loadMore={getMorePosts}
           isReverse
