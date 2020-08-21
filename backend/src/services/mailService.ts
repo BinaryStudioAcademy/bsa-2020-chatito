@@ -17,7 +17,7 @@ export const sendMail = async ({ from = mail, html = '', to, subject, text }: IM
   };
 
   return new Promise((resolve, reject) => {
-    transporter.sendMail(mailOptions, (error, info) => {
+    transporter.sendMail(mailOptions, (error: Error, info: any) => {
       if (error) {
         reject(error);
       } else {

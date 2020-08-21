@@ -12,7 +12,8 @@ import {
   faSearch,
   faDatabase,
   faPlay,
-  faPlus
+  faPlus,
+  faPencilAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
@@ -83,17 +84,32 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   );
 
   const userChannel = (channel: IChat) => {
-    const { name, isPrivate, id } = channel;
+    const { name, isPrivate, id, draftPosts } = channel;
+    const draftPostText = draftPosts?.length ? draftPosts[0].text : undefined;
+
     return (
       <button type="button" key={id} className={getChannelSelect(channel)} onClick={() => doSelectChannel(channel)}>
-        <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} color="black" />
-        <span className={styles.buttonText}>{name}</span>
+        <div className={styles.chatBlock}>
+          <div>
+            <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} color="black" />
+            <span className={styles.buttonText}>{name}</span>
+          </div>
+
+          {
+            draftPostText && !(selectedChat && selectedChat.id === channel.id)
+              ? <FontAwesomeIcon icon={faPencilAlt} color="black" />
+              : null
+          }
+
+        </div>
       </button>
     );
   };
 
   const directChannel = (directMessage: IChat) => {
-    const { name, id } = directMessage;
+    const { name, id, draftPosts } = directMessage;
+    const draftPostText = draftPosts?.length ? draftPosts[0].text : undefined;
+
     return (
       <button
         type="button"
@@ -101,8 +117,19 @@ const ChatToolbar: FunctionComponent<IProps> = ({
         className={getChannelSelect(directMessage)}
         onClick={() => doSelectChannel(directMessage)}
       >
-        <div className={styles.metkaOnLine} />
-        <span className={styles.buttonText}>{name}</span>
+        <div className={styles.chatBlock}>
+          <div>
+            <div className={styles.metkaOnLine} />
+            <span className={styles.buttonText}>{name}</span>
+          </div>
+
+          {
+            draftPostText && !(selectedChat && selectedChat.id === directMessage.id)
+              ? <FontAwesomeIcon icon={faPencilAlt} color="black" />
+              : null
+          }
+
+        </div>
       </button>
     );
   };

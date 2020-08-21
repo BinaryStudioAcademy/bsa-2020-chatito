@@ -4,6 +4,7 @@ import { User } from './User';
 import { Chat } from './Chat';
 import { Comment } from './Comment';
 import { PostReaction } from './PostReaction';
+import { DraftComment } from './DraftComment';
 
 @Entity()
 export class Post extends AbstractEntity {
@@ -12,6 +13,9 @@ export class Post extends AbstractEntity {
 
   @OneToMany(() => Comment, comment => comment.post)
   comments: Comment[];
+
+  @OneToMany(() => DraftComment, draftComment => draftComment.post)
+  draftComments: DraftComment[];
 
   @ManyToOne(() => User, user => user.posts)
   @JoinColumn({ name: 'createdByUserId' })

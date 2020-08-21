@@ -1,0 +1,11 @@
+GET http://localhost:3001/api/chats/42879827-9eca-44cc-8d21-9afeffa4a345/posts
+Content-Type: application/json
+Authorization: Bearer <insert token here>
+
+###
+
+GET http://localhost:3001/api/chats/
+Content-Type: application/json
+Authorization: Bearer <insert token here>
+
+###
