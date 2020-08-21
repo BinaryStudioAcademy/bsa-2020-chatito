@@ -1,5 +1,6 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
 import {
+  setCurrentChatRoutine,
   setPostsRoutine,
   addPostRoutine,
   createChatRoutine,
@@ -57,6 +58,7 @@ function* deleteDraftPostRequest({ payload }: Routine<any>) {
   try {
     yield call(deleteDraftPost, payload);
     yield put(updateChatDraftPostRoutine.trigger(payload));
+
     yield put(deleteDraftPostRoutine.success());
   } catch (error) {
     yield call(toastrError, error.message);
@@ -81,19 +83,13 @@ function* watchAddPostRequest() {
   yield takeEvery(addPostRoutine.TRIGGER, fetchAddPostRequest);
 }
 
-// function* setCurrChat({ payload }: Routine<any>): Routine<any> {
-//   // TODO: rewrite to load additional indo for current chat (like users[])
+function* setCurrChat({ payload }: Routine<any>): Routine<any> {
+  yield put(setCurrentChatRoutine.success(payload));
+}
 
-//   // trigger chats fetch to see draft chats
-//   const { channels, directMessages } = yield call(fetchUserChats);
-//   yield put(fetchUserChatsRoutine.success({ channels, directMessages }));
-
-//   yield put(setCurrentChatRoutine.success(payload));
-// }
-
-// function* watchCurrChat() {
-//   yield takeEvery(setCurrentChatRoutine.TRIGGER, setCurrChat);
-// }
+function* watchCurrChat() {
+  yield takeEvery(setCurrentChatRoutine.TRIGGER, setCurrChat);
+}
 
 function* toggleCreateChatModal({ payload }: Routine<any>) {
   yield call(showModalRoutine, payload);
@@ -163,6 +159,7 @@ function* watchRemoveUserFromChat() {
 export default function* chatSaga() {
   yield all([
     watchPostsRequest(),
+    watchCurrChat(),
     watchAddPostRequest(),
     watchUpsertDraftPostRequest(),
     watchDeleteDraftPostRequest(),

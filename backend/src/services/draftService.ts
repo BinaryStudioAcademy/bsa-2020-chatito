@@ -3,7 +3,12 @@ import { IUpsertDraftPost } from '../common/models/draft/IUpsertDraftPost';
 import UserRepository from '../data/repositories/userRepository';
 import ChatRepository from '../data/repositories/chatRepository';
 import DraftPostRepository from '../data/repositories/draftPostRepository';
-import { fromDraftPostToDraftPostClient, fromDraftCommentToDraftCommentClient } from '../common/mappers/draft';
+import {
+  fromDraftPostToDraftPostClient,
+  fromDraftCommentToDraftCommentClient,
+  fromDraftPostToDraftPostClientDraftPage,
+  fromDraftCommentToDraftCommentDraftPage
+} from '../common/mappers/draft';
 import CustomError from '../common/models/CustomError';
 import { ErrorCode } from '../common/enums/ErrorCode';
 import { IDeleteDraftPost } from '../common/models/draft/IDeleteDraftPost';
@@ -22,7 +27,7 @@ export const upsertDraftPost = async (id: string, draftPost: IUpsertDraftPost) =
   try {
     createdPost = await getCustomRepository(DraftPostRepository).upsertDraftPost(newPost);
   } catch (error) {
-    throw new CustomError(409, 'Draft post exists. Should be unique for user-chat.', ErrorCode.DraftPostExists);
+    throw new CustomError(409, error, ErrorCode.DraftPostExists);
   }
 
   return fromDraftPostToDraftPostClient(createdPost);
@@ -57,7 +62,7 @@ export const deleteDraftComment = async (id: string, { postId }: IDeleteDraftCom
 export const getAll = async (userId: string, wpId: string) => {
   const comments = await getCustomRepository(DraftCommentRepository).getByUserAndWorkspace(userId, wpId);
   const posts = await getCustomRepository(DraftPostRepository).getByUserAndWorkspace(userId, wpId);
-  const clientPosts = await Promise.all(posts.map(async p => fromDraftPostToDraftPostClient(p)));
-  const clientComments = await Promise.all(comments.map(async c => fromDraftCommentToDraftCommentClient(c)));
+  const clientPosts = await Promise.all(posts.map(async p => fromDraftPostToDraftPostClientDraftPage(p)));
+  const clientComments = await Promise.all(comments.map(async c => fromDraftCommentToDraftCommentDraftPage(c)));
   return { comments: clientComments, posts: clientPosts };
 };
