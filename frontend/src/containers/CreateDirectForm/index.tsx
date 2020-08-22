@@ -8,6 +8,7 @@ import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { getWorkspaceUsers } from 'services/workspaceService';
+import LoaderWrapper from 'components/LoaderWrapper';
 
 interface IProps {
   createDirect: IBindingCallback1<any>;
@@ -88,7 +89,9 @@ const CreateDirect = ({ createDirect, workspace }: IProps) => {
   return (
     <>
       {formHeader}
-      {formBody}
+      <LoaderWrapper loading={!users.length} height="50px">
+        {formBody}
+      </LoaderWrapper>
       {formFooter}
     </>
   );
