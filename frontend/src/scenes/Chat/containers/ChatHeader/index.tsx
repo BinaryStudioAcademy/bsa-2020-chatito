@@ -21,6 +21,8 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
 import { fetchWorkspaceUsersRoutine } from 'scenes/Workspace/routines';
 import ChatMembers from 'containers/ChatMembers';
+import { ChatType } from 'common/enums/ChatType';
+import { createDirectChannelName } from 'common/helpers/nameHelper';
 
 const privateChannelIcon = (
   <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
@@ -31,9 +33,10 @@ interface IProps {
   showModal: IBindingCallback1<IModalRoutine>;
   workspaceId: string;
   fetchWorkspaceUsers: (workspaceId: string) => void;
+  currentUserId: string;
 }
 
-const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorkspaceUsers }) => {
+const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorkspaceUsers, currentUserId }) => {
   const maxAvatarsDisplayed = 5;
   const userAvatars = (users: IUser[]) => {
     const usersToDisplay = users.slice(0, maxAvatarsDisplayed);
@@ -60,13 +63,16 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
     showModal({ modalType: ModalTypes.ChatMembers, show: true });
   };
 
+  const chatName = chat.type === ChatType.DirectMessage
+    ? createDirectChannelName(chat.users, currentUserId) : chat.name;
+
   return (
     <div className={styles.chatContainer} key={chat.id}>
 
       <div className={styles.headerInfo}>
         <div className={styles.titleBlock}>
           {chat.isPrivate ? privateChannelIcon : null}
-          <div className={styles.title}>{chat.name || ''}</div>
+          <div className={styles.title}>{chatName}</div>
           <FontAwesomeIcon icon={faStar} className={styles.icon} />
         </div>
 
@@ -101,7 +107,8 @@ const mapStateToProps = (state: IAppState) => {
   const { chat } = state.chat;
   return {
     chat,
-    workspaceId: state.workspace.workspace.id
+    workspaceId: state.workspace.workspace.id,
+    currentUserId: state.user.user?.id as string
   };
 };
 

@@ -29,7 +29,7 @@ import { push } from 'connected-react-router';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { Routes } from 'common/enums/Routes';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
-import { IUser } from 'common/models/user/IUser';
+import { createDirectChannelName } from 'common/helpers/nameHelper';
 
 interface IProps {
   channels: IChat[];
@@ -106,17 +106,9 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     );
   };
 
-  const createDirectChannelName = (users: IUser[]) => {
-    const [firstUser, secondUser] = users;
-    if (!secondUser) {
-      return `${firstUser.displayName} (you)`;
-    }
-    return firstUser.id === currentUserId ? secondUser.displayName : firstUser.displayName;
-  };
-
   const directChannel = (directMessage: IChat) => {
     const { users, id, draftPosts } = directMessage;
-    const channelName = createDirectChannelName(users);
+    const channelName = createDirectChannelName(users, currentUserId);
     const draftPostText = draftPosts?.length ? draftPosts[0].text : undefined;
 
     return (

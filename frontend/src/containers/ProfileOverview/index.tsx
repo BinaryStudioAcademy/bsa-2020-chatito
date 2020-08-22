@@ -53,7 +53,7 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, 
     const chat = user.id === currentUser.id
       ? directMessages.find(directMessage => directMessage.users.length === 1)
       : directMessages.find(directMessage => (
-        directMessage.users.find(directUser => directUser.id === user.id)
+        directMessage.users.length === 2 && directMessage.users.find(directUser => directUser.id === user.id)
       ));
 
     if (chat) {
@@ -65,7 +65,7 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, 
         isPrivate: true,
         type: ChatType.DirectMessage,
         workspaceName,
-        users: user.id === currentUser.id ? [currentUser] : [currentUser, user]
+        users: user.id === currentUser.id ? [] : [user]
       };
       createChatAndAddPost({ chat: newChat, text: message });
     }
