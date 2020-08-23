@@ -11,6 +11,8 @@ import PostRepository from '../data/repositories/postRepository';
 import DraftCommentRepository from '../data/repositories/draftCommentRepository';
 import { IUpsertDraftComment } from '../common/models/draft/IUpsertDraftComment';
 import { IDeleteDraftComment } from '../common/models/draft/IDeleteDraftComment';
+import { emitToChatRoom } from '../common/utils/socketHelper';
+import { ClientSockets } from '../common/enums/ClientSockets';
 
 export const upsertDraftPost = async (id: string, draftPost: IUpsertDraftPost) => {
   const user = await getCustomRepository(UserRepository).getById(id);
@@ -24,8 +26,10 @@ export const upsertDraftPost = async (id: string, draftPost: IUpsertDraftPost) =
   } catch (error) {
     throw new CustomError(409, 'Draft post exists. Should be unique for user-chat.', ErrorCode.DraftPostExists);
   }
+  const mappedDraftPost = fromDraftPostToDraftPostClient(createdPost);
 
-  return fromDraftPostToDraftPostClient(createdPost);
+  emitToChatRoom(draftPost.chatId, ClientSockets.UpsertDraftPost, id, draftPost.chatId, mappedDraftPost);
+  return mappedDraftPost;
 };
 
 export const deleteDraftPost = async (id: string, { chatId }: IDeleteDraftPost) => {

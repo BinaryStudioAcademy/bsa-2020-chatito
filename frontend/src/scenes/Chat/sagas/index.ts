@@ -44,7 +44,7 @@ function* upsertDraftPostRequest({ payload }: Routine<any>) {
     const response = yield call(upsertDraftPost, payload);
     yield put(updateChatDraftPostRoutine.trigger({ ...response, chatId: payload.chatId }));
 
-    yield put(upsertDraftPostRoutine.success(response));
+    // yield put(upsertDraftPostRoutine.success(response));
   } catch (error) {
     yield call(toastrError, error.message);
   }
