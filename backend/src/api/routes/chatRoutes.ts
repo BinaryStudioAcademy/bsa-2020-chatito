@@ -1,3 +1,5 @@
+import { getChatById } from './../../services/chatService';
+import { getUserByIdWithoutWorkspaces } from './../../services/userService';
 import { Router, Request } from 'express';
 import { run } from '../../common/utils/routeHelper';
 import {
@@ -7,6 +9,8 @@ import {
   getAllChatUsers,
   removeUserFromChat,
   addUsersToChat } from '../../services/chatService';
+import { ClientSockets } from '../../common/enums/ClientSockets';
+import { IUser } from '../../common/models/user/IUser';
 
 const router = Router();
 
@@ -21,9 +25,23 @@ router
   .delete('/:id/users/:userId', run((req: Request) => removeUserFromChat(req.params.id, req.params.userId)))
   .post('/', run(async (req: Request) => {
     const chat = await addChat(req.user.id, req.body);
-    req.io.of('/chat').emit('joinChat', chat.id);
+    req.io.of('/chat').emit(ClientSockets.JoinChat, chat.id);
     return chat;
   }))
-  .post('/invite-users', run((req: Request) => addUsersToChat(req.body.chatId, req.body.userIds)));
+  .post('/invite-users', run(async (req: Request) => {
+    const users = await addUsersToChat(req.body.chatId, req.body.userIds)
+    const usersToEmit: IUser[] = [];
+    req.body.userIds.forEach(async (userId: string) => {
+      const user = await getUserByIdWithoutWorkspaces(userId).then(user => user);
+      usersToEmit.push(user);
+    });
+    const chatInfoToSend = await getChatById(req.body.chatId);
+    req.io.of('/chat').emit(ClientSockets.NewUserNotification, usersToEmit, chatInfoToSend.name, chatInfoToSend.type );
+    return users;
+  }))
 
 export default router;
+// user: IUser,
+// chatId: string,
+// chatName: string,
+// chatType: ChatType
