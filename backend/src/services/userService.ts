@@ -12,11 +12,16 @@ import CustomError from '../common/models/CustomError';
 import { ErrorCode } from '../common/enums/ErrorCode';
 import { getPublicChats } from './workspaceService';
 import { addUsersToChat } from './chatService';
+import { IChat } from '../common/models/chat/IChat';
 
 export const getUsers = async () => {
   const users = await getCustomRepository(UserRepository).getAll();
   const clientUsers = users.map(user => fromUserToUserClient(user));
   return clientUsers;
+};
+
+export const addChatsToUser = (publicChats: IChat[], userId: string) => {
+  publicChats.forEach(chat => addUsersToChat(chat.id, [userId]));
 };
 
 export const getUserById = async (id: string) => {
@@ -63,7 +68,8 @@ export const addWorkspaceToUser = async (userId: string, workspaceId: string) =>
   try {
     const user = await getCustomRepository(UserRepository).addWorkspace(userId, workspaceId);
     const publicChats = await getPublicChats(workspaceId);
-    publicChats.forEach(chat => addUsersToChat(chat.id, [userId]));
+    addChatsToUser(publicChats, userId);
+
     return user;
   } catch (error) {
     throw new CustomError(409, 'User already exists in workspace. ', ErrorCode.UserExistsInWorkspace);
