@@ -17,6 +17,7 @@ import { PostType } from 'common/enums/PostType';
 import { IUpsertDraftComment } from 'common/models/draft/IUpsertDraftComment';
 import { IDeleteDraftComment } from 'common/models/draft/IDeleteDraftComment';
 import { IAppState } from 'common/models/store';
+import LoaderWrapper from 'components/LoaderWrapper';
 
 interface IProps {
   showOnlyTwoComments?: boolean;
@@ -33,6 +34,7 @@ interface IProps {
   draftCommentText?: string;
   upsertDraftComment: IBindingCallback1<IUpsertDraftComment>;
   deleteDraftComment: IBindingCallback1<IDeleteDraftComment>;
+  isLoading: boolean;
 }
 
 const Thread: FunctionComponent<IProps> = ({
@@ -48,7 +50,8 @@ const Thread: FunctionComponent<IProps> = ({
   draftCommentId,
   draftCommentText,
   upsertDraftComment,
-  deleteDraftComment
+  deleteDraftComment,
+  isLoading
 }) => {
   const { whash } = useParams();
   const [showAll, setShowAll] = useState(false);
@@ -70,67 +73,69 @@ const Thread: FunctionComponent<IProps> = ({
 
   return (
     <div className={styles.threadContainer} style={{ width }}>
-      <header>
-        {post.chat && post.chat.name
-          ? (
-            <button type="button" className={styles.threadChatNameButton} onClick={redirectToChat}>
-              {post.chat.name}
-            </button>
-          )
-          : <p className={styles.threadChatName}>Thread</p>}
-        <p>
-          {'Participants '}
-          {participants.length}
-        </p>
-        {!hideCloseBtn && <FontAwesomeIcon onClick={onHide} icon={faTimes} className={styles.closeBtn} />}
-      </header>
-      <div className={styles.threadPost}>
-        <Post post={post} type={PostType.Post} />
-      </div>
-      {showOnlyTwoComments
-        ? (
-          <button
-            type="button"
-            onClick={() => setShowAll(!showAll)}
-            className={styles.link}
-          >
-            Show other replies
-          </button>
-        ) : ('')}
-      <div className={styles.threadComments}>
-        {comments.map((comment, index) => (
-          index < maxComment
+      <LoaderWrapper loading={isLoading}>
+        <header>
+          {post.chat && post.chat.name
             ? (
-              <Post
-                key={comment.id}
-                post={comment}
-                type={PostType.Comment}
-              />
+              <button type="button" className={styles.threadChatNameButton} onClick={redirectToChat}>
+                {post.chat.name}
+              </button>
             )
-            : null
-        ))}
-      </div>
-      {comments.length > maxComment
-        ? (
-          <div className={styles.commentsMore}>
-            {`And ${comments.length - maxComment} more comments`}
-          </div>
-        ) : ('')}
-      <div className={styles.textEditor}>
-        <TextEditor
-          key={draftCommentId}
-          placeholder="write a comment!"
-          height={130}
-          draftPayload={{ postId: post.id }}
-          draftInput={{
-            id: draftCommentId,
-            text: draftCommentText
-          }}
-          upsertDraft={upsertDraftComment}
-          deleteDraft={deleteDraftComment}
-          onSend={sendCommentHandler}
-        />
-      </div>
+            : <p className={styles.threadChatName}>Thread</p>}
+          <p>
+            {'Participants '}
+            {participants.length}
+          </p>
+          {!hideCloseBtn && <FontAwesomeIcon onClick={onHide} icon={faTimes} className={styles.closeBtn} />}
+        </header>
+        <div className={styles.threadPost}>
+          <Post post={post} type={PostType.Post} />
+        </div>
+        {showOnlyTwoComments
+          ? (
+            <button
+              type="button"
+              onClick={() => setShowAll(!showAll)}
+              className={styles.link}
+            >
+              Show other replies
+            </button>
+          ) : ('')}
+        <div className={styles.threadComments}>
+          {comments.map((comment, index) => (
+            index < maxComment
+              ? (
+                <Post
+                  key={comment.id}
+                  post={comment}
+                  type={PostType.Comment}
+                />
+              )
+              : null
+          ))}
+        </div>
+        {comments.length > maxComment
+          ? (
+            <div className={styles.commentsMore}>
+              {`And ${comments.length - maxComment} more comments`}
+            </div>
+          ) : ('')}
+        <div className={styles.textEditor}>
+          <TextEditor
+            key={draftCommentId}
+            placeholder="write a comment!"
+            height={130}
+            draftPayload={{ postId: post.id }}
+            draftInput={{
+              id: draftCommentId,
+              text: draftCommentText
+            }}
+            upsertDraft={upsertDraftComment}
+            deleteDraft={deleteDraftComment}
+            onSend={sendCommentHandler}
+          />
+        </div>
+      </LoaderWrapper>
     </div>
   );
 };
@@ -142,7 +147,8 @@ const mapStateToProps = (state: IAppState) => {
     // eslint-disable-next-line
     currChatHash: state.chat.chat!.hash,
     draftCommentId: draftComments?.length ? draftComments[0].id : undefined,
-    draftCommentText: draftComments?.length ? draftComments[0].text : undefined
+    draftCommentText: draftComments?.length ? draftComments[0].text : undefined,
+    isLoading: state.workspace.threadLoading
   };
 };
 
