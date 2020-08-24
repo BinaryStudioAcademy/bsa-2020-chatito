@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from './styles.module.sass';
 import { ReactComponent as Upset } from 'img/error404.svg';
 import { Button } from 'react-bootstrap';
-import Header from 'scenes/Workspace/containers/Header';
+import Header from 'containers/Header';
 
 const PageNotFound: FunctionComponent = () => (
   <>
