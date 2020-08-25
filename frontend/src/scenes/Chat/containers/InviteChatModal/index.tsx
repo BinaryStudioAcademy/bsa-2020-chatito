@@ -70,10 +70,9 @@ const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
   };
 
   const onAdd = () => {
-    if (selectedUsers.length) {
-      const userIds = selectedUsers.map(user => user.id);
-      addUsersToChat({ chatId, userIds });
-    }
+    const userIds = selectedUsers.map(user => user.id);
+    addUsersToChat({ chatId, userIds });
+
     onHide();
   };
 
@@ -124,7 +123,9 @@ const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
             </InputGroup>
           </OverlayTrigger>
         </LoaderWrapper>
-        <Button variant="primary" className={styles.addBtn} onClick={onAdd}>Add</Button>
+        <Button variant="primary" disabled={!selectedUsers.length} className={styles.addBtn} onClick={onAdd}>
+          Add
+        </Button>
       </div>
     </ModalWindow>
   );

@@ -184,7 +184,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       <div className={styles.buttonChanel}>
         <button type="button" className={styles.buttonSelect} onClick={() => setChatPanel(!chatPanel)}>
           <FontAwesomeIcon icon={faPlay} className={getClassNameImg(chatPanel)} />
-          <span className={styles.buttonText}>Chanels</span>
+          <span className={styles.buttonText}>Channels</span>
         </button>
       </div>
       <div className={getClassNameDiv(chatPanel)}>

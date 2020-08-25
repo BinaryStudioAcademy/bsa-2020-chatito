@@ -45,9 +45,7 @@ class ChatRepository extends Repository<Chat> {
       ])
       .leftJoin(
         'chat.workspace',
-        'workspace',
-        'workspace.id = :workspaceId',
-        { workspaceId }
+        'workspace'
       )
       .leftJoin(
         'chat.draftPosts',
@@ -59,9 +57,9 @@ class ChatRepository extends Repository<Chat> {
         'chat.users',
         'user'
       )
-      .where('chat."createdByUserId" = :userId', { userId })
+      .where('workspace.id = :workspaceId', { workspaceId })
+      .andWhere('user.id = :userId', { userId })
       .getMany();
-
     return chats;
   }
 
