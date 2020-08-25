@@ -37,7 +37,6 @@ router
       usersToEmit.push(user);
     });
     const chatInfoToSend = await getChatById(req.body.chatId);
-    console.log(usersToEmit, chatInfoToSend.name, chatInfoToSend.type);
     emitToChatRoom(req.body.chatId, ClientSockets.NewUserNotification, usersToEmit, chatInfoToSend.name, chatInfoToSend.type);
     return users;
   }))
