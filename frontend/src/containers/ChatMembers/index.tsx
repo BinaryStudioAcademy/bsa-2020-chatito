@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IAppState } from 'common/models/store';
@@ -10,6 +10,7 @@ import { IChat } from 'common/models/chat/IChat';
 import { fetchChatUsersRoutine, removeUserFromChatRoutine } from 'scenes/Chat/routines';
 import { IUser } from 'common/models/user/IUser';
 import ChatMember from 'components/ChatMember';
+import { fetchChatUsers } from 'services/chatService';
 
 interface IProps {
   isShown: boolean;
@@ -34,29 +35,33 @@ const ChatMembers: FunctionComponent<any> = ({
 
   const removeUserFromChat = async (userId: string) => {
     await removeUser({ chatId: chat.id, userId });
-    getUserList(chat.id);
+    await getUserList(chat.id);
   };
 
-  const isCreator = chat.createdByUserId === currentUser.id;
   return (
     <ModalWindow
       isShown={isShown}
       onHide={handleCloseModal}
     >
       <div>
-        {chat.users.map((user: IUser) => {
-          if (isCreator) {
-            return null;
-          }
-          return (
-            <ChatMember
-              removeUser={removeUserFromChat}
-              user={user}
-              key={user.id}
-              isCreator={isCreator}
-            />
-          );
-        })}
+        {
+          chat.users.length <= 1
+            ? 'You are the only member of this chat!'
+            : chat.users.map((user: IUser) => {
+              const isCreator = chat.createdByUserId === currentUser.id;
+              if (currentUser.id === user.id) {
+                return null;
+              }
+              return (
+                <ChatMember
+                  removeUser={removeUserFromChat}
+                  user={user}
+                  key={user.id}
+                  isCreator={isCreator}
+                />
+              );
+            })
+        }
       </div>
     </ModalWindow>
   );
