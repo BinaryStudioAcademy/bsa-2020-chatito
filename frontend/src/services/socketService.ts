@@ -8,12 +8,15 @@ import {
   addPostWithSocketRoutine,
   editPostWithSocketRoutine,
   addChatWithSocketRoutine,
-  upsertDraftPostWithSocketRoutine
+  upsertDraftPostWithSocketRoutine,
+  deleteDraftPostWithSocketRoutine,
+  updatePostDraftCommentRoutine
 } from 'scenes/Chat/routines';
 import {
   incUnreadCountRoutine,
   addActiveCommentWithSocketRoutine,
-  newUserNotificationWithSocketRoutine
+  newUserNotificationWithSocketRoutine,
+  updateChatDraftPostRoutine
 } from 'scenes/Workspace/routines';
 import { IChat } from 'common/models/chat/IChat';
 import { ClientSockets } from 'common/enums/ClientSockets';
@@ -27,6 +30,8 @@ import { addPostReactionWithSocketRoutine, deletePostReactionWithSocketRoutine }
 import { IUser } from 'common/models/user/IUser';
 import { ChatType } from 'common/enums/ChatType';
 import { IDraftPost } from 'common/models/draft/IDraftPost';
+import { IDraftComment } from 'common/models/draft/IDraftComment';
+import { upsertDraftCommentWithSocketRoutine, deleteDraftCommentWithSocketRoutine } from 'containers/Thread/routines';
 
 const { server } = env.urls;
 
@@ -103,8 +108,44 @@ export const connectSockets = () => {
 
   chatSocket.on(ClientSockets.UpsertDraftPost, (userId: string, chatId: string, draftPost: IDraftPost) => {
     const state = store.getState();
-    if (chatId === state.chat.chat.id && state.user.user!.id === userId) {
+    if (chatId === state.chat.chat.id && state.user.user?.id === userId) {
       store.dispatch(upsertDraftPostWithSocketRoutine(draftPost));
+      store.dispatch(updateChatDraftPostRoutine({ ...draftPost, chatId }));
+    }
+  });
+
+  chatSocket.on(ClientSockets.DeleteDraftPost, (userId: string, chatId: string) => {
+    const state = store.getState();
+    if (chatId === state.chat.chat.id && state.user.user?.id === userId) {
+      store.dispatch(deleteDraftPostWithSocketRoutine());
+      store.dispatch(updateChatDraftPostRoutine({ chatId }));
+    }
+  });
+
+  chatSocket.on(ClientSockets.UpsertDraftComment, (
+    userId: string,
+    chatId: string,
+    postId: string,
+    draftComment: IDraftComment
+  ) => {
+    const state = store.getState();
+    if (postId === state.workspace.activeThread?.post.id && state.user.user?.id === userId) {
+      store.dispatch(upsertDraftCommentWithSocketRoutine(draftComment));
+    }
+
+    if (chatId === state.chat.chat.id && state.user.user?.id === userId) {
+      store.dispatch(updatePostDraftCommentRoutine({ ...draftComment, postId }));
+    }
+  });
+
+  chatSocket.on(ClientSockets.DeleteDraftComment, (userId: string, chatId: string, postId: string) => {
+    const state = store.getState();
+    if (postId === state.workspace.activeThread?.post.id && state.user.user?.id === userId) {
+      store.dispatch(deleteDraftCommentWithSocketRoutine());
+    }
+
+    if (chatId === state.chat.chat.id && state.user.user?.id === userId) {
+      store.dispatch(updatePostDraftCommentRoutine({ postId }));
     }
   });
 };

@@ -5,6 +5,7 @@ export const setPostsRoutine = createRoutine('SET_POSTS');
 export const upsertDraftPostRoutine = createRoutine('UPSERT_DRAFT_POST');
 export const upsertDraftPostWithSocketRoutine = createRoutine('UPSERT_DRAFT_POST_WITH_SOCKET');
 export const deleteDraftPostRoutine = createRoutine('DELETE_DRAFT_POST');
+export const deleteDraftPostWithSocketRoutine = createRoutine('DELETE_DRAFT_POST_WITH_SOCKET');
 export const updatePostDraftCommentRoutine = createRoutine('UPDATE_POST_DRAFT_COMMENT');
 export const addPostRoutine = createRoutine('ADD_POST');
 export const createChatRoutine = createRoutine('CREATE_CHAT');
