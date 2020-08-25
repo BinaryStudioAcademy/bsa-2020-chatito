@@ -176,4 +176,3 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
 };
 
 export default reducer;
-
