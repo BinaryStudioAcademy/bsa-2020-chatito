@@ -1,3 +1,4 @@
+import { emitToChatRoom } from './../../common/utils/socketHelper';
 import { getChatById } from './../../services/chatService';
 import { getUserByIdWithoutWorkspaces } from './../../services/userService';
 import { Router, Request } from 'express';
@@ -36,12 +37,8 @@ router
       usersToEmit.push(user);
     });
     const chatInfoToSend = await getChatById(req.body.chatId);
-    req.io.of('/chat').emit(ClientSockets.NewUserNotification, usersToEmit, chatInfoToSend.name, chatInfoToSend.type );
+    emitToChatRoom(req.body.chatId, ClientSockets.NewUserNotification, usersToEmit, chatInfoToSend.name, chatInfoToSend.type);
     return users;
   }))
 
 export default router;
-// user: IUser,
-// chatId: string,
-// chatName: string,
-// chatType: ChatType

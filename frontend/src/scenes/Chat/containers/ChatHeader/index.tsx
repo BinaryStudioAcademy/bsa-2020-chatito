@@ -66,8 +66,6 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal }) => {
           <div className={styles.title}>{chat.name || ''}</div>
           <FontAwesomeIcon icon={faStar} className={styles.icon} />
         </div>
-
-        <div className={styles.topic}>Add topic</div>
       </div>
 
       <div className={styles.rightHeaderBlock}>
