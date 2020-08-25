@@ -1,60 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import styles from './styles.module.sass';
 import ModalWindow from 'components/ModalWindow';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
-import { InputGroup, FormControl, Button, Popover, OverlayTrigger } from 'react-bootstrap';
 import { IAppState } from 'common/models/store';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { IUser } from 'common/models/user/IUser';
-import LoaderWrapper from 'components/LoaderWrapper';
-import { searchUsers } from 'common/helpers/searchHelper';
-import { addUsersToChatRoutine } from 'scenes/Chat/routines';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { IAddUsersToChat } from 'common/models/chat/IAddUsersToChat';
+import InviteChatForm from 'scenes/Chat/containers/InviteChatForm';
 
 interface IProps {
   isShown: boolean;
-  users: IUser[];
-  loading: boolean;
+  postsLoading: boolean;
   chatName: string;
   chatId: string;
   chatUsers: IUser[];
   toggleModal: IBindingCallback1<IModalRoutine>;
-  addUsersToChat: IBindingCallback1<IAddUsersToChat>;
 }
-
-let timer: NodeJS.Timeout;
-
-const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
-  chatId, toggleModal, addUsersToChat, chatUsers }) => {
-  const [text, setText] = useState('');
-  const [searchedUsers, setSearchedUsers] = useState<IUser[]>([]);
-  const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
-
-  const searchUserHandler = (str: string) => {
-    clearTimeout(timer);
-
-    timer = setTimeout(() => {
-      const result = searchUsers(str, users);
-      setSearchedUsers(result);
-    }, 200);
-  };
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setText(value);
-    searchUserHandler(value);
-  };
-
+const InviteChatModal: React.FC<IProps> = ({ chatName, chatId, chatUsers,
+  isShown, postsLoading, toggleModal }) => {
   const onHide = () => {
-    setText('');
-    setSelectedUsers([]);
     toggleModal({ modalType: ModalTypes.InviteChat, show: !isShown });
   };
 
+<<<<<<< HEAD
   const onSelectUser = (user: IUser) => {
     if (chatUsers.find(chatUser => chatUser.id === user.id)) {
       return;
@@ -127,18 +95,23 @@ const InviteChatModal: React.FC<IProps> = ({ isShown, users, loading, chatName,
           Add
         </Button>
       </div>
+=======
+  return (
+    <ModalWindow isShown={!postsLoading && isShown} onHide={onHide}>
+      <InviteChatForm
+        hideCallback={onHide}
+        chatName={chatName}
+        chatId={chatId}
+        chatUsers={chatUsers}
+      />
+>>>>>>> bug/loader
     </ModalWindow>
   );
 };
 
 const mapStateToProps = (state: IAppState) => ({
   isShown: state.modal.inviteChat,
-  users: state.workspace.users,
-  loading: state.workspace.loading
+  postsLoading: state.chat.loading
 });
 
-const mapDispatchToProps = {
-  addUsersToChat: addUsersToChatRoutine
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(InviteChatModal);
+export default connect(mapStateToProps)(InviteChatModal);

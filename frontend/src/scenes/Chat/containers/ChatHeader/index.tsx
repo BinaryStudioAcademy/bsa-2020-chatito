@@ -19,7 +19,6 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
-import { fetchWorkspaceUsersRoutine } from 'scenes/Workspace/routines';
 import ChatMembers from 'containers/ChatMembers';
 import { ChatType } from 'common/enums/ChatType';
 
@@ -30,11 +29,9 @@ const privateChannelIcon = (
 interface IProps {
   chat?: IChat;
   showModal: IBindingCallback1<IModalRoutine>;
-  workspaceId: string;
-  fetchWorkspaceUsers: (workspaceId: string) => void;
 }
 
-const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorkspaceUsers }) => {
+const ChatHeader: React.FC<IProps> = ({ chat, showModal }) => {
   const maxAvatarsDisplayed = 5;
   const userAvatars = (users: IUser[]) => {
     const usersToDisplay = users.slice(0, maxAvatarsDisplayed);
@@ -49,7 +46,6 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
   };
 
   const onInviteUser = () => {
-    fetchWorkspaceUsers(workspaceId);
     showModal({ modalType: ModalTypes.InviteChat, show: true });
   };
 
@@ -104,14 +100,12 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
 const mapStateToProps = (state: IAppState) => {
   const { chat } = state.chat;
   return {
-    chat,
-    workspaceId: state.workspace.workspace.id
+    chat
   };
 };
 
 const mapDispatchToProps = {
-  showModal: showModalRoutine,
-  fetchWorkspaceUsers: fetchWorkspaceUsersRoutine
+  showModal: showModalRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatHeader);
