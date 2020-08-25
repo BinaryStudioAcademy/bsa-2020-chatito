@@ -3,5 +3,6 @@ export enum ClientSockets {
   EditPost = 'editPost',
   JoinChat = 'joinChat',
   AddChat = 'addChat',
-  AddReply = 'addReply'
+  AddReply = 'addReply',
+  NewUserNotification = 'newUserNotification'
 }

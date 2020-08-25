@@ -19,7 +19,6 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
-import { fetchWorkspaceUsersRoutine } from 'scenes/Workspace/routines';
 import ChatMembers from 'containers/ChatMembers';
 import { ChatType } from 'common/enums/ChatType';
 import { createDirectChannelName } from 'common/helpers/nameHelper';
@@ -31,12 +30,10 @@ const privateChannelIcon = (
 interface IProps {
   chat?: IChat;
   showModal: IBindingCallback1<IModalRoutine>;
-  workspaceId: string;
-  fetchWorkspaceUsers: (workspaceId: string) => void;
   currentUserId: string;
 }
 
-const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorkspaceUsers, currentUserId }) => {
+const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUserId }) => {
   const maxAvatarsDisplayed = 5;
   const userAvatars = (users: IUser[]) => {
     const usersToDisplay = users.slice(0, maxAvatarsDisplayed);
@@ -51,7 +48,6 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
   };
 
   const onInviteUser = () => {
-    fetchWorkspaceUsers(workspaceId);
     showModal({ modalType: ModalTypes.InviteChat, show: true });
   };
 
@@ -75,8 +71,6 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
           <div className={styles.title}>{chatName}</div>
           <FontAwesomeIcon icon={faStar} className={styles.icon} />
         </div>
-
-        <div className={styles.topic}>Add topic</div>
       </div>
 
       <div className={styles.rightHeaderBlock}>
@@ -110,14 +104,12 @@ const mapStateToProps = (state: IAppState) => {
   const { chat } = state.chat;
   return {
     chat,
-    workspaceId: state.workspace.workspace.id,
     currentUserId: state.user.user?.id as string
   };
 };
 
 const mapDispatchToProps = {
-  showModal: showModalRoutine,
-  fetchWorkspaceUsers: fetchWorkspaceUsersRoutine
+  showModal: showModalRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatHeader);
