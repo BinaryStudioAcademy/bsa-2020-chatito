@@ -80,25 +80,28 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
       </div>
 
       <div className={styles.rightHeaderBlock}>
-        <div
-          role="button"
-          className={styles.memberAvatarBlock}
-          onClick={showChatMembers}
-          onKeyDown={showChatMembers}
-          tabIndex={0}
-        >
-          {userAvatars(chat.users)}
-          <div className={styles.memberCounter}>{chat.users.length || 0}</div>
-        </div>
+        {chat.type === ChatType.Channel && (
+          <>
+            <div
+              role="button"
+              className={styles.memberAvatarBlock}
+              onClick={showChatMembers}
+              onKeyDown={showChatMembers}
+              tabIndex={0}
+            >
+              {userAvatars(chat.users)}
+              <div className={styles.memberCounter}>{chat.users.length || 0}</div>
+            </div>
 
-        <button type="button" className="button-unstyled" onClick={onInviteUser}>
-          <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
-        </button>
+            <button type="button" className="button-unstyled" onClick={onInviteUser}>
+              <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
+            </button>
+            <InviteChatModal chatName={chat.name} chatId={chat.id} toggleModal={showModal} chatUsers={chat.users} />
+            <ChatMembers />
+          </>
+        )}
         <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
-
-        <InviteChatModal chatName={chat.name} chatId={chat.id} toggleModal={showModal} chatUsers={chat.users} />
       </div>
-      <ChatMembers />
     </div>
   );
 };

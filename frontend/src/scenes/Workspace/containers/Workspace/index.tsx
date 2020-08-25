@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
-import Header from '../Header';
+import Header from '../../../../containers/Header';
 import WorkspaceToolbar from '../WorkspaceToolbar';
 import NoChatMessage from '../NoChatMessage';
 import ProfileOverview from 'containers/ProfileOverview';

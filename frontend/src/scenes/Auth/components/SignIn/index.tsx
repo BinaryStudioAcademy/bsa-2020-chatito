@@ -77,7 +77,7 @@ const SignIn: FunctionComponent<IProps> = ({
   };
 
   const initialValues = {
-    email: '',
+    email: invitedUserEmail || '',
     password: '',
     workspace
   };

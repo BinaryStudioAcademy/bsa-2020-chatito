@@ -40,7 +40,7 @@ const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditPr
   const popOver = (
     <Popover id={id} className={styles.panepPopUp}>
       <button type="button" className={styles.panelSelect}>
-        Preferenses
+        Preferences
       </button>
       <button type="button" className={styles.panelSelect} onClick={onEditProfileClick}>
         View Profile
