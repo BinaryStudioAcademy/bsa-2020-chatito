@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-const password = Yup.string()
+const signUpPassword = Yup.string()
   .min(8, 'Password must be at least 8 characters')
   .required('Password is required')
   .matches(
@@ -15,6 +15,9 @@ const password = Yup.string()
     /^.*((?=.*[!/@#$%^&*()\-_=+{};:,<.>]){1}).*$/,
     'Password must include special symbols'
   );
+
+const signInPassword = Yup.string()
+  .required('Password is required');
 
 const email = Yup.string()
   .email('Email is invalid')
@@ -35,13 +38,13 @@ const fullName = Yup.string()
 
 export const signInValSchema = Yup.object().shape({
   email,
-  password
+  password: signInPassword
 });
 
 export const signUpValSchema = Yup.object().shape({
   fullName,
   email,
-  password,
+  password: signUpPassword,
   confirmPassword
 });
 
@@ -50,7 +53,7 @@ export const forgotPasswordSchema = Yup.object().shape({
 });
 
 export const resetPasswordSchema = Yup.object().shape({
-  password,
+  password: signUpPassword,
   confirmPassword
 });
 

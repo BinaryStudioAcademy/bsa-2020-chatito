@@ -1,7 +1,7 @@
 import { ChatType } from "common/enums/ChatType";
 import { IUser } from "../user/IUser";
 
-export interface IChat {
+export interface IChatWithUnread {
   id: string;
   name: string;
   type: ChatType;

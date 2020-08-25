@@ -31,7 +31,7 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspace, invit
 
   const initialValues = {
     fullName: '',
-    email: '',
+    email: invitedUserEmail || '',
     password: '',
     confirmPassword: '',
     workspace
