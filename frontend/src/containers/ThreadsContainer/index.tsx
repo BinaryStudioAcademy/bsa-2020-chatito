@@ -43,7 +43,6 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
       </header>
     );
   }
-  console.log(fetchedThreads);
 
   return (
     <div className={styles.threadsContainerComponent}>
