@@ -1,5 +1,5 @@
 import styles from './styles.module.sass';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { blockPosition } from '../../common/types/types';
@@ -24,7 +24,6 @@ interface IProps {
 }
 
 const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditProfileClick, showModal, router }) => {
-  const [show, setShow] = useState<boolean | undefined>(undefined);
   const onSingOut = () => {
     removeToken(getRefreshToken());
     localStorage.clear();
@@ -39,11 +38,8 @@ const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditPr
     router(Routes.AddWorkspace);
   };
   const buttonClick = (callback: IBindingAction) => {
-    setShow(false);
     callback();
-    setTimeout(() => {
-      setShow(undefined);
-    }, 0);
+    document.body.click();
   };
   const popOver = (
     <Popover id={id} className={styles.panelPopUp}>
@@ -66,7 +62,7 @@ const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditPr
   );
 
   return (
-    <OverlayTrigger trigger="click" rootClose show={show} placement={placement} overlay={popOver}>
+    <OverlayTrigger trigger="click" rootClose placement={placement} overlay={popOver}>
       {trigger()}
     </OverlayTrigger>
   );
