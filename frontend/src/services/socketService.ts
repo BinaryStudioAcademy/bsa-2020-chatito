@@ -1,10 +1,15 @@
+import { toastrSuccess } from 'services/toastrService';
 import io from 'socket.io-client';
 import { env } from '../env';
 import { getAccessToken } from 'common/helpers/storageHelper';
 import { store } from 'store';
 import { IPost } from 'common/models/post/IPost';
-import { addPostWithSocketRoutine, editPostWithSocketRoutine, addChatWithSocketRoutine } from 'scenes/Chat/routines';
-import { incUnreadCountRoutine, addActiveCommentWithSocketRoutine } from 'scenes/Workspace/routines';
+import { addPostWithSocketRoutine,
+  editPostWithSocketRoutine,
+  addChatWithSocketRoutine } from 'scenes/Chat/routines';
+import { incUnreadCountRoutine,
+  addActiveCommentWithSocketRoutine,
+  newUserNotificationWithSocketRoutine } from 'scenes/Workspace/routines';
 import { IChat } from 'common/models/chat/IChat';
 import { ClientSockets } from 'common/enums/ClientSockets';
 import { ServerSockets } from 'common/enums/ServerSockets';
@@ -14,6 +19,8 @@ import { addCommentWithSocketRoutine } from 'containers/ThreadsContainer/routine
 import { IServerComment } from 'common/models/post/IServerComment';
 import { IPostReactionSocket } from 'common/models/postReaction/IPostReactionSocket';
 import { addPostReactionWithSocketRoutine, deletePostReactionWithSocketRoutine } from 'containers/Post/routines';
+import { IUser } from 'common/models/user/IUser';
+import { ChatType } from 'common/enums/ChatType';
 
 const { server } = env.urls;
 
@@ -68,6 +75,23 @@ export const connectSockets = () => {
     const state = store.getState();
     if (reaction.userId !== state.user.user?.id as string) {
       store.dispatch(deletePostReactionWithSocketRoutine(reaction));
+    }
+  });
+
+  chatSocket.on(ClientSockets.NewUserNotification, (
+    users: IUser[],
+    chatName: string,
+    chatType: ChatType
+  ) => {
+    store.dispatch(newUserNotificationWithSocketRoutine({ users, chatType }));
+    if (users.length === 1) {
+      toastrSuccess(`User ${users[0].displayName} was invited to chat ${chatName}`);
+    } else {
+      let usersString = '';
+      users.forEach((user, index) => {
+        usersString += `${user.displayName}${index === users.length - 1 ? '' : ', '}`;
+      });
+      toastrSuccess(`Users ${usersString} were invited to chat ${chatName}`);
     }
   });
 };

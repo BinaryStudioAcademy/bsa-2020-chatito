@@ -3,6 +3,7 @@ import { User } from '../entities/User';
 import { ICreateUser } from '../../common/models/user/ICreateUser';
 import { IUserClient } from '../../common/models/user/IUserClient';
 import { Chat } from '../entities/Chat';
+import { IUser } from '../../common/models/user/IUser';
 
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
@@ -23,6 +24,9 @@ class UserRepository extends Repository<User> {
 
   getById(id: string): Promise<User> {
     return this.findOne({ where: { id }, relations: ['workspaces', 'workspacesCreated', 'chats'] });
+  }
+  getByIdWithoutWorkspaces(id: string): Promise<IUser>{
+    return this.findOne({ where: { id }});
   }
 
   async getAllUserChats(id: string): Promise<Chat[]> {
