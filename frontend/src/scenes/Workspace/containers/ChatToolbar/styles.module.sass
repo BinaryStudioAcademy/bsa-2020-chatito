@@ -42,6 +42,10 @@ $coloractive: #CECCC0 // цвет активной строки
   display: flex
   width: 100%
 
+.chatBlockContainer
+  display: flex
+  justify-content: flex-start
+
 .iconBorder
   display: flex
   justify-content: center
@@ -54,11 +58,13 @@ $coloractive: #CECCC0 // цвет активной строки
 
 .buttonText
   margin-left: 10px
+  text-align: start
 
-.metkaOnLine
+.onlineSign
   position: relative
   float: left
   width: 10px
+  min-width: 10px
   height: 10px
   border-radius: 5px
   background-color: rgb(43, 230, 83)

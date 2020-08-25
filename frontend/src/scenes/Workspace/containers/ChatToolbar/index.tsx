@@ -118,8 +118,8 @@ const ChatToolbar: FunctionComponent<IProps> = ({
         onClick={() => doSelectChannel(directMessage)}
       >
         <div className={styles.chatBlock}>
-          <div>
-            <div className={styles.metkaOnLine} />
+          <div className={styles.chatBlockContainer}>
+            <div className={styles.onlineSign} />
             <span className={styles.buttonText}>{name}</span>
           </div>
 
