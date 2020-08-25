@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
 import { IUser } from 'common/models/user/IUser';
 import MultiSelect from 'react-multi-select-component';
 import { IAppState } from 'common/models/store';
-import { fetchWorkspaceUsersRoutine } from 'scenes/Workspace/routines';
 import { connect } from 'react-redux';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
+import { getWorkspaceUsers } from 'services/workspaceService';
+import LoaderWrapper from 'components/LoaderWrapper';
 import { IChat } from 'common/models/chat/IChat';
 import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
@@ -15,9 +16,7 @@ import { IBindingAction } from 'common/models/callback/IBindingActions';
 
 interface IProps {
   createDirect: IBindingCallback1<any>;
-  getUsers: (workspaceId: string) => void;
   workspace: IWorkspace;
-  allUsers: IUser[];
   directMessages: IChat[];
   currentUserId: string;
   router: (route: string) => void;
@@ -29,11 +28,13 @@ interface IOption {
   label: string;
 }
 
-const CreateDirect = ({ workspace, allUsers, directMessages, currentUserId,
-  createDirect, getUsers, router, closeModal }: IProps) => {
+const CreateDirect = ({ workspace, directMessages, currentUserId,
+  createDirect, router, closeModal }: IProps) => {
   const [DirectUsers, setDirectUsers] = useState([]);
-
-  getUsers(workspace.id);
+  const [allUsers, setAllUsers] = useState<IUser[]>([]);
+  useEffect(() => {
+    getWorkspaceUsers(workspace.id).then(usersArr => setAllUsers(usersArr));
+  }, []);
   const mapOptionsToUsers = (options: IOption[]) => allUsers
     .filter(user => options.map(({ value }) => value).indexOf(user.id) !== -1);
 
@@ -115,7 +116,9 @@ const CreateDirect = ({ workspace, allUsers, directMessages, currentUserId,
   return (
     <>
       {formHeader}
-      {formBody}
+      <LoaderWrapper loading={!allUsers.length} height="50px">
+        {formBody}
+      </LoaderWrapper>
       {formFooter}
     </>
   );
@@ -123,19 +126,17 @@ const CreateDirect = ({ workspace, allUsers, directMessages, currentUserId,
 
 const mapStateToProps = (state: IAppState) => {
   const {
-    workspace: { workspace, users, directMessages }
+    workspace: { workspace, directMessages }
   } = state;
 
   return {
     workspace,
     directMessages,
-    allUsers: users,
     currentUserId: state.user.user?.id as string
   };
 };
 
 const mapDispatchToProps = {
-  getUsers: fetchWorkspaceUsersRoutine,
   router: push
 };
 
