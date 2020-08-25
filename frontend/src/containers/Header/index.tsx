@@ -49,7 +49,7 @@ const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showModal })
 
   return (
     <header className={styles.headerContainer}>
-      <Link className={styles.logoWrapper} to={`/w/${activeWorkspace}`}>
+      <Link className={styles.logoWrapper} to={activeWorkspace ? `/w/${activeWorkspace}` : '/'}>
         <Logo className={styles.logoImg} />
         <h1 className={styles.logoText}>Chatito</h1>
       </Link>
