@@ -20,6 +20,7 @@ import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
 import ChatMembers from 'containers/ChatMembers';
+import { ChatType } from 'common/enums/ChatType';
 
 const privateChannelIcon = (
   <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
@@ -70,25 +71,28 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal }) => {
       </div>
 
       <div className={styles.rightHeaderBlock}>
-        <div
-          role="button"
-          className={styles.memberAvatarBlock}
-          onClick={showChatMembers}
-          onKeyDown={showChatMembers}
-          tabIndex={0}
-        >
-          {userAvatars(chat.users)}
-          <div className={styles.memberCounter}>{chat.users.length || 0}</div>
-        </div>
+        {chat.type === ChatType.Channel && (
+          <>
+            <div
+              role="button"
+              className={styles.memberAvatarBlock}
+              onClick={showChatMembers}
+              onKeyDown={showChatMembers}
+              tabIndex={0}
+            >
+              {userAvatars(chat.users)}
+              <div className={styles.memberCounter}>{chat.users.length || 0}</div>
+            </div>
 
-        <button type="button" className="button-unstyled" onClick={onInviteUser}>
-          <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
-        </button>
+            <button type="button" className="button-unstyled" onClick={onInviteUser}>
+              <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
+            </button>
+            <InviteChatModal chatName={chat.name} chatId={chat.id} toggleModal={showModal} chatUsers={chat.users} />
+            <ChatMembers />
+          </>
+        )}
         <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
-
-        <InviteChatModal chatName={chat.name} chatId={chat.id} toggleModal={showModal} chatUsers={chat.users} />
       </div>
-      <ChatMembers />
     </div>
   );
 };
