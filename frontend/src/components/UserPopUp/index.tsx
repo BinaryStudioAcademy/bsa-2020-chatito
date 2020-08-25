@@ -38,7 +38,7 @@ const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditPr
   };
 
   const popOver = (
-    <Popover id={id} className={styles.panepPopUp}>
+    <Popover id={id} className={styles.panelPopUp}>
       <button type="button" className={styles.panelSelect}>
         Preferences
       </button>
