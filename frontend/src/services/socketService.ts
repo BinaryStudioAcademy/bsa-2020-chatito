@@ -69,7 +69,7 @@ export const connectSockets = () => {
     } else {
       let usersString = '';
       users.forEach((user, index) => {
-        usersString += `${user}${index === users.length - 1 ? '' : ', '}`;
+        usersString += `${user.displayName}${index === users.length - 1 ? '' : ', '}`;
       });
       toastrSuccess(`Users ${usersString} were invited to chat ${chatName}`);
     }
