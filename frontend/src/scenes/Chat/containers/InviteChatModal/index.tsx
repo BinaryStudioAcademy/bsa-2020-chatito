@@ -21,7 +21,6 @@ const InviteChatModal: React.FC<IProps> = ({ chatName, chatId, chatUsers,
   const onHide = () => {
     toggleModal({ modalType: ModalTypes.InviteChat, show: !isShown });
   };
-
   return (
     <ModalWindow isShown={!postsLoading && isShown} onHide={onHide}>
       <InviteChatForm
