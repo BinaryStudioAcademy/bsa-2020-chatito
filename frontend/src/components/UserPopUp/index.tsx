@@ -1,5 +1,5 @@
 import styles from './styles.module.sass';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { blockPosition } from '../../common/types/types';
@@ -12,6 +12,7 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
+import { IBindingAction } from 'common/models/callback/IBindingActions';
 
 interface IProps {
   trigger: () => React.ReactElement;
@@ -23,6 +24,7 @@ interface IProps {
 }
 
 const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditProfileClick, showModal, router }) => {
+  const [show, setShow] = useState<boolean | undefined>(undefined);
   const onSingOut = () => {
     removeToken(getRefreshToken());
     localStorage.clear();
@@ -36,29 +38,35 @@ const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditPr
   const onAddWorkspaceClick = () => {
     router(Routes.AddWorkspace);
   };
-
+  const buttonClick = (callback: IBindingAction) => {
+    setShow(false);
+    callback();
+    setTimeout(() => {
+      setShow(undefined);
+    }, 0);
+  };
   const popOver = (
     <Popover id={id} className={styles.panelPopUp}>
       <button type="button" className={styles.panelSelect}>
         Preferences
       </button>
-      <button type="button" className={styles.panelSelect} onClick={onEditProfileClick}>
+      <button type="button" className={styles.panelSelect} onClick={() => { buttonClick(onEditProfileClick); }}>
         View Profile
       </button>
-      <button type="button" className={styles.panelSelect} onClick={showInvitePopup}>
+      <button type="button" className={styles.panelSelect} onClick={() => { buttonClick(showInvitePopup); }}>
         Invite People
       </button>
-      <button type="button" className={styles.panelSelect} onClick={onAddWorkspaceClick}>
+      <button type="button" className={styles.panelSelect} onClick={() => { buttonClick(onAddWorkspaceClick); }}>
         Add workspace
       </button>
-      <button type="button" className={styles.panelSelect} onClick={onSingOut}>
+      <button type="button" className={styles.panelSelect} onClick={() => { buttonClick(onSingOut); }}>
         Sign Out
       </button>
     </Popover>
   );
 
   return (
-    <OverlayTrigger trigger="click" rootClose placement={placement} overlay={popOver}>
+    <OverlayTrigger trigger="click" rootClose show={show} placement={placement} overlay={popOver}>
       {trigger()}
     </OverlayTrigger>
   );
