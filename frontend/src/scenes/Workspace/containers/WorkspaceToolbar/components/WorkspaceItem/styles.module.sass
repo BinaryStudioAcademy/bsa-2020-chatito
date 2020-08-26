@@ -1,35 +1,33 @@
 .item, .selectedItem
-  width: 100px
-  height: 100px
-  padding: 10px 0
+  width: 85px
+  padding: 20px 7px
   display: flex
   flex-direction: column
   justify-content: center
   align-items: center
+  border: none
   &:hover
     cursor: pointer
 
 .item
   background-color: var(--workspace-toolbar-background)
-  padding: 0 !important
+
   &:hover
-    transition: all .2s
+    transition: ease .3s
     background-color: var(--workspace-toolbar-select-background)
 
     .avatar
       border: 2px solid var(--workspace-toolbar-select-border-color)
-      padding: 6px
 
     .itemName
       color: var(--workspace-toolbar-font-color-secondary)
 
 .selectedItem
   background-color: var(--workspace-toolbar-select-background)
-  padding: 0 !important
 
 .itemWithAvatar, .itemWithoutAvatar
-  height: 50px
-  width: 50px
+  height: 100%
+  width: 100%
   border-radius: 50%
 
 .itemWithoutAvatar
@@ -41,30 +39,40 @@
   font-weight: bolder
 
 .avatar, .selectedAvatar
-  width: 66px
-  max-height: 66px
-  padding: 8px
+  width: 58px
+  height: 58px
+  padding: 5px
   border-radius: 50%
 
 .selectedAvatar
   border: 2px solid var(--workspace-toolbar-select-border-color)
-  padding: 6px
 
 .itemName, .selectedItemName
-  margin: 3px 0
-  font-size: 13px
+  margin-top: 5px
+  font-size: 12px
+  font-weight: 500
+  line-height: 1.2
   text-align: center
+  text-overflow: ellipsis
+  white-space: nowrap
+  overflow: hidden
+  width: 100%
+
 
 .itemName
   color: var(--workspace-toolbar-font-color-primary)
-  text-overflow: ellipsis
-  white-space: nowrap
-  overflow: hidden
-  width: 90px
 
 .selectedItemName
   color: var(--workspace-toolbar-font-color-secondary)
-  text-overflow: ellipsis
-  white-space: nowrap
-  overflow: hidden
-  width: 90px
+
+
+@media screen and (max-width: 1440px)
+  .item, .selectedItem
+    width: 75px
+    padding: 15px 7px
+
+  .avatar, .selectedAvatar
+    width: 50px
+    height: 50px
+    padding: 3px
+

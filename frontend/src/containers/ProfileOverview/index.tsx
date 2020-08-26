@@ -23,6 +23,7 @@ import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
+import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface IProps {
   user: IUser;
@@ -101,9 +102,7 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, 
   return (
     <div className={styles.profileOverview}>
       <div className={styles.header}>
-        <button type="button" className="button-unstyled noselect" onClick={onClose}>
-          <span>&times;</span>
-        </button>
+        <FontAwesomeIcon icon={faTimesCircle} onClick={onClose} className={styles.closeBtn} />
       </div>
 
       <div className={styles.avatar}>

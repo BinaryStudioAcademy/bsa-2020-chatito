@@ -62,7 +62,6 @@ const WorkspaceToolbar: FunctionComponent<IProps> = ({
         <FontAwesomeIcon
           className={styles.plusIcon}
           icon={faPlus}
-          size="2x"
           onClick={onAddWorkspaceClick}
         />
       </div>

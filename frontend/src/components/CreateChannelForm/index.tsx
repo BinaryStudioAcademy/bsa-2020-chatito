@@ -28,14 +28,14 @@ const CreateChannel = ({ createChannel }: IProps) => {
     : 'Create a channel';
 
   const createPrivateDescription = (
-    <p>
+    <p className={styles.channelDescription}>
       <strong>This can’t be undone. </strong>
       A private channel cannot be made public later on.
     </p>
   );
 
   const createPublicDescription = (
-    <p>
+    <p className={styles.channelDescription}>
       When a channel is set to private, it can only be viewed or joined by invitation.
     </p>
   );
@@ -77,7 +77,7 @@ const CreateChannel = ({ createChannel }: IProps) => {
         type="text"
         onChange={e => setChannelDescription(e.target.value)}
       />
-      <Form.Text>What this channel about?</Form.Text>
+      <Form.Text className="text-muted">What this channel about?</Form.Text>
     </Form.Group>
   );
 
@@ -117,8 +117,9 @@ const CreateChannel = ({ createChannel }: IProps) => {
     <div className={styles.footer}>
       <Button
         disabled={isNameEmpty()}
-        variant="primary"
+        variant="secondary"
         onClick={handleSubmit}
+        className={styles.createButton}
       >
         Create
       </Button>

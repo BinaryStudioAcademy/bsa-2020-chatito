@@ -31,9 +31,43 @@ body
   vertical-align: initial
   cursor: pointer
 
-.tox-toolbar__group:last-child
+// Text editor styles
+
+.tox .tox-toolbar__group:last-child
   margin-left: auto
-  border-left: none
 
   .tox-tbtn
     flex-direction: row-reverse
+
+.tox .tox-tbtn
+  &:hover
+    background-color: var(--chat-background-primary) !important
+
+.tox-tinymce
+  border: 1px solid var(--text-editor-border) !important
+  border-radius: 4px !important
+
+.tox .tox-edit-area__iframe
+  background-color: var(--chat-background-primary) !important
+
+.tox .tox-toolbar__primary
+  background-color: var(--chat-background-secondary) !important
+
+// bootstrap modal windows
+
+.modal-content
+  background-color: var(--chat-background-primary)
+
+.modal-body
+  h4
+    font-size: 18px
+    font-weight: 600
+    letter-spacing: .1px
+
+.form-control
+  &:focus
+    border-color: var(--auth-scene-btn-background)
+    box-shadow: 0 0 0 0.05rem var(--auth-scene-btn-background)
+
+small
+  font-size: 12px

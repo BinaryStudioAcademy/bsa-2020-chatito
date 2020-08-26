@@ -2,11 +2,12 @@ import React from 'react';
 import styles from './styles.module.sass';
 
 import {
+  faHashtag,
   faLock,
-  faStar,
   faUserPlus,
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'react-bootstrap/Image';
 import { IAppState } from 'common/models/store';
@@ -25,6 +26,10 @@ import { createDirectChannelName } from 'common/helpers/nameHelper';
 
 const privateChannelIcon = (
   <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
+);
+
+const publicChannelIcon = (
+  <FontAwesomeIcon icon={faHashtag} className={styles.iconChatType} />
 );
 
 interface IProps {
@@ -67,10 +72,11 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUserId }) => {
 
       <div className={styles.headerInfo}>
         <div className={styles.titleBlock}>
-          {chat.isPrivate ? privateChannelIcon : null}
+          {chat.isPrivate ? privateChannelIcon : publicChannelIcon}
           <div className={styles.title}>{chatName}</div>
           <FontAwesomeIcon icon={faStar} className={styles.icon} />
         </div>
+
       </div>
 
       <div className={styles.rightHeaderBlock}>
