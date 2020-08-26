@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IAppState } from 'common/models/store';
@@ -10,7 +10,6 @@ import { IChat } from 'common/models/chat/IChat';
 import { fetchChatUsersRoutine, removeUserFromChatRoutine } from 'scenes/Chat/routines';
 import { IUser } from 'common/models/user/IUser';
 import ChatMember from 'components/ChatMember';
-import { fetchChatUsers } from 'services/chatService';
 
 interface IProps {
   isShown: boolean;
