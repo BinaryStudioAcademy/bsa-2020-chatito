@@ -41,6 +41,7 @@ class ChatRepository extends Repository<Chat> {
         'chat.isPrivate',
         'user.id',
         'user.imageUrl',
+        'user.displayName',
         'draft_post.id',
         'draft_post.text'
       ])

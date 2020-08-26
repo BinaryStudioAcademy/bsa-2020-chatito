@@ -15,7 +15,7 @@ import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 import { ListGroup } from 'react-bootstrap';
 
 interface IProps {
-  workspaces?: IWorkspace[];
+  workspaces: IWorkspace[];
   selectedWorkspace: IWorkspace;
   router: (route: string) => void;
   selectChat: Routine;
