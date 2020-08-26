@@ -1,3 +1,4 @@
+import { IPost } from './../post/IPost';
 import { ChatType } from "common/enums/ChatType";
 import { IUser } from "../user/IUser";
 import { IWorkspace } from "../workspace/IWorkspace";
@@ -15,4 +16,5 @@ export interface IChat {
   unreadCount?: number;
   hash: string;
   draftPosts?: IDraftPost[];
+  unreadPosts?: IPost[];
 }

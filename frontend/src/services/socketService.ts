@@ -1,4 +1,4 @@
-import { toastrSuccess } from 'services/toastrService';
+import { toastrSuccess, toastrCustomNotification } from 'services/toastrService';
 import io from 'socket.io-client';
 import { env } from '../env';
 import { getAccessToken } from 'common/helpers/storageHelper';
@@ -10,13 +10,15 @@ import {
   addChatWithSocketRoutine,
   upsertDraftPostWithSocketRoutine,
   deleteDraftPostWithSocketRoutine,
-  updatePostDraftCommentRoutine
+  updatePostDraftCommentRoutine,
+  setCurrentChatRoutine
 } from 'scenes/Chat/routines';
 import {
   incUnreadCountRoutine,
   addActiveCommentWithSocketRoutine,
   newUserNotificationWithSocketRoutine,
-  updateChatDraftPostRoutine
+  updateChatDraftPostRoutine,
+  markAsUnreadWithSocketRoutine
 } from 'scenes/Workspace/routines';
 import { IChat } from 'common/models/chat/IChat';
 import { ClientSockets } from 'common/enums/ClientSockets';
@@ -45,6 +47,24 @@ export const connectSockets = () => {
       store.dispatch(addPostWithSocketRoutine(post));
     } else {
       store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
+    }
+  });
+
+  chatSocket.on(ClientSockets.NotifyAndMarkAsUnread, (post: IPost, user: IUser, chat: IChat) => {
+    const state = store.getState();
+    const currentUser = state.user.user!;
+    if (user.id !== currentUser.id) {
+      toastrCustomNotification(
+        chat.type === 'DirectMessage' ? (
+          `from ${user.displayName}`
+        ) : (
+          `in channel "${chat.name}" from ${user.displayName}`
+        ),
+        5000,
+        'blueToastrNotification',
+        () => { console.log(post); }
+      );
+      store.dispatch(markAsUnreadWithSocketRoutine({ chatId: chat.id, chatType: chat.type, unreadPost: post }));
     }
   });
 
@@ -92,17 +112,19 @@ export const connectSockets = () => {
   chatSocket.on(ClientSockets.NewUserNotification, (
     users: IUser[],
     chatName: string,
-    chatType: ChatType
+    chatType: ChatType,
+    chatId: string
   ) => {
-    store.dispatch(newUserNotificationWithSocketRoutine({ users, chatType }));
+    console.log(users, chatName, chatType, chatId);
+    store.dispatch(newUserNotificationWithSocketRoutine({ users, chatType, chatId }));
     if (users.length === 1) {
-      toastrSuccess(`User ${users[0].displayName} was invited to chat ${chatName}`);
+      toastrSuccess(`User ${users[0].displayName} was invited to channel ${chatName}`);
     } else {
       let usersString = '';
       users.forEach((user, index) => {
         usersString += `${user.displayName}${index === users.length - 1 ? '' : ', '}`;
       });
-      toastrSuccess(`Users ${usersString} were invited to chat ${chatName}`);
+      toastrSuccess(`Users ${usersString} were invited to channel ${chatName}`);
     }
   });
 

@@ -10,7 +10,8 @@ import {
   fetchWorkspaceUsersRoutine,
   addActiveCommentWithSocketRoutine,
   updateChatDraftPostRoutine,
-  newUserNotificationWithSocketRoutine } from '../routines';
+  newUserNotificationWithSocketRoutine,
+  markAsUnreadWithSocketRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
@@ -200,8 +201,29 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       const chatTypeKey = payload.chatType === ChatType.Channel ? 'channels' : 'directMessages';
       const workspaceChatsCopy = state[chatTypeKey];
       workspaceChatsCopy.forEach(chat => {
+        console.log(chat.id, payload.chatId);
         if (chat.id === payload.chatId) {
-          chat.users.push(...payload.user);
+          chat.users.push(...payload.users);
+        }
+      });
+      if (chatTypeKey === 'channels') {
+        return {
+          ...state, channels: workspaceChatsCopy
+        };
+      }
+      if (chatTypeKey === 'directMessages') {
+        return {
+          ...state, directMessages: workspaceChatsCopy
+        };
+      }
+      return state;
+    }
+    case markAsUnreadWithSocketRoutine.TRIGGER: {
+      const chatTypeKey = payload.chatType === ChatType.Channel ? 'channels' : 'directMessages';
+      const workspaceChatsCopy = state[chatTypeKey];
+      workspaceChatsCopy.forEach(chat => {
+        if (chat.id === payload.chatId) {
+          chat.unreadPosts!.push(...payload.unreadPost);
         }
       });
       if (chatTypeKey === 'channels') {
