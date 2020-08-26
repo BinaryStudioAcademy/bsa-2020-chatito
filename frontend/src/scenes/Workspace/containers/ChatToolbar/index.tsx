@@ -18,8 +18,6 @@ import {
 import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
 import styles from './styles.module.sass';
-import { goToThreadsRoutine } from 'containers/ThreadsContainer/routines';
-import { Routine } from 'redux-saga-routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { showModalRoutine } from 'routines/modal';
@@ -31,21 +29,23 @@ import { push } from 'connected-react-router';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { Routes } from 'common/enums/Routes';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
+import { createDirectChannelName } from 'common/helpers/nameHelper';
 
 interface IProps {
   channels: IChat[];
   directMessages: IChat[];
   selectedChat: IChat;
   selectedWorkspace: IWorkspace;
+  currentUserId: string;
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
-  goToThreads: Routine;
 }
 
 const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
   selectedChat,
+  currentUserId,
   showModal,
   router,
   selectedWorkspace
@@ -110,7 +110,8 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   };
 
   const directChannel = (directMessage: IChat) => {
-    const { name, id, draftPosts } = directMessage;
+    const { users, id, draftPosts } = directMessage;
+    const channelName = createDirectChannelName(users, currentUserId);
     const draftPostText = draftPosts?.length ? draftPosts[0].text : undefined;
 
     return (
@@ -125,15 +126,13 @@ const ChatToolbar: FunctionComponent<IProps> = ({
             <div className={styles.iconWrapper}>
               <div className={styles.onlineSign} />
             </div>
-            <span className={styles.buttonText}>{name}</span>
+            <span className={styles.buttonText}>{channelName}</span>
           </div>
-
           {
             draftPostText && !(selectedChat && selectedChat.id === directMessage.id)
               ? <FontAwesomeIcon icon={faPencilAlt} color="black" />
               : null
           }
-
         </div>
       </button>
     );
@@ -237,11 +236,10 @@ const mapStateToProps = (state: IAppState) => ({
   directMessages: state.workspace.directMessages || [],
   selectedWorkspace: state.workspace.workspace,
   isLoading: state.workspace.loading,
-  selectedChat: state.chat.chat! // eslint-disable-line
+  selectedChat: state.chat.chat as IChat
 });
 
 const mapDispatchToProps = {
-  goToThreads: goToThreadsRoutine,
   showModal: showModalRoutine,
   router: push,
   selectChat: setCurrentChatRoutine

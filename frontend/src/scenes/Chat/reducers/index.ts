@@ -11,6 +11,7 @@ import { setCurrentChatRoutine,
   editPostWithSocketRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
+  createChatAndAddPostRoutine,
   updatePostDraftCommentRoutine,
   upsertDraftPostWithSocketRoutine,
   deleteDraftPostWithSocketRoutine
@@ -202,6 +203,14 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state, chat: result, loading: false
       };
     case removeUserFromChatRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
+    case createChatAndAddPostRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case createChatAndAddPostRoutine.FAILURE:
       return {
         ...state, loading: false
       };
