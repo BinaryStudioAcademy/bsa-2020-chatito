@@ -1,5 +1,3 @@
-$colorText: var(--title-text)
-
 @mixin unSelectable
   -webkit-touch-callout: none
   -webkit-user-select: none
@@ -50,10 +48,10 @@ $colorText: var(--title-text)
   @include unSelectable
   &:hover
     text-decoration: none
-    color: $colorText
+    color: var(--title-text)
     cursor: pointer
   &:visited
-    color: $colorText
+    color: var(--title-text)
 
 .logoImg
   height: 50px
@@ -63,6 +61,7 @@ $colorText: var(--title-text)
   font-weight: 600
   font-size: 25px
   margin: auto 10px
+  color: var(--title-text)
 
 .searchInput
   width: 400px
