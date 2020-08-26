@@ -5,6 +5,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faEdit, faEllipsisH, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { IUser } from 'common/models/user/IUser';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 
@@ -61,9 +62,7 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUserId, hideRightMenu 
   return (
     <div className={styles.profileOverview}>
       <div className={styles.header}>
-        <button type="button" className="button-unstyled noselect" onClick={onClose}>
-          <span>&times;</span>
-        </button>
+        <FontAwesomeIcon icon={faTimesCircle} onClick={onClose} className={styles.closeBtn} />
       </div>
 
       <div className={styles.avatar}>

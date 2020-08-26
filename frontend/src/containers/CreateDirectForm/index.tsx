@@ -105,8 +105,9 @@ const CreateDirect = ({ workspace, directMessages, currentUserId,
     <div className={styles.footer}>
       <Button
         disabled={isSelectEmpty()}
-        variant="primary"
+        variant="secondary"
         onClick={handleSubmit}
+        className={styles.createButton}
       >
         Create
       </Button>

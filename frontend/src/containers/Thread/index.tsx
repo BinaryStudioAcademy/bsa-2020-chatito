@@ -7,7 +7,7 @@ import { IPost } from 'common/models/post/IPost';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { ICreateComment } from 'common/models/post/ICreateComment';
 import { addCommentRoutine, upsertDraftCommentRoutine, deleteDraftCommentRoutine } from './routines';
 import { connect } from 'react-redux';
@@ -71,18 +71,19 @@ const Thread: FunctionComponent<IProps> = ({
   return (
     <div className={styles.threadContainer} style={{ width }}>
       <header>
-        {post.chat && post.chat.name
-          ? (
-            <button type="button" className={styles.threadChatNameButton} onClick={redirectToChat}>
-              {post.chat.name}
-            </button>
-          )
-          : <p className={styles.threadChatName}>Thread</p>}
-        <p>
-          {'Participants '}
-          {participants.length}
-        </p>
-        {!hideCloseBtn && <FontAwesomeIcon onClick={onHide} icon={faTimes} className={styles.closeBtn} />}
+        <div className={styles.threadHeaderBlock}>
+          {post.chat && post.chat.name
+            ? (
+              <button type="button" className={styles.threadChatNameButton} onClick={redirectToChat}>
+                {post.chat.name}
+              </button>
+            )
+            : <p className={styles.threadChatName}>Thread</p>}
+
+          <span>{`Participants ${participants.length}`}</span>
+        </div>
+
+        {!hideCloseBtn && <FontAwesomeIcon onClick={onHide} icon={faTimesCircle} className={styles.closeBtn} />}
       </header>
       <div className={styles.threadPost}>
         <Post post={post} type={PostType.Post} />
@@ -118,9 +119,9 @@ const Thread: FunctionComponent<IProps> = ({
         ) : ('')}
       <div className={styles.textEditor}>
         <TextEditor
-          key={draftCommentId}
+          key={draftCommentText}
           placeholder="write a comment!"
-          height={130}
+          height={110}
           draftPayload={{ postId: post.id }}
           draftInput={{
             id: draftCommentId,

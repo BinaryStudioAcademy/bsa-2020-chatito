@@ -37,6 +37,7 @@ class ChatRepository extends Repository<Chat> {
         'chat.name',
         'chat.type',
         'chat.hash',
+        'chat.createdByUser.id',
         'chat.isPrivate',
         'user.id',
         'user.imageUrl',
@@ -53,7 +54,7 @@ class ChatRepository extends Repository<Chat> {
         'draft_post."chatId" = chat.id AND draft_post."createdByUserId" = :userId',
         { userId }
       )
-      .leftJoin(
+      .leftJoinAndSelect(
         'chat.users',
         'user'
       )
