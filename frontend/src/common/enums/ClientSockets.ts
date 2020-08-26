@@ -6,5 +6,9 @@ export enum ClientSockets {
   AddReply = 'addReply',
   AddReaction = 'addReaction',
   DeleteReaction = 'deleteReaction',
-  NewUserNotification = 'newUserNotification'
+  NewUserNotification = 'newUserNotification',
+  UpsertDraftPost = 'upsertDraftPost',
+  DeleteDraftPost = 'deleteDraftPost',
+  UpsertDraftComment = 'upsertDraftComment',
+  DeleteDraftComment = 'deleteDraftComment'
 }
