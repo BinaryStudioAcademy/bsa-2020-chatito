@@ -123,7 +123,7 @@ const InviteChatForm: React.FC<IProps> = ({ workspaceId, chatName,
           </InputGroup>
         </OverlayTrigger>
       </LoaderWrapper>
-      <Button variant="primary" className={styles.addBtn} onClick={onAdd}>Add</Button>
+      <Button variant="secondary" className={styles.addBtn} onClick={onAdd}>Add</Button>
     </div>
   );
 };

@@ -5,7 +5,8 @@
   padding: 0 1rem
 
   .formDescription
-    color: rgb(97, 96, 97)
+    font-size: 14px
+    margin: 15px 0
 
 .footer
   display: flex
@@ -24,9 +25,14 @@
   display: flex
   justify-content: space-between
   align-items: center
+  font-size: 14px
+  line-height: 1.2
 
 .makePrivateDescription
   width: 75%
+
+  h5
+    font-weight: 600
 
 $switchWidth: 2.75rem
 
@@ -46,8 +52,21 @@ $switchWidth: 2.75rem
 
 .makePrivateSwitch :global(.custom-control-input:checked~.custom-control-label)
   &::before
-    background-color: #28a745
-    border-color: #28a745
+    background-color: var(--make-private-channel-switch)
+    border-color: var(--make-private-channel-switch)
 
   &::after
     transform: translateX(1.25rem)
+
+.channelDescription
+  margin-top: 7px
+  font-size: 14px
+
+.createButton
+  font-size: 14px
+  font-weight: 500
+  border: none
+  background-color: var(--invite-to-workspace-button)
+
+  &:hover
+    background-color: var(--invite-to-workspace-button-hover)

@@ -11,7 +11,7 @@ import {
   faAt,
   faSearch,
   faDatabase,
-  faPlay,
+  faCaretRight,
   faPlus,
   faPencilAlt
 } from '@fortawesome/free-solid-svg-icons';
@@ -78,7 +78,10 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   // eslint-disable-next-line
   const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => { }) => (
     <button type="button" className={styles.channelSelect} onClick={onClick}>
-      <FontAwesomeIcon icon={iconFa} color="black" />
+      <div className={styles.iconWrapper}>
+        <FontAwesomeIcon icon={iconFa} />
+      </div>
+
       <span className={styles.buttonText}>{text}</span>
     </button>
   );
@@ -89,15 +92,15 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 
     return (
       <button type="button" key={id} className={getChannelSelect(channel)} onClick={() => doSelectChannel(channel)}>
+        <div className={styles.iconWrapper}>
+          <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} size="xs" />
+        </div>
         <div className={styles.chatBlock}>
-          <div>
-            <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} color="black" />
-            <span className={styles.buttonText}>{name}</span>
-          </div>
+          <span className={styles.buttonText}>{name}</span>
 
           {
             draftPostText && !(selectedChat && selectedChat.id === channel.id)
-              ? <FontAwesomeIcon icon={faPencilAlt} color="black" />
+              ? <FontAwesomeIcon icon={faPencilAlt} size="xs" />
               : null
           }
 
@@ -119,7 +122,9 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       >
         <div className={styles.chatBlock}>
           <div className={styles.chatBlockContainer}>
-            <div className={styles.onlineSign} />
+            <div className={styles.iconWrapper}>
+              <div className={styles.onlineSign} />
+            </div>
             <span className={styles.buttonText}>{name}</span>
           </div>
 
@@ -135,33 +140,40 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   };
 
   const addChannelButton = () => (
-    <a
-      href="#0"
+    <button
+      type="button"
       className={styles.channelSelect}
       onClick={() => showModal({ modalType: ModalTypes.CreateChannel, show: true })}
     >
-      <div className={styles.iconBorder}>
-        <FontAwesomeIcon icon={faPlus} color="red" />
+
+      <div className={styles.iconWrapper}>
+        <div className={styles.iconBorder}>
+          <FontAwesomeIcon icon={faPlus} />
+        </div>
       </div>
-      <span className={styles.buttonText}>
+
+      <span className={styles.addButtonText}>
         Add a channel
       </span>
-    </a>
+    </button>
   );
 
   const addDirectButton = () => (
-    <a
-      href="#0"
+    <button
+      type="button"
       className={styles.channelSelect}
       onClick={() => showModal({ modalType: ModalTypes.CreateDirect, show: true })}
     >
-      <div className={styles.iconBorder}>
-        <FontAwesomeIcon icon={faPlus} color="red" />
+      <div className={styles.iconWrapper}>
+        <div className={styles.iconBorder}>
+          <FontAwesomeIcon icon={faPlus} />
+        </div>
       </div>
-      <span className={styles.buttonText}>
+
+      <span className={styles.addButtonText}>
         Add a direct
       </span>
-    </a>
+    </button>
   );
 
   const showInvitePopup = () => {
@@ -180,31 +192,39 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       {channelSelector('Drafts', faListAlt, goToDraftsCallBack)}
       {channelSelector('Saved Items', faSearch)}
       {channelSelector('File Browser', faDatabase)}
-      <hr className={styles.hrr} />
-      <div className={styles.buttonChanel}>
+
+      <div className={styles.buttonChannel}>
         <button type="button" className={styles.buttonSelect} onClick={() => setChatPanel(!chatPanel)}>
-          <FontAwesomeIcon icon={faPlay} className={getClassNameImg(chatPanel)} />
+          <div className={styles.iconWrapper}>
+            <FontAwesomeIcon icon={faCaretRight} className={getClassNameImg(chatPanel)} />
+          </div>
+
           <span className={styles.buttonText}>Channels</span>
         </button>
       </div>
+
       <div className={getClassNameDiv(chatPanel)}>
         {channels.map(channel => (
           userChannel(channel)))}
         {addChannelButton()}
       </div>
-      <hr className={styles.hrr} />
-      <div className={styles.buttonChanel}>
+
+      <div className={styles.buttonChannel}>
         <button type="button" className={styles.buttonSelect} onClick={() => setDirectPanel(!directPanel)}>
-          <FontAwesomeIcon icon={faPlay} className={getClassNameImg(directPanel)} />
+          <div className={styles.iconWrapper}>
+            <FontAwesomeIcon icon={faCaretRight} className={getClassNameImg(directPanel)} />
+          </div>
+
           <span className={styles.buttonText}>Direct Messages</span>
         </button>
       </div>
+
       <div className={getClassNameDiv(directPanel)}>
         {directMessages.map(directMessage => (
           directChannel(directMessage)))}
         {addDirectButton()}
       </div>
-      <hr className={styles.hrr} />
+
       <InvitePopup />
       <CreateChannelModal />
       <CreateDirectModal />
