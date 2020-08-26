@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { Modal } from 'react-bootstrap';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import styles from './styles.module.sass';
 
 interface IProps {
@@ -34,7 +34,7 @@ const ModalWindow: React.FC<IProps> = ({
   >
     {!hideCloseBtn && (
       <button type="button" className={styles.closeContainer}>
-        <FontAwesomeIcon onClick={onHide} icon={faTimes} className={styles.closeBtn} />
+        <FontAwesomeIcon onClick={onHide} icon={faTimesCircle} className={styles.closeBtn} />
       </button>
     )}
     <Modal.Body bsPrefix={modalBody}>

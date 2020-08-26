@@ -2,11 +2,12 @@ import React from 'react';
 import styles from './styles.module.sass';
 
 import {
+  faHashtag,
   faLock,
-  faStar,
   faUserPlus,
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'react-bootstrap/Image';
 import { IAppState } from 'common/models/store';
@@ -19,21 +20,23 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
-import { fetchWorkspaceUsersRoutine } from 'scenes/Workspace/routines';
 import ChatMembers from 'containers/ChatMembers';
+import { ChatType } from 'common/enums/ChatType';
 
 const privateChannelIcon = (
   <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
 );
 
+const publicChannelIcon = (
+  <FontAwesomeIcon icon={faHashtag} className={styles.iconChatType} />
+);
+
 interface IProps {
   chat?: IChat;
   showModal: IBindingCallback1<IModalRoutine>;
-  workspaceId: string;
-  fetchWorkspaceUsers: (workspaceId: string) => void;
 }
 
-const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorkspaceUsers }) => {
+const ChatHeader: React.FC<IProps> = ({ chat, showModal }) => {
   const maxAvatarsDisplayed = 5;
   const userAvatars = (users: IUser[]) => {
     const usersToDisplay = users.slice(0, maxAvatarsDisplayed);
@@ -48,7 +51,6 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
   };
 
   const onInviteUser = () => {
-    fetchWorkspaceUsers(workspaceId);
     showModal({ modalType: ModalTypes.InviteChat, show: true });
   };
 
@@ -65,34 +67,36 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
 
       <div className={styles.headerInfo}>
         <div className={styles.titleBlock}>
-          {chat.isPrivate ? privateChannelIcon : null}
+          {chat.isPrivate ? privateChannelIcon : publicChannelIcon}
           <div className={styles.title}>{chat.name || ''}</div>
           <FontAwesomeIcon icon={faStar} className={styles.icon} />
         </div>
 
-        <div className={styles.topic}>Add topic</div>
       </div>
 
       <div className={styles.rightHeaderBlock}>
-        <div
-          role="button"
-          className={styles.memberAvatarBlock}
-          onClick={showChatMembers}
-          onKeyDown={showChatMembers}
-          tabIndex={0}
-        >
-          {userAvatars(chat.users)}
-          <div className={styles.memberCounter}>{chat.users.length || 0}</div>
-        </div>
+        {chat.type === ChatType.Channel && (
+          <>
+            <div
+              role="button"
+              className={styles.memberAvatarBlock}
+              onClick={showChatMembers}
+              onKeyDown={showChatMembers}
+              tabIndex={0}
+            >
+              {userAvatars(chat.users)}
+              <div className={styles.memberCounter}>{chat.users.length || 0}</div>
+            </div>
 
-        <button type="button" className="button-unstyled" onClick={onInviteUser}>
-          <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
-        </button>
+            <button type="button" className="button-unstyled" onClick={onInviteUser}>
+              <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
+            </button>
+            <InviteChatModal chatName={chat.name} chatId={chat.id} toggleModal={showModal} chatUsers={chat.users} />
+            <ChatMembers />
+          </>
+        )}
         <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
-
-        <InviteChatModal chatName={chat.name} chatId={chat.id} toggleModal={showModal} chatUsers={chat.users} />
       </div>
-      <ChatMembers />
     </div>
   );
 };
@@ -100,14 +104,12 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, workspaceId, fetchWorks
 const mapStateToProps = (state: IAppState) => {
   const { chat } = state.chat;
   return {
-    chat,
-    workspaceId: state.workspace.workspace.id
+    chat
   };
 };
 
 const mapDispatchToProps = {
-  showModal: showModalRoutine,
-  fetchWorkspaceUsers: fetchWorkspaceUsersRoutine
+  showModal: showModalRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatHeader);

@@ -43,7 +43,7 @@ const ChatBody: React.FC<IProps> = ({
   };
 
   useEffect(() => {
-    if (chatId && loading) {
+    if (chatId) {
       getMorePosts();
     }
     if (chatBody.current !== null && !loading) {

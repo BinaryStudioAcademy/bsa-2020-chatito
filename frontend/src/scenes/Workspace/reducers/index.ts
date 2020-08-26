@@ -9,7 +9,8 @@ import {
   incUnreadCountRoutine,
   fetchWorkspaceUsersRoutine,
   addActiveCommentWithSocketRoutine,
-  updateChatDraftPostRoutine } from '../routines';
+  updateChatDraftPostRoutine,
+  newUserNotificationWithSocketRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
@@ -199,6 +200,26 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         const comments = [...thread.comments];
         comments.push(payload);
         return { ...state, activeThread: { ...thread, comments } };
+      }
+      return state;
+    }
+    case newUserNotificationWithSocketRoutine.TRIGGER: {
+      const chatTypeKey = payload.chatType === ChatType.Channel ? 'channels' : 'directMessages';
+      const workspaceChatsCopy = state[chatTypeKey];
+      workspaceChatsCopy.forEach(chat => {
+        if (chat.id === payload.chatId) {
+          chat.users.push(...payload.user);
+        }
+      });
+      if (chatTypeKey === 'channels') {
+        return {
+          ...state, channels: workspaceChatsCopy
+        };
+      }
+      if (chatTypeKey === 'directMessages') {
+        return {
+          ...state, directMessages: workspaceChatsCopy
+        };
       }
       return state;
     }

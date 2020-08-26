@@ -22,6 +22,11 @@ export const getUserById = async (id: string) => {
   return fromUserToUserWithWorkspaces(user);
 };
 
+export const getUserByIdWithoutWorkspaces = async (id: string) => {
+  const user = await getCustomRepository(UserRepository).getByIdWithoutWorkspaces(id);
+  return user;
+};
+
 export const deleteUser = async (id: string): Promise<unknown> => {
   const user = await getCustomRepository(UserRepository).getById(id);
   if (user.workspacesCreated.length !== 0) {
