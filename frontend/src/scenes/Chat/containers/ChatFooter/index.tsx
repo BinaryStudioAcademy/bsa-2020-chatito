@@ -36,7 +36,7 @@ const ChatFooter: React.FC<IProps> = ({
     <LoaderWrapper loading={!chatId}>
       <div className={styles.chatFooter} key={chatId}>
         <TextEditor
-          key={draftPostId}
+          key={draftPostText}
           placeholder=""
           draftPayload={{ chatId }}
           height="100px"

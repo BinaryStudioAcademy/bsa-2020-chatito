@@ -119,7 +119,7 @@ const Thread: FunctionComponent<IProps> = ({
         ) : ('')}
       <div className={styles.textEditor}>
         <TextEditor
-          key={draftCommentId}
+          key={draftCommentText}
           placeholder="write a comment!"
           height={110}
           draftPayload={{ postId: post.id }}

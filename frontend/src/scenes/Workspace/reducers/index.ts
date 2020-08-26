@@ -18,7 +18,10 @@ import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { IUser } from 'common/models/user/IUser';
 import { addChatWithSocketRoutine } from 'scenes/Chat/routines';
 import { ChatType } from 'common/enums/ChatType';
-import { upsertDraftCommentRoutine, deleteDraftCommentRoutine } from 'containers/Thread/routines';
+import {
+  upsertDraftCommentWithSocketRoutine,
+  deleteDraftCommentWithSocketRoutine
+} from 'containers/Thread/routines';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
@@ -78,7 +81,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         showRightSideMenu: RightMenuTypes.Thread,
         activeThread: { ...state.activeThread, post: payload, comments: [] }
       };
-    case upsertDraftCommentRoutine.SUCCESS:
+    case upsertDraftCommentWithSocketRoutine.TRIGGER:
       if (state.activeThread) {
         return {
           ...state,
@@ -94,7 +97,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         };
       }
       return { ...state };
-    case deleteDraftCommentRoutine.SUCCESS:
+    case deleteDraftCommentWithSocketRoutine.TRIGGER:
       if (state.activeThread) {
         return {
           ...state,

@@ -24,7 +24,6 @@ import { toastrError, toastrSuccess } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
 import { IUser } from 'common/models/user/IUser';
 import { upsertDraftPost, deleteDraftPost } from 'services/draftService';
-import { updateChatDraftPostRoutine } from 'scenes/Workspace/routines';
 
 function* fetchChatPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
@@ -41,10 +40,7 @@ function* watchPostsRequest() {
 
 function* upsertDraftPostRequest({ payload }: Routine<any>) {
   try {
-    const response = yield call(upsertDraftPost, payload);
-    yield put(updateChatDraftPostRoutine.trigger({ ...response, chatId: payload.chatId }));
-
-    yield put(upsertDraftPostRoutine.success(response));
+    yield call(upsertDraftPost, payload);
   } catch (error) {
     yield call(toastrError, error.message);
   }
@@ -57,9 +53,6 @@ function* watchUpsertDraftPostRequest() {
 function* deleteDraftPostRequest({ payload }: Routine<any>) {
   try {
     yield call(deleteDraftPost, payload);
-    yield put(updateChatDraftPostRoutine.trigger(payload));
-
-    yield put(deleteDraftPostRoutine.success());
   } catch (error) {
     yield call(toastrError, error.message);
   }
