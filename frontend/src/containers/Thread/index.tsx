@@ -106,9 +106,11 @@ const Thread: FunctionComponent<IProps> = ({
           {comments.map((comment, index) => (
             index < maxComment
               ? (
-                <button type="button" className={styles.threadChatNameButton} onClick={redirectToChat}>
-                  {post?.chat?.name}
-                </button>
+                <Post
+                  key={comment.id}
+                  post={comment}
+                  type={PostType.Comment}
+                />
               )
               : null
           ))}
