@@ -17,6 +17,8 @@ import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
 import { addCommentWithSocketRoutine } from 'containers/ThreadsContainer/routines';
 import { IServerComment } from 'common/models/post/IServerComment';
+import { IPostReactionSocket } from 'common/models/postReaction/IPostReactionSocket';
+import { addPostReactionWithSocketRoutine, deletePostReactionWithSocketRoutine } from 'containers/Post/routines';
 import { IUser } from 'common/models/user/IUser';
 import { ChatType } from 'common/enums/ChatType';
 
@@ -41,13 +43,16 @@ export const connectSockets = () => {
       store.dispatch(editPostWithSocketRoutine(post));
     }
   });
+
   chatSocket.on(ClientSockets.JoinChat, (chatId: string) => {
     chatSocket.emit(ServerSockets.JoinChatRoom, chatId);
   });
+
   chatSocket.on(ClientSockets.AddChat, (chat: IChat) => {
     store.dispatch(addChatWithSocketRoutine(chat));
     store.dispatch(push(Routes.Chat.replace(':whash', chat.workspace.hash).replace(':chash', chat.hash)));
   });
+
   chatSocket.on(ClientSockets.AddReply, (comment: IServerComment) => {
     const state = store.getState();
     if (state.threads.threads) {
@@ -58,6 +63,21 @@ export const connectSockets = () => {
       store.dispatch(addActiveCommentWithSocketRoutine(comment));
     }
   });
+
+  chatSocket.on(ClientSockets.AddReaction, (reaction: IPostReactionSocket) => {
+    const state = store.getState();
+    if (reaction.userId !== state.user.user?.id as string) {
+      store.dispatch(addPostReactionWithSocketRoutine(reaction));
+    }
+  });
+
+  chatSocket.on(ClientSockets.DeleteReaction, (reaction: IPostReactionSocket) => {
+    const state = store.getState();
+    if (reaction.userId !== state.user.user?.id as string) {
+      store.dispatch(deletePostReactionWithSocketRoutine(reaction));
+    }
+  });
+
   chatSocket.on(ClientSockets.NewUserNotification, (
     users: IUser[],
     chatName: string,

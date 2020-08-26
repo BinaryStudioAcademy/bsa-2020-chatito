@@ -4,5 +4,7 @@ export enum ClientSockets {
   JoinChat = 'joinChat',
   AddChat = 'addChat',
   AddReply = 'addReply',
+  AddReaction = 'addReaction',
+  DeleteReaction = 'deleteReaction',
   NewUserNotification = 'newUserNotification'
 }
