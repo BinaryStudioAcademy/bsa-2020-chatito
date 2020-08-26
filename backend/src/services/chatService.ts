@@ -63,6 +63,6 @@ export const removeUserFromChat = async (chatId: string, userId: string): Promis
 };
 
 export const getChatById = async (chatId: string) => {
-  const chat: IChat = await getCustomRepository(ChatRepository).getNameAndTypeById(chatId);
+  const chat: IChat = await getCustomRepository(ChatRepository).getNameAndTypeAndIdById(chatId);
   return chat;
 };

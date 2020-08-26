@@ -10,5 +10,6 @@ export enum ClientSockets {
   UpsertDraftPost = 'upsertDraftPost',
   DeleteDraftPost = 'deleteDraftPost',
   UpsertDraftComment = 'upsertDraftComment',
-  DeleteDraftComment = 'deleteDraftComment'
+  DeleteDraftComment = 'deleteDraftComment',
+  NotifyAndMarkAsUnread = 'notifyAndMarkAsUnread'
 }

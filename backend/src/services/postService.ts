@@ -21,7 +21,14 @@ export const addPost = async (id: string, post: ICreatePost) => {
   const createdPost: IPost = await getCustomRepository(PostRepository).addPost(newPost);
   const clientPost = await fromPostToPostClient(createdPost);
   emitToChatRoom(clientPost.chatId, ClientSockets.AddPost, clientPost);
-  return clientPost;
+  const users = await getCustomRepository(ChatRepository).getAllChatUsers(chat.id);
+  users.forEach(async (chatUser) => {
+    if (user.id !== chatUser.id) {
+      await getCustomRepository(UserRepository).markAsUnread(chatUser.id, createdPost.id)
+    }
+  });
+  emitToChatRoom(createdPost.chatId, ClientSockets.NotifyAndMarkAsUnread, createdPost, user, chat);
+  return createdPost;
 };
 
 export const editPost = async ({ id, text }: IEditPost) => {

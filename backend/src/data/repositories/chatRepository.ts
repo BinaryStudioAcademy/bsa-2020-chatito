@@ -15,11 +15,12 @@ class ChatRepository extends Repository<Chat> {
     return this.findOne({ where: { id }, relations: ['posts'] });
   }
 
-  async getNameAndTypeById(id: string){
+  async getNameAndTypeAndIdById(id: string){
     const chatInfoToSend = await this.createQueryBuilder('chat')
     .select([
       'chat.name',
-      'chat.type'
+      'chat.type',
+      'chat.id'
     ])
     .where('chat."id" = :id', { id })
     .getOne()

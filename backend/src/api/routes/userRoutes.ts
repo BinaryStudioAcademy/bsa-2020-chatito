@@ -8,7 +8,8 @@ import {
   editStatus,
   checkInvitedUserRegistered,
   addWorkspaceToUser,
-  markAsUnread
+  markAsUnread,
+  markAsRead
 } from '../../services/userService';
 
 const router = Router();
@@ -21,6 +22,7 @@ router
   .put('/edit-status', run((req: Request) => editStatus({ id: req.body.id, status: req.body.status })))
   .post('/invite', run((req: Request) => checkInvitedUserRegistered(req.body)))
   .post('/add-to-workspace', run((req: Request) => addWorkspaceToUser(req.user.id, req.body.workspaceId)))
-  .post('/unread', run((req: Request) => markAsUnread(req.user.id, req.body.postId)));
+  .post('/unread', run((req: Request) => markAsUnread(req.user.id, req.body.postId)))
+  .delete('/read/:id', run((req: Request) => markAsRead(req.user.id, req.params.id)));
 
 export default router;

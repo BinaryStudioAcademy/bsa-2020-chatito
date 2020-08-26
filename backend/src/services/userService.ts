@@ -75,3 +75,8 @@ export const markAsUnread = async (userId: string, postId: string) => {
   const user = await getCustomRepository(UserRepository).markAsUnread(userId, postId) 
   return user
 };
+
+export const markAsRead = async (userId: string, postId: string) => {
+  const user = await getCustomRepository(UserRepository).markAsRead(userId, postId) 
+  return user
+};
