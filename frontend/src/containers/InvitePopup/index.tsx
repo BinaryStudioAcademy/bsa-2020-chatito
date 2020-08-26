@@ -57,14 +57,14 @@ const InvitePopup = ({ isShown, workspace, sendInviteLink, showModal }: IProps) 
     <div className={styles.modalFooter}>
       <div className={styles.inviteLinkBlock} />
 
-      <Button type="submit" variant="secondary">
+      <Button type="submit" variant="secondary" className={styles.inviteButton}>
         Send
       </Button>
     </div>
   );
 
   return (
-    <ModalWindow isShown={isShown} onHide={handleCloseModal}>
+    <ModalWindow isShown={isShown} onHide={handleCloseModal} modalClassName={styles.invitePopupContainer}>
       {modalHeader}
       <Formik
         initialValues={initialValues}

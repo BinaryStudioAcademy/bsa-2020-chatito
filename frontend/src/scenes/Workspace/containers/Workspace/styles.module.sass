@@ -7,22 +7,37 @@
   .contentContainer
     display: flex
     flex: 1
-    max-height: calc( 100vh - 91px )
     overflow: hidden
-    height: 90%
 
     .workspaceViewContainer
       display: flex
       flex: 1
 
       .leftPanelWrapper
-        flex-basis: 15%
-        min-width: 275px
+        width: 275px
 
       .chatWrapper
         flex: 1
         height: 100%
 
       .rightPanelWrapper
-        flex-basis: 20%
-        border-left: 1px solid var(--border-lightbrown)
+        width: 400px
+
+@media screen and (max-width: 1440px)
+  .mainContainer
+    .contentContainer
+      .workspaceViewContainer
+
+        .leftPanelWrapper
+          width: 250px
+
+        .rightPanelWrapper
+          width: 375px
+
+@media screen and (max-width: 1200px)
+  .mainContainer
+   .contentContainer
+      .workspaceViewContainer
+
+        .rightPanelWrapper
+          width: 350px

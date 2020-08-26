@@ -16,7 +16,6 @@ const Thread: React.FC<IProps> = ({ post, comments = [], onHide }) => (
   post
     ? (
       <ThreadView
-        width="400px"
         post={post}
         comments={comments}
         onHide={onHide}
