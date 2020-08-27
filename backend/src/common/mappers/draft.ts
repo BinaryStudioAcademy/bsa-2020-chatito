@@ -4,18 +4,27 @@ import { DraftComment } from '../../data/entities/DraftComment';
 import { IDraftCommentClient } from '../models/draft/IDraftCommentClient';
 
 export const fromDraftPostToDraftPostClient = (draftPost: DraftPost): IDraftPostClient => {
-  const { id, text } = draftPost;
+  const { id, text, chat } = draftPost;
   return {
     id,
-    text
+    text,
+    chat: {
+      hash: chat.hash || null,
+      name: chat.name || null
+    }
   };
 };
 
 export const fromDraftCommentToDraftCommentClient = (draftComment: DraftComment): IDraftCommentClient => {
-  const { id, text } = draftComment;
+  const { id, text, postId, post: { chat } } = draftComment;
   return {
     id,
-    text
+    text,
+    chat: {
+      hash: chat.hash || null,
+      name: chat.name || null
+    },
+    postId
   };
 };
 
