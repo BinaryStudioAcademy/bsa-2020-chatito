@@ -34,7 +34,7 @@ const initialState: IUserState = {
   workspaceList: []
 };
 
-const reducer = (state = initialState, { type, payload }: Routine<any>) => {
+const reducer = (state = initialState, { type, payload }: Routine<any>): IUserState => {
   switch (type) {
     case addNewUserRoutine.TRIGGER:
       return {
@@ -75,20 +75,21 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         isAuthorized: false
       };
     case editProfileRoutine.TRIGGER: {
-      return { ...state, loading: true };
+      return { ...state, isLoading: true };
     }
     case editProfileRoutine.SUCCESS: {
-      return { ...state, loading: false, user: { ...payload } };
+      return { ...state, isLoading: false, user: { ...payload } };
     }
     case editProfileRoutine.FAILURE: {
-      return { ...state, loading: false };
+      return { ...state, isLoading: false };
     }
     case deleteAccountRoutine.TRIGGER:
       return { ...state, isLoading: true };
     case deleteAccountRoutine.SUCCESS:
-      return { isAuthorized: false, isLoading: false };
+      return { ...state, isAuthorized: false, isLoading: false };
     case deleteAccountRoutine.FAILURE:
       return { ...state, isLoading: false };
+
     case loginUserRoutine.TRIGGER:
     case loginWithGoogleRoutine.TRIGGER:
       return {
@@ -104,39 +105,42 @@ const reducer = (state = initialState, { type, payload }: Routine<any>) => {
         isAuthorized: false
       };
     case forgotPasswordRoutine.SUCCESS: {
-      return { ...state, loading: false };
+      return { ...state, isLoading: false };
     }
     case forgotPasswordRoutine.FAILURE: {
-      return { ...state, loading: false };
+      return { ...state, isLoading: false };
     }
     case forgotPasswordRoutine.TRIGGER: {
-      return { ...state, loading: true };
+      return { ...state, isLoading: true };
     }
     case resetPasswordRoutine.TRIGGER: {
-      return { ...state, loading: true };
+      return { ...state, isLoading: true };
     }
     case resetPasswordRoutine.SUCCESS: {
-      return { ...state, loading: false };
+      return { ...state, isLoading: false };
     }
     case resetPasswordRoutine.FAILURE: {
-      return { ...state, loading: false };
+      return { ...state, isLoading: false };
     }
     case editStatusRoutine.TRIGGER: {
-      return { ...state, loading: true };
+      return { ...state, isLoading: true };
     }
     case editStatusRoutine.SUCCESS: {
-      return { ...state, loading: false, user: { ...state.user, status: payload } };
+      if (state.user) {
+        return { ...state, isLoading: false, user: { ...state.user, status: payload } };
+      }
+      return state;
     }
     case editStatusRoutine.FAILURE: {
-      return { ...state, loading: false };
+      return { ...state, isLoading: false };
     }
     case addWorkspaceRoutine.SUCCESS: {
       const workspaces = [...state.workspaceList];
       workspaces.push(payload);
-      return { ...state, loading: false, workspaceList: workspaces };
+      return { ...state, isLoading: false, workspaceList: workspaces };
     }
     case addWorkspaceRoutine.FAILURE: {
-      return { ...state, loading: false };
+      return { ...state, isLoading: false };
     }
 
     case setInvitedUserRoutine.TRIGGER: {

@@ -51,14 +51,24 @@ export const getPostComments = async (postId: string) => {
   return fromPostCommentsToPostCommentsClient(comments);
 };
 
-export const addReaction = (reaction: string, postId: string, userId: string) => (
-  getCustomRepository(PostReactionRepository).addReaction({
+export const addReaction = async (reaction: string, postId: string, userId: string) => {
+  const newReaction = await getCustomRepository(PostReactionRepository).addReaction({
     reaction,
     post: { id: postId },
     user: { id: userId }
-  })
-);
+  });
+  const post = await getCustomRepository(PostRepository).getById(postId);
+  emitToChatRoom(post.chatId, ClientSockets.AddReaction, { reaction, userId, postId });
+  return newReaction;
+};
 
-export const deleteReaction = (reaction: string, postId: string, userId: string) => (
-  getCustomRepository(PostReactionRepository).deleteReaction({ reaction, postId, userId })
-);
+export const deleteReaction = async (reaction: string, postId: string, userId: string) => {
+  const deletedReaction = await getCustomRepository(PostReactionRepository).deleteReaction({
+    reaction,
+    postId,
+    userId
+  });
+  const post = await getCustomRepository(PostRepository).getById(postId);
+  emitToChatRoom(post.chatId, ClientSockets.DeleteReaction, { reaction, userId, postId });
+  return deletedReaction;
+};

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import styles from './styles.module.sass';
-
 import ChatHeader from './containers/ChatHeader';
 import ChatBody from './containers/ChatBody';
 import ChatFooter from './containers/ChatFooter';
@@ -8,7 +7,7 @@ import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import { IChat } from 'common/models/chat/IChat';
 import { setCurrentChatRoutine } from './routines';
-import Loader from 'components/LoaderWrapper';
+import LoaderWrapper from 'components/LoaderWrapper';
 // eslint-disable-next-line
 interface IProps {
   isLoading: boolean;
@@ -32,13 +31,13 @@ const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, selectChat }
   }, [isLoading, match.params.chash]);
 
   return (
-    <Loader loading={isLoading}>
+    <LoaderWrapper loading={isLoading}>
       <div className={styles.chatContainer}>
         <ChatHeader />
         <ChatBody />
         <ChatFooter />
       </div>
-    </Loader>
+    </LoaderWrapper>
   );
 };
 
