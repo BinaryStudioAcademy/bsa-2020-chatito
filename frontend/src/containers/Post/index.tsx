@@ -1,6 +1,6 @@
 import React, { useState, useEffect, MutableRefObject } from 'react';
 import { connect } from 'react-redux';
-import { Card, Media } from 'react-bootstrap';
+import { Card, Media, Popover, OverlayTrigger } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import styles from './styles.module.sass';
 import { IPost } from 'common/models/post/IPost';
@@ -14,7 +14,11 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPostReactionRoutine } from 'common/models/postReaction/IPostReactionRoutine';
 import { IAppState } from 'common/models/store';
 import { PostType } from 'common/enums/PostType';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import { showModalRoutine } from 'routines/modal';
+import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { showUserProfileRoutine } from 'scenes/Workspace/routines';
+import ReminderItem from 'components/ReminderItem/ReminderItem';
 
 interface IProps {
   post: IPost;
@@ -24,11 +28,13 @@ interface IProps {
   addPostReaction: IBindingCallback1<IPostReactionRoutine>;
   deletePostReaction: IBindingCallback1<IPostReactionRoutine>;
   showUserProfile: IBindingCallback1<IUser>;
+  showModal: IBindingCallback1<IModalRoutine>;
+  isShown: boolean;
   postRef: MutableRefObject<any> | null;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
-  addPostReaction, deletePostReaction, showUserProfile, postRef }) => {
+  showUserProfile, addPostReaction, deletePostReaction, showModal, isShown, postRef }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
 
@@ -49,6 +55,12 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
 
   const { createdByUser, text, postReactions } = post;
   const createdAt = new Date(post.createdAt);
+
+  const twentyMinutes = 20 * 60000;
+  const oneHour = twentyMinutes * 3;
+  const threeHours = oneHour * 3;
+  const oneDay = oneHour * 24;
+  const oneWeek = oneDay * 7;
 
   const trigger = () => (
     <button type="button" className={`${styles.reactBtn} button-unstyled`}>React</button>
@@ -100,10 +112,67 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
     });
   };
 
+  const popoverRemindOptions = (
+    <Popover id="popover-basic" className={isShown ? styles.dNone : ''}>
+      <Popover.Content>
+        <ReminderItem
+          text="In 20 minutes"
+          addedTime={twentyMinutes}
+        />
+        <ReminderItem
+          text="In 1 hour"
+          addedTime={oneHour}
+        />
+        <ReminderItem
+          text="In 3 hours"
+          addedTime={threeHours}
+        />
+        <ReminderItem
+          text="Tomorrow"
+          addedTime={oneDay}
+        />
+        <ReminderItem
+          text="Next week"
+          addedTime={oneWeek}
+        />
+        <button
+          type="button"
+          className={styles.optionsSelect}
+          onClick={() => showModal({ modalType: ModalTypes.SetReminder, show: true })}
+        >
+          <span>Custom</span>
+        </button>
+      </Popover.Content>
+    </Popover>
+  );
+
+  const popoverMore = (
+    <Popover id="popover-basic">
+      <Popover.Title as="h3">More actions</Popover.Title>
+      <Popover.Content>
+        <OverlayTrigger trigger="click" placement="right" overlay={popoverRemindOptions}>
+          <button type="button" className={styles.optionsSelect}>
+            <span>Remind me about that &gt;</span>
+          </button>
+        </OverlayTrigger>
+      </Popover.Content>
+    </Popover>
+  );
+
+  const ButtonMore = () => (
+    <OverlayTrigger trigger="click" placement="top" overlay={popoverMore}>
+      <Card.Link
+        bsPrefix={styles.openThreadBtn}
+      >
+        More
+      </Card.Link>
+    </OverlayTrigger>
+  );
+
   return (
     <div ref={postRef}>
       <Media className={styles.postWrapper}>
-        <ProfilePreview user={createdByUser} onSend={onSend} openProfile={showUserProfile} />
+        <ProfilePreview user={createdByUser} openProfile={showUserProfile} />
         <Media.Body bsPrefix={styles.body}>
           <button
             onClick={() => showUserProfile(createdByUser)}
@@ -131,6 +200,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
               </Card.Link>
             )}
             {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
+            <ButtonMore />
           </div>
         </Media.Body>
       </Media>
@@ -139,12 +209,14 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
 };
 
 const mapStateToProps = (state: IAppState) => ({
-  userId: state.user.user?.id as string
+  userId: state.user.user?.id as string,
+  isShown: state.modal.setReminder
 });
 
 const mapDispatchToProps = {
   addPostReaction: addPostReactionRoutine,
   deletePostReaction: deletePostReactionRoutine,
+  showModal: showModalRoutine,
   showUserProfile: showUserProfileRoutine
 };
 
