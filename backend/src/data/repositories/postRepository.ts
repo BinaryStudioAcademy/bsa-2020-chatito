@@ -29,10 +29,9 @@ class PostRepository extends Repository<Post> {
         'user.fullName',
         'user.displayName',
         'user.imageUrl',
+        'user.email',
         'draft_comment.id',
         'draft_comment.text',
-        'post_reaction.reaction',
-        'post_reaction."userId"',
         'chat.name',
         'chat.hash'
       ])
@@ -46,7 +45,7 @@ class PostRepository extends Repository<Post> {
         'post.createdByUser',
         'user'
       )
-      .leftJoin(
+      .leftJoinAndSelect(
         'post.postReactions',
         'post_reaction'
       )
@@ -159,7 +158,7 @@ class PostRepository extends Repository<Post> {
         'user.status'
       ])
 
-      .leftJoinAndSelect('post.postReactions', 'reactions')
+      .leftJoinAndSelect('post.postReactions', 'post_reaction')
 
       .leftJoin('post.comments', 'comments')
       .addSelect([

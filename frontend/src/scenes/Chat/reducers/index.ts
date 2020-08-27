@@ -1,5 +1,9 @@
 import { Routine } from 'redux-saga-routines';
-import { addPostReactionRoutine, deletePostReactionRoutine } from 'containers/Post/routines';
+import { addPostReactionRoutine,
+  deletePostReactionRoutine,
+  addPostReactionWithSocketRoutine,
+  deletePostReactionWithSocketRoutine
+} from 'containers/Post/routines';
 import { setCurrentChatRoutine,
   setPostsRoutine,
   createChatRoutine,
@@ -7,9 +11,10 @@ import { setCurrentChatRoutine,
   editPostWithSocketRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
-  upsertDraftPostRoutine,
-  deleteDraftPostRoutine,
+  createChatAndAddPostRoutine,
   updatePostDraftCommentRoutine,
+  upsertDraftPostWithSocketRoutine,
+  deleteDraftPostWithSocketRoutine,
   fetchNavigationPostRoutine
 } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
@@ -66,7 +71,7 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         hasMorePosts: Boolean(payload.length),
         fetchFrom: state.fetchFrom + state.fetchCount
       };
-    case upsertDraftPostRoutine.SUCCESS:
+    case upsertDraftPostWithSocketRoutine.TRIGGER:
       return {
         ...state,
         chat: {
@@ -76,7 +81,7 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
           ]
         }
       };
-    case deleteDraftPostRoutine.SUCCESS:
+    case deleteDraftPostWithSocketRoutine.TRIGGER:
       return {
         ...state,
         chat: {
@@ -84,7 +89,7 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
           draftPosts: []
         }
       };
-    case updatePostDraftCommentRoutine.TRIGGER:
+    case updatePostDraftCommentRoutine.TRIGGER: {
       const { postId, id, text } = payload;
       const draftComments = id ? [{ id, text }] : [];
 
@@ -98,6 +103,7 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state,
         posts: updatedPosts
       };
+    }
     case createChatRoutine.TRIGGER:
       return {
         ...state, loading: true
@@ -130,6 +136,36 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
           return post;
         })
       };
+    case addPostReactionWithSocketRoutine.TRIGGER: {
+      const { postId, userId, reaction } = payload;
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (postId === post.id) {
+            return {
+              ...post,
+              postReactions: [...post.postReactions, { userId, reaction }]
+            };
+          }
+          return post;
+        })
+      };
+    }
+    case deletePostReactionWithSocketRoutine.TRIGGER: {
+      const { postId, userId, reaction } = payload;
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (postId === post.id) {
+            return {
+              ...post,
+              postReactions: post.postReactions.filter(r => r.userId !== userId || r.reaction !== reaction)
+            };
+          }
+          return post;
+        })
+      };
+    }
     case addPostWithSocketRoutine.TRIGGER: {
       const posts = [...state.posts];
       posts.push(payload);
@@ -184,10 +220,17 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         hasMorePosts: Boolean(payload.length),
         fetchFrom: payload.length
       };
+    case createChatAndAddPostRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case createChatAndAddPostRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
     default:
       return state;
   }
 };
 
 export default reducer;
-

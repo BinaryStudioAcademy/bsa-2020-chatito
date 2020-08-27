@@ -7,7 +7,6 @@ import Post from 'containers/Post';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { setActiveThreadRoutine } from 'scenes/Workspace/routines';
 import InfiniteScroll from 'react-infinite-scroller';
-import { Spinner } from 'react-bootstrap';
 import { setPostsRoutine, fetchNavigationPostRoutine } from 'scenes/Chat/routines';
 import { IFetchMorePosts } from 'common/models/post/IFetchMorePosts';
 import LoaderWrapper from 'components/LoaderWrapper';
@@ -70,7 +69,7 @@ const ChatBody: React.FC<IProps> = ({
     if (postRef.current && postId) {
       scrollToRef(postRef);
     }
-  }, [loading]);
+  }, [loading, chatId]);
 
   const handleOpenThread = (post: IPost) => {
     if (activeThreadPostId === post.id) return;
@@ -88,7 +87,6 @@ const ChatBody: React.FC<IProps> = ({
           isReverse
           initialLoad={false}
           hasMore={hasMorePosts && !loading}
-          loader={<Spinner animation="border" role="status" key={0} />}
           useWindow={false}
         >
           {messages.map(m => (

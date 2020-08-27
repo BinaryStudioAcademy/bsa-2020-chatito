@@ -4,7 +4,7 @@
   display: flex
   flex-direction: column
   align-items: center
-  overflow-y: scroll
+  overflow-y: auto
   background-color: var(--chat-background-secondary)
   color: var(--main-text)
 
@@ -25,25 +25,12 @@
     justify-content: flex-end
     padding: 20px 20px 20px 0
 
-    button
-      position: relative
-      width: 20px
-      height: 20px
-      color: var(--close-button)
-      border: 1px solid var(--close-button)
-      border-radius: 50%
-
-      span
-        position: absolute
-        top: 0
-        left: 50%
-        transform: translateX(-50%)
-        line-height: 1
-        font-size: 18px
+    .closeBtn
+      cursor: pointer
+      opacity: 0.4
 
       &:hover
-        color: var(--icon-hover)
-        border-color: var(--icon-hover)
+        opacity: 1
 
   .avatar
     overflow: hidden
@@ -138,8 +125,10 @@
 
   .aboutItem
     width: 100%
-    padding: 0 15px 15px
+    padding: 0 15px
+    margin-bottom: 20px
 
     .label
       color: var(--secondary-text)
-      font-size: 13px
+      font-size: 12px
+      margin-bottom: 7px
