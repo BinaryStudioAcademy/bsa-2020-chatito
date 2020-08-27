@@ -17,7 +17,6 @@ import { PostType } from 'common/enums/PostType';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
-import CustomReminderModal from 'containers/CustomReminderModal';
 import { showUserProfileRoutine } from 'scenes/Workspace/routines';
 import ReminderItem from 'components/ReminderItem/ReminderItem';
 
@@ -110,10 +109,6 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
         </button>
       );
     });
-  };
-
-  const onSend = () => {
-    console.log('Send text message'); // eslint-disable-line
   };
 
   const popoverRemindOptions = (

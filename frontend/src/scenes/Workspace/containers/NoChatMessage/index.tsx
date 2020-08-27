@@ -13,23 +13,23 @@ const NoChatReminder = () => (
         </p>
         <p>
           Each workspace has it`s own users and channels.
-          Create separate workspace for your projects so that`ll be easy to manage your busyness.
+          Create a separate workspace for your projects to simplify the management of your business.
         </p>
 
         <p className={`${styles.paragh} ${styles.direction}`}>
           Communicate with your team in different ways
         </p>
         <p>
-          Here you can create public and private channels, write each other via direct messages,
+          Here you can create public and private channels, write to each other via direct messages,
           comment any message in threads and leave emoji reactions.
         </p>
 
         <p className={`${styles.paragh} ${styles.direction}`}>
-          Reach text editing abilities
+          Try out text editing abilities
         </p>
         <p>
-          Our users can write messages using powerful TinyMCE text editor.
-          It allows you to use a lot of text formating instruments. What is more,
+          Our users can write messages using the powerful TinyMCE text editor.
+          It allows you to use a lot of text formatting instruments. What is more,
           we support using of some simple HTML tags like
           <strong>{' <p>,'}</strong>
           <strong>{' <bold>,'}</strong>
@@ -38,20 +38,20 @@ const NoChatReminder = () => (
         </p>
 
         <p className={`${styles.paragh} ${styles.direction}`}>
-          Use numbers of utilities to make your life easier
+          Use a great number of our tools and features
         </p>
         <p>
           We provide a lot of useful tools for you, which are easy to understand.
           Moreover, we are integrating services like GitHub and Trello in order to allow you
-          not to waste time on following links or swapping browser tabs.
+          not to waste your precious time on following links or swapping browser tabs.
         </p>
 
       </span>
       <p className={`${styles.paragh} ${styles.direction}`}>
-        To start working, create new chat, invite your friends and enjoy yourself!
+        To start working, just create a new chat, invite your friends and enjoy yourself!
       </p>
       <p className={`${styles.paragh} ${styles.direction}`}>
-        With lot of love,
+        Kind regards,
         <br />
         Chatito team
       </p>

@@ -41,7 +41,7 @@ export const connectSockets = () => {
 
   chatSocket.on(ClientSockets.AddPost, (post: IPost) => {
     const state = store.getState();
-    if (post.chatId === state.chat.chat.id) {
+    if (post.chatId === state.chat.chat?.id) {
       store.dispatch(addPostWithSocketRoutine(post));
     } else {
       store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
@@ -50,7 +50,7 @@ export const connectSockets = () => {
 
   chatSocket.on(ClientSockets.EditPost, (post: IPost) => {
     const state = store.getState();
-    if (post.chatId === state.chat.chat.id) {
+    if (post.chatId === state.chat.chat?.id) {
       store.dispatch(editPostWithSocketRoutine(post));
     }
   });
@@ -110,7 +110,7 @@ export const connectSockets = () => {
 
   chatSocket.on(ClientSockets.UpsertDraftPost, (userId: string, chatId: string, draftPost: IDraftPost) => {
     const state = store.getState();
-    if (chatId === state.chat.chat.id && state.user.user?.id === userId) {
+    if (chatId === state.chat.chat?.id && state.user.user?.id === userId) {
       store.dispatch(upsertDraftPostWithSocketRoutine(draftPost));
       store.dispatch(updateChatDraftPostRoutine({ ...draftPost, chatId }));
     }
@@ -118,7 +118,7 @@ export const connectSockets = () => {
 
   chatSocket.on(ClientSockets.DeleteDraftPost, (userId: string, chatId: string) => {
     const state = store.getState();
-    if (chatId === state.chat.chat.id && state.user.user?.id === userId) {
+    if (chatId === state.chat.chat?.id && state.user.user?.id === userId) {
       store.dispatch(deleteDraftPostWithSocketRoutine());
       store.dispatch(updateChatDraftPostRoutine({ chatId }));
     }
@@ -135,7 +135,7 @@ export const connectSockets = () => {
       store.dispatch(upsertDraftCommentWithSocketRoutine(draftComment));
     }
 
-    if (chatId === state.chat.chat.id && state.user.user?.id === userId) {
+    if (chatId === state.chat.chat?.id && state.user.user?.id === userId) {
       store.dispatch(updatePostDraftCommentRoutine({ ...draftComment, postId }));
     }
   });
@@ -146,7 +146,7 @@ export const connectSockets = () => {
       store.dispatch(deleteDraftCommentWithSocketRoutine());
     }
 
-    if (chatId === state.chat.chat.id && state.user.user?.id === userId) {
+    if (chatId === state.chat.chat?.id && state.user.user?.id === userId) {
       store.dispatch(updatePostDraftCommentRoutine({ postId }));
     }
   });
