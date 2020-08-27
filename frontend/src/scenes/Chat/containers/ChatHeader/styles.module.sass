@@ -3,8 +3,8 @@
     display: flex
     align-items: center
     justify-content: space-between
-    border-bottom: 1px solid var(--border)
-    padding: 5px 20px
+    border-bottom: 1px solid var(--chat-background-secondary)
+    padding: 5px 40px 5px 25px
 
     .headerInfo
       display: flex
@@ -17,8 +17,8 @@
         cursor: pointer
 
         .title
-          font-size: 14px
-          font-weight: 700
+          font-size: 16px
+          font-weight: 600
           margin-left: 3px
 
         .icon
@@ -29,12 +29,6 @@
 
           &.active
             color: var(--icon-active)
-
-      .topic
-        font-size: 12px
-        color: var(--secondary-text)
-        width: 100%
-        cursor: pointer
 
     .rightHeaderBlock
       display: flex
@@ -47,7 +41,6 @@
         border-radius: 4px
         margin-right: 8px
 
-
         &:hover
           background-color: var(--icon-hover-background)
 
@@ -56,6 +49,7 @@
           height: 25px
           margin-right: -4px
           position: relative
+          background-color: var(--chat-background-primary)
           box-shadow: 0 0 0 2px var(--member-avatar-box-shadow)
 
           &:nth-child(1)
@@ -75,14 +69,15 @@
 .icon
   font-size: 30px
   line-height: 0
+  opacity: 0.4
   color: var(--icon)
   margin-left: 4px
   padding: 5px
   border-radius: 4px
 
   &:hover
+    opacity: 1
     background-color: var(--icon-hover-background)
-    color: var(--icon-hover)
     cursor: pointer
 
 .userLogo

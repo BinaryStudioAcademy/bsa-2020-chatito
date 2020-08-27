@@ -1,17 +1,19 @@
 .postWrapper
-  padding: 10px
+  padding: 5px 40px 10px 25px
   color: var(--main-text)
-  border-radius: 15px
-  margin-bottom: 5px
-  background: var(--post-bg)
+
+  &:hover
+
+    .body
+      .footer
+        color: var(--main-text)
 
 .body
   overflow: hidden
-  padding: 5px
 
 .author
   display: inline-block
-  font-size: 1rem
+  font-size: 14px
   color: var(--title-text)
   font-weight: 600
   margin-bottom: 2px
@@ -21,12 +23,12 @@
     text-decoration: underline
 
 .metadata
-  display: inline-block
   font-weight: 400
   color: var(--secondary-text)
-  font-size: .75rem
+  font-size: 12px
   font-family: var(--secondary-font-family), sans-serif
   margin-bottom: 14px
+  padding: 0
   background: none
   border: none
   &:hover
@@ -34,8 +36,11 @@
 
 .text
   text-align: left
+  font-size: 16px
   margin-bottom: 15px
   overflow-wrap: break-word
+  line-height: 1.2
+  letter-spacing: .1px
 
 .emojiStats
   display: flex
@@ -60,11 +65,12 @@
   border-color: var(--post-active-emoji-border)
 
 .emoji
-  margin-right: 3px
+  margin-right: 7px
   font-size: 14px
 
 .footer
   display: flex
+  color: var(--chat-background-primary)
 
 .postWrapper .openThreadBtn,
 .reactBtn
@@ -96,3 +102,7 @@
 
   &:hover
     background: var(--post-bg)
+
+@media screen and (max-width: 1440px)
+  .text
+    line-height: 1.3

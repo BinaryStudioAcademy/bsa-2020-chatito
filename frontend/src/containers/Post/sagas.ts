@@ -10,7 +10,7 @@ function* addPostReaction({ payload }: Routine<any>) {
 
     yield call(addReaction, { postId: payload.post.id, reaction: payload.reaction });
   } catch (error) {
-    yield call(toastr.error, 'Error', 'Add reaction is failed, please check connection and try again.');
+    yield call(toastr.error, 'Error', 'Add reaction was failed. Please try again later.');
   }
 }
 
@@ -24,7 +24,7 @@ function* deletePostReaction({ payload }: Routine<any>) {
 
     yield call(deleteReaction, { postId: payload.post.id, reaction: payload.reaction });
   } catch (error) {
-    yield call(toastr.error, 'Error', 'Delete reaction is failed, please check connection and try again.');
+    yield call(toastr.error, 'Error', 'Delete reaction was failed. Please try again later.');
   }
 }
 
