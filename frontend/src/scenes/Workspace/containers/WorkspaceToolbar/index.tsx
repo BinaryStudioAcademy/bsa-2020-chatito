@@ -58,13 +58,12 @@ const WorkspaceToolbar: FunctionComponent<IProps> = ({
           : null}
 
       </ListGroup>
-      <div className={styles.plusIconContainer}>
+      <button type="button" className={styles.plusIconContainer} onClick={onAddWorkspaceClick}>
         <FontAwesomeIcon
           className={styles.plusIcon}
           icon={faPlus}
-          onClick={onAddWorkspaceClick}
         />
-      </div>
+      </button>
     </div>
   );
 };
