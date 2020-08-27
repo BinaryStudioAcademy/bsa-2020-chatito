@@ -1,3 +1,4 @@
+import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 import { Routine } from 'redux-saga-routines';
 import {
   selectWorkspaceRoutine,
@@ -35,6 +36,7 @@ export interface IWorkspaceState {
   activeThread: IActiveThread | null;
   userProfile: IUser;
   threadLoading: boolean;
+  unreadChats: IUnreadChat[];
 }
 
 const initialState: IWorkspaceState = {
@@ -47,7 +49,8 @@ const initialState: IWorkspaceState = {
   showRightSideMenu: RightMenuTypes.None,
   activeThread: null,
   userProfile: { id: '', email: '', fullName: '', displayName: '' },
-  threadLoading: false
+  threadLoading: false,
+  unreadChats: []
 };
 
 const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>): IWorkspaceState => {
@@ -229,24 +232,15 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return state;
     }
     case markAsUnreadWithSocketRoutine.TRIGGER: {
-      const chatTypeKey = payload.chatType === ChatType.Channel ? 'channels' : 'directMessages';
-      const workspaceChatsCopy = state[chatTypeKey];
-      workspaceChatsCopy.forEach(chat => {
-        if (chat.id === payload.chatId) {
-          chat.unreadPosts!.push(...payload.unreadPost);
+      const unreadChatCopy = state.unreadChats;
+      unreadChatCopy.forEach(unreadChat => {
+        if (unreadChat.id === payload.chat.id) {
+          
         }
       });
-      if (chatTypeKey === 'channels') {
-        return {
-          ...state, channels: workspaceChatsCopy
-        };
-      }
-      if (chatTypeKey === 'directMessages') {
-        return {
-          ...state, directMessages: workspaceChatsCopy
-        };
-      }
-      return state;
+      return {
+        ...state, unreadChats: {...state.unreadChats,  }}
+      };
     }
     default:
       return state;
