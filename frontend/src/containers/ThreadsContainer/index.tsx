@@ -43,6 +43,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
       </header>
     );
   }
+
   return (
     <div className={styles.threadsContainerComponent}>
       <header className={styles.headerContainer}>
@@ -67,7 +68,10 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
                     id: post.id,
                     chatId: post.chat.id,
                     postReactions: post.postReactions,
-                    commentsInfo: noInfo
+                    commentsInfo: noInfo,
+                    chat: {
+                      name: post.chat.name || ''
+                    }
                   }}
                   comments={post.comments}
                   hideCloseBtn={hideCloseBtn}
