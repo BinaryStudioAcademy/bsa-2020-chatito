@@ -94,16 +94,6 @@ const Thread: FunctionComponent<IProps> = ({
           <div className={styles.threadPost}>
             <Post post={post} type={PostType.Post} />
           </div>
-          {showOnlyTwoComments
-            ? (
-              <button
-                type="button"
-                onClick={() => setShowAll(!showAll)}
-                className={styles.link}
-              >
-                Show other replies
-              </button>
-            ) : ('')}
           <div className={styles.threadComments}>
             {comments.map((comment, index) => (
               index < maxComment
@@ -119,9 +109,13 @@ const Thread: FunctionComponent<IProps> = ({
           </div>
           {comments.length > maxComment
             ? (
-              <div className={styles.commentsMore}>
-                {`And ${comments.length - maxComment} more comments`}
-              </div>
+              <button
+                type="button"
+                onClick={() => setShowAll(!showAll)}
+                className={styles.link}
+              >
+                {`Show ${comments.length - maxComment} more replies`}
+              </button>
             ) : ('')}
           <div className={styles.textEditor}>
             <TextEditor
