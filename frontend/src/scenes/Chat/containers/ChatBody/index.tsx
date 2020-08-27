@@ -11,6 +11,7 @@ import { setPostsRoutine } from 'scenes/Chat/routines';
 import { IFetchMorePosts } from 'common/models/post/IFetchMorePosts';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { PostType } from 'common/enums/PostType';
+import CustomReminderModal from 'containers/CustomReminderModal';
 
 interface IProps {
   chatId: string | undefined;
@@ -76,6 +77,7 @@ const ChatBody: React.FC<IProps> = ({
               type={PostType.Post}
             />
           ))}
+          <CustomReminderModal />
         </InfiniteScroll>
       </div>
     </LoaderWrapper>

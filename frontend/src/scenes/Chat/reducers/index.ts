@@ -11,6 +11,8 @@ import { setCurrentChatRoutine,
   editPostWithSocketRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
+  addReminderRoutine,
+  addReminderSuccessPostRoutine,
   createChatAndAddPostRoutine,
   updatePostDraftCommentRoutine,
   upsertDraftPostWithSocketRoutine,
@@ -19,11 +21,13 @@ import { setCurrentChatRoutine,
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 import { IUser } from 'common/models/user/IUser';
+import { ICreateReminder } from 'common/models/reminder/ICreateReminder';
 
 export interface IChatState {
   chat?: IChat;
   posts: IPost[];
   users?: IUser[];
+  reminders?: ICreateReminder[];
   loading: boolean;
   error: any;
   hasMorePosts: boolean;
@@ -33,6 +37,7 @@ export interface IChatState {
 
 const initialState: IChatState = {
   posts: [],
+  reminders: [],
   loading: false,
   error: '',
   hasMorePosts: true,
@@ -205,6 +210,40 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     case removeUserFromChatRoutine.FAILURE:
       return {
         ...state, loading: false
+      };
+    case addReminderRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case addReminderRoutine.SUCCESS:
+      return {
+        ...state, reminders: { ...state.reminders, payload }, loading: false
+      };
+    case addReminderRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
+    case addReminderSuccessPostRoutine.SUCCESS:
+      const { day, time, note, chatId } = payload;
+      const chatitoBotMock = {
+        id: '0',
+        fullName: 'Chatito Bot',
+        displayName: 'Chatito Bot',
+        email: 'chatito@gmail.com'
+      };
+      const newPost: IPost = {
+        createdByUser: chatitoBotMock,
+        text: `I'll remind you about this message ${note ? `with note "${note}"` : ''} at ${day} ${time}.`,
+        createdAt: new Date(),
+        id: '0',
+        postReactions: [],
+        commentsInfo: { count: 0, lastAt: new Date(), avatars: [] },
+        chatId
+      };
+      const posts = [...state.posts];
+      posts.push(newPost);
+      return {
+        ...state, posts
       };
     case createChatAndAddPostRoutine.TRIGGER:
       return {
