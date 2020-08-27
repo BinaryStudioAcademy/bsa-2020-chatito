@@ -14,7 +14,7 @@ const routes = (app: Express) => {
   app.use('/api/posts', postRoutes);
   app.use('/api/chats', chatRoutes);
   app.use('/api/post-reactions', postReactionsRoutes);
-  app.use('/api/draft', draftRoutes);
+  app.use('/api/drafts', draftRoutes);
 };
 
 export default routes;

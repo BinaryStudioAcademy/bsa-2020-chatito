@@ -33,6 +33,17 @@ class DraftPostRepository extends Repository<DraftPost> {
       .andWhere('draft_post."chatId" = :chatId', { chatId })
       .execute();
   }
+
+  async getByUserAndWorkspace(userId: string, workspaceId: string): Promise<DraftPost[]> {
+    return this.createQueryBuilder()
+      .select('draft_post')
+      .from(DraftPost, 'draft_post')
+      .where('draft_post."createdByUserId" = :userId', { userId })
+      .leftJoinAndSelect('draft_post.chat',
+        'chat')
+      .where('chat."workspaceId" = :workspaceId', { workspaceId })
+      .getMany();
+  }
 }
 
 export default DraftPostRepository;

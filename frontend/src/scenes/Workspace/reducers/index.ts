@@ -36,6 +36,7 @@ export interface IWorkspaceState {
   activeThread: IActiveThread | null;
   userProfile: IUser;
   threadLoading: boolean;
+  someField: string;
   unreadChats: IUnreadChat[];
 }
 
@@ -50,6 +51,7 @@ const initialState: IWorkspaceState = {
   activeThread: null,
   userProfile: { id: '', email: '', fullName: '', displayName: '' },
   threadLoading: false,
+  someField: 'string',
   unreadChats: []
 };
 
@@ -234,7 +236,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
     case markAsUnreadWithSocketRoutine.TRIGGER: {
       const unreadChatsCopy = state.unreadChats;
       let currentChatExist = false;
-      if (unreadChatsCopy) {
+      if (unreadChatsCopy.length) {
         unreadChatsCopy.forEach(unreadChat => {
           if (unreadChat.id === payload.chatId) {
             currentChatExist = true;
@@ -246,7 +248,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         unreadChatsCopy.push({ id: payload.chatId, unreadPosts: [payload.unreadPost] });
       }
       return {
-        ...state, unreadChats: { ...unreadChatsCopy }
+        ...state, unreadChats: [...unreadChatsCopy]
       };
     }
     default:

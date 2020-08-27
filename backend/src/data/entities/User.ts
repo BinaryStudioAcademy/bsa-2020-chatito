@@ -6,6 +6,7 @@ import { Post } from './Post';
 import { Comment } from './Comment';
 import { RefreshToken } from './RefreshToken';
 import { PostReaction } from './PostReaction';
+import { Reminder } from './Reminder';
 import { DraftPost } from './DraftPost';
 import { DraftComment } from './DraftComment';
 
@@ -34,6 +35,9 @@ export class User extends AbstractEntity {
 
   @OneToMany(() => Post, post => post.createdByUser)
   posts: Post[];
+
+  @OneToMany(() => Reminder, reminder => reminder.createdByUser)
+  reminders: Reminder[];
 
   @OneToMany(() => DraftPost, draftPost => draftPost.createdByUser)
   draftPosts: DraftPost[];

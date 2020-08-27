@@ -1,7 +1,6 @@
-import { emitToChatRoom } from './../../common/utils/socketHelper';
-import { getChatById } from './../../services/chatService';
-import { getUserByIdWithoutWorkspaces } from './../../services/userService';
 import { Router, Request } from 'express';
+import { emitToChatRoom } from '../../common/utils/socketHelper';
+import { getUserByIdWithoutWorkspaces } from '../../services/userService';
 import { run } from '../../common/utils/routeHelper';
 import {
   getAllChatPosts,
@@ -9,7 +8,9 @@ import {
   getAllUserChats,
   getAllChatUsers,
   removeUserFromChat,
-  addUsersToChat } from '../../services/chatService';
+  addUsersToChat,
+  getChatById } from '../../services/chatService';
+import { addReminder } from '../../services/reminderService';
 import { ClientSockets } from '../../common/enums/ClientSockets';
 import { IUser } from '../../common/models/user/IUser';
 
@@ -29,9 +30,16 @@ router
     req.io.of('/chat').emit(ClientSockets.JoinChat, chat.id);
     return chat;
   }))
+  .post('/:id/reminders', run((req: Request) => addReminder(
+    {
+      chatId: req.params.id,
+      userId: req.user.id,
+      body: req.body
+    }
+  )))
   .post('/invite-users', run(async (req: Request) => {
-    const users = await addUsersToChat(req.body.chatId, req.body.userIds)
-    let usersToEmit: IUser[] = [];
+    const users = await addUsersToChat(req.body.chatId, req.body.userIds);
+    const usersToEmit: IUser[] = [];
 
     for (const userId of req.body.userIds) {
       const user = await getUserByIdWithoutWorkspaces(userId);
@@ -40,6 +48,6 @@ router
     const chatInfoToSend = await getChatById(req.body.chatId);
     emitToChatRoom(req.body.chatId, ClientSockets.NewUserNotification, usersToEmit, chatInfoToSend.name, chatInfoToSend.type, chatInfoToSend.id);
     return users;
-  }))
+  }));
 
 export default router;

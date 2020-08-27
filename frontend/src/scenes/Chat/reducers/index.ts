@@ -11,6 +11,8 @@ import { setCurrentChatRoutine,
   editPostWithSocketRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
+  addReminderRoutine,
+  addReminderSuccessPostRoutine,
   createChatAndAddPostRoutine,
   updatePostDraftCommentRoutine,
   upsertDraftPostWithSocketRoutine,
@@ -19,11 +21,13 @@ import { setCurrentChatRoutine,
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
 import { IUser } from 'common/models/user/IUser';
+import { ICreateReminder } from 'common/models/reminder/ICreateReminder';
 
 export interface IChatState {
   chat?: IChat;
   posts: IPost[];
   users?: IUser[];
+  reminders?: ICreateReminder[];
   loading: boolean;
   error: any;
   hasMorePosts: boolean;
@@ -33,6 +37,7 @@ export interface IChatState {
 
 const initialState: IChatState = {
   posts: [],
+  reminders: [],
   loading: false,
   error: '',
   hasMorePosts: true,
@@ -40,7 +45,7 @@ const initialState: IChatState = {
   fetchCount: 10
 };
 
-const reducer = (state: IChatState = initialState, { type, payload }: Routine<any>) => {
+const reducer = (state: IChatState = initialState, { type, payload }: Routine<any>): IChatState => {
   switch (type) {
     case setCurrentChatRoutine.TRIGGER:
       return {
@@ -71,23 +76,29 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         fetchFrom: state.fetchFrom + state.fetchCount
       };
     case upsertDraftPostWithSocketRoutine.TRIGGER:
-      return {
-        ...state,
-        chat: {
-          ...state.chat,
-          draftPosts: [
-            payload
-          ]
-        }
-      };
+      if (state.chat) {
+        return {
+          ...state,
+          chat: {
+            ...state.chat,
+            draftPosts: [
+              payload
+            ]
+          }
+        };
+      }
+      return state;
     case deleteDraftPostWithSocketRoutine.TRIGGER:
-      return {
-        ...state,
-        chat: {
-          ...state.chat,
-          draftPosts: []
-        }
-      };
+      if (state.chat) {
+        return {
+          ...state,
+          chat: {
+            ...state.chat,
+            draftPosts: []
+          }
+        };
+      }
+      return state;
     case updatePostDraftCommentRoutine.TRIGGER: {
       const { postId, id, text } = payload;
       const draftComments = id ? [{ id, text }] : [];
@@ -184,10 +195,13 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state, loading: true
       };
     case fetchChatUsersRoutine.SUCCESS:
-      const newChat = { ...state.chat, users: payload };
-      return {
-        ...state, chat: newChat, loading: false
-      };
+      if (state.chat) {
+        const newChat = { ...state.chat, users: payload };
+        return {
+          ...state, chat: newChat, loading: false
+        };
+      }
+      return state;
     case fetchChatUsersRoutine.FAILURE:
       return {
         ...state, loading: false
@@ -197,14 +211,51 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state, loading: true
       };
     case removeUserFromChatRoutine.SUCCESS:
-      const newUserList = state.chat?.users?.filter(user => user.id !== payload) || [];
-      const result = { ...state.chat, users: newUserList };
-      return {
-        ...state, chat: result, loading: false
-      };
+      if (state.chat) {
+        const newUserList = state.chat?.users?.filter(user => user.id !== payload) || [];
+        const result = { ...state.chat, users: newUserList };
+        return {
+          ...state, chat: result, loading: false
+        };
+      }
+      return state;
     case removeUserFromChatRoutine.FAILURE:
       return {
         ...state, loading: false
+      };
+    case addReminderRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case addReminderRoutine.SUCCESS:
+      return {
+        ...state, reminders: { ...state.reminders, ...payload }, loading: false
+      };
+    case addReminderRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
+    case addReminderSuccessPostRoutine.SUCCESS:
+      const { day, time, note, chatId } = payload;
+      const chatitoBotMock = {
+        id: '0',
+        fullName: 'Chatito Bot',
+        displayName: 'Chatito Bot',
+        email: 'chatito@gmail.com'
+      };
+      const newPost: IPost = {
+        createdByUser: chatitoBotMock,
+        text: `I'll remind you about this message ${note ? `with note "${note}"` : ''} at ${day} ${time}.`,
+        createdAt: new Date(),
+        id: '0',
+        postReactions: [],
+        commentsInfo: { count: 0, lastAt: new Date(), avatars: [] },
+        chatId
+      };
+      const posts = [...state.posts];
+      posts.push(newPost);
+      return {
+        ...state, posts
       };
     case createChatAndAddPostRoutine.TRIGGER:
       return {
