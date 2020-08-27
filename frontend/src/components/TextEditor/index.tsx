@@ -81,6 +81,10 @@ const TextEditor: FunctionComponent<IProps> = ({
 
             editor.on('init', () => {
               editor.setContent(draftInput.text ? draftInput.text : '');
+              // set cursor active and move to the end of content
+              editor.focus();
+              editor.selection.select(editor.getBody(), true);
+              editor.selection.collapse(false);
             });
 
             editor.on('keyup', debounce((event: KeyboardEvent) => {
