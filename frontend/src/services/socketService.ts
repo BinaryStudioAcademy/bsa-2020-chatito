@@ -92,17 +92,19 @@ export const connectSockets = () => {
   chatSocket.on(ClientSockets.NewUserNotification, (
     users: IUser[],
     chatName: string,
-    chatType: ChatType
+    chatType: ChatType,
+    chatId: string
   ) => {
-    store.dispatch(newUserNotificationWithSocketRoutine({ users, chatType }));
+    console.log(users, chatName, chatType, chatId);
+    store.dispatch(newUserNotificationWithSocketRoutine({ users, chatType, chatId }));
     if (users.length === 1) {
-      toastrSuccess(`User ${users[0].displayName} was invited to chat ${chatName}`);
+      toastrSuccess(`User ${users[0].displayName} was invited to channel "${chatName}"`);
     } else {
       let usersString = '';
       users.forEach((user, index) => {
         usersString += `${user.displayName}${index === users.length - 1 ? '' : ', '}`;
       });
-      toastrSuccess(`Users ${usersString} were invited to chat ${chatName}`);
+      toastrSuccess(`Users ${usersString} were invited to channel "${chatName}"`);
     }
   });
 
