@@ -45,7 +45,7 @@ const initialState: IChatState = {
   fetchCount: 10
 };
 
-const reducer = (state: IChatState = initialState, { type, payload }: Routine<any>) => {
+const reducer = (state: IChatState = initialState, { type, payload }: Routine<any>): IChatState => {
   switch (type) {
     case setCurrentChatRoutine.TRIGGER:
       return {
@@ -76,23 +76,29 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         fetchFrom: state.fetchFrom + state.fetchCount
       };
     case upsertDraftPostWithSocketRoutine.TRIGGER:
-      return {
-        ...state,
-        chat: {
-          ...state.chat,
-          draftPosts: [
-            payload
-          ]
-        }
-      };
+      if (state.chat) {
+        return {
+          ...state,
+          chat: {
+            ...state.chat,
+            draftPosts: [
+              payload
+            ]
+          }
+        };
+      }
+      return state;
     case deleteDraftPostWithSocketRoutine.TRIGGER:
-      return {
-        ...state,
-        chat: {
-          ...state.chat,
-          draftPosts: []
-        }
-      };
+      if (state.chat) {
+        return {
+          ...state,
+          chat: {
+            ...state.chat,
+            draftPosts: []
+          }
+        };
+      }
+      return state;
     case updatePostDraftCommentRoutine.TRIGGER: {
       const { postId, id, text } = payload;
       const draftComments = id ? [{ id, text }] : [];
@@ -189,10 +195,13 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state, loading: true
       };
     case fetchChatUsersRoutine.SUCCESS:
-      const newChat = { ...state.chat, users: payload };
-      return {
-        ...state, chat: newChat, loading: false
-      };
+      if (state.chat) {
+        const newChat = { ...state.chat, users: payload };
+        return {
+          ...state, chat: newChat, loading: false
+        };
+      }
+      return state;
     case fetchChatUsersRoutine.FAILURE:
       return {
         ...state, loading: false
@@ -202,11 +211,14 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state, loading: true
       };
     case removeUserFromChatRoutine.SUCCESS:
-      const newUserList = state.chat?.users?.filter(user => user.id !== payload) || [];
-      const result = { ...state.chat, users: newUserList };
-      return {
-        ...state, chat: result, loading: false
-      };
+      if (state.chat) {
+        const newUserList = state.chat?.users?.filter(user => user.id !== payload) || [];
+        const result = { ...state.chat, users: newUserList };
+        return {
+          ...state, chat: result, loading: false
+        };
+      }
+      return state;
     case removeUserFromChatRoutine.FAILURE:
       return {
         ...state, loading: false
@@ -217,7 +229,7 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
       };
     case addReminderRoutine.SUCCESS:
       return {
-        ...state, reminders: { ...state.reminders, payload }, loading: false
+        ...state, reminders: { ...state.reminders, ...payload }, loading: false
       };
     case addReminderRoutine.FAILURE:
       return {
