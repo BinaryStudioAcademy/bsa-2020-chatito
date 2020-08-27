@@ -64,8 +64,8 @@ export const connectSockets = () => {
         'blueToastrNotification',
         () => { console.log(post); }
       );
-      store.dispatch(markAsUnreadWithSocketRoutine({ chatId: chat.id, chatType: chat.type, unreadPost: post }));
     }
+    store.dispatch(markAsUnreadWithSocketRoutine({ chatId: chat.id, chatType: chat.type, unreadPost: post }));
   });
 
   chatSocket.on(ClientSockets.EditPost, (post: IPost) => {

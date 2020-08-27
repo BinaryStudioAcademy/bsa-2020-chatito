@@ -232,14 +232,21 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return state;
     }
     case markAsUnreadWithSocketRoutine.TRIGGER: {
-      const unreadChatCopy = state.unreadChats;
-      unreadChatCopy.forEach(unreadChat => {
-        if (unreadChat.id === payload.chat.id) {
-          
-        }
-      });
+      const unreadChatsCopy = state.unreadChats;
+      let currentChatExist = false;
+      if (unreadChatsCopy) {
+        unreadChatsCopy.forEach(unreadChat => {
+          if (unreadChat.id === payload.chatId) {
+            currentChatExist = true;
+            unreadChat.unreadPosts.push(payload.unreadPost);
+          }
+        });
+      }
+      if (!currentChatExist) {
+        unreadChatsCopy.push({ id: payload.chatId, unreadPosts: [payload.unreadPost] });
+      }
       return {
-        ...state, unreadChats: {...state.unreadChats,  }}
+        ...state, unreadChats: { ...unreadChatsCopy }
       };
     }
     default:
