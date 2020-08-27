@@ -7,5 +7,6 @@ export enum ErrorCode {
   WorkspaceAlreadyExists,
   UserHaveCreatedWorkspace,
   DraftPostExists,
-  DraftCommentExists
+  DraftCommentExists,
+  ForbiddenFileType
 }

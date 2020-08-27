@@ -9,6 +9,8 @@ import { IUser } from 'common/models/user/IUser';
 import { getUserImgLink } from 'common/helpers/imageHelper';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { signS3, uploadPhoto } from 'services/awsService';
+import { toastr } from 'react-redux-toastr';
 
 interface IProps {
   editProfile: IBindingCallback1<IUser>;
@@ -36,6 +38,26 @@ const EditProfileForm: FunctionComponent<IProps> = ({
 
   const handleDeleteAccount = () => {
     deleteAccount();
+  };
+
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const target = event.target as HTMLInputElement;
+
+      if (!target.files) return;
+
+      const file = target.files[0];
+      const fileType = file.name.split('.')[1];
+
+      const signedData = await signS3(fileType);
+
+      const { signedRequest, url, fileName } = signedData;
+
+      const response = await uploadPhoto(signedRequest, fileName, fileType, file);
+      console.log(response);
+    } catch (error) {
+      toastr.error('Upload error', error.message);
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,9 +140,18 @@ const EditProfileForm: FunctionComponent<IProps> = ({
               src={getUserImgLink(user.imageUrl as string)}
             />
             <div className={`${styles.imageFooter} w-100`}>
-              <button type="submit" className={styles.link}>
-                Upload an Image
-              </button>
+              <div>
+                <label htmlFor="image_uploads">
+                  <span>Upload image</span>
+                  <input
+                    type="file"
+                    id="image_uploads"
+                    name="image_uploads"
+                    accept=".jpg, .jpeg, .png"
+                    onChange={handleUpload}
+                  />
+                </label>
+              </div>
               {user.imageUrl ? (
                 <button type="submit" className={styles.link}>
                   Remove photo

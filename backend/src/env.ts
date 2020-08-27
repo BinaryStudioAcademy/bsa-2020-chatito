@@ -24,7 +24,7 @@ export const env = {
   },
   aws: {
     accessKeyId: getOsEnv('AWS_ACCESS_KEY_ID'),
-    secretKey: getOsEnv('AWS_SECRET_KEY'),
+    secretAccessKey: getOsEnv('AWS_SECRET_KEY'),
     bucket: getOsEnv('BUCKET')
   }
 };
