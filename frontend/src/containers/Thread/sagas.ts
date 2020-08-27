@@ -4,7 +4,6 @@ import { takeEvery, put, call, all } from 'redux-saga/effects';
 import { addComment } from 'services/threadsService';
 import { toastrError } from 'services/toastrService';
 import { upsertDraftComment, deleteDraftComment } from 'services/draftService';
-import { updatePostDraftCommentRoutine } from 'scenes/Chat/routines';
 
 function* addCommentRequest({ payload }: Routine<any>) {
   try {
@@ -24,10 +23,7 @@ function* watchAddCommentRequest() {
 
 function* upsertDraftCommentRequest({ payload }: Routine<any>) {
   try {
-    const response = yield call(upsertDraftComment, payload);
-    yield put(updatePostDraftCommentRoutine.trigger({ ...response, postId: payload.postId }));
-
-    yield put(upsertDraftCommentRoutine.success(response));
+    yield call(upsertDraftComment, payload);
   } catch (error) {
     yield call(toastrError, error.message);
   }
@@ -40,9 +36,6 @@ function* watchUpsertDraftCommentRequest() {
 function* deleteDraftCommentRequest({ payload }: Routine<any>) {
   try {
     yield call(deleteDraftComment, payload);
-    yield put(updatePostDraftCommentRoutine.trigger(payload));
-
-    yield put(deleteDraftCommentRoutine.success());
   } catch (error) {
     yield call(toastrError, error.message);
   }

@@ -12,13 +12,13 @@ class PostReactionRepository extends Repository<PostReaction> {
   }
 
   async deleteReaction({ userId, postId, reaction }: IDeletePostReaction) {
-    const delReaction = await this.createQueryBuilder('postReaction')
+    const deletedReaction = await this.createQueryBuilder('postReaction')
       .leftJoinAndSelect('postReaction.user', 'user', 'user.id = :userId', { userId })
       .leftJoinAndSelect('postReaction.post', 'post', 'post.id = :postId', { postId })
       .where('postReaction.reaction = :reaction', { reaction })
       .getOne();
 
-    return this.remove(delReaction);
+    return this.remove(deletedReaction);
   }
 }
 

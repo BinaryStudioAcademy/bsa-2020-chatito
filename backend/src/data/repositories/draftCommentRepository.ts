@@ -24,6 +24,17 @@ class DraftCommentRepository extends Repository<DraftComment> {
       .andWhere('draft_comment."postId" = :postId', { postId })
       .execute();
   }
+
+  async getByUserAndWorkspace(userId: string, workspaceId: string): Promise<DraftComment[]> {
+    return this.createQueryBuilder()
+      .select('draft_comment')
+      .from(DraftComment, 'draft_comment')
+      .where('draft_comment."createdByUserId" = :userId', { userId })
+      .leftJoinAndSelect('draft_comment.post', 'post')
+      .leftJoinAndSelect('post.chat', 'chat')
+      .where('chat."workspaceId" = :workspaceId', { workspaceId })
+      .getMany();
+  }
 }
 
 export default DraftCommentRepository;

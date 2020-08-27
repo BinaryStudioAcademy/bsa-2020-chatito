@@ -18,3 +18,28 @@ export const fromDraftCommentToDraftCommentClient = (draftComment: DraftComment)
     text
   };
 };
+
+export const fromDraftPostToDraftPostClientDraftPage = (draftPost: DraftPost): IDraftPostClient => {
+  const { id, text, chat: { hash, name } } = draftPost;
+  return {
+    id,
+    text,
+    chat: {
+      hash,
+      name
+    }
+  };
+};
+
+export const fromDraftCommentToDraftCommentDraftPage = (draftComment: DraftComment): IDraftCommentClient => {
+  const { id, text, postId, post: { chat: { hash, name } } } = draftComment;
+  return {
+    id,
+    text,
+    chat: {
+      hash,
+      name
+    },
+    postId
+  };
+};

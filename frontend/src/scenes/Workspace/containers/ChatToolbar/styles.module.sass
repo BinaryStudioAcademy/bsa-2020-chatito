@@ -1,15 +1,13 @@
-$color: var(--workspace-toolbar-select-background) // цвет фона
-$colorText: var(--title-text) // цвет текста
-$coloractive: #CECCC0 // цвет активной строки
+$color: var(--workspace-toolbar-select-background)
+$colorText: var(--title-text)
 
 .leftToolbar
-  padding-top: 15px
+  padding: 15px 0
   top: 0px
   left: 10px
   height: 100%
   background-color: $color
   overflow-y: auto
-  min-width: 250px
 
   -ms-overflow-style: none
   scrollbar-width
@@ -31,12 +29,18 @@ $coloractive: #CECCC0 // цвет активной строки
   color: $colorText
   cursor: pointer
 
-  &:hover
-    text-decoration: underline
+.iconWrapper
+  display: flex
+  justify-content: center
+  align-items: center
+  width: 25px
 
 .channelSelectActive
   composes: channelSelect
-  background-color: $coloractive
+  background-color: var(--chat-background-primary)
+
+.channelCurrent
+  background-color: var(--chat-background-primary)
 
 
 .chatBlock
@@ -44,26 +48,44 @@ $coloractive: #CECCC0 // цвет активной строки
   display: flex
   width: 100%
 
+.chatBlockContainer
+  display: flex
+  justify-content: flex-start
+.chatNameWrapper
+  display: flex
+
 .iconBorder
   display: flex
   justify-content: center
   align-items: center
-  width: 30px
-  height: 30px
-  margin-left: -8px
-  border: 1px solid red
-  border-radius: 15px
+  width: 19px
+  height: 19px
+  font-size: 10px
+  color: var(--workspace-background-color)
+  border: 1px solid var(--workspace-background-color)
+  border-radius: 50%
 
 .buttonText
   margin-left: 10px
+  text-align: start
+  display: flex
+  width: 100%
 
-.metkaOnLine
+
+.addButtonText
+  margin-left: 10px
+  font-size: 14px
+  font-weight: bold
+  color: var(--workspace-background-color)
+
+.onlineSign
   position: relative
   float: left
   width: 10px
+  min-width: 10px
   height: 10px
   border-radius: 5px
-  background-color: rgb(43, 230, 83)
+  background-color: var(--user-detector-online)
   margin-top: 2px
   margin-left: 3px
 
@@ -79,16 +101,11 @@ $coloractive: #CECCC0 // цвет активной строки
 
 .channelSelect:hover
   color: $colorText
-  background-color: $coloractive
+  background-color: var(--chat-background-primary)
 
 .channelSelect:active
   color: $colorText
-  background-color: $coloractive
-
-.hrr
-  margin-top: 10px
-  height: 2px
-  background-color: $coloractive
+  background-color: var(--chat-background-primary)
 
 .channelButtonsWrapper
   display: flex
@@ -97,16 +114,13 @@ $coloractive: #CECCC0 // цвет активной строки
   justify-content: space-around
 
 
-.buttonChanel
-  display: flex
-  flex-direction: column
-  align-items: flex-start
-  border: 0
-  padding: 0
-  align-content: left
-  outline: none
-  width: 100%
-  color: $colorText
+.buttonChannel
+  margin-top: 40px
+
+  button
+    span
+      font-size: 16px
+      font-weight: 600
 
 .buttonSelect
   display: flex
@@ -122,27 +136,17 @@ $coloractive: #CECCC0 // цвет активной строки
   background-color: $color
 
 .chanelsImg
-  width: 22px
-  height: 22px
   transition-property: transform
-  transition-duration: 1000ms
+  transition-duration: 500ms
   transform: rotate(90deg)
-  color: var(--workspace-icon-background)
 
 .chanelsImgRotate
-  width: 22px
-  height: 22px
   transition-property: transform
-  transition-duration: 1000ms
+  transition-duration: 500ms
   transform: none
-  color: var(--workspace-icon-background)
 
 .buttonSelect:hover
-  background-color: #CECCC0
-
-.buttonSelect:focus
-  outline: none
-  font-weight: bold
+  background-color: var(--chat-background-primary)
 
 .listBox
   overflow: hidden

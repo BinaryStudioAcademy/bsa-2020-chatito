@@ -45,7 +45,6 @@ const CreateDirectModal: FunctionComponent<IProps> = ({
       users
     };
     createDirect(newDirect);
-    toggleModal({ modalType: ModalTypes.CreateDirect, show: false });
   };
 
   return (
@@ -53,7 +52,7 @@ const CreateDirectModal: FunctionComponent<IProps> = ({
       isShown={isShown}
       onHide={handleCloseModal}
     >
-      <CreateDirectForm createDirect={getNewDirectData} />
+      <CreateDirectForm createDirect={getNewDirectData} closeModal={handleCloseModal} />
     </ModalWindow>
   );
 };
