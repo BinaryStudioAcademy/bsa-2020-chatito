@@ -19,7 +19,8 @@ class ChatRepository extends Repository<Chat> {
     const chatInfoToSend = await this.createQueryBuilder('chat')
     .select([
       'chat.name',
-      'chat.type'
+      'chat.type',
+      'chat.id'
     ])
     .where('chat."id" = :id', { id })
     .getOne()

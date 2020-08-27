@@ -143,7 +143,7 @@ const Thread: FunctionComponent<IProps> = ({
 
 const mapStateToProps = (state: IAppState) => {
   const draftComments = state.workspace.activeThread?.post.draftComments;
-  const currChatHash = state.chat.chat ? state.chat.chat!.hash : null;
+  const currChatHash = state.chat.chat ? state.chat.chat.hash : null;
   return {
     // eslint-disable-next-line
     currChatHash,
