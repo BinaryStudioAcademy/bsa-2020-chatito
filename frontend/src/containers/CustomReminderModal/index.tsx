@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import { IAppState } from 'common/models/store';
 import { showModalRoutine } from 'routines/modal';
 import { addReminderRoutine } from 'scenes/Chat/routines';
-import { IChat } from 'common/models/chat/IChatWithUnread';
 
 interface IProps {
   toggleModal: IBindingCallback1<any>;

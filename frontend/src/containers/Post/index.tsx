@@ -206,7 +206,6 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
           <ButtonMore />
         </div>
       </Media.Body>
-      <CustomReminderModal />
     </Media>
   );
 };
