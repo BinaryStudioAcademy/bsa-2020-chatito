@@ -16,5 +16,4 @@ export interface IChat {
   unreadCount?: number;
   hash: string;
   draftPosts?: IDraftPost[];
-  unreadPosts?: IPost[];
 }
