@@ -211,7 +211,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       const workspaceChatsCopy = state[chatTypeKey];
       workspaceChatsCopy.forEach(chat => {
         if (chat.id === payload.chatId) {
-          chat.users.push(...payload.user);
+          chat.users.push(...payload.users);
         }
       });
       if (chatTypeKey === 'channels') {
