@@ -37,6 +37,10 @@ const ChatMembers: FunctionComponent<any> = ({
     getUserList(chat.id);
   };
 
+  const onInvite = () => {
+    toggleModal({ modalType: ModalTypes.InviteChat, show: true });
+  };
+
   const isCreator = chat.createdByUserId === currentUser.id;
   return (
     <ModalWindow
@@ -44,6 +48,7 @@ const ChatMembers: FunctionComponent<any> = ({
       onHide={handleCloseModal}
     >
       <div>
+        <button type="button" onClick={onInvite}>Add user</button>
         {chat.users.map((user: IUser) => {
           if (isCreator) {
             return null;
