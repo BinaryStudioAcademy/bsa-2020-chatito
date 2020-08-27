@@ -1,3 +1,4 @@
+import { ModalTypes } from 'common/enums/ModalTypes';
 import { all, put, call, takeEvery } from 'redux-saga/effects';
 import {
   setCurrentChatRoutine,
@@ -6,7 +7,9 @@ import {
   createChatRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
+  addReminderRoutine,
   addUsersToChatRoutine,
+  addReminderSuccessPostRoutine,
   createChatAndAddPostRoutine,
   upsertDraftPostRoutine,
   deleteDraftPostRoutine,
@@ -26,6 +29,7 @@ import { IPost } from 'common/models/post/IPost';
 import { toastrError, toastrSuccess } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
 import { IUser } from 'common/models/user/IUser';
+import { addReminder } from 'services/reminderService';
 import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
 import { upsertDraftPost, deleteDraftPost } from 'services/draftService';
@@ -151,7 +155,23 @@ function* removeUserFromChatRequest({ payload }: Routine<any>) {
 }
 
 function* watchRemoveUserFromChat() {
-  yield takeEvery(removeUserFromChatRoutine.TRIGGER, removeUserFromChatRequest);
+  yield takeEvery(addReminderRoutine.TRIGGER, removeUserFromChatRequest);
+}
+
+function* createReminderRequest({ payload }: Routine<any>) {
+  try {
+    const reminder = yield call(addReminder, payload);
+    yield put(addReminderRoutine.success(reminder));
+    yield put(showModalRoutine({ modalType: ModalTypes.SetReminder, show: false }));
+    yield put(addReminderSuccessPostRoutine.success(payload));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(addReminderRoutine.failure());
+  }
+}
+
+function* watchCreateReminderRequest() {
+  yield takeEvery(addReminderRoutine.TRIGGER, createReminderRequest);
 }
 
 function* fetchNavigationPostRequest({ payload }: Routine<any>) {
@@ -197,6 +217,7 @@ export default function* chatSaga() {
     watchFetchChatUsersRequest(),
     watchRemoveUserFromChat(),
     watchFetchNavigationPost(),
+    watchCreateReminderRequest(),
     watchCreateChatAndAddPost()
   ]);
 }

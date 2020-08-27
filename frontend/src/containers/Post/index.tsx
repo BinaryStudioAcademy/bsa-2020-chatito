@@ -103,7 +103,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
   return (
     <div ref={postRef}>
       <Media className={styles.postWrapper}>
-        <ProfilePreview user={createdByUser} openProfile={showUserProfile} />
+        <ProfilePreview user={createdByUser} onSend={onSend} openProfile={showUserProfile} />
         <Media.Body bsPrefix={styles.body}>
           <button
             onClick={() => showUserProfile(createdByUser)}
