@@ -89,52 +89,55 @@ const Thread: FunctionComponent<IProps> = ({
 
           {!hideCloseBtn && <FontAwesomeIcon onClick={onHide} icon={faTimesCircle} className={styles.closeBtn} />}
         </header>
-        <div className={styles.threadPost}>
-          <Post post={post} type={PostType.Post} />
-        </div>
-        {showOnlyTwoComments
-          ? (
-            <button
-              type="button"
-              onClick={() => setShowAll(!showAll)}
-              className={styles.link}
-            >
-              Show other replies
-            </button>
-          ) : ('')}
-        <div className={styles.threadComments}>
-          {comments.map((comment, index) => (
-            index < maxComment
-              ? (
-                <Post
-                  key={comment.id}
-                  post={comment}
-                  type={PostType.Comment}
-                />
-              )
-              : null
-          ))}
-        </div>
-        {comments.length > maxComment
-          ? (
-            <div className={styles.commentsMore}>
-              {`And ${comments.length - maxComment} more comments`}
-            </div>
-          ) : ('')}
-        <div className={styles.textEditor}>
-          <TextEditor
-            key={draftCommentText}
-            placeholder="write a comment!"
-            height={110}
-            draftPayload={{ postId: post.id }}
-            draftInput={{
-              id: draftCommentId,
-              text: draftCommentText
-            }}
-            upsertDraft={upsertDraftComment}
-            deleteDraft={deleteDraftComment}
-            onSend={sendCommentHandler}
-          />
+        <div className={styles.threadBlock}>
+
+          <div className={styles.threadPost}>
+            <Post post={post} type={PostType.Post} />
+          </div>
+          {showOnlyTwoComments
+            ? (
+              <button
+                type="button"
+                onClick={() => setShowAll(!showAll)}
+                className={styles.link}
+              >
+                Show other replies
+              </button>
+            ) : ('')}
+          <div className={styles.threadComments}>
+            {comments.map((comment, index) => (
+              index < maxComment
+                ? (
+                  <Post
+                    key={comment.id}
+                    post={comment}
+                    type={PostType.Comment}
+                  />
+                )
+                : null
+            ))}
+          </div>
+          {comments.length > maxComment
+            ? (
+              <div className={styles.commentsMore}>
+                {`And ${comments.length - maxComment} more comments`}
+              </div>
+            ) : ('')}
+          <div className={styles.textEditor}>
+            <TextEditor
+              key={draftCommentText}
+              placeholder="write a comment!"
+              height={110}
+              draftPayload={{ postId: post.id }}
+              draftInput={{
+                id: draftCommentId,
+                text: draftCommentText
+              }}
+              upsertDraft={upsertDraftComment}
+              deleteDraft={deleteDraftComment}
+              onSend={sendCommentHandler}
+            />
+          </div>
         </div>
       </LoaderWrapper>
     </div>
