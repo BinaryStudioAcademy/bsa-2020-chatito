@@ -13,7 +13,13 @@ class DraftCommentRepository extends Repository<DraftComment> {
       .returning(['id', 'text', 'createdByUser', 'post'])
       .execute();
 
-    return draftComment.raw[0];
+    return this.createQueryBuilder()
+      .select('draft_comment')
+      .from(DraftComment, 'draft_comment')
+      .where('draft_comment.id = :id', { id: draftComment.raw[0].id })
+      .leftJoinAndSelect('draft_comment.post', 'post')
+      .leftJoinAndSelect('post.chat', 'chat')
+      .getOne();
   }
 
   async deleteDraftComment(userId: string, postId: string) {

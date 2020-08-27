@@ -10,10 +10,15 @@ class DraftPostRepository extends Repository<DraftPost> {
       .into(DraftPost)
       .values(data)
       .orUpdate({ conflict_target: ['id'], overwrite: ['text'] })
-      .returning(['id', 'text', 'createdByUser', 'chat'])
+      .returning(['id', 'text', 'createdByUser', 'chat', 'hash', 'chat.hash'])
       .execute();
 
-    return draftPost.raw[0];
+    return this.createQueryBuilder()
+      .select('draft_post')
+      .from(DraftPost, 'draft_post')
+      .where('draft_post.id = :id', { id: draftPost.raw[0].id })
+      .leftJoinAndSelect('draft_post.chat', 'chat')
+      .getOne();
   }
 
   async getDraftPost(userId: string, chatId: string) {
@@ -26,12 +31,14 @@ class DraftPostRepository extends Repository<DraftPost> {
   }
 
   async deleteDraftPost(userId: string, chatId: string) {
-    await this.createQueryBuilder()
+    const res = await this.createQueryBuilder()
       .delete()
       .from(DraftPost)
       .where('draft_post."createdByUserId" = :userId', { userId })
       .andWhere('draft_post."chatId" = :chatId', { chatId })
+      .returning(['id'])
       .execute();
+    return res.raw[0];
   }
 
   async getByUserAndWorkspace(userId: string, workspaceId: string): Promise<DraftPost[]> {

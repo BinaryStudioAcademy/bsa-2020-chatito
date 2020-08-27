@@ -1,10 +1,12 @@
 import { Routine } from 'redux-saga-routines';
-import { addPostReactionRoutine,
+import {
+  addPostReactionRoutine,
   deletePostReactionRoutine,
   addPostReactionWithSocketRoutine,
   deletePostReactionWithSocketRoutine
 } from 'containers/Post/routines';
-import { setCurrentChatRoutine,
+import {
+  setCurrentChatRoutine,
   setPostsRoutine,
   createChatRoutine,
   addPostWithSocketRoutine,
@@ -88,6 +90,7 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         };
       }
       return state;
+
     case deleteDraftPostWithSocketRoutine.TRIGGER:
       if (state.chat) {
         return {
