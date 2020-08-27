@@ -9,7 +9,8 @@ import { setCurrentChatRoutine,
   removeUserFromChatRoutine,
   upsertDraftPostRoutine,
   deleteDraftPostRoutine,
-  updatePostDraftCommentRoutine
+  updatePostDraftCommentRoutine,
+  fetchNavigationPostRoutine
 } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
@@ -169,6 +170,19 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     case removeUserFromChatRoutine.FAILURE:
       return {
         ...state, loading: false
+      };
+    case fetchNavigationPostRoutine.TRIGGER:
+      return {
+        ...state,
+        hasMorePosts: false
+      };
+    case fetchNavigationPostRoutine.SUCCESS:
+      return {
+        ...state,
+        posts: [...payload, ...(state.posts || [])],
+        loading: false,
+        hasMorePosts: Boolean(payload.length),
+        fetchFrom: payload.length
       };
     default:
       return state;

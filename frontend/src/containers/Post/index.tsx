@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, MutableRefObject } from 'react';
 import { connect } from 'react-redux';
 import { Card, Media } from 'react-bootstrap';
 import dayjs from 'dayjs';
@@ -24,10 +24,11 @@ interface IProps {
   addPostReaction: IBindingCallback1<IPostReactionRoutine>;
   deletePostReaction: IBindingCallback1<IPostReactionRoutine>;
   showUserProfile: IBindingCallback1<IUser>;
+  postRef: MutableRefObject<any> | null;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
-  addPostReaction, deletePostReaction, showUserProfile }) => {
+  addPostReaction, deletePostReaction, showUserProfile, postRef }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
 
@@ -104,38 +105,40 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
   };
 
   return (
-    <Media className={styles.postWrapper}>
-      <ProfilePreview user={createdByUser} onSend={onSend} openProfile={showUserProfile} />
-      <Media.Body bsPrefix={styles.body}>
-        <button
-          onClick={() => showUserProfile(createdByUser)}
-          className={`${styles.author} button-unstyled`}
-          type="button"
-        >
-          {createdByUser.fullName}
-        </button>
+    <div ref={postRef}>
+      <Media className={styles.postWrapper}>
+        <ProfilePreview user={createdByUser} onSend={onSend} openProfile={showUserProfile} />
+        <Media.Body bsPrefix={styles.body}>
+          <button
+            onClick={() => showUserProfile(createdByUser)}
+            className={`${styles.author} button-unstyled`}
+            type="button"
+          >
+            {createdByUser.fullName}
+          </button>
 
-        <br />
+          <br />
 
-        <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
-        {/* eslint-disable-next-line */}
-        <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
-        <div className={styles.emojiStats}>
-          {type === PostType.Post && renderEmojis()}
-        </div>
-        <div className={styles.footer}>
-          {openThread && (
-            <Card.Link
-              bsPrefix={styles.openThreadBtn}
-              onClick={() => openThread(post)}
-            >
-              Reply
-            </Card.Link>
-          )}
-          {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
-        </div>
-      </Media.Body>
-    </Media>
+          <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
+          {/* eslint-disable-next-line */}
+          <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
+          <div className={styles.emojiStats}>
+            {type === PostType.Post && renderEmojis()}
+          </div>
+          <div className={styles.footer}>
+            {openThread && (
+              <Card.Link
+                bsPrefix={styles.openThreadBtn}
+                onClick={() => openThread(post)}
+              >
+                Reply
+              </Card.Link>
+            )}
+            {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
+          </div>
+        </Media.Body>
+      </Media>
+    </div>
   );
 };
 

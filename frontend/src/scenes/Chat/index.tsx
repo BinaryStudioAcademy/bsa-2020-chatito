@@ -16,6 +16,7 @@ interface IProps {
     params: {
       whash: string;
       chash: string;
+      postId: string;
     };
   };
   chats: IChat[];
@@ -35,7 +36,7 @@ const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, selectChat }
     <Loader loading={isLoading}>
       <div className={styles.chatContainer}>
         <ChatHeader />
-        <ChatBody />
+        <ChatBody postId={match?.params?.postId} />
         <ChatFooter />
       </div>
     </Loader>

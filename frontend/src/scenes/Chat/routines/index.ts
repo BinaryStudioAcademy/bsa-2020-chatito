@@ -13,3 +13,4 @@ export const addPostWithSocketRoutine = createRoutine('ADD_POST_WITH_SOCKET');
 export const editPostWithSocketRoutine = createRoutine('EDIT_POST_WITH_SOCKET');
 export const addChatWithSocketRoutine = createRoutine('ADD_CHAT_WITH_SOCKET');
 export const addUsersToChatRoutine = createRoutine('ADD_USERS_TO_CHAT');
+export const fetchNavigationPostRoutine = createRoutine('FETCH_NAVIGATION_POST');
