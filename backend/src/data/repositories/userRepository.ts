@@ -1,5 +1,5 @@
-import { IUserUnreadPosts } from '../../common/models/user/IUserUnreadPosts';
 import { EntityRepository, Repository } from 'typeorm';
+import { IUserUnreadPosts } from '../../common/models/user/IUserUnreadPosts';
 import { User } from '../entities/User';
 import { ICreateUser } from '../../common/models/user/ICreateUser';
 import { IUserClient } from '../../common/models/user/IUserClient';
@@ -24,14 +24,14 @@ class UserRepository extends Repository<User> {
   }
 
   async markAsRead(id: string, postId: string): Promise<string> {
-    await this.createQueryBuilder().relation(User, 'unreadPosts').of(id).remove(postId)
-    return(postId)
+    await this.createQueryBuilder().relation(User, 'unreadPosts').of(id).remove(postId);
+    return postId;
   }
 
   async getUnreadById(id: string): Promise<IUserUnreadPosts> {
     const postIds = await this.createQueryBuilder('user')
       .select([
-        'user.id',
+        'user.id'
       ])
       .leftJoinAndSelect('user.unreadPosts', 'unreadposts')
       .where('user.id = :id', { id })
@@ -46,8 +46,9 @@ class UserRepository extends Repository<User> {
   getById(id: string): Promise<User> {
     return this.findOne({ where: { id }, relations: ['workspaces', 'workspacesCreated', 'chats'] });
   }
-  getByIdWithoutWorkspaces(id: string): Promise<IUser>{
-    return this.findOne({ where: { id }});
+
+  getByIdWithoutWorkspaces(id: string): Promise<IUser> {
+    return this.findOne({ where: { id } });
   }
 
   async getAllUserChats(id: string): Promise<Chat[]> {

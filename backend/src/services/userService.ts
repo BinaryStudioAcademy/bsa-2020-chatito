@@ -78,11 +78,12 @@ export const markAsUnread = async (userId: string, postId: string) => {
 
 export const markAsRead = async (userId: string, postIds: string[]) => {
   const response: string[] = [];
+  // eslint-disable-next-line no-restricted-syntax
   for (const postId of postIds) {
     const responsePostId = await getCustomRepository(UserRepository).markAsRead(userId, postId);
-    response.push(responsePostId)
+    response.push(responsePostId);
   }
-  return response
+  return response;
 };
 
 export const getUnreadById = async (userId: string) => {
