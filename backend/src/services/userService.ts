@@ -76,9 +76,13 @@ export const markAsUnread = async (userId: string, postId: string) => {
   return user;
 };
 
-export const markAsRead = async (userId: string, postId: string) => {
-  const user = await getCustomRepository(UserRepository).markAsRead(userId, postId);
-  return user;
+export const markAsRead = async (userId: string, postIds: string[]) => {
+  const response: string[] = [];
+  for (const postId of postIds) {
+    const responsePostId = await getCustomRepository(UserRepository).markAsRead(userId, postId);
+    response.push(responsePostId)
+  }
+  return response
 };
 
 export const getUnreadById = async (userId: string) => {

@@ -1,4 +1,4 @@
-import { IUserUnreadPosts } from './../../common/models/user/IUserUnreadPosts';
+import { IUserUnreadPosts } from '../../common/models/user/IUserUnreadPosts';
 import { EntityRepository, Repository } from 'typeorm';
 import { User } from '../entities/User';
 import { ICreateUser } from '../../common/models/user/ICreateUser';
@@ -23,8 +23,9 @@ class UserRepository extends Repository<User> {
     await this.createQueryBuilder().relation(User, 'unreadPosts').of(id).add(postId);
   }
 
-  async markAsRead(id: string, postId: string): Promise<void> {
+  async markAsRead(id: string, postId: string): Promise<string> {
     await this.createQueryBuilder().relation(User, 'unreadPosts').of(id).remove(postId)
+    return(postId)
   }
 
   async getUnreadById(id: string): Promise<IUserUnreadPosts> {

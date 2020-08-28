@@ -25,6 +25,6 @@ router
   .post('/invite', run((req: Request) => checkInvitedUserRegistered(req.body)))
   .post('/add-to-workspace', run((req: Request) => addWorkspaceToUser(req.user.id, req.body.workspaceId)))
   .post('/unread', run((req: Request) => markAsUnread(req.user.id, req.body.postId)))
-  .delete('/read/:id', run((req: Request) => markAsRead(req.user.id, req.params.id)));
+  .post('/read', run((req: Request) => markAsRead(req.user.id, req.body.postIds)));
 
 export default router;

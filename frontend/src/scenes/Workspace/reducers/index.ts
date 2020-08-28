@@ -27,6 +27,7 @@ import {
   upsertDraftCommentWithSocketRoutine,
   deleteDraftCommentWithSocketRoutine
 } from 'containers/Thread/routines';
+import { deleteUnreadPosts } from 'services/userService';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
@@ -288,18 +289,27 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state, loading: false
       };
     case readPostRoutine.TRIGGER:
+      return {
+        ...state
+      };
     case readPostRoutine.SUCCESS: {
       const postId = payload;
       const unreadChats = [...state.unreadChats];
+      let postsToDelete: IPost[] = [];
+      const postIdsToDelete: string[] = [];
       unreadChats.forEach((unreadChat, chatIndex) => {
         const unreadPostCopy = unreadChat.unreadPosts;
         unreadChat.unreadPosts.forEach((unreadPost, index) => {
           if (unreadPost.id === postId) {
-            unreadPostCopy.splice(0, index + 1);
+            postsToDelete = [...unreadPostCopy.splice(0, index + 1)];
           }
         });
         unreadChats[chatIndex].unreadPosts = [...unreadPostCopy];
       });
+      postsToDelete.forEach(postToDelete => {
+        postIdsToDelete.push(postToDelete.id);
+      });
+      deleteUnreadPosts(postIdsToDelete);
       return {
         ...state, unreadChats
       };

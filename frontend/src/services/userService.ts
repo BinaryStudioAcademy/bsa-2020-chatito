@@ -30,3 +30,7 @@ export const getUnreadPosts = async (id: string): Promise<IUserUnreadPosts> => {
   const response: IUserUnreadPosts = await api.get(`/api/users/unread/${id}`);
   return response;
 };
+
+export const deleteUnreadPosts = async (postIds: string[]): Promise<void> => {
+  await api.post('/api/users/read', { postIds });
+};

@@ -176,7 +176,6 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, curr
       if (unreadChat.id === currentChatId) {
         unreadChat.unreadPosts.forEach(unreadPost => {
           if (unreadPost.id === post.id) {
-            console.log(unreadChat.id, unreadPost.id);
             readPost(unreadPost.id);
           }
         });

@@ -114,7 +114,6 @@ export const connectSockets = () => {
     chatType: ChatType,
     chatId: string
   ) => {
-    console.log(users, chatName, chatType, chatId);
     store.dispatch(newUserNotificationWithSocketRoutine({ users, chatType, chatId }));
     if (users.length === 1) {
       toastrSuccess(`User ${users[0].displayName} was invited to channel "${chatName}"`);
