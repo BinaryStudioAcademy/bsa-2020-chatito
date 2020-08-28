@@ -78,7 +78,6 @@ const mapStateToProps = (state: IAppState) => {
     modal: { chatMembers },
     user: { user: currentUser }
   } = state;
-  console.log(state);
   return {
     isShown: chatMembers,
     chat,

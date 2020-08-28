@@ -146,7 +146,6 @@ function* watchFetchChatUsersRequest() {
 function* removeUserFromChatRequest({ payload }: Routine<any>) {
   try {
     const { chatId, userId } = payload;
-    console.log(chatId, userId);
     yield call(removeUserFromChat, chatId, userId);
     yield put(removeUserFromChatRoutine.success(userId));
   } catch (error) {

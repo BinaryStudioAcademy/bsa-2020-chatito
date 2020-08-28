@@ -32,7 +32,6 @@ export async function fetchChatUsers(chatId: string) {
 
 export async function removeUserFromChat(chatId: string, userId: string) {
   const response = await api.delete(`/api/chats/${chatId}/users/${userId}`);
-  console.log(response);
   return response;
 }
 
