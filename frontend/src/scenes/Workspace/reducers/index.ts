@@ -1,3 +1,4 @@
+import { IPost } from 'common/models/post/IPost';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 import { Routine } from 'redux-saga-routines';
 import {
@@ -12,7 +13,9 @@ import {
   addActiveCommentWithSocketRoutine,
   updateChatDraftPostRoutine,
   newUserNotificationWithSocketRoutine,
-  markAsUnreadWithSocketRoutine } from '../routines';
+  markAsUnreadWithSocketRoutine,
+  fetchUnreadUserPostsRoutine,
+  readPostRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
@@ -216,7 +219,6 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       const chatTypeKey = payload.chatType === ChatType.Channel ? 'channels' : 'directMessages';
       const workspaceChatsCopy = state[chatTypeKey];
       workspaceChatsCopy.forEach(chat => {
-        console.log(chat.id, payload.chatId);
         if (chat.id === payload.chatId) {
           chat.users.push(...payload.users);
         }
@@ -251,6 +253,58 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state, unreadChats: [...unreadChatsCopy]
       };
     }
+    case fetchUnreadUserPostsRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case fetchUnreadUserPostsRoutine.SUCCESS: {
+      const unreadPosts: IPost[] = [...payload.unreadPosts];
+      const unreadChats = [...state.unreadChats];
+      if (unreadPosts.length) {
+        unreadPosts.forEach(unreadPost => {
+          let chatExists = false;
+          if (unreadChats.length) {
+            unreadChats.forEach(unreadChat => {
+              if (unreadPost.chatId === unreadChat.id) {
+                unreadChat.unreadPosts.push(unreadPost);
+                chatExists = true;
+              }
+            });
+          }
+          if (!chatExists) {
+            unreadChats.push({ id: unreadPost.chatId!, unreadPosts: [unreadPost] });
+          }
+        });
+      }
+      unreadChats.forEach(unreadChat => {
+        unreadChat.unreadPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      });
+      return {
+        ...state, loading: false, unreadChats
+      };
+    }
+    case fetchUnreadUserPostsRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
+    case readPostRoutine.TRIGGER:
+    case readPostRoutine.SUCCESS: {
+      const postId = payload;
+      const unreadChats = [...state.unreadChats];
+      unreadChats.forEach((unreadChat, chatIndex) => {
+        const unreadPostCopy = unreadChat.unreadPosts;
+        unreadChat.unreadPosts.forEach((unreadPost, index) => {
+          if (unreadPost.id === postId) {
+            unreadPostCopy.splice(0, index + 1);
+          }
+        });
+        unreadChats[chatIndex].unreadPosts = [...unreadPostCopy];
+      });
+      return {
+        ...state, unreadChats
+      };
+    }
+    case readPostRoutine.FAILURE:
     default:
       return state;
   }

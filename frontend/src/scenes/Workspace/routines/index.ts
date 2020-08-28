@@ -15,3 +15,5 @@ export const fetchWorkspaceUsersRoutine = createRoutine('FETCH_WORKSPACE_USERS')
 export const updateChatDraftPostRoutine = createRoutine('UPDATE_CHAT_DRAFT_POST');
 export const newUserNotificationWithSocketRoutine = createRoutine('NEW_USER_NOTIFICATION_WITH_SOCKET');
 export const markAsUnreadWithSocketRoutine = createRoutine('MARK_AS_UNREAD_WITH_SOCKET');
+export const fetchUnreadUserPostsRoutine = createRoutine('FETCH_UNREAD_USER_POSTS_ROUTINE');
+export const readPostRoutine = createRoutine('READ_POST_ROUTINE');

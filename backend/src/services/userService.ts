@@ -72,11 +72,16 @@ export const addWorkspaceToUser = async (userId: string, workspaceId: string) =>
 };
 
 export const markAsUnread = async (userId: string, postId: string) => {
-  const user = await getCustomRepository(UserRepository).markAsUnread(userId, postId) 
-  return user
+  const user = await getCustomRepository(UserRepository).markAsUnread(userId, postId);
+  return user;
 };
 
 export const markAsRead = async (userId: string, postId: string) => {
-  const user = await getCustomRepository(UserRepository).markAsRead(userId, postId) 
-  return user
+  const user = await getCustomRepository(UserRepository).markAsRead(userId, postId);
+  return user;
+};
+
+export const getUnreadById = async (userId: string) => {
+  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadById(userId);
+  return unreadUserPostIds;
 };

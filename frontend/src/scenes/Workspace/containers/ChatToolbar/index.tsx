@@ -30,11 +30,13 @@ import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { Routes } from 'common/enums/Routes';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 import { createDirectChannelName } from 'common/helpers/nameHelper';
+import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 
 interface IProps {
   channels: IChat[];
   directMessages: IChat[];
   selectedChat: IChat;
+  unreadChats: IUnreadChat[];
   selectedWorkspace: IWorkspace;
   currentUserId: string;
   showModal: IBindingCallback1<IModalRoutine>;
@@ -45,6 +47,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
   selectedChat,
+  unreadChats,
   currentUserId,
   showModal,
   router,
@@ -86,6 +89,25 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     </button>
   );
 
+  const unreadMarker = (chatId: string) => (
+    unreadChats.map(unreadChat => {
+      if (unreadChat.id === chatId && unreadChat.unreadPosts.length) {
+        return (
+          <div className={styles.unreadContainer} key={unreadChat.id}>
+            <div className={styles.unreadCircle}>
+              {unreadChat.unreadPosts.length < 10 ? (
+                <span className={styles.unreadAmount}>{unreadChat.unreadPosts.length}</span>
+              ) : (
+                <span className={`${styles.unreadAmountNineMore} ${styles.unreadAmount}`}>9+</span>
+              )}
+            </div>
+          </div>
+        );
+      }
+      return '';
+    })
+  );
+
   const userChannel = (channel: IChat) => {
     const { name, isPrivate, id, draftPosts } = channel;
     const draftPostText = draftPosts?.length ? draftPosts[0].text : undefined;
@@ -103,8 +125,8 @@ const ChatToolbar: FunctionComponent<IProps> = ({
               ? <FontAwesomeIcon icon={faPencilAlt} size="xs" />
               : null
           }
-
         </div>
+        {unreadMarker(id)}
       </button>
     );
   };
@@ -134,6 +156,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
               : null
           }
         </div>
+        {unreadMarker(id)}
       </button>
     );
   };
@@ -236,7 +259,8 @@ const mapStateToProps = (state: IAppState) => ({
   directMessages: state.workspace.directMessages || [],
   selectedWorkspace: state.workspace.workspace,
   isLoading: state.workspace.loading,
-  selectedChat: state.chat.chat as IChat
+  selectedChat: state.chat.chat as IChat,
+  unreadChats: state.workspace.unreadChats
 });
 
 const mapDispatchToProps = {

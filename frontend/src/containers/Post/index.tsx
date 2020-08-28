@@ -17,8 +17,9 @@ import { PostType } from 'common/enums/PostType';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
-import { showUserProfileRoutine } from 'scenes/Workspace/routines';
+import { showUserProfileRoutine, readPostRoutine } from 'scenes/Workspace/routines';
 import ReminderItem from 'components/ReminderItem/ReminderItem';
+import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 
 interface IProps {
   post: IPost;
@@ -30,10 +31,13 @@ interface IProps {
   showUserProfile: IBindingCallback1<IUser>;
   showModal: IBindingCallback1<IModalRoutine>;
   isShown: boolean;
+  unreadChats: IUnreadChat[];
+  currentChatId: string;
+  readPost: IBindingCallback1<string>;
 }
 
-const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
-  showUserProfile, addPostReaction, deletePostReaction, showModal, isShown }) => {
+const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, currentChatId,
+  showUserProfile, addPostReaction, deletePostReaction, showModal, isShown, unreadChats, readPost }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
 
@@ -167,9 +171,20 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
       </Card.Link>
     </OverlayTrigger>
   );
-
+  const readMessage = () => {
+    unreadChats.forEach(unreadChat => {
+      if (unreadChat.id === currentChatId) {
+        unreadChat.unreadPosts.forEach(unreadPost => {
+          if (unreadPost.id === post.id) {
+            console.log(unreadChat.id, unreadPost.id);
+            readPost(unreadPost.id);
+          }
+        });
+      }
+    });
+  };
   return (
-    <Media className={styles.postWrapper}>
+    <Media className={styles.postWrapper} onMouseEnter={readMessage}>
       <ProfilePreview user={createdByUser} openProfile={showUserProfile} />
       <Media.Body bsPrefix={styles.body}>
         <button
@@ -207,14 +222,17 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
 
 const mapStateToProps = (state: IAppState) => ({
   userId: state.user.user?.id as string,
-  isShown: state.modal.setReminder
+  isShown: state.modal.setReminder,
+  unreadChats: state.workspace.unreadChats,
+  currentChatId: state.chat.chat!.id
 });
 
 const mapDispatchToProps = {
   addPostReaction: addPostReactionRoutine,
   deletePostReaction: deletePostReactionRoutine,
   showModal: showModalRoutine,
-  showUserProfile: showUserProfileRoutine
+  showUserProfile: showUserProfileRoutine,
+  readPost: readPostRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

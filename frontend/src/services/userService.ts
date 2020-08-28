@@ -2,6 +2,7 @@ import api from '../common/helpers/apiHelper';
 import { IUser } from 'common/models/user/IUser';
 import { IForgotPasswordInput } from 'common/models/auth/IForgotPasswordInput';
 import { IEditStatusData } from 'common/models/status/IEditStatusData';
+import { IUserUnreadPosts } from 'common/models/user/IUserUnreadPosts';
 
 export const editStatus = async (editStatusData: IEditStatusData) => {
   const response = await api.put('/api/users/edit-status', editStatusData);
@@ -23,4 +24,9 @@ export const forgotPassword = async (forgotpassword: IForgotPasswordInput) => {
 
 export const resetPassword = async (password: string, token: string) => {
   await api.put('/api/auth/resetpass', { password, token });
+};
+
+export const getUnreadPosts = async (id: string): Promise<IUserUnreadPosts> => {
+  const response: IUserUnreadPosts = await api.get(`/api/users/unread/${id}`);
+  return response;
 };
