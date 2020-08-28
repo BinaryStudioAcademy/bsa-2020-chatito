@@ -33,6 +33,9 @@ export class User extends AbstractEntity {
   @Column({ nullable: true, length: 100 })
   status: string;
 
+  @Column({ default: 'https://mobcup.net/d/c76xxfvk/mp3' })
+  audio: string
+
   @OneToMany(() => Post, post => post.createdByUser)
   posts: Post[];
 

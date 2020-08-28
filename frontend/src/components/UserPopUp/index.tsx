@@ -58,6 +58,7 @@ const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditPr
       <button type="button" className={styles.panelSelect} onClick={() => { buttonClick(onSingOut); }}>
         Sign Out
       </button>
+
     </Popover>
   );
 
