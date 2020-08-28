@@ -37,17 +37,23 @@ const ChatMembers: FunctionComponent<any> = ({
     await getUserList(chat.id);
   };
 
+  const onInvite = () => {
+    toggleModal({ modalType: ModalTypes.InviteChat, show: true });
+  };
+
+  const isCreator = chat.createdByUserId === currentUser.id;
+
   return (
     <ModalWindow
       isShown={isShown}
       onHide={handleCloseModal}
     >
       <div>
+        <button type="button" onClick={onInvite}>Add user</button>
         {
           chat.users.length <= 1
             ? 'You are the only member of this chat!'
             : chat.users.map((user: IUser) => {
-              const isCreator = chat.createdByUserId === currentUser.id;
               if (currentUser.id === user.id) {
                 return null;
               }

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, RefObject } from 'react';
 import styles from './styles.module.sass';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
@@ -7,10 +7,11 @@ import Post from 'containers/Post';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { setActiveThreadRoutine } from 'scenes/Workspace/routines';
 import InfiniteScroll from 'react-infinite-scroller';
-import { setPostsRoutine } from 'scenes/Chat/routines';
+import { setPostsRoutine, fetchNavigationPostRoutine } from 'scenes/Chat/routines';
 import { IFetchMorePosts } from 'common/models/post/IFetchMorePosts';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { PostType } from 'common/enums/PostType';
+import { IFetchNavPost } from 'common/models/post/IFetchNavPost';
 import CustomReminderModal from 'containers/CustomReminderModal';
 
 interface IProps {
@@ -23,6 +24,8 @@ interface IProps {
   loading: boolean;
   from: number;
   count: number;
+  postId?: string;
+  fetchNavigationPost: IBindingCallback1<IFetchNavPost>;
 }
 
 const ChatBody: React.FC<IProps> = ({
@@ -34,7 +37,9 @@ const ChatBody: React.FC<IProps> = ({
   hasMorePosts,
   loading,
   from,
-  count
+  count,
+  postId,
+  fetchNavigationPost
 }) => {
   const chatBody = useRef<HTMLDivElement>(null);
 
@@ -42,12 +47,28 @@ const ChatBody: React.FC<IProps> = ({
     loadMorePosts({ chatId, from, count });
   };
 
+  const scrollToRef = (ref: RefObject<HTMLElement>) => {
+    ref.current!.scrollIntoView({
+      block: 'start'
+    });
+  };
+
+  const postRef = useRef(null);
+
   useEffect(() => {
-    if (chatId) {
-      getMorePosts();
+    if (chatId && loading) {
+      if (postId) {
+        fetchNavigationPost({ chatId, from: 0, postId });
+      } else {
+        getMorePosts();
+      }
     }
     if (chatBody.current !== null && !loading) {
       chatBody.current.scrollTop = chatBody.current.scrollHeight;
+    }
+
+    if (postRef.current && postId) {
+      scrollToRef(postRef);
     }
   }, [loading, chatId]);
 
@@ -73,6 +94,7 @@ const ChatBody: React.FC<IProps> = ({
             <Post
               post={m}
               key={m.id}
+              postRef={m.id === postId ? postRef : null}
               openThread={handleOpenThread}
               type={PostType.Post}
             />
@@ -96,7 +118,8 @@ const mapStateToProps = (state: IAppState) => ({
 
 const mapDispatchToProps = {
   openThread: setActiveThreadRoutine,
-  loadMorePosts: setPostsRoutine
+  loadMorePosts: setPostsRoutine,
+  fetchNavigationPost: fetchNavigationPostRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatBody);

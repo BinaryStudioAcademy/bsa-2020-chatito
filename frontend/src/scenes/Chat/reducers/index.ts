@@ -1,10 +1,12 @@
 import { Routine } from 'redux-saga-routines';
-import { addPostReactionRoutine,
+import {
+  addPostReactionRoutine,
   deletePostReactionRoutine,
   addPostReactionWithSocketRoutine,
   deletePostReactionWithSocketRoutine
 } from 'containers/Post/routines';
-import { setCurrentChatRoutine,
+import {
+  setCurrentChatRoutine,
   setPostsRoutine,
   createChatRoutine,
   addPostWithSocketRoutine,
@@ -16,7 +18,8 @@ import { setCurrentChatRoutine,
   createChatAndAddPostRoutine,
   updatePostDraftCommentRoutine,
   upsertDraftPostWithSocketRoutine,
-  deleteDraftPostWithSocketRoutine
+  deleteDraftPostWithSocketRoutine,
+  fetchNavigationPostRoutine
 } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
@@ -88,6 +91,7 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         };
       }
       return state;
+
     case deleteDraftPostWithSocketRoutine.TRIGGER:
       if (state.chat) {
         return {
@@ -234,6 +238,19 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     case addReminderRoutine.FAILURE:
       return {
         ...state, loading: false
+      };
+    case fetchNavigationPostRoutine.TRIGGER:
+      return {
+        ...state,
+        hasMorePosts: false
+      };
+    case fetchNavigationPostRoutine.SUCCESS:
+      return {
+        ...state,
+        posts: [...payload, ...(state.posts || [])],
+        loading: false,
+        hasMorePosts: Boolean(payload.length),
+        fetchFrom: payload.length
       };
     case addReminderSuccessPostRoutine.SUCCESS:
       const { day, time, note, chatId } = payload;
