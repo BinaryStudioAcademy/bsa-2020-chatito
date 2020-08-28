@@ -144,6 +144,7 @@ function* watchFetchChatUsersRequest() {
 function* removeUserFromChatRequest({ payload }: Routine<any>) {
   try {
     const { chatId, userId } = payload;
+    console.log(chatId, userId);
     yield call(removeUserFromChat, chatId, userId);
     yield put(removeUserFromChatRoutine.success(userId));
   } catch (error) {
@@ -153,7 +154,7 @@ function* removeUserFromChatRequest({ payload }: Routine<any>) {
 }
 
 function* watchRemoveUserFromChat() {
-  yield takeEvery(addReminderRoutine.TRIGGER, removeUserFromChatRequest);
+  yield takeEvery(removeUserFromChatRoutine.TRIGGER, removeUserFromChatRequest);
 }
 
 function* createReminderRequest({ payload }: Routine<any>) {

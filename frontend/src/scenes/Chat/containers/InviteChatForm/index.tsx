@@ -7,7 +7,7 @@ import { IAppState } from 'common/models/store';
 import { IUser } from 'common/models/user/IUser';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { searchUsers } from 'common/helpers/searchHelper';
-import { addUsersToChatRoutine } from 'scenes/Chat/routines';
+import { addUsersToChatRoutine, fetchChatUsersRoutine } from 'scenes/Chat/routines';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { IAddUsersToChat } from 'common/models/chat/IAddUsersToChat';
@@ -21,12 +21,13 @@ interface IProps {
   chatUsers: IUser[];
   hideCallback: IBindingAction;
   addUsersToChat: IBindingCallback1<IAddUsersToChat>;
+  getUserList: CallableFunction;
 }
 
 let timer: NodeJS.Timeout;
 
 const InviteChatForm: React.FC<IProps> = ({ workspaceId, chatName,
-  chatId, hideCallback, addUsersToChat, chatUsers }) => {
+  chatId, hideCallback, addUsersToChat, chatUsers, getUserList }) => {
   const [text, setText] = useState('');
   const [searchedUsers, setSearchedUsers] = useState<IUser[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
@@ -69,10 +70,11 @@ const InviteChatForm: React.FC<IProps> = ({ workspaceId, chatName,
     setSelectedUsers(state => [...state.filter(user => user.id !== id)]);
   };
 
-  const onAdd = () => {
+  const onAdd = async () => {
     if (selectedUsers.length) {
       const userIds = selectedUsers.map(user => user.id);
-      addUsersToChat({ chatId, userIds });
+      await addUsersToChat({ chatId, userIds });
+      await getUserList(chatId);
     }
     onHide();
   };
@@ -133,7 +135,8 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  addUsersToChat: addUsersToChatRoutine
+  addUsersToChat: addUsersToChatRoutine,
+  getUserList: fetchChatUsersRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InviteChatForm);
