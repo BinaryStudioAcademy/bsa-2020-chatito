@@ -12,7 +12,8 @@ import {
   addReminderSuccessPostRoutine,
   createChatAndAddPostRoutine,
   upsertDraftPostRoutine,
-  deleteDraftPostRoutine
+  deleteDraftPostRoutine,
+  fetchNavigationPostRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import {
@@ -21,7 +22,8 @@ import {
   createChat,
   fetchChatUsers,
   removeUserFromChat,
-  addUsersToChat
+  addUsersToChat,
+  fetchNavigationPost
 } from 'services/chatService';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError, toastrSuccess } from 'services/toastrService';
@@ -172,6 +174,20 @@ function* watchCreateReminderRequest() {
   yield takeEvery(addReminderRoutine.TRIGGER, createReminderRequest);
 }
 
+function* fetchNavigationPostRequest({ payload }: Routine<any>) {
+  try {
+    const response = yield call(fetchNavigationPost, payload);
+    yield put(fetchNavigationPostRoutine.success(response));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(fetchNavigationPostRoutine.failure(error.message));
+  }
+}
+
+function* watchFetchNavigationPost() {
+  yield takeEvery(fetchNavigationPostRoutine.TRIGGER, fetchNavigationPostRequest);
+}
+
 function* createChatAndAddPost({ payload }: Routine<any>) {
   try {
     const chat = yield call(createChat, payload.chat);
@@ -200,6 +216,7 @@ export default function* chatSaga() {
     watchAddUsersToChat(),
     watchFetchChatUsersRequest(),
     watchRemoveUserFromChat(),
+    watchFetchNavigationPost(),
     watchCreateReminderRequest(),
     watchCreateChatAndAddPost()
   ]);

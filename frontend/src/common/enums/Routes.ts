@@ -8,6 +8,7 @@ export enum Routes {
   Profile = '/profile',
   Workspace = '/w/:whash',
   Chat = '/w/:whash/c/:chash',
+  Post = '/w/:whash/c/:chash/:postId',
   Threads = '/w/:whash/threads',
   Drafts = '/w/:whash/drafts',
   AddWorkspace = '/add-workspace',
