@@ -48,6 +48,7 @@ const ChatBody: React.FC<IProps> = ({
   };
 
   const scrollToRef = (ref: RefObject<HTMLElement>) => {
+    // eslint-disable-next-line
     ref.current!.scrollIntoView({
       block: 'start'
     });
