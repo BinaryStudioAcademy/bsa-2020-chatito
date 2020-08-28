@@ -155,7 +155,7 @@ function* removeUserFromChatRequest({ payload }: Routine<any>) {
 }
 
 function* watchRemoveUserFromChat() {
-  yield takeEvery(addReminderRoutine.TRIGGER, removeUserFromChatRequest);
+  yield takeEvery(removeUserFromChatRoutine.TRIGGER, removeUserFromChatRequest);
 }
 
 function* createReminderRequest({ payload }: Routine<any>) {

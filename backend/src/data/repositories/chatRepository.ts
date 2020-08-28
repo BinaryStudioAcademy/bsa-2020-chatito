@@ -15,16 +15,16 @@ class ChatRepository extends Repository<Chat> {
     return this.findOne({ where: { id }, relations: ['posts'] });
   }
 
-  async getNameAndTypeById(id: string){
+  async getNameAndTypeById(id: string) {
     const chatInfoToSend = await this.createQueryBuilder('chat')
-    .select([
-      'chat.name',
-      'chat.type',
-      'chat.id'
-    ])
-    .where('chat."id" = :id', { id })
-    .getOne()
-    return chatInfoToSend
+      .select([
+        'chat.name',
+        'chat.type',
+        'chat.id'
+      ])
+      .where('chat."id" = :id', { id })
+      .getOne();
+    return chatInfoToSend;
   }
 
   getByIdWithUsers(id: string): Promise<Chat> {
@@ -42,6 +42,11 @@ class ChatRepository extends Repository<Chat> {
         'chat.isPrivate',
         'user.id',
         'user.imageUrl',
+        'user.createdAt',
+        'user.fullName',
+        'user.status',
+        'user.title',
+        'user.email',
         'user.displayName',
         'draft_post.id',
         'draft_post.text'
@@ -56,12 +61,16 @@ class ChatRepository extends Repository<Chat> {
         'draft_post."chatId" = chat.id AND draft_post."createdByUserId" = :userId',
         { userId }
       )
-      .leftJoinAndSelect(
+      .leftJoin(
         'chat.users',
         'user'
       )
+      .leftJoin(
+        'chat.users',
+        'currentUser'
+      )
       .where('workspace.id = :workspaceId', { workspaceId })
-      .andWhere('user.id = :userId', { userId })
+      .andWhere('currentUser.id = :userId', { userId })
       .getMany();
     return chats;
   }
