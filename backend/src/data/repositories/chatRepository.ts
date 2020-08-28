@@ -42,6 +42,11 @@ class ChatRepository extends Repository<Chat> {
         'chat.isPrivate',
         'user.id',
         'user.imageUrl',
+        'user.createdAt',
+        'user.fullName',
+        'user.status',
+        'user.title',
+        'user.email',
         'user.displayName',
         'draft_post.id',
         'draft_post.text'
@@ -56,14 +61,18 @@ class ChatRepository extends Repository<Chat> {
         'draft_post."chatId" = chat.id AND draft_post."createdByUserId" = :userId',
         { userId }
       )
-      .where('workspace.id = :workspaceId', { workspaceId })
-      // .andWhere('user.id = :userId', { userId })
-      .leftJoinAndSelect(
+      .leftJoin(
         'chat.users',
         'user'
       )
+      .leftJoin(
+        'chat.users',
+        'currentUser'
+      )
+      .where('workspace.id = :workspaceId', { workspaceId })
+      .andWhere('currentUser.id = :userId', { userId })
       .getMany();
-    console.log(chats);
+
     return chats;
   }
 
@@ -118,9 +127,7 @@ class ChatRepository extends Repository<Chat> {
       relations: ['users'],
       where: { id: chatId }
     });
-    console.log(`Do ${chat.users}`);
     chat.users = chat.users.filter((user: IUser) => user.id !== userId);
-    console.log(`Posle ${chat.users}`);
     chat.save();
   }
 }
