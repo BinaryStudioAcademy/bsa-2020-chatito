@@ -25,8 +25,9 @@ class UserRepository extends Repository<User> {
   getById(id: string): Promise<User> {
     return this.findOne({ where: { id }, relations: ['workspaces', 'workspacesCreated', 'chats'] });
   }
-  getByIdWithoutWorkspaces(id: string): Promise<IUser>{
-    return this.findOne({ where: { id }});
+
+  getByIdWithoutWorkspaces(id: string): Promise<IUser> {
+    return this.findOne({ where: { id } });
   }
 
   async getAllUserChats(id: string): Promise<Chat[]> {
@@ -45,7 +46,7 @@ class UserRepository extends Repository<User> {
     return user;
   }
 
-  async editUser(id:string, data: IUserClient): Promise<User> {
+  async editUser(id: string, data: IUserClient): Promise<User> {
     await this.update(
       id,
       data

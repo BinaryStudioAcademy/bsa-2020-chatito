@@ -1,0 +1,55 @@
+.cropAvatar
+  padding: 5px 10px
+  overflow-y: auto
+
+.cropAvatar::-webkit-scrollbar
+  width: 8px
+
+.cropAvatar::-webkit-scrollbar-thumb
+  background: var(--scrollbar)
+  border-radius: 5px
+
+.header
+  font-size: 18px
+  margin-bottom: 15px
+  font-weight: bold
+
+.imgWrp
+  display: flex
+  flex-direction: center
+  align-items: center
+  height: 460px
+  background-color: var(--crop-bg)
+  margin-bottom: 15px
+
+.imgWrp::-webkit-scrollbar
+  width: 8px
+
+.imgWrp::-webkit-scrollbar-thumb
+  background: var(--scrollbar)
+  border-radius: 5px
+
+.btnWrp
+  display: flex
+  justify-content: flex-end
+
+.saveBtn
+  margin-left: 10px
+  background-color: var(--save-button-bg)
+  border: none
+  display: flex
+  align-items: center
+
+.saveBtn:disabled
+  background-color: var(--save-button-bg)
+
+.saveBtn:not(:disabled):hover
+  margin-left: 10px
+  background-color: var(--save-button-bg-hover)
+
+.cropAvatar .btnWrp .saveBtn:active,
+.btnWrp .saveBtn:focus
+  background-color: var(--save-button-bg-hover)
+
+.saveBtn span
+  margin-right: 8px

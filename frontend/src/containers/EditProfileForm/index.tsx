@@ -6,33 +6,36 @@ import { showModalRoutine } from 'routines/modal';
 import { editProfileRoutine, deleteAccountRoutine } from 'routines/user';
 import styles from './styles.module.sass';
 import { IUser } from 'common/models/user/IUser';
-import { getUserImgLink } from 'common/helpers/imageHelper';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
-import { signS3, uploadPhoto } from 'services/awsService';
-import { toastr } from 'react-redux-toastr';
+import { CropAvatar } from 'components/CropAvatar';
+import { env } from 'env';
+import { userLogoDefaultUrl } from 'common/configs/defaults';
 
 interface IProps {
   editProfile: IBindingCallback1<IUser>;
   deleteAccount: IBindingAction;
   handleClose: IBindingAction;
-  user?: IUser | null;
+  user: IUser | undefined;
 }
 
 const EditProfileForm: FunctionComponent<IProps> = ({
   editProfile,
   deleteAccount,
   handleClose,
-  user = undefined
+  user
 }: IProps) => {
   if (!user) return <></>;
   const [fullName, setFullName] = useState(user.fullName);
   const [displayName, setDisplayName] = useState(user.displayName);
   const [title, setTitle] = useState(user.title ? user.title : '');
   const [showMoreOptions, setshowMoreOptions] = useState(false);
+  const [avatar, setAvatar] = useState('');
+  const [avatarLoading, setAvatarLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
 
   const handleSubmit = () => {
-    const editUserProps = { ...user, fullName, displayName, title };
+    const editUserProps = { ...user, fullName, displayName, title, imageUrl };
     editProfile(editUserProps);
   };
 
@@ -40,25 +43,23 @@ const EditProfileForm: FunctionComponent<IProps> = ({
     deleteAccount();
   };
 
-  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      const target = event.target as HTMLInputElement;
-
-      if (!target.files) return;
-
-      const file = target.files[0];
-      const fileType = file.name.split('.')[1];
-
-      const signedData = await signS3(fileType);
-
-      const { signedRequest, url, fileName } = signedData;
-
-      const response = await uploadPhoto(signedRequest, fileName, fileType, file);
-      console.log(response);
-    } catch (error) {
-      toastr.error('Upload error', error.message);
+  const onSelectFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const reader = new FileReader();
+      setAvatarLoading(true);
+      reader.addEventListener('load', () => {
+        setAvatar(reader.result as string);
+        setAvatarLoading(false);
+      });
+      reader.readAsDataURL(e.target.files[0]);
     }
   };
+
+  const clearAvatarData = () => {
+    setAvatar('');
+  };
+
+  const setImageUrlHandler = () => setImageUrl(`/avatars/${user.id}`);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, id } = event.currentTarget;
@@ -79,6 +80,20 @@ const EditProfileForm: FunctionComponent<IProps> = ({
         break;
     }
   };
+
+  if (avatar || avatarLoading) {
+    return (
+      <CropAvatar
+        src={avatar}
+        avatarLoading={avatarLoading}
+        clearAvatarData={clearAvatarData}
+        setImageUrl={setImageUrlHandler}
+      />
+    );
+  }
+
+  const imageSource = imageUrl ? `${env.urls.aws}${imageUrl}` : '' || user.imageUrl || userLogoDefaultUrl;
+
   return (
     <div className={styles.mainContainer}>
       <header className={styles.modalHeader}>Edit your profile</header>
@@ -137,20 +152,22 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             <Image
               className={styles.image}
               height={150}
-              src={getUserImgLink(user.imageUrl as string)}
+              src={imageSource}
             />
             <div className={`${styles.imageFooter} w-100`}>
-              <div>
-                <label htmlFor="image_uploads">
-                  <span>Upload image</span>
-                  <input
-                    type="file"
-                    id="image_uploads"
-                    name="image_uploads"
-                    accept=".jpg, .jpeg, .png"
-                    onChange={handleUpload}
-                  />
-                </label>
+              <div className={styles.uploadWrp}>
+                <Form.Label
+                  htmlFor="uploadAvatar"
+                  className={[styles.uploadAvatarLabel, styles.link].join(' ')}
+                >
+                  Upload an image
+                </Form.Label>
+                <Form.Control
+                  id="uploadAvatar"
+                  type="file"
+                  onChange={onSelectFile}
+                  className={styles.uploadAvatar}
+                />
               </div>
               {user.imageUrl ? (
                 <button type="submit" className={styles.link}>
@@ -192,10 +209,6 @@ const mapDispatchToProps = {
   showModal: showModalRoutine,
   editProfile: editProfileRoutine,
   deleteAccount: deleteAccountRoutine
-};
-
-EditProfileForm.defaultProps = {
-  user: null
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProfileForm);
