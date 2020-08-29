@@ -7,21 +7,13 @@ import LoaderWrapper from 'components/LoaderWrapper';
 import { signS3, uploadPhoto } from 'services/awsService';
 import { toastr } from 'react-redux-toastr';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
+import { ICropData } from 'common/models/cropAvatar/ICropData';
 
 interface IProps {
   src: string;
   avatarLoading: boolean;
   clearAvatarData: IBindingAction;
   setImageUrl: IBindingAction;
-}
-
-interface ICropData {
-  aspect: number;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  unit: 'px' | '%';
 }
 
 export const CropAvatar: React.FC<IProps> = ({ src, avatarLoading, clearAvatarData, setImageUrl }) => {
