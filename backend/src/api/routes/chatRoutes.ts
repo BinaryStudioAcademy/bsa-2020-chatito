@@ -10,6 +10,7 @@ import {
   removeUserFromChat,
   addUsersToChat,
   getChatById } from '../../services/chatService';
+import { addReminder } from '../../services/reminderService';
 import { ClientSockets } from '../../common/enums/ClientSockets';
 import { IUser } from '../../common/models/user/IUser';
 
@@ -29,16 +30,23 @@ router
     req.io.of('/chat').emit(ClientSockets.JoinChat, chat.id);
     return chat;
   }))
+  .post('/:id/reminders', run((req: Request) => addReminder(
+    {
+      chatId: req.params.id,
+      userId: req.user.id,
+      body: req.body
+    }
+  )))
   .post('/invite-users', run(async (req: Request) => {
     const users = await addUsersToChat(req.body.chatId, req.body.userIds);
     const usersToEmit: IUser[] = [];
-    req.body.userIds.forEach(async (userId: string) => {
-      const user = await getUserByIdWithoutWorkspaces(userId).then(userData => userData);
+
+    for (const userId of req.body.userIds) {
+      const user = await getUserByIdWithoutWorkspaces(userId);
       usersToEmit.push(user);
-    });
+    }
     const chatInfoToSend = await getChatById(req.body.chatId);
-    emitToChatRoom(req.body.chatId, ClientSockets.NewUserNotification,
-      usersToEmit, chatInfoToSend.name, chatInfoToSend.type);
+    emitToChatRoom(req.body.chatId, ClientSockets.NewUserNotification, usersToEmit, chatInfoToSend.name, chatInfoToSend.type, chatInfoToSend.id);
     return users;
   }));
 

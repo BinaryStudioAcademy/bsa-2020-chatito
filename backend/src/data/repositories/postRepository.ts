@@ -2,6 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { Post } from '../entities/Post';
 import { ICreatePost } from '../../common/models/post/ICreatePost';
 import { IGetChatPosts } from '../../common/models/chat/IGetChatPosts';
+import { IGetNavigatePost } from '../../common/models/chat/IGetNavigatePost';
 
 @EntityRepository(Post)
 class PostRepository extends Repository<Post> {
@@ -19,6 +20,55 @@ class PostRepository extends Repository<Post> {
     from: skip = undefined,
     count: take = undefined
   }: IGetChatPosts): Promise<Post[]> {
+    const posts = await this.createQueryBuilder('post')
+      .select([
+        'post.id',
+        'post.createdAt',
+        'post.text',
+        'user.id',
+        'user.fullName',
+        'user.displayName',
+        'user.imageUrl',
+        'user.email',
+        'draft_comment.id',
+        'draft_comment.text',
+        'chat.name',
+        'chat.hash'
+      ])
+      .leftJoin(
+        'post.draftComments',
+        'draft_comment',
+        'draft_comment."postId" = post.id AND draft_comment."createdByUserId" = :userId',
+        { userId }
+      )
+      .leftJoin(
+        'post.createdByUser',
+        'user'
+      )
+      .leftJoinAndSelect(
+        'post.postReactions',
+        'post_reaction'
+      )
+      .leftJoin(
+        'post.chat',
+        'chat'
+      )
+      .where('post.chat = :chatId', { chatId })
+      .orderBy('post.createdAt', 'DESC')
+      .skip(skip)
+      .take(take)
+      .getMany();
+
+    return posts.reverse();
+  }
+
+  async getAllNavChatPosts({
+    userId,
+    chatId,
+    postCreatedAt,
+    from: skip = undefined,
+    count: take = undefined
+  }: IGetNavigatePost): Promise<Post[]> {
     const posts = await this.createQueryBuilder('post')
       .select([
         'post.id',
@@ -54,6 +104,7 @@ class PostRepository extends Repository<Post> {
         'chat'
       )
       .where('post.chat = :chatId', { chatId })
+      .andWhere('post.createdAt >= :postCreatedAt', { postCreatedAt })
       .orderBy('post.createdAt', 'DESC')
       .skip(skip)
       .take(take)
@@ -107,7 +158,7 @@ class PostRepository extends Repository<Post> {
         'user.status'
       ])
 
-      .leftJoinAndSelect('post.postReactions', 'reactions')
+      .leftJoinAndSelect('post.postReactions', 'post_reaction')
 
       .leftJoin('post.comments', 'comments')
       .addSelect([

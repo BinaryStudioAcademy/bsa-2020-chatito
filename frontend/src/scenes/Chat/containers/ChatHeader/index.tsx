@@ -2,11 +2,12 @@ import React from 'react';
 import styles from './styles.module.sass';
 
 import {
+  faHashtag,
   faLock,
-  faStar,
   faUserPlus,
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'react-bootstrap/Image';
 import { IAppState } from 'common/models/store';
@@ -21,17 +22,23 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
 import ChatMembers from 'containers/ChatMembers';
 import { ChatType } from 'common/enums/ChatType';
+import { createDirectChannelName } from 'common/helpers/nameHelper';
 
 const privateChannelIcon = (
   <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
 );
 
+const publicChannelIcon = (
+  <FontAwesomeIcon icon={faHashtag} className={styles.iconChatType} />
+);
+
 interface IProps {
   chat?: IChat;
   showModal: IBindingCallback1<IModalRoutine>;
+  currentUserId: string;
 }
 
-const ChatHeader: React.FC<IProps> = ({ chat, showModal }) => {
+const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUserId }) => {
   const maxAvatarsDisplayed = 5;
   const userAvatars = (users: IUser[]) => {
     const usersToDisplay = users.slice(0, maxAvatarsDisplayed);
@@ -57,15 +64,19 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal }) => {
     showModal({ modalType: ModalTypes.ChatMembers, show: true });
   };
 
+  const chatName = chat.type === ChatType.DirectMessage
+    ? createDirectChannelName(chat.users, currentUserId) : chat.name;
+
   return (
     <div className={styles.chatContainer} key={chat.id}>
 
       <div className={styles.headerInfo}>
         <div className={styles.titleBlock}>
-          {chat.isPrivate ? privateChannelIcon : null}
-          <div className={styles.title}>{chat.name || ''}</div>
+          {chat.isPrivate ? privateChannelIcon : publicChannelIcon}
+          <div className={styles.title}>{chatName}</div>
           <FontAwesomeIcon icon={faStar} className={styles.icon} />
         </div>
+
       </div>
 
       <div className={styles.rightHeaderBlock}>
@@ -98,7 +109,8 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal }) => {
 const mapStateToProps = (state: IAppState) => {
   const { chat } = state.chat;
   return {
-    chat
+    chat,
+    currentUserId: state.user.user?.id as string
   };
 };
 

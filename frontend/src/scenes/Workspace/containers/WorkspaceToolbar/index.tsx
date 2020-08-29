@@ -15,7 +15,7 @@ import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 import { ListGroup } from 'react-bootstrap';
 
 interface IProps {
-  workspaces?: IWorkspace[];
+  workspaces: IWorkspace[];
   selectedWorkspace: IWorkspace;
   router: (route: string) => void;
   selectChat: Routine;
@@ -58,14 +58,12 @@ const WorkspaceToolbar: FunctionComponent<IProps> = ({
           : null}
 
       </ListGroup>
-      <div className={styles.plusIconContainer}>
+      <button type="button" className={styles.plusIconContainer} onClick={onAddWorkspaceClick}>
         <FontAwesomeIcon
           className={styles.plusIcon}
           icon={faPlus}
-          size="2x"
-          onClick={onAddWorkspaceClick}
         />
-      </div>
+      </button>
     </div>
   );
 };

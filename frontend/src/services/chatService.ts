@@ -3,6 +3,7 @@ import { ICreateChat } from 'common/models/chat/ICreateChat';
 import { ICreatePost } from 'common/models/post/ICreatePost';
 import { IAddUsersToChat } from 'common/models/chat/IAddUsersToChat';
 import { IFetchMorePosts } from 'common/models/post/IFetchMorePosts';
+import { IFetchNavPost } from 'common/models/post/IFetchNavPost';
 
 export async function createChat(payload: ICreateChat) {
   const response = await api.post('/api/chats', payload);
@@ -16,6 +17,11 @@ export async function fetchWorkspaceChats(workspaceId: string) {
 
 export async function fetchChatPosts({ chatId, from, count }: IFetchMorePosts) {
   const response = await api.get(`/api/chats/${chatId}/posts`, { from, count });
+  return response;
+}
+
+export async function fetchNavigationPost({ chatId, postId }: IFetchNavPost) {
+  const response = await api.get(`/api/chats/${chatId}/posts`, { from: 0, postId });
   return response;
 }
 

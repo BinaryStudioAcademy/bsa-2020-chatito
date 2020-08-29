@@ -34,29 +34,39 @@ const ChatMembers: FunctionComponent<any> = ({
 
   const removeUserFromChat = async (userId: string) => {
     await removeUser({ chatId: chat.id, userId });
-    getUserList(chat.id);
+    await getUserList(chat.id);
+  };
+
+  const onInvite = () => {
+    toggleModal({ modalType: ModalTypes.InviteChat, show: true });
   };
 
   const isCreator = chat.createdByUserId === currentUser.id;
+
   return (
     <ModalWindow
       isShown={isShown}
       onHide={handleCloseModal}
     >
       <div>
-        {chat.users.map((user: IUser) => {
-          if (isCreator) {
-            return null;
-          }
-          return (
-            <ChatMember
-              removeUser={removeUserFromChat}
-              user={user}
-              key={user.id}
-              isCreator={isCreator}
-            />
-          );
-        })}
+        <button type="button" onClick={onInvite}>Add user</button>
+        {
+          chat.users.length <= 1
+            ? 'You are the only member of this chat!'
+            : chat.users.map((user: IUser) => {
+              if (currentUser.id === user.id) {
+                return null;
+              }
+              return (
+                <ChatMember
+                  removeUser={removeUserFromChat}
+                  user={user}
+                  key={user.id}
+                  isCreator={isCreator}
+                />
+              );
+            })
+        }
       </div>
     </ModalWindow>
   );
@@ -68,7 +78,6 @@ const mapStateToProps = (state: IAppState) => {
     modal: { chatMembers },
     user: { user: currentUser }
   } = state;
-
   return {
     isShown: chatMembers,
     chat,

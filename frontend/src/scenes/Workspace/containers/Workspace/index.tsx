@@ -4,7 +4,7 @@ import styles from './styles.module.sass';
 import Header from '../../../../containers/Header';
 import WorkspaceToolbar from '../WorkspaceToolbar';
 import NoChatMessage from '../NoChatMessage';
-import ProfileOverview from 'components/ProfileOverview';
+import ProfileOverview from 'containers/ProfileOverview';
 import { IUser } from 'common/models/user/IUser';
 import { IAppState } from 'common/models/store';
 import ChatScene from 'scenes/Chat';
@@ -80,7 +80,6 @@ const Workspace: React.FC<IProps> = ({
   const renderProfile = () => (
     <ProfileOverview
       user={userProfile}
-      currentUserId={currentUserId}
       hideRightMenu={hideRightMenu}
     />
   );
@@ -108,12 +107,13 @@ const Workspace: React.FC<IProps> = ({
           <div className={styles.workspaceViewContainer}>
 
             <div className={styles.leftPanelWrapper}>
-              <ChatToolbar />
+              <ChatToolbar currentUserId={currentUserId} />
             </div>
             <div className={styles.chatWrapper}>
               <Switch>
                 <Route path={Routes.Drafts} component={DraftsContainer} />
                 <Route path={Routes.Threads} component={ThreadsContainer} />
+                <Route path={Routes.Post} component={ChatScene} />
                 <Route path={Routes.Chat} component={ChatScene} />
                 <Route component={NoChatMessage} />
               </Switch>

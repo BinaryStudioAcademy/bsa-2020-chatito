@@ -9,7 +9,7 @@ Authorization: Bearer <insert token here>
 }
 ###
 
-DELETE http://localhost:3001/api/draft/posts
+DELETE http://localhost:3001/api/drafts/posts
 Content-Type: application/json
 Authorization: Bearer <insert token here>
 
@@ -18,7 +18,7 @@ Authorization: Bearer <insert token here>
 }
 ###
 
-POST http://localhost:3001/api/draft/comments
+POST http://localhost:3001/api/drafts/comments
 Content-Type: application/json
 Authorization: Bearer <insert token here>
 
@@ -31,7 +31,7 @@ Authorization: Bearer <insert token here>
 }
 ###
 
-DELETE http://localhost:3001/api/draft/comments
+DELETE http://localhost:3001/api/drafts/comments
 Content-Type: application/json
 Authorization: Bearer <insert token here>
 

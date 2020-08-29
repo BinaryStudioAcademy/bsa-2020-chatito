@@ -18,7 +18,10 @@ import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { IUser } from 'common/models/user/IUser';
 import { addChatWithSocketRoutine } from 'scenes/Chat/routines';
 import { ChatType } from 'common/enums/ChatType';
-import { upsertDraftCommentRoutine, deleteDraftCommentRoutine } from 'containers/Thread/routines';
+import {
+  upsertDraftCommentWithSocketRoutine,
+  deleteDraftCommentWithSocketRoutine
+} from 'containers/Thread/routines';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
@@ -30,6 +33,7 @@ export interface IWorkspaceState {
   showRightSideMenu: RightMenuTypes;
   activeThread: IActiveThread | null;
   userProfile: IUser;
+  threadLoading: boolean;
 }
 
 const initialState: IWorkspaceState = {
@@ -41,7 +45,8 @@ const initialState: IWorkspaceState = {
   users: [],
   showRightSideMenu: RightMenuTypes.None,
   activeThread: null,
-  userProfile: { id: '', email: '', fullName: '', displayName: '' }
+  userProfile: { id: '', email: '', fullName: '', displayName: '' },
+  threadLoading: false
 };
 
 const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>): IWorkspaceState => {
@@ -78,7 +83,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         showRightSideMenu: RightMenuTypes.Thread,
         activeThread: { ...state.activeThread, post: payload, comments: [] }
       };
-    case upsertDraftCommentRoutine.SUCCESS:
+    case upsertDraftCommentWithSocketRoutine.TRIGGER:
       if (state.activeThread) {
         return {
           ...state,
@@ -94,7 +99,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         };
       }
       return { ...state };
-    case deleteDraftCommentRoutine.SUCCESS:
+    case deleteDraftCommentWithSocketRoutine.TRIGGER:
       if (state.activeThread) {
         return {
           ...state,
@@ -135,15 +140,23 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         showRightSideMenu: RightMenuTypes.Profile,
         userProfile: { ...payload }
       };
+    case fetchPostCommentsRoutine.TRIGGER:
+      return {
+        ...state,
+        threadLoading: true
+      };
     case fetchPostCommentsRoutine.SUCCESS: {
-      if (state.activeThread) {
-        return {
-          ...state,
-          activeThread: { ...state.activeThread, comments: payload }
-        };
-      }
-      return { ...state };
+      return {
+        ...state,
+        activeThread: { ...state.activeThread, comments: payload } as IActiveThread,
+        threadLoading: false
+      };
     }
+    case fetchPostCommentsRoutine.FAILURE:
+      return {
+        ...state,
+        threadLoading: false
+      };
     case incUnreadCountRoutine.TRIGGER: {
       const { chatId } = payload;
       const channels = [...state.channels].map(channel => (
@@ -198,7 +211,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       const workspaceChatsCopy = state[chatTypeKey];
       workspaceChatsCopy.forEach(chat => {
         if (chat.id === payload.chatId) {
-          chat.users.push(...payload.user);
+          chat.users.push(...payload.users);
         }
       });
       if (chatTypeKey === 'channels') {

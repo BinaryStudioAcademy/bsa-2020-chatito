@@ -9,6 +9,7 @@ export interface IModalState {
   invitePopup: boolean;
   inviteChat: boolean;
   chatMembers: boolean;
+  setReminder: boolean;
 }
 
 const initialState: IModalState = {
@@ -16,8 +17,9 @@ const initialState: IModalState = {
   createChannel: false,
   createDirect: false,
   invitePopup: false,
-  inviteChat: false,
-  chatMembers: false
+  chatMembers: false,
+  setReminder: false,
+  inviteChat: false
 };
 
 export default (state = initialState, action: Routine<any>) => {
@@ -42,6 +44,9 @@ export default (state = initialState, action: Routine<any>) => {
         }
         case ModalTypes.ChatMembers: {
           return { ...state, chatMembers: show };
+        }
+        case ModalTypes.SetReminder: {
+          return { ...state, setReminder: show };
         }
         default:
           return state;

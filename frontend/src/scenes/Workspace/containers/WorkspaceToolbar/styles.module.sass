@@ -1,5 +1,4 @@
 .workspaceToolbarContainer
-  width: 100px
   background-color: var(--workspace-toolbar-background)
   display: flex
   flex-direction: column
@@ -7,29 +6,27 @@
   justify-content: flex-start
   overflow-y: auto
 
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none  /* Internet Explorer 10+ */
+  scrollbar-width: none  /* Firefox */
   &::-webkit-scrollbar
-    display: none;  /* Safari and Chrome */
+    display: none  /* Safari and Chrome */
 
 .plusIconContainer
   width: 50px
-  min-height: 50px
-  margin: 3px 3px 15px
+  height: 50px
   margin-top: 10px
-  padding: 5px
-  cursor: pointer
   display: flex
   justify-content: center
   align-items: center
-  border-radius: 10px
   transition: all .3s
+  border: none
   border-radius: 50%
+  background-color: var(--workspace-toolbar-background)
   &:hover
-    background-color: #ffffff
+    background-color: var(--workspace-toolbar-select-background)
   &:hover .plusIcon
-    color: var(--workspace-background-color)
+    color: var(--workspace-icon-background)
 
 .plusIcon
-  color: #ffffff
+  color: var(--workspace-toolbar-font-color-primary)
   transition: all .3s
