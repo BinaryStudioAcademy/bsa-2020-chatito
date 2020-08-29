@@ -17,3 +17,7 @@ export const uploadPhoto = (signedRequest: string, fileName: string, file: Blob)
 
   return fetch(signedRequest, options);
 };
+
+export const deleteAvatar = () => {
+  api.delete('/api/aws/delete-avatar');
+};

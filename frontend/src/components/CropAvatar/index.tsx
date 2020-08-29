@@ -14,9 +14,10 @@ interface IProps {
   avatarLoading: boolean;
   clearAvatarData: IBindingAction;
   setImageUrl: IBindingAction;
+  handleClose: IBindingAction;
 }
 
-export const CropAvatar: React.FC<IProps> = ({ src, avatarLoading, clearAvatarData, setImageUrl }) => {
+export const CropAvatar: React.FC<IProps> = ({ src, avatarLoading, clearAvatarData, setImageUrl, handleClose }) => {
   const [crop, setCrop] = useState<ReactCrop.Crop>({
     unit: '%',
     height: 100,
@@ -97,7 +98,7 @@ export const CropAvatar: React.FC<IProps> = ({ src, avatarLoading, clearAvatarDa
         </div>
       </LoaderWrapper>
       <div className={styles.btnWrp}>
-        <Button className={styles.cancelBtn} variant="outline-secondary">Cancel</Button>
+        <Button className={styles.cancelBtn} variant="outline-secondary" onClick={handleClose}>Cancel</Button>
         {!avatarLoading && (
           <Button
             className={styles.saveBtn}

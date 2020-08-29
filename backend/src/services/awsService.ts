@@ -25,3 +25,19 @@ export const signS3 = (fileName: string): Promise<ISignS3> => {
     });
   });
 };
+
+export const deleteAvatar = (fileName: string) => {
+  const s3Params = {
+    Bucket: bucket,
+    Key: `avatars/${fileName}`
+  };
+
+  return new Promise((resolve, reject) => {
+    s3.deleteObject(s3Params, (err, data) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(data);
+    });
+  });
+};

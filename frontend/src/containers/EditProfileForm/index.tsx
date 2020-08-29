@@ -11,6 +11,7 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { CropAvatar } from 'components/CropAvatar';
 import { env } from 'env';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
+import { deleteAvatar } from 'services/awsService';
 
 interface IProps {
   editProfile: IBindingCallback1<IUser>;
@@ -29,14 +30,17 @@ const EditProfileForm: FunctionComponent<IProps> = ({
   const [fullName, setFullName] = useState(user.fullName);
   const [displayName, setDisplayName] = useState(user.displayName);
   const [title, setTitle] = useState(user.title ? user.title : '');
+  const [imageUrl, setImageUrl] = useState(user.imageUrl || '');
   const [showMoreOptions, setshowMoreOptions] = useState(false);
   const [avatar, setAvatar] = useState('');
   const [avatarLoading, setAvatarLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState('');
 
   const handleSubmit = () => {
     const editUserProps = { ...user, fullName, displayName, title, imageUrl };
     editProfile(editUserProps);
+    if (user.imageUrl && !imageUrl) {
+      deleteAvatar();
+    }
   };
 
   const handleDeleteAccount = () => {
@@ -61,6 +65,11 @@ const EditProfileForm: FunctionComponent<IProps> = ({
 
   const setImageUrlHandler = () => setImageUrl(`/avatars/${user.id}`);
 
+  const handleDeleteAvatar = () => {
+    setImageUrl('');
+    deleteAvatar();
+  };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, id } = event.currentTarget;
     switch (id) {
@@ -81,6 +90,16 @@ const EditProfileForm: FunctionComponent<IProps> = ({
     }
   };
 
+  const getImageSource = () => {
+    if (imageUrl.startsWith('https')) {
+      return imageUrl;
+    }
+    if (imageUrl) {
+      return `${env.urls.aws}${imageUrl}`;
+    }
+    return userLogoDefaultUrl;
+  };
+
   if (avatar || avatarLoading) {
     return (
       <CropAvatar
@@ -88,11 +107,10 @@ const EditProfileForm: FunctionComponent<IProps> = ({
         avatarLoading={avatarLoading}
         clearAvatarData={clearAvatarData}
         setImageUrl={setImageUrlHandler}
+        handleClose={handleClose}
       />
     );
   }
-
-  const imageSource = imageUrl ? `${env.urls.aws}${imageUrl}` : '' || user.imageUrl || userLogoDefaultUrl;
 
   return (
     <div className={styles.mainContainer}>
@@ -152,7 +170,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             <Image
               className={styles.image}
               height={150}
-              src={imageSource}
+              src={getImageSource()}
             />
             <div className={`${styles.imageFooter} w-100`}>
               <div className={styles.uploadWrp}>
@@ -170,7 +188,11 @@ const EditProfileForm: FunctionComponent<IProps> = ({
                 />
               </div>
               {user.imageUrl ? (
-                <button type="submit" className={styles.link}>
+                <button
+                  type="button"
+                  className={[styles.link, styles.removePhoto].join(' ')}
+                  onClick={handleDeleteAvatar}
+                >
                   Remove photo
                 </button>
               ) : null}
