@@ -12,6 +12,8 @@ import { CropAvatar } from 'components/CropAvatar';
 import { env } from 'env';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
 import { deleteAvatar } from 'services/awsService';
+import { allowedFileTypes } from 'config/allowedFileTypes';
+import { toastr } from 'react-redux-toastr';
 
 interface IProps {
   editProfile: IBindingCallback1<IUser>;
@@ -49,6 +51,9 @@ const EditProfileForm: FunctionComponent<IProps> = ({
 
   const onSelectFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
+      if (!allowedFileTypes.includes(e.target.files[0].type)) {
+        toastr.error('Error', 'Forbidden file type. Please choose image with type .png, .jpg or .jpeg');
+      }
       const reader = new FileReader();
       setAvatarLoading(true);
       reader.addEventListener('load', () => {
