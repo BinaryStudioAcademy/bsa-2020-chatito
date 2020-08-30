@@ -1,4 +1,4 @@
-import { getUnreadPosts } from 'services/userService';
+import { getUnreadPosts, deleteUnreadPosts } from 'services/userService';
 import {
   addWorkspaceRoutine,
   setActiveThreadRoutine,
@@ -104,8 +104,8 @@ function* watchfetchUnreadUserPosts() {
 
 function* readPost({ payload }: Routine<any>) {
   try {
-    // const readPost = yield call(markAsReadPost, payload);
-    yield put(readPostRoutine.success(payload));
+    yield call(deleteUnreadPosts, payload.postIdsToDelete);
+    yield put(readPostRoutine.success(payload.unreadChatsCopy));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(readPostRoutine.failure(error));

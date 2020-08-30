@@ -20,6 +20,7 @@ import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { showUserProfileRoutine, readPostRoutine } from 'scenes/Workspace/routines';
 import ReminderItem from 'components/ReminderItem/ReminderItem';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
+import { IPostsToRead } from 'common/models/chat/IPostsToRead';
 
 interface IProps {
   post: IPost;
@@ -33,7 +34,7 @@ interface IProps {
   isShown: boolean;
   unreadChats: IUnreadChat[];
   currentChatId: string;
-  readPost: IBindingCallback1<string>;
+  readPost: IBindingCallback1<IPostsToRead>;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, currentChatId,
@@ -171,19 +172,40 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, curr
       </Card.Link>
     </OverlayTrigger>
   );
-  const readMessage = () => {
+
+  const postToRead = (id: string) => {
+    const postId = id;
+    const unreadChatsCopy = [...unreadChats];
+    let postsToDelete: IPost[] = [];
+    const postIdsToDelete: string[] = [];
+    unreadChatsCopy.forEach((unreadChat, chatIndex) => {
+      const unreadPostCopy = unreadChat.unreadPosts;
+      unreadChat.unreadPosts.forEach((unreadPost, index) => {
+        if (unreadPost.id === postId) {
+          postsToDelete = [...unreadPostCopy.splice(0, index + 1)];
+        }
+      });
+      unreadChatsCopy[chatIndex].unreadPosts = [...unreadPostCopy];
+    });
+    postsToDelete.forEach(postToDelete => {
+      postIdsToDelete.push(postToDelete.id);
+    });
+    readPost({ postIdsToDelete, unreadChatsCopy });
+  };
+
+  const onHoverReadPost = () => {
     unreadChats.forEach(unreadChat => {
       if (unreadChat.id === currentChatId) {
         unreadChat.unreadPosts.forEach(unreadPost => {
           if (unreadPost.id === post.id) {
-            readPost(unreadPost.id);
+            postToRead(unreadPost.id);
           }
         });
       }
     });
   };
   return (
-    <Media className={styles.postWrapper} onMouseEnter={readMessage}>
+    <Media className={styles.postWrapper} onMouseEnter={onHoverReadPost}>
       <ProfilePreview user={createdByUser} openProfile={showUserProfile} />
       <Media.Body bsPrefix={styles.body}>
         <button

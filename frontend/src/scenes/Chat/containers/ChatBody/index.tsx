@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styles from './styles.module.sass';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
@@ -12,6 +12,8 @@ import { IFetchMorePosts } from 'common/models/post/IFetchMorePosts';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { PostType } from 'common/enums/PostType';
 import CustomReminderModal from 'containers/CustomReminderModal';
+import { IUnreadChat } from 'common/models/chat/IUnreadChats';
+import { divide } from 'ramda';
 
 interface IProps {
   chatId: string | undefined;
@@ -23,6 +25,7 @@ interface IProps {
   loading: boolean;
   from: number;
   count: number;
+  unreadChats: IUnreadChat[];
 }
 
 const ChatBody: React.FC<IProps> = ({
@@ -34,17 +37,32 @@ const ChatBody: React.FC<IProps> = ({
   hasMorePosts,
   loading,
   from,
-  count
+  count,
+  unreadChats
 }) => {
+  const [postIdForLine, setPostIdForLine] = useState('');
   const chatBody = useRef<HTMLDivElement>(null);
 
   const getMorePosts = () => {
     loadMorePosts({ chatId, from, count });
   };
 
+  const newMessageLine = () => {
+    unreadChats.forEach(unreadChat => {
+      if (unreadChat.unreadPosts.length) {
+        if (unreadChat.id === chatId && unreadChat.unreadPosts[0]) {
+          setPostIdForLine(unreadChat.unreadPosts[0].id);
+        }
+      } else {
+        setPostIdForLine('');
+      }
+    });
+  };
+
   useEffect(() => {
     if (chatId) {
       getMorePosts();
+      newMessageLine();
     }
     if (chatBody.current !== null && !loading) {
       chatBody.current.scrollTop = chatBody.current.scrollHeight;
@@ -55,6 +73,23 @@ const ChatBody: React.FC<IProps> = ({
     if (activeThreadPostId === post.id) return;
     openThread(post);
   };
+
+  // const newPostLine = (postId: string) => {
+  //   const line = <div>New</div>;
+  //   let show = false;
+  //   if (unreadChats.length) {
+  //     unreadChats.forEach(unreadChat => {
+  //       if (unreadChat.id === chatId) {
+  //         unreadChat.unreadPosts.forEach((unreadPost, index) => {
+  //           if (unreadPost.id === postId && index === 0) {
+  //             show = true;
+  //           }
+  //         });
+  //       }
+  //     });
+  //   }
+  //   return show ? line : '';
+  // };
 
   return (
     <LoaderWrapper
@@ -70,12 +105,16 @@ const ChatBody: React.FC<IProps> = ({
           useWindow={false}
         >
           {messages.map(m => (
-            <Post
-              post={m}
-              key={m.id}
-              openThread={handleOpenThread}
-              type={PostType.Post}
-            />
+            <>
+              {/* {newPostLine(m.id)} */}
+              {postIdForLine === m.id ? <div>New</div> : ''}
+              <Post
+                post={m}
+                key={m.id}
+                openThread={handleOpenThread}
+                type={PostType.Post}
+              />
+            </>
           ))}
           <CustomReminderModal />
         </InfiniteScroll>
@@ -91,7 +130,8 @@ const mapStateToProps = (state: IAppState) => ({
   hasMorePosts: state.chat.hasMorePosts,
   loading: state.chat.loading,
   from: state.chat.fetchFrom,
-  count: state.chat.fetchCount
+  count: state.chat.fetchCount,
+  unreadChats: state.workspace.unreadChats
 });
 
 const mapDispatchToProps = {

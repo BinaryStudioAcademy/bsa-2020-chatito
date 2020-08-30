@@ -293,25 +293,8 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state
       };
     case readPostRoutine.SUCCESS: {
-      const postId = payload;
-      const unreadChats = [...state.unreadChats];
-      let postsToDelete: IPost[] = [];
-      const postIdsToDelete: string[] = [];
-      unreadChats.forEach((unreadChat, chatIndex) => {
-        const unreadPostCopy = unreadChat.unreadPosts;
-        unreadChat.unreadPosts.forEach((unreadPost, index) => {
-          if (unreadPost.id === postId) {
-            postsToDelete = [...unreadPostCopy.splice(0, index + 1)];
-          }
-        });
-        unreadChats[chatIndex].unreadPosts = [...unreadPostCopy];
-      });
-      postsToDelete.forEach(postToDelete => {
-        postIdsToDelete.push(postToDelete.id);
-      });
-      deleteUnreadPosts(postIdsToDelete);
       return {
-        ...state, unreadChats
+        ...state, unreadChats: payload
       };
     }
     case readPostRoutine.FAILURE:
