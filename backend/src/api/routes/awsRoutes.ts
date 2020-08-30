@@ -6,6 +6,6 @@ const router = Router();
 
 router
   .post('/sign-s3', run((req: Request) => signS3(req.user.id)))
-  .delete('/delete-avatar', run((req: Request) => deleteAvatar(req.user.id)));
+  .delete('/delete-avatar', run((req: Request) => deleteAvatar(req.body.imageUrl)));
 
 export default router;

@@ -1,7 +1,8 @@
 import { s3, bucket, signedUrlExpireSeconds } from '../config/awsConfig';
 import { ISignS3 } from '../common/models/aws/ISignS3';
 
-export const signS3 = (fileName: string): Promise<ISignS3> => {
+export const signS3 = (userId: string): Promise<ISignS3> => {
+  const fileName = `${userId}-${Date.now()}`;
   const s3Params = {
     Bucket: bucket,
     Key: `avatars/${fileName}`,
@@ -26,7 +27,8 @@ export const signS3 = (fileName: string): Promise<ISignS3> => {
   });
 };
 
-export const deleteAvatar = (fileName: string) => {
+export const deleteAvatar = (imageUrl: string) => {
+  const fileName = imageUrl.slice(imageUrl.lastIndexOf('/') + 1);
   const s3Params = {
     Bucket: bucket,
     Key: `avatars/${fileName}`

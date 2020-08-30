@@ -40,8 +40,8 @@ const EditProfileForm: FunctionComponent<IProps> = ({
   const handleSubmit = () => {
     const editUserProps = { ...user, fullName, displayName, title, imageUrl };
     editProfile(editUserProps);
-    if (user.imageUrl && !imageUrl) {
-      deleteAvatar();
+    if (user.imageUrl && user.imageUrl !== imageUrl) {
+      deleteAvatar(user.imageUrl);
     }
   };
 
@@ -68,11 +68,10 @@ const EditProfileForm: FunctionComponent<IProps> = ({
     setAvatar('');
   };
 
-  const setImageUrlHandler = () => setImageUrl(`/avatars/${user.id}`);
+  const setImageUrlHandler = (filename: string) => setImageUrl(`/avatars/${filename}`);
 
   const handleDeleteAvatar = () => {
     setImageUrl('');
-    deleteAvatar();
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -13,7 +13,7 @@ interface IProps {
   src: string;
   avatarLoading: boolean;
   clearAvatarData: IBindingAction;
-  setImageUrl: IBindingAction;
+  setImageUrl: (fileName: string) => void;
   handleClose: IBindingAction;
 }
 
@@ -71,7 +71,7 @@ export const CropAvatar: React.FC<IProps> = ({ src, avatarLoading, clearAvatarDa
       const croppedImage = await getCroppedImg(image as HTMLImageElement, crop as ICropData);
       const { signedRequest, fileName } = await signS3();
       await uploadPhoto(signedRequest, fileName, croppedImage);
-      setImageUrl();
+      setImageUrl(fileName);
       clearAvatarData();
     } catch (erorr) {
       toastr.error('Error', erorr.message);
