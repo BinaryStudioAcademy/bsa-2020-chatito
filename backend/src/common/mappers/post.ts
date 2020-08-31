@@ -3,6 +3,8 @@ import { IPost } from '../models/post/IPost';
 import { IPostReaction } from '../models/postReaction/IPostReaction';
 import CommentRepository from '../../data/repositories/commentRepository';
 import { fromPostCommentsToCommentsInfo } from './comment';
+import { getImageUrl } from '../utils/imageHelper';
+import { Comment } from '../../data/entities/Comment';
 
 export const fromReactionToReactionClient = ({ reaction, userId }: IPostReaction) => ({
   reaction, userId
@@ -23,6 +25,20 @@ export const fromPostToPostClient = async (post: IPost) => {
     chat: {
       name: chat.name,
       hash: chat.hash
+    },
+    createdByUser: {
+      ...post.createdByUser,
+      imageUrl: getImageUrl(post.createdByUser.imageUrl)
     }
   };
 };
+
+export const fromCommentsToCommentsWithUserImageUrl = (comments: Comment[]) => (
+  comments.map(comment => ({
+    ...comment,
+    createdByUser: {
+      ...comment.createdByUser,
+      imageUrl: getImageUrl(comment.createdByUser.imageUrl)
+    }
+  }))
+);
