@@ -1,3 +1,5 @@
+import { IServerComment } from 'common/models/post/IServerComment';
+import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
 import { IPost } from 'common/models/post/IPost';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 import { Routine } from 'redux-saga-routines';
@@ -13,10 +15,14 @@ import {
   addActiveCommentWithSocketRoutine,
   updateChatDraftPostRoutine,
   newUserNotificationWithSocketRoutine,
-  markAsUnreadWithSocketRoutine,
+  markAsUnreadPostWithSocketRoutine,
   fetchUnreadUserPostsRoutine,
   readPostRoutine,
-  markAsUnreadWithOptionRoutine } from '../routines';
+  markAsUnreadPostWithOptionRoutine,
+  markAsUnreadCommentWithSocketRoutine,
+  fetchUnreadUserCommentsRoutine,
+  readCommentRoutine,
+  markAsUnreadCommentWithOptionRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
@@ -28,7 +34,6 @@ import {
   upsertDraftCommentWithSocketRoutine,
   deleteDraftCommentWithSocketRoutine
 } from 'containers/Thread/routines';
-import { deleteUnreadPosts } from 'services/userService';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
@@ -43,6 +48,7 @@ export interface IWorkspaceState {
   threadLoading: boolean;
   someField: string;
   unreadChats: IUnreadChat[];
+  unreadPostComments: IUnreadPostComments[];
 }
 
 const initialState: IWorkspaceState = {
@@ -57,7 +63,8 @@ const initialState: IWorkspaceState = {
   userProfile: { id: '', email: '', fullName: '', displayName: '' },
   threadLoading: false,
   someField: 'string',
-  unreadChats: []
+  unreadChats: [],
+  unreadPostComments: []
 };
 
 const markAsUnreadPosts = (unreadChats: IUnreadChat[], chatId: string, unreadPost: IPost) => {
@@ -77,6 +84,29 @@ const markAsUnreadPosts = (unreadChats: IUnreadChat[], chatId: string, unreadPos
     unreadChat.unreadPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   });
   return unreadChats;
+};
+
+const markAsUnreadComments = (
+  unreadPostComments: IUnreadPostComments[],
+  postId: string,
+  unreadComment: IServerComment
+) => {
+  let currentPostExist = false;
+  if (unreadPostComments.length) {
+    unreadPostComments.forEach(unreadPostComment => {
+      if (unreadPostComment.id === postId) {
+        currentPostExist = true;
+        unreadPostComment.unreadComments.push(unreadComment);
+      }
+    });
+  }
+  if (!currentPostExist) {
+    unreadPostComments.push({ id: postId, unreadComments: [unreadComment] });
+  }
+  unreadPostComments.forEach(unreadPostComment => {
+    unreadPostComment.unreadComments.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  });
+  return unreadPostComments;
 };
 
 const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>): IWorkspaceState => {
@@ -256,21 +286,40 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       }
       return state;
     }
-    case markAsUnreadWithSocketRoutine.TRIGGER: {
+    case markAsUnreadPostWithSocketRoutine.TRIGGER: {
       const unreadChatsforState = markAsUnreadPosts(state.unreadChats, payload.chatId, payload.unreadPost);
       return {
         ...state, unreadChats: [...unreadChatsforState]
       };
     }
-    case markAsUnreadWithOptionRoutine.TRIGGER: {
+    case markAsUnreadCommentWithSocketRoutine.TRIGGER: {
+      const unreadPostsforState = markAsUnreadComments(state.unreadPostComments, payload.postId, payload.comment);
+      return {
+        ...state, unreadPostComments: [...unreadPostsforState]
+      };
+    }
+    case markAsUnreadPostWithOptionRoutine.TRIGGER: {
       return {
         ...state
       };
     }
-    case markAsUnreadWithOptionRoutine.SUCCESS: {
+    case markAsUnreadPostWithOptionRoutine.SUCCESS: {
       const unreadChatsforState = markAsUnreadPosts(state.unreadChats, payload.chatId, payload.unreadPost);
       return {
         ...state, unreadChats: [...unreadChatsforState]
+      };
+    }
+    case markAsUnreadCommentWithOptionRoutine.TRIGGER: {
+      return {
+        ...state
+      };
+    }
+    case markAsUnreadCommentWithOptionRoutine.SUCCESS: {
+      const unreadPostCommentsforState = markAsUnreadComments(
+        state.unreadPostComments, payload.postId, payload.unreadComment
+      );
+      return {
+        ...state, unreadPostComments: [...unreadPostCommentsforState]
       };
     }
     case fetchUnreadUserPostsRoutine.TRIGGER:
@@ -307,6 +356,43 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return {
         ...state, loading: false
       };
+
+    case fetchUnreadUserCommentsRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case fetchUnreadUserCommentsRoutine.SUCCESS: {
+      const unreadComments: IServerComment[] = [...payload.unreadComments];
+      const unreadPostComments = [...state.unreadPostComments];
+      if (unreadComments.length) {
+        unreadComments.forEach(unreadComment => {
+          let postExists = false;
+          if (unreadPostComments.length) {
+            unreadPostComments.forEach(unreadPost => {
+              if (unreadComment.postId === unreadPost.id) {
+                unreadPost.unreadComments.push(unreadComment);
+                postExists = true;
+              }
+            });
+          }
+          if (!postExists) {
+            unreadPostComments.push({ id: unreadComment.postId, unreadComments: [unreadComment] });
+          }
+        });
+      }
+      unreadPostComments.forEach(unreadPost => {
+        unreadPost.unreadComments.sort((a, b) => (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
+      });
+      return {
+        ...state, loading: false, unreadPostComments
+      };
+    }
+    case fetchUnreadUserCommentsRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
+
     case readPostRoutine.TRIGGER:
       return {
         ...state
@@ -317,6 +403,22 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       };
     }
     case readPostRoutine.FAILURE:
+      return {
+        ...state
+      };
+    case readCommentRoutine.TRIGGER:
+      return {
+        ...state
+      };
+    case readCommentRoutine.SUCCESS: {
+      return {
+        ...state, unreadPostComments: payload
+      };
+    }
+    case readCommentRoutine.FAILURE:
+      return {
+        ...state
+      };
     default:
       return state;
   }

@@ -71,22 +71,43 @@ export const addWorkspaceToUser = async (userId: string, workspaceId: string) =>
   }
 };
 
-export const markAsUnread = async (userId: string, postId: string) => {
-  const responsePostId = await getCustomRepository(UserRepository).markAsUnread(userId, postId);
+export const markAsUnreadPost = async (userId: string, postId: string) => {
+  const responsePostId = await getCustomRepository(UserRepository).markAsUnreadPost(userId, postId);
   return [responsePostId];
 };
 
-export const markAsRead = async (userId: string, postIds: string[]) => {
+export const markAsReadPosts = async (userId: string, postIds: string[]) => {
   const response: string[] = [];
   // eslint-disable-next-line no-restricted-syntax
   for (const postId of postIds) {
-    const responsePostId = await getCustomRepository(UserRepository).markAsRead(userId, postId);
+    const responsePostId = await getCustomRepository(UserRepository).markAsReadPosts(userId, postId);
     response.push(responsePostId);
   }
   return response;
 };
 
-export const getUnreadById = async (userId: string) => {
-  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadById(userId);
+export const getUnreadPostsById = async (userId: string) => {
+  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadPostsById(userId);
+  // eslint-disable-next-line no-console
+  return unreadUserPostIds;
+};
+
+export const markAsUnreadComment = async (userId: string, postId: string) => {
+  const responsePostId = await getCustomRepository(UserRepository).markAsUnreadComment(userId, postId);
+  return [responsePostId];
+};
+
+export const markAsReadComments = async (userId: string, postIds: string[]) => {
+  const response: string[] = [];
+  // eslint-disable-next-line no-restricted-syntax
+  for (const postId of postIds) {
+    const responsePostId = await getCustomRepository(UserRepository).markAsReadComments(userId, postId);
+    response.push(responsePostId);
+  }
+  return response;
+};
+
+export const getUnreadCommentsById = async (userId: string) => {
+  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadCommentsById(userId);
   return unreadUserPostIds;
 };

@@ -17,7 +17,12 @@ import { PostType } from 'common/enums/PostType';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
-import { showUserProfileRoutine, readPostRoutine, markAsUnreadWithOptionRoutine } from 'scenes/Workspace/routines';
+import {
+  showUserProfileRoutine,
+  readPostRoutine,
+  markAsUnreadPostWithOptionRoutine,
+  readCommentRoutine,
+  markAsUnreadCommentWithOptionRoutine } from 'scenes/Workspace/routines';
 import ReminderItem from 'components/ReminderItem/ReminderItem';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 import { IPostsToRead } from 'common/models/chat/IPostsToRead';
@@ -25,26 +30,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { IMarkAsUnreadPost } from 'common/models/post/IMarkAsUnreadPost';
 import { ChatType } from 'common/enums/ChatType';
+import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
+import { ICommentsToRead } from 'common/models/chat/ICommentsToRead';
+import { IServerComment } from 'common/models/post/IServerComment';
+import { IMarkAsUnreadComment } from 'common/models/post/IMarkAsUnreadComment';
 
 interface IProps {
   post: IPost;
   userId: string;
   type: PostType;
   openThread?: IBindingCallback1<IPost>;
+  mainPostId?: string;
   addPostReaction: IBindingCallback1<IPostReactionRoutine>;
   deletePostReaction: IBindingCallback1<IPostReactionRoutine>;
   showUserProfile: IBindingCallback1<IUser>;
   showModal: IBindingCallback1<IModalRoutine>;
   isShown: boolean;
   unreadChats: IUnreadChat[];
+  unreadPostComments: IUnreadPostComments[];
   currentChatId: string;
   readPost: IBindingCallback1<IPostsToRead>;
+  readComment: IBindingCallback1<ICommentsToRead>;
   currentChatType: ChatType;
-  markAsUnread: IBindingCallback1<IMarkAsUnreadPost>;
+  markAsUnreadPost: IBindingCallback1<IMarkAsUnreadPost>;
+  markAsUnreadComment: IBindingCallback1<IMarkAsUnreadComment>;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, currentChatId, currentChatType,
-  showUserProfile, addPostReaction, deletePostReaction, showModal, isShown, unreadChats, readPost, markAsUnread }) => {
+  unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, isShown, unreadChats,
+  readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
 
@@ -180,8 +194,11 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, curr
   );
 
   const markAsUnreadOptionClick = () => {
-    // const markAsUnreadOptionClick = (callback: IBindingAction) => {
-    markAsUnread({ chatId: currentChatId, chatType: currentChatType, unreadPost: post });
+    if (type === PostType.Post) {
+      markAsUnreadPost({ chatId: currentChatId, chatType: currentChatType, unreadPost: post });
+    } else {
+      markAsUnreadComment({ postId: mainPostId!, unreadComment: post });
+    }
     document.body.click();
   };
 
@@ -231,19 +248,51 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, curr
     readPost({ postIdsToDelete, unreadChatsCopy });
   };
 
-  const onHoverReadPost = () => {
-    unreadChats.forEach(unreadChat => {
-      if (unreadChat.id === currentChatId) {
-        unreadChat.unreadPosts.forEach(unreadPost => {
-          if (unreadPost.id === post.id) {
-            postsToRead(unreadPost.id);
-          }
-        });
-      }
+  const commentsToRead = (id: string) => {
+    const commentId = id;
+    const unreadCommentsCopy = [...unreadPostComments];
+    let commentsToDelete: IServerComment[] = [];
+    const commentIdsToDelete: string[] = [];
+    unreadCommentsCopy.forEach((unreadChat, chatIndex) => {
+      const unreadCommentCopy = unreadChat.unreadComments;
+      unreadChat.unreadComments.forEach((unreadComment, index) => {
+        if (unreadComment.id === commentId) {
+          commentsToDelete = [...unreadCommentCopy.splice(0, index + 1)];
+        }
+      });
+      unreadCommentsCopy[chatIndex].unreadComments = [...unreadCommentCopy];
     });
+    commentsToDelete.forEach(commentToDelete => {
+      commentIdsToDelete.push(commentToDelete.id);
+    });
+    readComment({ commentIdsToDelete, unreadCommentsCopy });
+  };
+
+  const onHoverRead = () => {
+    if (type === PostType.Post) {
+      unreadChats.forEach(unreadChat => {
+        if (unreadChat.id === currentChatId) {
+          unreadChat.unreadPosts.forEach(unreadPost => {
+            if (unreadPost.id === post.id) {
+              postsToRead(unreadPost.id);
+            }
+          });
+        }
+      });
+    } else {
+      unreadPostComments.forEach(UnreadPost => {
+        if (UnreadPost.id === mainPostId) {
+          UnreadPost.unreadComments.forEach(unreadComment => {
+            if (unreadComment.id === post.id) {
+              commentsToRead(unreadComment.id);
+            }
+          });
+        }
+      });
+    }
   };
   return (
-    <Media className={styles.postWrapper} onMouseEnter={onHoverReadPost}>
+    <Media className={styles.postWrapper} onMouseEnter={onHoverRead}>
       <ProfilePreview user={createdByUser} openProfile={showUserProfile} />
       <Media.Body bsPrefix={styles.body}>
         <button
@@ -284,6 +333,7 @@ const mapStateToProps = (state: IAppState) => ({
   userId: state.user.user?.id as string,
   isShown: state.modal.setReminder,
   unreadChats: state.workspace.unreadChats,
+  unreadPostComments: state.workspace.unreadPostComments,
   currentChatId: state.chat.chat!.id,
   currentChatType: state.chat.chat!.type
 });
@@ -294,7 +344,9 @@ const mapDispatchToProps = {
   showModal: showModalRoutine,
   showUserProfile: showUserProfileRoutine,
   readPost: readPostRoutine,
-  markAsUnread: markAsUnreadWithOptionRoutine
+  readComment: readCommentRoutine,
+  markAsUnreadPost: markAsUnreadPostWithOptionRoutine,
+  markAsUnreadComment: markAsUnreadCommentWithOptionRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

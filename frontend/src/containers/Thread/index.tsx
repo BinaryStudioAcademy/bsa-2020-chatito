@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import TextEditor from 'components/TextEditor';
 import Post from 'containers/Post';
 import { useParams } from 'react-router-dom';
@@ -18,6 +18,7 @@ import { IUpsertDraftComment } from 'common/models/draft/IUpsertDraftComment';
 import { IDeleteDraftComment } from 'common/models/draft/IDeleteDraftComment';
 import { IAppState } from 'common/models/store';
 import LoaderWrapper from 'components/LoaderWrapper';
+import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
 
 interface IProps {
   showOnlyTwoComments?: boolean;
@@ -35,6 +36,7 @@ interface IProps {
   upsertDraftComment: IBindingCallback1<IUpsertDraftComment>;
   deleteDraftComment: IBindingCallback1<IDeleteDraftComment>;
   isLoading: boolean;
+  unreadPostComments: IUnreadPostComments[];
 }
 
 const Thread: FunctionComponent<IProps> = ({
@@ -51,10 +53,38 @@ const Thread: FunctionComponent<IProps> = ({
   draftCommentText,
   upsertDraftComment,
   deleteDraftComment,
-  isLoading
+  isLoading,
+  unreadPostComments
 }) => {
   const { whash } = useParams();
   const [showAll, setShowAll] = useState(false);
+  const [commentIdForLine, setCommentIdForLine] = useState('');
+
+  const setNewCommentLine = () => {
+    unreadPostComments.forEach(unreadPost => {
+      if (unreadPost.id === post.id) {
+        if (unreadPost.unreadComments.length) {
+          setCommentIdForLine(unreadPost.unreadComments[0].id);
+        } else {
+          setCommentIdForLine('');
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (post.id) {
+      setNewCommentLine();
+    }
+  }, [post.id]);
+
+  const newCommentLineElement = (
+    <div className={styles.newPostBlock}>
+      <div className={styles.line} />
+      <span>New</span>
+    </div>
+  );
+
   const participants = Array.from(new Set(comments.map((comment: IPost) => comment.createdByUser.id)));
   const sendCommentHandler = (text: string) => {
     const { id: postId } = post;
@@ -106,11 +136,14 @@ const Thread: FunctionComponent<IProps> = ({
           {comments.map((comment, index) => (
             index < maxComment
               ? (
-                <Post
-                  key={comment.id}
-                  post={comment}
-                  type={PostType.Comment}
-                />
+                <div key={comment.id}>
+                  {commentIdForLine === comment.id ? newCommentLineElement : ''}
+                  <Post
+                    post={comment}
+                    type={PostType.Comment}
+                    mainPostId={post.id}
+                  />
+                </div>
               )
               : null
           ))}
@@ -149,7 +182,8 @@ const mapStateToProps = (state: IAppState) => {
     currChatHash: state.chat.chat!.hash,
     draftCommentId: draftComments?.length ? draftComments[0].id : undefined,
     draftCommentText: draftComments?.length ? draftComments[0].text : undefined,
-    isLoading: state.workspace.threadLoading
+    isLoading: state.workspace.threadLoading,
+    unreadPostComments: state.workspace.unreadPostComments
   };
 };
 

@@ -31,6 +31,7 @@ import { Routes } from 'common/enums/Routes';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 import { createDirectChannelName } from 'common/helpers/nameHelper';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
+import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
 
 interface IProps {
   channels: IChat[];
@@ -39,6 +40,7 @@ interface IProps {
   unreadChats: IUnreadChat[];
   selectedWorkspace: IWorkspace;
   currentUserId: string;
+  unreadPostComments: IUnreadPostComments[];
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
 }
@@ -49,6 +51,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   selectedChat,
   unreadChats,
   currentUserId,
+  unreadPostComments,
   showModal,
   router,
   selectedWorkspace
@@ -77,19 +80,36 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     }
     return styles.channelSelect;
   };
-
+  const unreadThreadsMarker = () => {
+    let unreadThreadsStatus = false;
+    if (unreadPostComments.length) {
+      unreadPostComments.forEach(unreadPost => {
+        if (unreadPost.unreadComments.length) {
+          unreadThreadsStatus = true;
+        }
+      });
+      if (unreadThreadsStatus) {
+        return (
+          <div className={styles.unreadContainer}>
+            <div className={styles.unreadCircle} />
+          </div>
+        );
+      }
+    }
+    return '';
+  };
   // eslint-disable-next-line
   const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => { }) => (
     <button type="button" className={styles.channelSelect} onClick={onClick}>
       <div className={styles.iconWrapper}>
         <FontAwesomeIcon icon={iconFa} />
       </div>
-
       <span className={styles.buttonText}>{text}</span>
+      {text === 'Threads' ? unreadThreadsMarker() : ''}
     </button>
   );
 
-  const unreadMarker = (chatId: string) => (
+  const unreadChatsMarker = (chatId: string) => (
     unreadChats.map(unreadChat => {
       if (unreadChat.id === chatId && unreadChat.unreadPosts.length) {
         return (
@@ -126,7 +146,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
               : null
           }
         </div>
-        {unreadMarker(id)}
+        {unreadChatsMarker(id)}
       </button>
     );
   };
@@ -156,7 +176,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
               : null
           }
         </div>
-        {unreadMarker(id)}
+        {unreadChatsMarker(id)}
       </button>
     );
   };
@@ -260,7 +280,8 @@ const mapStateToProps = (state: IAppState) => ({
   selectedWorkspace: state.workspace.workspace,
   isLoading: state.workspace.loading,
   selectedChat: state.chat.chat as IChat,
-  unreadChats: state.workspace.unreadChats
+  unreadChats: state.workspace.unreadChats,
+  unreadPostComments: state.workspace.unreadPostComments
 });
 
 const mapDispatchToProps = {

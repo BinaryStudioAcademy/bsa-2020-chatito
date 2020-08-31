@@ -20,7 +20,8 @@ import {
   setActiveThreadRoutine,
   showRightSideMenuRoutine,
   fetchWorkspaceChatsRoutine,
-  fetchUnreadUserPostsRoutine
+  fetchUnreadUserPostsRoutine,
+  fetchUnreadUserCommentsRoutine
 } from 'scenes/Workspace/routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
@@ -48,6 +49,7 @@ interface IProps {
   selectedHash: string;
   fetchWorkspaceChats: IBindingCallback1<IFetchWorkspaceChat>;
   fetchUnreadUserPosts: IBindingCallback1<string>;
+  fetchUnreadUserComments: IBindingCallback1<string>;
 }
 
 const Workspace: React.FC<IProps> = ({
@@ -61,10 +63,12 @@ const Workspace: React.FC<IProps> = ({
   userProfile,
   selectedHash,
   fetchWorkspaceChats,
-  fetchUnreadUserPosts
+  fetchUnreadUserPosts,
+  fetchUnreadUserComments
 }) => {
   if (!currentUserId) return <></>;
   const [workspaceChatsStatus, setWorkspaceChatsStatus] = useState(false);
+  const [fetchUnreadCommentsStatus, setFetchUnreadCommentsStatus] = useState(false);
   useEffect(() => {
     const { whash } = match.params;
     if (selectedHash !== whash) {
@@ -80,8 +84,15 @@ const Workspace: React.FC<IProps> = ({
   useEffect(() => {
     if (workspaceChatsStatus) {
       fetchUnreadUserPosts(currentUserId);
+      setFetchUnreadCommentsStatus(true);
     }
   }, [workspaceChatsStatus]);
+
+  useEffect(() => {
+    if (fetchUnreadCommentsStatus) {
+      fetchUnreadUserComments(currentUserId);
+    }
+  }, [fetchUnreadCommentsStatus]);
 
   const hideRightMenu = () => {
     toggleRightMenu(RightMenuTypes.None);
@@ -164,7 +175,8 @@ const mapDispatchToProps = {
   toggleActiveThread: setActiveThreadRoutine,
   toggleRightMenu: showRightSideMenuRoutine,
   fetchWorkspaceChats: fetchWorkspaceChatsRoutine,
-  fetchUnreadUserPosts: fetchUnreadUserPostsRoutine
+  fetchUnreadUserPosts: fetchUnreadUserPostsRoutine,
+  fetchUnreadUserComments: fetchUnreadUserCommentsRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Workspace);

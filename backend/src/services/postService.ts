@@ -24,7 +24,7 @@ export const addPost = async (id: string, post: ICreatePost) => {
   const users = await getCustomRepository(ChatRepository).getAllChatUsers(chat.id);
   users.forEach(async chatUser => {
     if (user.id !== chatUser.id) {
-      await getCustomRepository(UserRepository).markAsUnread(chatUser.id, createdPost.id);
+      await getCustomRepository(UserRepository).markAsUnreadPost(chatUser.id, createdPost.id);
     }
   });
   emitToChatRoom(createdPost.chatId, ClientSockets.NotifyAndMarkAsUnread, createdPost, user, chat);
@@ -50,6 +50,19 @@ export const addComment = async (userId: string, postId: string, { text }: { tex
   const newClientComment = { ...newComment, createdByUser: user };
   const chatId = (await getCustomRepository(PostRepository).getByIdWithChat(newClientComment.postId)).chat.id;
   emitToChatRoom(chatId, ClientSockets.AddReply, newClientComment);
+  const postComments = await getCustomRepository(CommentRepository).getAllPostComments(postId);
+  const postCreatedByUserId = (await getCustomRepository(PostRepository).getById(postId)).createdByUserId;
+  let threadParticipantsId: string[] = [postCreatedByUserId];
+  postComments.forEach(postComment => {
+    threadParticipantsId.push(postComment.createdByUser.id);
+  });
+  threadParticipantsId = Array.from(new Set(threadParticipantsId));
+  threadParticipantsId.forEach(async participantId => {
+    if (user.id !== participantId) {
+      await getCustomRepository(UserRepository).markAsUnreadComment(participantId, newClientComment.id);
+    }
+  });
+  emitToChatRoom(chatId, ClientSockets.MarkAsUnreadComment, postId, newClientComment, threadParticipantsId);
   return newClientComment;
 };
 
@@ -78,4 +91,9 @@ export const deleteReaction = async (reaction: string, postId: string, userId: s
   const post = await getCustomRepository(PostRepository).getById(postId);
   emitToChatRoom(post.chatId, ClientSockets.DeleteReaction, { reaction, userId, postId });
   return deletedReaction;
+};
+
+export const test = async (postId: string) => {
+  const post = await getCustomRepository(CommentRepository).getAllPostComments(postId);
+  return post;
 };

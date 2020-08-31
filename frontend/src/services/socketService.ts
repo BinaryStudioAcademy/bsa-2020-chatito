@@ -17,7 +17,8 @@ import {
   addActiveCommentWithSocketRoutine,
   newUserNotificationWithSocketRoutine,
   updateChatDraftPostRoutine,
-  markAsUnreadWithSocketRoutine
+  markAsUnreadPostWithSocketRoutine,
+  markAsUnreadCommentWithSocketRoutine
 } from 'scenes/Workspace/routines';
 import { IChat } from 'common/models/chat/IChat';
 import { ClientSockets } from 'common/enums/ClientSockets';
@@ -61,9 +62,9 @@ export const connectSockets = () => {
         ),
         5000,
         'blueToastrNotification',
-        () => { console.log(post); }
+        () => { console.log('OnClickFunction'); }
       );
-      store.dispatch(markAsUnreadWithSocketRoutine({ chatId: chat.id, chatType: chat.type, unreadPost: post }));
+      store.dispatch(markAsUnreadPostWithSocketRoutine({ chatId: chat.id, chatType: chat.type, unreadPost: post }));
     }
   });
 
@@ -91,6 +92,18 @@ export const connectSockets = () => {
     const { activeThread } = state.workspace;
     if (activeThread && activeThread.post.id === comment.postId) {
       store.dispatch(addActiveCommentWithSocketRoutine(comment));
+    }
+  });
+
+  chatSocket.on(ClientSockets.MarkAsUnreadComment, (
+    postId: string,
+    comment: IServerComment,
+    threadParticipants: string[]
+  ) => {
+    const state = store.getState();
+    const currentUser = state.user.user!;
+    if (threadParticipants.includes(currentUser.id) && comment.createdByUser.id !== currentUser.id) {
+      store.dispatch(markAsUnreadCommentWithSocketRoutine({ postId, comment }));
     }
   });
 

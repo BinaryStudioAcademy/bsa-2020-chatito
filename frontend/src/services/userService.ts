@@ -1,3 +1,4 @@
+import { IUserUnreadPostComments } from '../common/models/user/IUserUnreadPostComments';
 import api from '../common/helpers/apiHelper';
 import { IUser } from 'common/models/user/IUser';
 import { IForgotPasswordInput } from 'common/models/auth/IForgotPasswordInput';
@@ -27,14 +28,27 @@ export const resetPassword = async (password: string, token: string) => {
 };
 
 export const getUnreadPosts = async (id: string): Promise<IUserUnreadPosts> => {
-  const response: IUserUnreadPosts = await api.get(`/api/users/unread/${id}`);
+  const response: IUserUnreadPosts = await api.get(`/api/users/${id}/unread-posts`);
+  return response;
+};
+
+export const getUnreadComments = async (id: string): Promise<IUserUnreadPostComments> => {
+  const response: IUserUnreadPostComments = await api.get(`/api/users/${id}/unread-comments`);
   return response;
 };
 
 export const deleteUnreadPosts = async (postIds: string[]): Promise<void> => {
-  await api.post('/api/users/read', { postIds });
+  await api.post('/api/users/read-posts', { postIds });
+};
+
+export const deleteUnreadComments = async (commentIds: string[]): Promise<void> => {
+  await api.post('/api/users/read-comments', { commentIds });
 };
 
 export const markPostAsUnread = async (postId: string): Promise<void> => {
-  await api.post('/api/users/unread', { postId });
+  await api.post('/api/users/unread-post', { postId });
+};
+
+export const markCommentAsUnread = async (commentId: string): Promise<void> => {
+  await api.post('/api/users/unread-comment', { commentId });
 };

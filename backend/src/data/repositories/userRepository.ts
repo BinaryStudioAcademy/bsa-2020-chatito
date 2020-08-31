@@ -19,22 +19,43 @@ class UserRepository extends Repository<User> {
     return this.findOne({ where: { id }, relations: ['workspaces'] });
   }
 
-  async markAsUnread(id: string, postId: string): Promise<string> {
+  async markAsUnreadPost(id: string, postId: string): Promise<string> {
     await this.createQueryBuilder().relation(User, 'unreadPosts').of(id).add(postId);
     return postId;
   }
 
-  async markAsRead(id: string, postId: string): Promise<string> {
+  async markAsReadPosts(id: string, postId: string): Promise<string> {
     await this.createQueryBuilder().relation(User, 'unreadPosts').of(id).remove(postId);
     return postId;
   }
 
-  async getUnreadById(id: string): Promise<IUserUnreadPosts> {
+  async getUnreadPostsById(id: string): Promise<IUserUnreadPosts> {
     const postIds = await this.createQueryBuilder('user')
       .select([
         'user.id'
       ])
       .leftJoinAndSelect('user.unreadPosts', 'unreadposts')
+      .where('user.id = :id', { id })
+      .getOne();
+    return postIds;
+  }
+
+  async markAsUnreadComment(id: string, postId: string): Promise<string> {
+    await this.createQueryBuilder().relation(User, 'unreadComments').of(id).add(postId);
+    return postId;
+  }
+
+  async markAsReadComments(id: string, postId: string): Promise<string> {
+    await this.createQueryBuilder().relation(User, 'unreadComments').of(id).remove(postId);
+    return postId;
+  }
+
+  async getUnreadCommentsById(id: string): Promise<IUserUnreadPosts> {
+    const postIds = await this.createQueryBuilder('user')
+      .select([
+        'user.id'
+      ])
+      .leftJoinAndSelect('user.unreadComments', 'unreadcomments')
       .where('user.id = :id', { id })
       .getOne();
     return postIds;
