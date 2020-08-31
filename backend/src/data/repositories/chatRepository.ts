@@ -72,6 +72,7 @@ class ChatRepository extends Repository<Chat> {
       .where('workspace.id = :workspaceId', { workspaceId })
       .andWhere('currentUser.id = :userId', { userId })
       .getMany();
+
     return chats;
   }
 

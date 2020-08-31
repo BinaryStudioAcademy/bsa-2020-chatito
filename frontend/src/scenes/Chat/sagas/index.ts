@@ -33,6 +33,7 @@ import { addReminder } from 'services/reminderService';
 import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
 import { upsertDraftPost, deleteDraftPost } from 'services/draftService';
+import { removeUserFromChatInWorkspaceRoutine } from 'scenes/Workspace/routines';
 
 function* fetchChatPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
@@ -148,6 +149,7 @@ function* removeUserFromChatRequest({ payload }: Routine<any>) {
     const { chatId, userId } = payload;
     yield call(removeUserFromChat, chatId, userId);
     yield put(removeUserFromChatRoutine.success(userId));
+    yield put(removeUserFromChatInWorkspaceRoutine.success({ chatId, userId }));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(removeUserFromChatRoutine.failure(error.message));

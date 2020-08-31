@@ -217,9 +217,9 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     case removeUserFromChatRoutine.SUCCESS:
       if (state.chat) {
         const newUserList = state.chat?.users?.filter(user => user.id !== payload) || [];
-        const result = { ...state.chat, users: newUserList };
+        const chatState = { ...state.chat, users: newUserList };
         return {
-          ...state, chat: result, loading: false
+          ...state, chat: chatState, loading: false
         };
       }
       return state;
