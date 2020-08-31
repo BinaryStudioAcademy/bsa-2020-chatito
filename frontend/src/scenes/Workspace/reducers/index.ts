@@ -411,11 +411,10 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return {
         ...state
       };
-    case readCommentRoutine.SUCCESS: {
+    case readCommentRoutine.SUCCESS:
       return {
         ...state, unreadPostComments: payload
       };
-    }
     case readCommentRoutine.FAILURE:{
       return {
         ...state
