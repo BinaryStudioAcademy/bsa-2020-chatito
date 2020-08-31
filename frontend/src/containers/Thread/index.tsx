@@ -127,16 +127,16 @@ const Thread: FunctionComponent<IProps> = ({
           <div className={styles.threadComments}>
             {comments.map((comment, index) => (
               index < maxComment
-              ? (
-                <div key={comment.id}>
-                  {commentIdForLine === comment.id ? newCommentLineElement : ''}
-                  <Post
-                    post={comment}
-                    type={PostType.Comment}
-                    mainPostId={post.id}
-                  />
-                </div>
-              )
+                ? (
+                  <div key={comment.id}>
+                    {commentIdForLine === comment.id ? newCommentLineElement : ''}
+                    <Post
+                      post={comment}
+                      type={PostType.Comment}
+                      mainPostId={post.id}
+                    />
+                  </div>
+                )
                 : null
             ))}
           </div>
