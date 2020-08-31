@@ -30,7 +30,7 @@ interface IProps {
   showUserProfile: IBindingCallback1<IUser>;
   showModal: IBindingCallback1<IModalRoutine>;
   isShown: boolean;
-  postRef: MutableRefObject<any> | null;
+  postRef?: MutableRefObject<any> | null;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,

@@ -99,7 +99,11 @@ class ChatRepository extends Repository<Chat> {
         'chat.users',
         'user'
       )
-      .where('chat."createdByUserId" = :userId', { userId })
+      .leftJoin(
+        'chat.users',
+        'currentUser'
+      )
+      .where('currentUser.id = :userId', { userId })
       .getMany();
 
     return chats;
