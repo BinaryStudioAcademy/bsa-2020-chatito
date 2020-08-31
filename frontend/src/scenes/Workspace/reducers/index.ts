@@ -415,11 +415,10 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return {
         ...state, unreadPostComments: payload
       };
-    case readCommentRoutine.FAILURE:{
+    case readCommentRoutine.FAILURE:
       return {
         ...state
       };
-    }
     case removeUserFromChatInWorkspaceRoutine.SUCCESS: {
       const { chatId, userId } = payload;
       const chat = [...state.channels, ...state.directMessages].filter(({ id: _chatId }) => _chatId === chatId)[0];
