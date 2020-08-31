@@ -12,6 +12,7 @@ import CustomError from '../common/models/CustomError';
 import ChatRepository from '../data/repositories/chatRepository';
 import { fromChatToClientChat } from '../common/mappers/chat';
 import { ChatType } from '../common/enums/ChatType';
+import { fromCommentsToCommentsWithUserImageUrl } from '../common/mappers/post';
 
 export const createWorkspace = async (data: IClientCreateWorkspace): Promise<IWorkspaceResponse> => {
   const { name } = data;
@@ -34,7 +35,8 @@ export const getWorkspaceUsers = async (id: string): Promise<IUser[]> => {
 
 export const getThreads = async (workspaceId: string, userId: string) => {
   const posts = await getCustomRepository(PostRepository).getPostsByUserId(workspaceId, userId);
-  return posts;
+  const mappedPosts = posts.map(post => ({ ...post, comments: fromCommentsToCommentsWithUserImageUrl(post.comments) }));
+  return mappedPosts;
 };
 
 export const getWorkspaceUserChats = async (workspaceId: string, userId: string): Promise<any> => {

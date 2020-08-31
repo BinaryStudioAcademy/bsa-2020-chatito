@@ -71,11 +71,9 @@ const InviteChatForm: React.FC<IProps> = ({ workspaceId, chatName,
   };
 
   const onAdd = async () => {
-    if (selectedUsers.length) {
-      const userIds = selectedUsers.map(user => user.id);
-      await addUsersToChat({ chatId, userIds });
-      await getUserList(chatId);
-    }
+    const userIds = selectedUsers.map(user => user.id);
+    await addUsersToChat({ chatId, userIds });
+    await getUserList(chatId);
     onHide();
   };
 
@@ -125,7 +123,9 @@ const InviteChatForm: React.FC<IProps> = ({ workspaceId, chatName,
           </InputGroup>
         </OverlayTrigger>
       </LoaderWrapper>
-      <Button variant="secondary" className={styles.addBtn} onClick={onAdd}>Add</Button>
+      <Button variant="secondary" className={styles.addBtn} disabled={!selectedUsers.length} onClick={onAdd}>
+        Add
+      </Button>
     </div>
   );
 };

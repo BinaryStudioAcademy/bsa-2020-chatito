@@ -21,5 +21,11 @@ export const env = {
   facebookAuth: {
     appId: getOsEnv('FACEBOOK_LOGIN_APP_ID'),
     appSecret: getOsEnv('FACEBOOK_LOGIN_APP_SECRET')
+  },
+  aws: {
+    accessKeyId: getOsEnv('AWS_ACCESS_KEY_ID'),
+    secretAccessKey: getOsEnv('AWS_SECRET_KEY'),
+    bucket: getOsEnv('AWS_BUCKET'),
+    url: getOsEnv('AWS_URL')
   }
 };
