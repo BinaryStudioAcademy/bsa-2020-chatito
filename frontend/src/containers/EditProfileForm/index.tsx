@@ -146,16 +146,16 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             </div>
           </Form.Group>
           <Form.Group controlId="formEditTitle" className={styles.inputBlock}>
-            <span className={styles.inputHeader}>Live position</span>
+            <span className={styles.inputHeader}>Life position</span>
             <Form.Control
               className={styles.inputGroup}
               type="text"
-              placeholder="Live position"
+              placeholder="Life position"
               value={title}
               onChange={handleChange}
             />
             <div className={styles.description}>
-              Let people know what you do at this channel.
+              Write here your life principles, your motto, or some fun facts about yourself.
             </div>
           </Form.Group>
           <div className={`${styles.formFooter} w-100`}>
