@@ -1,4 +1,8 @@
-import { getUnreadPosts, deleteUnreadPosts } from 'services/userService';
+import {
+  getUnreadPosts,
+  deleteUnreadPosts,
+  markPostAsUnread
+} from 'services/userService';
 import {
   addWorkspaceRoutine,
   setActiveThreadRoutine,
@@ -6,7 +10,8 @@ import {
   fetchPostCommentsRoutine,
   fetchWorkspaceUsersRoutine,
   fetchUnreadUserPostsRoutine,
-  readPostRoutine
+  readPostRoutine,
+  markAsUnreadWithOptionRoutine
 } from 'scenes/Workspace/routines';
 import { Routine } from 'redux-saga-routines';
 import { takeEvery, put, call, all } from 'redux-saga/effects';
@@ -112,8 +117,22 @@ function* readPost({ payload }: Routine<any>) {
   }
 }
 
-function* watchreadPostRoutine() {
+function* watchReadPostRoutine() {
   yield takeEvery(readPostRoutine.TRIGGER, readPost);
+}
+
+function* markAsUnreadPost({ payload }: Routine<any>) {
+  try {
+    console.log(payload);
+    yield call(markPostAsUnread, payload.unreadPost.id);
+    yield put(markAsUnreadWithOptionRoutine.success(payload));
+  } catch (error) {
+    yield call(toastrError, error.message);
+  }
+}
+
+function* watchMarkAsUnreadPost() {
+  yield takeEvery(markAsUnreadWithOptionRoutine.TRIGGER, markAsUnreadPost);
 }
 
 export default function* workspaceSaga() {
@@ -124,6 +143,7 @@ export default function* workspaceSaga() {
     watchFetchUserChatsRequest(),
     watchFetchWorkspaceUsers(),
     watchfetchUnreadUserPosts(),
-    watchreadPostRoutine()
+    watchReadPostRoutine(),
+    watchMarkAsUnreadPost()
   ]);
 }

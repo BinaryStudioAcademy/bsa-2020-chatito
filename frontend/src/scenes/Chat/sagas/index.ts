@@ -117,7 +117,6 @@ function* watchCreateChatRequest() {
 function* addUsersToChatRequest({ payload }: Routine<any>) {
   try {
     yield call(addUsersToChat, payload);
-    yield call(toastrSuccess, 'Users have been added successfully.');
   } catch (error) {
     yield call(toastrError, 'Adding users was failed. Please try again later.');
   }

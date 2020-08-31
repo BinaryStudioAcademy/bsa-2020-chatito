@@ -15,7 +15,8 @@ import {
   newUserNotificationWithSocketRoutine,
   markAsUnreadWithSocketRoutine,
   fetchUnreadUserPostsRoutine,
-  readPostRoutine } from '../routines';
+  readPostRoutine,
+  markAsUnreadWithOptionRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
@@ -57,6 +58,25 @@ const initialState: IWorkspaceState = {
   threadLoading: false,
   someField: 'string',
   unreadChats: []
+};
+
+const markAsUnreadPosts = (unreadChats: IUnreadChat[], chatId: string, unreadPost: IPost) => {
+  let currentChatExist = false;
+  if (unreadChats.length) {
+    unreadChats.forEach(unreadChat => {
+      if (unreadChat.id === chatId) {
+        currentChatExist = true;
+        unreadChat.unreadPosts.push(unreadPost);
+      }
+    });
+  }
+  if (!currentChatExist) {
+    unreadChats.push({ id: chatId, unreadPosts: [unreadPost] });
+  }
+  unreadChats.forEach(unreadChat => {
+    unreadChat.unreadPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  });
+  return unreadChats;
 };
 
 const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>): IWorkspaceState => {
@@ -237,21 +257,20 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return state;
     }
     case markAsUnreadWithSocketRoutine.TRIGGER: {
-      const unreadChatsCopy = state.unreadChats;
-      let currentChatExist = false;
-      if (unreadChatsCopy.length) {
-        unreadChatsCopy.forEach(unreadChat => {
-          if (unreadChat.id === payload.chatId) {
-            currentChatExist = true;
-            unreadChat.unreadPosts.push(payload.unreadPost);
-          }
-        });
-      }
-      if (!currentChatExist) {
-        unreadChatsCopy.push({ id: payload.chatId, unreadPosts: [payload.unreadPost] });
-      }
+      const unreadChatsforState = markAsUnreadPosts(state.unreadChats, payload.chatId, payload.unreadPost);
       return {
-        ...state, unreadChats: [...unreadChatsCopy]
+        ...state, unreadChats: [...unreadChatsforState]
+      };
+    }
+    case markAsUnreadWithOptionRoutine.TRIGGER: {
+      return {
+        ...state
+      };
+    }
+    case markAsUnreadWithOptionRoutine.SUCCESS: {
+      const unreadChatsforState = markAsUnreadPosts(state.unreadChats, payload.chatId, payload.unreadPost);
+      return {
+        ...state, unreadChats: [...unreadChatsforState]
       };
     }
     case fetchUnreadUserPostsRoutine.TRIGGER:

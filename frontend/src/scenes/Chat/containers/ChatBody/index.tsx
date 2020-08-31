@@ -13,7 +13,6 @@ import LoaderWrapper from 'components/LoaderWrapper';
 import { PostType } from 'common/enums/PostType';
 import CustomReminderModal from 'containers/CustomReminderModal';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
-import { divide } from 'ramda';
 
 interface IProps {
   chatId: string | undefined;
@@ -47,14 +46,14 @@ const ChatBody: React.FC<IProps> = ({
     loadMorePosts({ chatId, from, count });
   };
 
-  const newMessageLine = () => {
+  const setNewPostLine = () => {
     unreadChats.forEach(unreadChat => {
-      if (unreadChat.unreadPosts.length) {
-        if (unreadChat.id === chatId && unreadChat.unreadPosts[0]) {
+      if (unreadChat.id === chatId) {
+        if (unreadChat.unreadPosts.length) {
           setPostIdForLine(unreadChat.unreadPosts[0].id);
+        } else {
+          setPostIdForLine('');
         }
-      } else {
-        setPostIdForLine('');
       }
     });
   };
@@ -62,7 +61,7 @@ const ChatBody: React.FC<IProps> = ({
   useEffect(() => {
     if (chatId) {
       getMorePosts();
-      newMessageLine();
+      setNewPostLine();
     }
     if (chatBody.current !== null && !loading) {
       chatBody.current.scrollTop = chatBody.current.scrollHeight;
@@ -74,22 +73,12 @@ const ChatBody: React.FC<IProps> = ({
     openThread(post);
   };
 
-  // const newPostLine = (postId: string) => {
-  //   const line = <div>New</div>;
-  //   let show = false;
-  //   if (unreadChats.length) {
-  //     unreadChats.forEach(unreadChat => {
-  //       if (unreadChat.id === chatId) {
-  //         unreadChat.unreadPosts.forEach((unreadPost, index) => {
-  //           if (unreadPost.id === postId && index === 0) {
-  //             show = true;
-  //           }
-  //         });
-  //       }
-  //     });
-  //   }
-  //   return show ? line : '';
-  // };
+  const newPostLineElement = (
+    <div className={styles.newPostBlock}>
+      <div className={styles.line} />
+      <span>New</span>
+    </div>
+  );
 
   return (
     <LoaderWrapper
@@ -105,16 +94,14 @@ const ChatBody: React.FC<IProps> = ({
           useWindow={false}
         >
           {messages.map(m => (
-            <>
-              {/* {newPostLine(m.id)} */}
-              {postIdForLine === m.id ? <div>New</div> : ''}
+            <div key={m.id}>
+              {postIdForLine === m.id ? newPostLineElement : ''}
               <Post
                 post={m}
-                key={m.id}
                 openThread={handleOpenThread}
                 type={PostType.Post}
               />
-            </>
+            </div>
           ))}
           <CustomReminderModal />
         </InfiniteScroll>

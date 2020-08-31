@@ -34,3 +34,7 @@ export const getUnreadPosts = async (id: string): Promise<IUserUnreadPosts> => {
 export const deleteUnreadPosts = async (postIds: string[]): Promise<void> => {
   await api.post('/api/users/read', { postIds });
 };
+
+export const markPostAsUnread = async (postId: string): Promise<void> => {
+  await api.post('/api/users/unread', { postId });
+};

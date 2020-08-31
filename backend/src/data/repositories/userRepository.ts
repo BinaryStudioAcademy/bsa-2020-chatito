@@ -19,8 +19,9 @@ class UserRepository extends Repository<User> {
     return this.findOne({ where: { id }, relations: ['workspaces'] });
   }
 
-  async markAsUnread(id: string, postId: string): Promise<void> {
+  async markAsUnread(id: string, postId: string): Promise<string> {
     await this.createQueryBuilder().relation(User, 'unreadPosts').of(id).add(postId);
+    return postId;
   }
 
   async markAsRead(id: string, postId: string): Promise<string> {

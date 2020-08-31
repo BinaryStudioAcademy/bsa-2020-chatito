@@ -17,10 +17,14 @@ import { PostType } from 'common/enums/PostType';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
-import { showUserProfileRoutine, readPostRoutine } from 'scenes/Workspace/routines';
+import { showUserProfileRoutine, readPostRoutine, markAsUnreadWithOptionRoutine } from 'scenes/Workspace/routines';
 import ReminderItem from 'components/ReminderItem/ReminderItem';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 import { IPostsToRead } from 'common/models/chat/IPostsToRead';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { IMarkAsUnreadPost } from 'common/models/post/IMarkAsUnreadPost';
+import { ChatType } from 'common/enums/ChatType';
 
 interface IProps {
   post: IPost;
@@ -35,10 +39,12 @@ interface IProps {
   unreadChats: IUnreadChat[];
   currentChatId: string;
   readPost: IBindingCallback1<IPostsToRead>;
+  currentChatType: ChatType;
+  markAsUnread: IBindingCallback1<IMarkAsUnreadPost>;
 }
 
-const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, currentChatId,
-  showUserProfile, addPostReaction, deletePostReaction, showModal, isShown, unreadChats, readPost }) => {
+const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, currentChatId, currentChatType,
+  showUserProfile, addPostReaction, deletePostReaction, showModal, isShown, unreadChats, readPost, markAsUnread }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
 
@@ -164,7 +170,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, curr
   );
 
   const ButtonMore = () => (
-    <OverlayTrigger trigger="click" placement="top" overlay={popoverMore}>
+    <OverlayTrigger trigger="click" rootClose placement="top" overlay={popoverMore}>
       <Card.Link
         bsPrefix={styles.openThreadBtn}
       >
@@ -173,7 +179,39 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, curr
     </OverlayTrigger>
   );
 
-  const postToRead = (id: string) => {
+  const markAsUnreadOptionClick = () => {
+    // const markAsUnreadOptionClick = (callback: IBindingAction) => {
+    markAsUnread({ chatId: currentChatId, chatType: currentChatType, unreadPost: post });
+    document.body.click();
+  };
+
+  const popoverOptions = (
+    <Popover id="popover-basic">
+      <Popover.Title as="h3">More options</Popover.Title>
+      <button
+        type="button"
+        className={`${styles.optionsSelect} ${styles.moreOptionsSelect}`}
+        onClick={markAsUnreadOptionClick}
+      >
+        <span>Mark as unread</span>
+      </button>
+      <button type="button" className={`${styles.optionsSelect} ${styles.moreOptionsSelect}`}>
+        <span>Other option</span>
+      </button>
+    </Popover>
+  );
+
+  const ButtonOptions = () => (
+    <OverlayTrigger trigger="click" rootClose placement="left" overlay={popoverOptions}>
+      <Card.Link
+        bsPrefix={styles.optionsBlock}
+      >
+        <FontAwesomeIcon icon={faEllipsisV} className={styles.optionsIcon} />
+      </Card.Link>
+    </OverlayTrigger>
+  );
+
+  const postsToRead = (id: string) => {
     const postId = id;
     const unreadChatsCopy = [...unreadChats];
     let postsToDelete: IPost[] = [];
@@ -198,7 +236,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, curr
       if (unreadChat.id === currentChatId) {
         unreadChat.unreadPosts.forEach(unreadPost => {
           if (unreadPost.id === post.id) {
-            postToRead(unreadPost.id);
+            postsToRead(unreadPost.id);
           }
         });
       }
@@ -236,6 +274,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, curr
           {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
           <ButtonMore />
         </div>
+        <ButtonOptions />
       </Media.Body>
     </Media>
   );
@@ -245,7 +284,8 @@ const mapStateToProps = (state: IAppState) => ({
   userId: state.user.user?.id as string,
   isShown: state.modal.setReminder,
   unreadChats: state.workspace.unreadChats,
-  currentChatId: state.chat.chat!.id
+  currentChatId: state.chat.chat!.id,
+  currentChatType: state.chat.chat!.type
 });
 
 const mapDispatchToProps = {
@@ -253,7 +293,8 @@ const mapDispatchToProps = {
   deletePostReaction: deletePostReactionRoutine,
   showModal: showModalRoutine,
   showUserProfile: showUserProfileRoutine,
-  readPost: readPostRoutine
+  readPost: readPostRoutine,
+  markAsUnread: markAsUnreadWithOptionRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);
