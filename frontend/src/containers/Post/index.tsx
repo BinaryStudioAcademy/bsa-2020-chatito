@@ -19,6 +19,7 @@ import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { showUserProfileRoutine } from 'scenes/Workspace/routines';
 import ReminderItem from 'components/ReminderItem/ReminderItem';
+import { IBindingAction } from 'common/models/callback/IBindingActions';
 
 interface IProps {
   post: IPost;
@@ -62,8 +63,10 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
   const oneDay = oneHour * 24;
   const oneWeek = oneDay * 7;
 
-  const trigger = () => (
-    <button type="button" className={`${styles.reactBtn} button-unstyled`}>React</button>
+  const trigger = (onTriggerClick: IBindingAction, triggerRef: React.RefObject<HTMLButtonElement>) => (
+    <button type="button" className={`${styles.reactBtn} button-unstyled`} onClick={onTriggerClick} ref={triggerRef}>
+      React
+    </button>
   );
 
   const onEmojiHandler = (emoji: string) => {
@@ -199,7 +202,12 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
                 Reply
               </Card.Link>
             )}
-            {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
+            {type === PostType.Post && (
+              <EmojiPopUp
+                trigger={trigger}
+                onEmojiClick={onEmojiClick}
+              />
+            )}
             <ButtonMore />
           </div>
         </Media.Body>
