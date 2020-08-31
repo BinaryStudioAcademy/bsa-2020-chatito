@@ -134,6 +134,7 @@ const Workspace: React.FC<IProps> = ({
               <Switch>
                 <Route path={Routes.Drafts} component={DraftsContainer} />
                 <Route path={Routes.Threads} component={ThreadsContainer} />
+                <Route path={Routes.Post} component={ChatScene} />
                 <Route path={Routes.Chat} component={ChatScene} />
                 <Route component={NoChatMessage} />
               </Switch>

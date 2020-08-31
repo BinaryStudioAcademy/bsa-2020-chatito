@@ -24,3 +24,4 @@ export const markAsUnreadCommentWithSocketRoutine = createRoutine('MARK_AS_UNREA
 export const markAsUnreadCommentWithOptionRoutine = createRoutine('MARK_AS_UNREAD_COMMENT_WITH_OPTION');
 export const fetchUnreadUserCommentsRoutine = createRoutine('FETCH_UNREAD_USER_COMMENTS_ROUTINE');
 export const readCommentRoutine = createRoutine('READ_COMMENT_ROUTINE');
+export const removeUserFromChatInWorkspaceRoutine = createRoutine('REMOVE_USER_FROM_CHAT_IN_WORKSPACE');

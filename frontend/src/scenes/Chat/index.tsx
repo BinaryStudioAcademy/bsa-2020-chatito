@@ -15,10 +15,11 @@ interface IProps {
     params: {
       whash: string;
       chash: string;
+      postId: string;
     };
   };
   chats: IChat[];
-  selectChat: (chat: IChat) => void;
+  selectChat: (chat: IChat | null) => void;
 }
 // eslint-disable-next-line
 const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, selectChat }) => {
@@ -27,6 +28,8 @@ const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, selectChat }
     if (chash) {
       const currChat = chats.find(chatItem => chatItem.hash === chash);
       if (currChat) selectChat(currChat);
+    } else {
+      selectChat(null);
     }
   }, [isLoading, match.params.chash]);
 
@@ -34,7 +37,7 @@ const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, selectChat }
     <LoaderWrapper loading={isLoading}>
       <div className={styles.chatContainer}>
         <ChatHeader />
-        <ChatBody />
+        <ChatBody postId={match?.params?.postId} />
         <ChatFooter />
       </div>
     </LoaderWrapper>

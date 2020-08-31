@@ -29,6 +29,7 @@ import { push } from 'connected-react-router';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { Routes } from 'common/enums/Routes';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
+import { useLocation } from 'react-router-dom';
 import { createDirectChannelName } from 'common/helpers/nameHelper';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
@@ -58,7 +59,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
-
+  const location = useLocation();
   const doSelectChannel = (chat: IChat) => {
     if (selectedWorkspace && chat) {
       router(Routes.Chat.replace(':whash', selectedWorkspace.hash)
@@ -99,10 +100,13 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     return '';
   };
   // eslint-disable-next-line
-  const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => { }) => (
-    <button type="button" className={styles.channelSelect} onClick={onClick}>
+  const isActiveChanneSelector = (route: Routes) => location.pathname.includes(route.replace(':whash', selectedWorkspace.hash));
+
+  // eslint-disable-next-line
+  const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => { }, isActive = () => false) => (
+    <button type="button" className={isActive() ? styles.channelSelectActive : styles.channelSelect} onClick={onClick}>
       <div className={styles.iconWrapper}>
-        <FontAwesomeIcon icon={iconFa} />
+        <FontAwesomeIcon icon={iconFa} color="black" />
       </div>
       <span className={styles.buttonText}>{text}</span>
       {text === 'Threads' ? unreadThreadsMarker() : ''}
@@ -222,16 +226,18 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     showModal({ modalType: ModalTypes.InvitePopup, show: true });
   };
 
-  const goToThreadsCallBack = () => router(Routes.Threads.replace(':whash', selectedWorkspace.hash));
-
-  const goToDraftsCallBack = () => router(Routes.Drafts.replace(':whash', selectedWorkspace.hash));
+  const goToRoute = (route: Routes) => router(route.replace(':whash', selectedWorkspace.hash));
 
   return (
     <div className={styles.leftToolbar}>
       {channelSelector('Invite to workspace', faUserFriends, showInvitePopup)}
-      {channelSelector('Threads', faClipboardList, goToThreadsCallBack)}
+      {channelSelector('Threads', faClipboardList,
+        () => goToRoute(Routes.Threads),
+        () => isActiveChanneSelector(Routes.Threads))}
       {channelSelector('Mentions & reactions', faAt)}
-      {channelSelector('Drafts', faListAlt, goToDraftsCallBack)}
+      {channelSelector('Drafts', faListAlt,
+        () => goToRoute(Routes.Drafts),
+        () => isActiveChanneSelector(Routes.Drafts))}
       {channelSelector('Saved Items', faSearch)}
       {channelSelector('File Browser', faDatabase)}
 

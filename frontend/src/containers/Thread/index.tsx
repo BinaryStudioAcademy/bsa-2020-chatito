@@ -29,7 +29,7 @@ interface IProps {
   sendComment: IBindingCallback1<ICreateComment>;
   onHide?: IBindingAction;
   hideCloseBtn?: boolean;
-  currChatHash: string;
+  currChatHash: string | null;
   router: (route: string) => void;
   draftCommentId?: string;
   draftCommentText?: string;
@@ -94,7 +94,7 @@ const Thread: FunctionComponent<IProps> = ({
   const maxComment = showOnlyTwoComments && !showAll ? 2 : 10000;
 
   const redirectToChat = () => {
-    if (whash && post.chat && post.chat?.hash !== currChatHash) {
+    if (whash && currChatHash && post.chat && post.chat?.hash !== currChatHash) {
       router(Routes.Chat
         .replace(':whash', whash)
         .replace(':chash', post.chat.hash || currChatHash));
@@ -119,22 +119,14 @@ const Thread: FunctionComponent<IProps> = ({
 
           {!hideCloseBtn && <FontAwesomeIcon onClick={onHide} icon={faTimesCircle} className={styles.closeBtn} />}
         </header>
-        <div className={styles.threadPost}>
-          <Post post={post} type={PostType.Post} />
-        </div>
-        {showOnlyTwoComments
-          ? (
-            <button
-              type="button"
-              onClick={() => setShowAll(!showAll)}
-              className={styles.link}
-            >
-              Show other replies
-            </button>
-          ) : ('')}
-        <div className={styles.threadComments}>
-          {comments.map((comment, index) => (
-            index < maxComment
+        <div className={styles.threadBlock}>
+
+          <div className={styles.threadPost}>
+            <Post post={post} type={PostType.Post} />
+          </div>
+          <div className={styles.threadComments}>
+            {comments.map((comment, index) => (
+              index < maxComment
               ? (
                 <div key={comment.id}>
                   {commentIdForLine === comment.id ? newCommentLineElement : ''}
@@ -145,29 +137,34 @@ const Thread: FunctionComponent<IProps> = ({
                   />
                 </div>
               )
-              : null
-          ))}
-        </div>
-        {comments.length > maxComment
-          ? (
-            <div className={styles.commentsMore}>
-              {`And ${comments.length - maxComment} more comments`}
-            </div>
-          ) : ('')}
-        <div className={styles.textEditor}>
-          <TextEditor
-            key={draftCommentText}
-            placeholder="write a comment!"
-            height={110}
-            draftPayload={{ postId: post.id }}
-            draftInput={{
-              id: draftCommentId,
-              text: draftCommentText
-            }}
-            upsertDraft={upsertDraftComment}
-            deleteDraft={deleteDraftComment}
-            onSend={sendCommentHandler}
-          />
+                : null
+            ))}
+          </div>
+          {comments.length > maxComment
+            ? (
+              <button
+                type="button"
+                onClick={() => setShowAll(!showAll)}
+                className={styles.link}
+              >
+                {`Show ${comments.length - maxComment} more replies`}
+              </button>
+            ) : ('')}
+          <div className={styles.textEditor}>
+            <TextEditor
+              key={draftCommentText}
+              placeholder="write a comment!"
+              height={110}
+              draftPayload={{ postId: post.id }}
+              draftInput={{
+                id: draftCommentId,
+                text: draftCommentText
+              }}
+              upsertDraft={upsertDraftComment}
+              deleteDraft={deleteDraftComment}
+              onSend={sendCommentHandler}
+            />
+          </div>
         </div>
       </LoaderWrapper>
     </div>
@@ -176,10 +173,10 @@ const Thread: FunctionComponent<IProps> = ({
 
 const mapStateToProps = (state: IAppState) => {
   const draftComments = state.workspace.activeThread?.post.draftComments;
-
+  const currChatHash = state.chat.chat ? state.chat.chat.hash : null;
   return {
     // eslint-disable-next-line
-    currChatHash: state.chat.chat!.hash,
+    currChatHash,
     draftCommentId: draftComments?.length ? draftComments[0].id : undefined,
     draftCommentText: draftComments?.length ? draftComments[0].text : undefined,
     isLoading: state.workspace.threadLoading,

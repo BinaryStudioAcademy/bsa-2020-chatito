@@ -42,6 +42,11 @@ class ChatRepository extends Repository<Chat> {
         'chat.isPrivate',
         'user.id',
         'user.imageUrl',
+        'user.createdAt',
+        'user.fullName',
+        'user.status',
+        'user.title',
+        'user.email',
         'user.displayName',
         'draft_post.id',
         'draft_post.text'
@@ -56,13 +61,18 @@ class ChatRepository extends Repository<Chat> {
         'draft_post."chatId" = chat.id AND draft_post."createdByUserId" = :userId',
         { userId }
       )
-      .leftJoinAndSelect(
+      .leftJoin(
         'chat.users',
         'user'
       )
+      .leftJoin(
+        'chat.users',
+        'currentUser'
+      )
       .where('workspace.id = :workspaceId', { workspaceId })
-      .andWhere('user.id = :userId', { userId })
+      .andWhere('currentUser.id = :userId', { userId })
       .getMany();
+
     return chats;
   }
 
@@ -89,7 +99,11 @@ class ChatRepository extends Repository<Chat> {
         'chat.users',
         'user'
       )
-      .where('chat."createdByUserId" = :userId', { userId })
+      .leftJoin(
+        'chat.users',
+        'currentUser'
+      )
+      .where('currentUser.id = :userId', { userId })
       .getMany();
 
     return chats;

@@ -12,7 +12,8 @@ import {
   addReminderSuccessPostRoutine,
   createChatAndAddPostRoutine,
   upsertDraftPostRoutine,
-  deleteDraftPostRoutine
+  deleteDraftPostRoutine,
+  fetchNavigationPostRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import {
@@ -21,7 +22,8 @@ import {
   createChat,
   fetchChatUsers,
   removeUserFromChat,
-  addUsersToChat
+  addUsersToChat,
+  fetchNavigationPost
 } from 'services/chatService';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError, toastrSuccess } from 'services/toastrService';
@@ -31,6 +33,7 @@ import { addReminder } from 'services/reminderService';
 import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
 import { upsertDraftPost, deleteDraftPost } from 'services/draftService';
+import { removeUserFromChatInWorkspaceRoutine } from 'scenes/Workspace/routines';
 
 function* fetchChatPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
@@ -145,6 +148,7 @@ function* removeUserFromChatRequest({ payload }: Routine<any>) {
     const { chatId, userId } = payload;
     yield call(removeUserFromChat, chatId, userId);
     yield put(removeUserFromChatRoutine.success(userId));
+    yield put(removeUserFromChatInWorkspaceRoutine.success({ chatId, userId }));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(removeUserFromChatRoutine.failure(error.message));
@@ -152,7 +156,7 @@ function* removeUserFromChatRequest({ payload }: Routine<any>) {
 }
 
 function* watchRemoveUserFromChat() {
-  yield takeEvery(addReminderRoutine.TRIGGER, removeUserFromChatRequest);
+  yield takeEvery(removeUserFromChatRoutine.TRIGGER, removeUserFromChatRequest);
 }
 
 function* createReminderRequest({ payload }: Routine<any>) {
@@ -169,6 +173,20 @@ function* createReminderRequest({ payload }: Routine<any>) {
 
 function* watchCreateReminderRequest() {
   yield takeEvery(addReminderRoutine.TRIGGER, createReminderRequest);
+}
+
+function* fetchNavigationPostRequest({ payload }: Routine<any>) {
+  try {
+    const response = yield call(fetchNavigationPost, payload);
+    yield put(fetchNavigationPostRoutine.success(response));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(fetchNavigationPostRoutine.failure(error.message));
+  }
+}
+
+function* watchFetchNavigationPost() {
+  yield takeEvery(fetchNavigationPostRoutine.TRIGGER, fetchNavigationPostRequest);
 }
 
 function* createChatAndAddPost({ payload }: Routine<any>) {
@@ -199,6 +217,7 @@ export default function* chatSaga() {
     watchAddUsersToChat(),
     watchFetchChatUsersRequest(),
     watchRemoveUserFromChat(),
+    watchFetchNavigationPost(),
     watchCreateReminderRequest(),
     watchCreateChatAndAddPost()
   ]);

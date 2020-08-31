@@ -89,7 +89,7 @@ class UserRepository extends Repository<User> {
     return user;
   }
 
-  async editUser(id:string, data: IUserClient): Promise<User> {
+  async editUser(id: string, data: IUserClient): Promise<User> {
     await this.update(
       id,
       data
