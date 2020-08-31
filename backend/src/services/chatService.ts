@@ -16,7 +16,15 @@ import { fromPostToPostClient } from '../common/mappers/post';
 import { IUser } from '../common/models/user/IUser';
 import { IGetChatPosts } from '../common/models/chat/IGetChatPosts';
 
-export const getAllChatPosts = async (filter: IGetChatPosts) => {
+export const getAllChatPosts = async (filterData: IGetChatPosts) => {
+  const { postId, ...filter } = filterData;
+  if (postId) {
+    const postCreatedAt = new Date((await getCustomRepository(PostRepository).getByIdWithChat(postId)).createdAt);
+    const navChatPosts = await getCustomRepository(PostRepository).getAllNavChatPosts({ ...filter, postCreatedAt });
+    const mappedChatPosts = await Promise.all(navChatPosts.map(async post => fromPostToPostClient(post)));
+
+    return mappedChatPosts;
+  }
   const chatPosts: IPost[] = await getCustomRepository(PostRepository).getAllChatPosts(filter);
   const mappedChatPosts = await Promise.all(chatPosts.map(async post => fromPostToPostClient(post)));
 

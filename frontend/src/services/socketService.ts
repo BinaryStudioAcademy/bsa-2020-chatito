@@ -9,8 +9,10 @@ import {
   editPostWithSocketRoutine,
   addChatWithSocketRoutine,
   upsertDraftPostWithSocketRoutine,
+  usertDraftsPagePostRoutine,
   deleteDraftPostWithSocketRoutine,
-  updatePostDraftCommentRoutine
+  updatePostDraftCommentRoutine,
+  deleteDraftPostFromDraftsRoutine
 } from 'scenes/Chat/routines';
 import {
   incUnreadCountRoutine,
@@ -31,7 +33,12 @@ import { IUser } from 'common/models/user/IUser';
 import { ChatType } from 'common/enums/ChatType';
 import { IDraftPost } from 'common/models/draft/IDraftPost';
 import { IDraftComment } from 'common/models/draft/IDraftComment';
-import { upsertDraftCommentWithSocketRoutine, deleteDraftCommentWithSocketRoutine } from 'containers/Thread/routines';
+import {
+  upsertDraftCommentWithSocketRoutine,
+  deleteDraftCommentWithSocketRoutine,
+  upsertDraftPageCommentRoutine,
+  deleteDraftCommentFromDraftsRoutine
+} from 'containers/Thread/routines';
 
 const { server } = env.urls;
 
@@ -95,7 +102,6 @@ export const connectSockets = () => {
     chatType: ChatType,
     chatId: string
   ) => {
-    console.log(users, chatName, chatType, chatId);
     store.dispatch(newUserNotificationWithSocketRoutine({ users, chatType, chatId }));
     if (users.length === 1) {
       toastrSuccess(`User ${users[0].displayName} was invited to channel "${chatName}"`);
@@ -110,17 +116,26 @@ export const connectSockets = () => {
 
   chatSocket.on(ClientSockets.UpsertDraftPost, (userId: string, chatId: string, draftPost: IDraftPost) => {
     const state = store.getState();
-    if (chatId === state.chat.chat?.id && state.user.user?.id === userId) {
-      store.dispatch(upsertDraftPostWithSocketRoutine(draftPost));
-      store.dispatch(updateChatDraftPostRoutine({ ...draftPost, chatId }));
+    // store.dispatch(updateDraftsListRoutine({ ...draftPost, chatId }));
+
+    if (state.user.user?.id === userId) {
+      store.dispatch(usertDraftsPagePostRoutine(draftPost));
+      if (chatId === state.chat.chat?.id) {
+        store.dispatch(upsertDraftPostWithSocketRoutine(draftPost));
+        store.dispatch(updateChatDraftPostRoutine({ ...draftPost, chatId }));
+      }
     }
   });
 
-  chatSocket.on(ClientSockets.DeleteDraftPost, (userId: string, chatId: string) => {
+  chatSocket.on(ClientSockets.DeleteDraftPost, (userId: string, chatId: string, post: IPost) => {
     const state = store.getState();
-    if (chatId === state.chat.chat?.id && state.user.user?.id === userId) {
-      store.dispatch(deleteDraftPostWithSocketRoutine());
-      store.dispatch(updateChatDraftPostRoutine({ chatId }));
+
+    if (state.user.user?.id === userId) {
+      store.dispatch(deleteDraftPostFromDraftsRoutine(post));
+      if (chatId === state.chat.chat?.id) {
+        store.dispatch(deleteDraftPostWithSocketRoutine());
+        store.dispatch(updateChatDraftPostRoutine({ chatId }));
+      }
     }
   });
 
@@ -131,12 +146,16 @@ export const connectSockets = () => {
     draftComment: IDraftComment
   ) => {
     const state = store.getState();
+
     if (postId === state.workspace.activeThread?.post.id && state.user.user?.id === userId) {
       store.dispatch(upsertDraftCommentWithSocketRoutine(draftComment));
     }
 
-    if (chatId === state.chat.chat?.id && state.user.user?.id === userId) {
-      store.dispatch(updatePostDraftCommentRoutine({ ...draftComment, postId }));
+    if (state.user.user?.id === userId) {
+      store.dispatch(upsertDraftPageCommentRoutine({ ...draftComment, postId }));
+      if (chatId === state.chat.chat?.id) {
+        store.dispatch(updatePostDraftCommentRoutine({ ...draftComment, postId }));
+      }
     }
   });
 
@@ -146,8 +165,11 @@ export const connectSockets = () => {
       store.dispatch(deleteDraftCommentWithSocketRoutine());
     }
 
-    if (chatId === state.chat.chat?.id && state.user.user?.id === userId) {
-      store.dispatch(updatePostDraftCommentRoutine({ postId }));
+    if (state.user.user?.id === userId) {
+      store.dispatch(deleteDraftCommentFromDraftsRoutine(postId));
+      if (chatId === state.chat.chat?.id) {
+        store.dispatch(updatePostDraftCommentRoutine({ postId }));
+      }
     }
   });
 };

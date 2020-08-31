@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { IAppState } from 'common/models/store';
 import { fetchDraftsRoutine } from './routines';
 import DraftCard from './components/DraftCard';
+import NoDraftsMessage from './components/NoDraftsMessage';
 import { IDraftClient } from 'common/models/draft/IDraftClient';
 
 interface IProps {
@@ -27,10 +28,14 @@ const Drafts: React.FC<IProps> = ({ posts, comments, fetchDrafts, workspaceId, w
 
   return (
     <div className={styles.body}>
+      {[...posts, ...comments].length
+        ? (
+          <div className={styles.wrapper}>
+            {createCards([...posts, ...comments])}
+          </div>
+        )
+        : <NoDraftsMessage />}
 
-      <div className={styles.wrapper}>
-        {createCards([...posts, ...comments])}
-      </div>
     </div>
   );
 };

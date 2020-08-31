@@ -14,3 +14,4 @@ export const incUnreadCountRoutine = createRoutine('INC_UNREAD_COUNT');
 export const fetchWorkspaceUsersRoutine = createRoutine('FETCH_WORKSPACE_USERS');
 export const updateChatDraftPostRoutine = createRoutine('UPDATE_CHAT_DRAFT_POST');
 export const newUserNotificationWithSocketRoutine = createRoutine('NEW_USER_NOTIFICATION_WITH_SOCKET');
+export const removeUserFromChatInWorkspaceRoutine = createRoutine('REMOVE_USER_FROM_CHAT_IN_WORKSPACE');

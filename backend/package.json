@@ -35,6 +35,7 @@
     "@types/socketio-jwt-auth": "0.0.0",
     "@typescript-eslint/eslint-plugin": "3.7.1",
     "@typescript-eslint/parser": "3.7.1",
+    "aws-sdk": "2.739.0",
     "bcrypt": "5.0.0",
     "body-parser": "1.19.0",
     "cors": "2.8.5",

@@ -8,16 +8,16 @@ import { fromCreatedWorkspaceToClient } from './workspace';
 import { IGoogleUser } from '../models/user/IGoogleUser';
 import { IFacebookUser } from '../models/user/IFacebookUser';
 import { IUser } from '../models/user/IUser';
+import { getImageUrl } from '../utils/imageHelper';
 
 export const fromUserToUserClient = (user: IUserWithWorkspaces | IUser): IUserClient => {
   const { id, fullName, displayName, email, imageUrl, title, status } = user;
-
   return {
     id,
     fullName,
     email,
     displayName,
-    imageUrl,
+    imageUrl: getImageUrl(imageUrl),
     title,
     status
   };
@@ -30,7 +30,7 @@ export const fromUserToUserWithWorkspaces = (user: User): IUserWithWorkspaces =>
     fullName,
     email,
     displayName,
-    imageUrl,
+    imageUrl: getImageUrl(imageUrl),
     title,
     status,
     workspaces: workspaces.map(workspace => fromCreatedWorkspaceToClient(workspace))
