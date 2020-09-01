@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { IChat } from 'common/models/chat/IChat';
 import { setCurrentChatRoutine } from './routines';
 import LoaderWrapper from 'components/LoaderWrapper';
+import { ChatType } from 'common/enums/ChatType';
 
 interface IProps {
   isLoading: boolean;
@@ -18,10 +19,12 @@ interface IProps {
       postId: string;
     };
   };
+  chat?: IChat;
   chats: IChat[];
   selectChat: (chat: IChat | null) => void;
 }
-const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, selectChat }) => {
+
+const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats, selectChat }) => {
   useEffect(() => {
     const { chash } = match.params;
     if (chash) {
@@ -37,7 +40,7 @@ const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, selectChat }
       <div className={styles.chatContainer}>
         <ChatHeader />
         <ChatBody postId={match?.params?.postId} />
-        <ChatFooter />
+        { chat?.type === ChatType.GithubRepository ? '' : <ChatFooter /> }
       </div>
     </LoaderWrapper>
   );

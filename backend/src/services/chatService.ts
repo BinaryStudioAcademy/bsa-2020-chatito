@@ -41,8 +41,9 @@ export const getAllUserChats = async (userId: string) => {
 
   const directs = chats.filter(({ type }) => type === ChatType.DirectMessage);
   const channels = chats.filter(({ type }) => type === ChatType.Channel);
+  const githubRepositories = chats.filter(({ type }) => type === ChatType.GithubRepository);
 
-  return { directs, channels };
+  return { directs, channels, githubRepositories };
 };
 
 export const addChat = async (userId: string, body: IChatData) => {

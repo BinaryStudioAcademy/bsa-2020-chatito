@@ -37,6 +37,7 @@ import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
 interface IProps {
   channels: IChat[];
   directMessages: IChat[];
+  githubRepositories: IChat[];
   selectedChat: IChat;
   unreadChats: IUnreadChat[];
   selectedWorkspace: IWorkspace;
@@ -49,6 +50,7 @@ interface IProps {
 const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
+  githubRepositories,
   selectedChat,
   unreadChats,
   currentUserId,
@@ -59,6 +61,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
+  const [githubPanel, setGithubPanel] = useState<boolean>(false);
   const location = useLocation();
   const doSelectChannel = (chat: IChat) => {
     if (selectedWorkspace && chat) {
@@ -185,6 +188,26 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     );
   };
 
+  const githubChannel = (githubRepository: IChat) => {
+    const { id, name } = githubRepository;
+
+    return (
+      <button
+        type="button"
+        key={id}
+        className={getChannelSelect(githubRepository)}
+        onClick={() => doSelectChannel(githubRepository)}
+      >
+        <div className={styles.chatBlock}>
+          <div className={styles.chatBlockContainer}>
+            <div className={styles.iconWrapper} />
+            <span className={styles.buttonText}>{name}</span>
+          </div>
+        </div>
+      </button>
+    );
+  };
+
   const addChannelButton = () => (
     <button
       type="button"
@@ -218,6 +241,24 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 
       <span className={styles.addButtonText}>
         Add a direct
+      </span>
+    </button>
+  );
+
+  const addRepositoryButton = () => (
+    <button
+      type="button"
+      className={styles.channelSelect}
+    // onClick={() => showModal({ modalType: ModalTypes.CreateGithubRepository, show: true })}
+    >
+      <div className={styles.iconWrapper}>
+        <div className={styles.iconBorder}>
+          <FontAwesomeIcon icon={faPlus} />
+        </div>
+      </div>
+
+      <span className={styles.addButtonText}>
+        Add a repository
       </span>
     </button>
   );
@@ -273,6 +314,22 @@ const ChatToolbar: FunctionComponent<IProps> = ({
         {addDirectButton()}
       </div>
 
+      <div className={styles.buttonChannel}>
+        <button type="button" className={styles.buttonSelect} onClick={() => setGithubPanel(!githubPanel)}>
+          <div className={styles.iconWrapper}>
+            <FontAwesomeIcon icon={faCaretRight} className={getClassNameImg(githubPanel)} />
+          </div>
+
+          <span className={styles.buttonText}>GitHub</span>
+        </button>
+      </div>
+
+      <div className={getClassNameDiv(githubPanel)}>
+        {githubRepositories.map(githubRepository => (
+          githubChannel(githubRepository)))}
+        {addRepositoryButton()}
+      </div>
+
       <InvitePopup />
       <CreateChannelModal />
       <CreateDirectModal />
@@ -283,6 +340,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 const mapStateToProps = (state: IAppState) => ({
   channels: state.workspace.channels || [],
   directMessages: state.workspace.directMessages || [],
+  githubRepositories: state.workspace.githubRepositories || [],
   selectedWorkspace: state.workspace.workspace,
   isLoading: state.workspace.loading,
   selectedChat: state.chat.chat as IChat,
