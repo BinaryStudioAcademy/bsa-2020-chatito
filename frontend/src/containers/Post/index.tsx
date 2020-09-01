@@ -271,13 +271,11 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, curr
   const onHoverRead = () => {
     if (type === PostType.Post) {
       unreadChats.forEach(unreadChat => {
-        if (unreadChat.id === currentChatId) {
-          unreadChat.unreadPosts.forEach(unreadPost => {
-            if (unreadPost.id === post.id) {
-              postsToRead(unreadPost.id);
-            }
-          });
-        }
+        unreadChat.unreadPosts.forEach(unreadPost => {
+          if (unreadPost.id === post.id) {
+            postsToRead(unreadPost.id);
+          }
+        });
       });
     } else {
       unreadPostComments.forEach(UnreadPost => {
