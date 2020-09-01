@@ -48,7 +48,6 @@ interface IProps {
   isShown: boolean;
   unreadChats: IUnreadChat[];
   unreadPostComments: IUnreadPostComments[];
-  currentChatId: string;
   readPost: IBindingCallback1<IPostsToRead>;
   readComment: IBindingCallback1<ICommentsToRead>;
   markAsUnreadPost: IBindingCallback1<IMarkAsUnreadPost>;
@@ -56,7 +55,7 @@ interface IProps {
   postRef?: MutableRefObject<any> | null;
 }
 
-const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, currentChatId,
+const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
   unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, isShown, unreadChats,
   readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef }) => {
   const [post, setPost] = useState(postData);
@@ -333,8 +332,7 @@ const mapStateToProps = (state: IAppState) => ({
   userId: state.user.user?.id as string,
   isShown: state.modal.setReminder,
   unreadChats: state.workspace.unreadChats,
-  unreadPostComments: state.workspace.unreadPostComments,
-  currentChatId: state.chat.chat ? state.chat.chat.id : ''
+  unreadPostComments: state.workspace.unreadPostComments
 });
 
 const mapDispatchToProps = {
