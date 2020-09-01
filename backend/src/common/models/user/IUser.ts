@@ -7,4 +7,5 @@ export interface IUser {
   imageUrl?: string;
   title?: string;
   status?: string;
+  audio?: string;
 }

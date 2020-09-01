@@ -9,4 +9,5 @@ export interface IUserWithWorkspaces {
   title: string;
   status: string;
   workspaces: IWorkspaceResponse[];
+  audio?: string;
 }

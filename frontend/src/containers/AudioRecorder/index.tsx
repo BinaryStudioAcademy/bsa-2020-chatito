@@ -6,22 +6,23 @@ import styles from './styles.module.sass';
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 
-const AudioRecorder = () => {
+interface IProps {
+  onRecord: (buffer: any[], blobUrl: string | null) => void;
+  maxDuration?: number;
+  onError?: (err: string) => void;
+  showPlayer?: boolean;
+}
+
+const AudioRecorder: React.FC<IProps> = ({ onRecord, maxDuration, onError, showPlayer = false }) => {
   const a = 5;
   const [isBlocked, setBlocked] = useState(true);
   const [isRecording, setRecording] = useState(false);
   const [blobUrl, setBlobUrl] = useState<null | string>(null);
-  const [bufferStr, setBuffer] = useState('');
+  const [bufferStr, setBuffer] = useState([]);
   useEffect(() => {
     navigator.getUserMedia({ audio: true },
-      () => {
-        console.log('Permission Granted');
-        setBlocked(false);
-      },
-      () => {
-        console.log('Permission Denied');
-        setBlocked(true);
-      });
+      () => setBlocked(false),
+      () => setBlocked(true));
   });
 
   const start = () => {
@@ -44,10 +45,15 @@ const AudioRecorder = () => {
         const blobURL = URL.createObjectURL(blob);
         setBlobUrl(blobURL);
         setRecording(false);
+        setBuffer(buffer);
 
+        onRecord(buffer, blobURL);
         return getBlobDuration(blob);
-      }).then((duration: string | number) => {
-        console.log(duration, ' seconds');
+      }).then((duration: number) => {
+        if (onError && maxDuration && duration > maxDuration) {
+          onError(`Max duration is ${Math.floor(maxDuration)}, but yours - ${Math.floor(duration)}`);
+        }
+        console.log('Duration ', duration);
       })
       .catch((e: any) => console.error(e));
   };
@@ -59,7 +65,9 @@ const AudioRecorder = () => {
       .then(([buffer, blob]: [any, any]) => {
         const blobURL = URL.createObjectURL(blob);
         setBlobUrl(null);
+        setBuffer([]);
         setRecording(false);
+        onRecord([], '');
       })
       .catch((e: any) => console.error(e));
   };
@@ -86,7 +94,7 @@ const AudioRecorder = () => {
             Cancel
           </Button>
           {/* eslint-disable-next-line */}
-          <audio src={blobUrl as string} controls />
+          {showPlayer && <audio src={blobUrl as string} controls />}
         </>
       )}
 

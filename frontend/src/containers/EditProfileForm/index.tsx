@@ -9,7 +9,6 @@ import { IUser } from 'common/models/user/IUser';
 import { getUserImgLink } from 'common/helpers/imageHelper';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
-import AudioRecorder from 'containers/AudioRecorder';
 
 interface IProps {
   editProfile: IBindingCallback1<IUser>;
@@ -29,7 +28,6 @@ const EditProfileForm: FunctionComponent<IProps> = ({
   const [displayName, setDisplayName] = useState(user.displayName);
   const [title, setTitle] = useState(user.title ? user.title : '');
   const [showMoreOptions, setshowMoreOptions] = useState(false);
-  const [audio, setAudio] = useState(user.audio);
   const handleSubmit = () => {
     const editUserProps = { ...user, fullName, displayName, title };
     editProfile(editUserProps);
@@ -101,12 +99,6 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             </div>
           </Form.Group>
 
-          <Form.Group>
-            <AudioRecorder />
-            <div className={styles.description}>
-              The audio everybody hear when you chat
-            </div>
-          </Form.Group>
           <div className={`${styles.formFooter} w-100`}>
             <Button className={styles.primaryBtnCancel} variant="secondary" onClick={handleClose}>
               Cancel

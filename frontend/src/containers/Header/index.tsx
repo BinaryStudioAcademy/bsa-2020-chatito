@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IUser } from 'common/models/user/IUser';
 import { IAppState } from 'common/models/store';
 import EditProfile from 'containers/EditProfileModal';
+import Preferences from 'containers/PreferencesModal';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
@@ -76,6 +77,7 @@ const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showModal })
           />
         </div>
         <EditProfile />
+        <Preferences />
       </div>
     </header>
   );

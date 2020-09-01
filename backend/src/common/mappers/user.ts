@@ -10,21 +10,8 @@ import { IFacebookUser } from '../models/user/IFacebookUser';
 import { IUser } from '../models/user/IUser';
 
 export const fromUserToUserClient = (user: IUserWithWorkspaces | IUser): IUserClient => {
-  const { id, fullName, displayName, email, imageUrl, title, status } = user;
+  const { id, fullName, displayName, email, imageUrl, title, status, audio } = user;
 
-  return {
-    id,
-    fullName,
-    email,
-    displayName,
-    imageUrl,
-    title,
-    status
-  };
-};
-
-export const fromUserToUserWithWorkspaces = (user: User): IUserWithWorkspaces => {
-  const { id, fullName, displayName, email, imageUrl, title, status, workspaces = [] } = user;
   return {
     id,
     fullName,
@@ -33,6 +20,21 @@ export const fromUserToUserWithWorkspaces = (user: User): IUserWithWorkspaces =>
     imageUrl,
     title,
     status,
+    audio
+  };
+};
+
+export const fromUserToUserWithWorkspaces = (user: User): IUserWithWorkspaces => {
+  const { id, fullName, displayName, email, imageUrl, title, status, workspaces = [], audio } = user;
+  return {
+    id,
+    fullName,
+    email,
+    displayName,
+    imageUrl,
+    title,
+    status,
+    audio,
     workspaces: workspaces.map(workspace => fromCreatedWorkspaceToClient(workspace))
   };
 };

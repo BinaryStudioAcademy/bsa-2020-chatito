@@ -5,6 +5,7 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 export interface IModalState {
   editProfile: boolean;
   createChannel: boolean;
+  preferences: boolean;
   createDirect: boolean;
   invitePopup: boolean;
   inviteChat: boolean;
@@ -14,6 +15,7 @@ export interface IModalState {
 
 const initialState: IModalState = {
   editProfile: false,
+  preferences: false,
   createChannel: false,
   createDirect: false,
   invitePopup: false,
@@ -47,6 +49,9 @@ export default (state = initialState, action: Routine<any>) => {
         }
         case ModalTypes.SetReminder: {
           return { ...state, setReminder: show };
+        }
+        case ModalTypes.Preferences: {
+          return { ...state, preferences: show };
         }
         default:
           return state;
