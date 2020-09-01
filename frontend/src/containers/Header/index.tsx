@@ -21,7 +21,6 @@ interface IProps {
   activeWorkspace: string;
 }
 
-// eslint-disable-next-line
 const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showModal }) => {
   const toggleButtonClick = () => {
     // @todo decide which button to trigger

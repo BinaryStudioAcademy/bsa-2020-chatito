@@ -80,9 +80,8 @@ export const markAsUnreadPost = async (userId: string, postId: string) => {
 
 export const markAsReadPosts = async (userId: string, postIds: string[]) => {
   const response: string[] = [];
-  // eslint-disable-next-line no-restricted-syntax
-  for (const postId of postIds) {
-    const responsePostId = await getCustomRepository(UserRepository).markAsReadPosts(userId, postId);
+  for (let i = 0; i < postIds.length; i += 1) {
+    const responsePostId = await getCustomRepository(UserRepository).markAsReadPosts(userId, postIds[i]);
     response.push(responsePostId);
   }
   return response;
@@ -90,7 +89,6 @@ export const markAsReadPosts = async (userId: string, postIds: string[]) => {
 
 export const getUnreadPostsById = async (userId: string) => {
   const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadPostsById(userId);
-  // eslint-disable-next-line no-console
   return unreadUserPostIds;
 };
 
@@ -101,9 +99,8 @@ export const markAsUnreadComment = async (userId: string, postId: string) => {
 
 export const markAsReadComments = async (userId: string, postIds: string[]) => {
   const response: string[] = [];
-  // eslint-disable-next-line no-restricted-syntax
-  for (const postId of postIds) {
-    const responsePostId = await getCustomRepository(UserRepository).markAsReadComments(userId, postId);
+  for (let i = 0; i < postIds.length; i += 1) {
+    const responsePostId = await getCustomRepository(UserRepository).markAsReadComments(userId, postIds[i]);
     response.push(responsePostId);
   }
   return response;
