@@ -4,7 +4,7 @@ import 'react-image-crop/lib/ReactCrop.scss';
 import styles from './styles.module.sass';
 import { Button, Spinner } from 'react-bootstrap';
 import LoaderWrapper from 'components/LoaderWrapper';
-import { signS3, uploadPhoto } from 'services/awsService';
+import { uploadOnAWS, signS3Avatar } from 'services/awsService';
 import { toastr } from 'react-redux-toastr';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { ICropData } from 'common/models/cropAvatar/ICropData';
@@ -69,8 +69,8 @@ export const CropAvatar: React.FC<IProps> = ({ src, avatarLoading, clearAvatarDa
     try {
       setCroppedAvatarLoading(true);
       const croppedImage = await getCroppedImg(image as HTMLImageElement, crop as ICropData);
-      const { signedRequest, fileName } = await signS3();
-      await uploadPhoto(signedRequest, fileName, croppedImage);
+      const { signedRequest, fileName } = await signS3Avatar();
+      await uploadOnAWS(signedRequest, croppedImage, fileName, 'jpeg');
       setImageUrl(fileName);
       clearAvatarData();
     } catch (erorr) {

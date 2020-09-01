@@ -1,16 +1,19 @@
 import api from 'common/helpers/apiHelper';
 import { ISignResponse } from 'common/models/aws/ISignResponse';
 
-export const signS3 = () => (
-  api.post<ISignResponse>('/api/aws/sign-s3')
+export const signS3 = (folder: string, fileType: string) => (
+  api.post<ISignResponse>('/api/aws/sign-s3', { folder, fileType })
 );
 
-export const uploadPhoto = (signedRequest: string, fileName: string, file: Blob) => {
+export const signS3Avatar = () => (
+  signS3('avatars', 'jpeg')
+);
+
+export const uploadOnAWS = (signedRequest: string, file: Blob, fileName: string, fileType: string) => {
   const options = {
     method: 'PUT',
     headers: {
-      'Content-Type': 'jpeg',
-      'Content-Disposition': `attachment; filename=${fileName}`
+      'Content-Type': fileType
     },
     body: file
   };
@@ -18,6 +21,6 @@ export const uploadPhoto = (signedRequest: string, fileName: string, file: Blob)
   return fetch(signedRequest, options);
 };
 
-export const deleteAvatar = (imageUrl: string) => {
-  api.delete('/api/aws/delete-avatar', { imageUrl });
+export const deleteAWSObject = (url: string) => {
+  api.delete('/api/aws/delete', { url });
 };

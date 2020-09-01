@@ -11,7 +11,7 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { CropAvatar } from 'components/CropAvatar';
 import { env } from 'env';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
-import { deleteAvatar } from 'services/awsService';
+import { deleteAWSObject } from 'services/awsService';
 import { allowedFileTypes } from 'config/allowedFileTypes';
 import { toastr } from 'react-redux-toastr';
 
@@ -41,7 +41,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
     const editUserProps = { ...user, fullName, displayName, title, imageUrl };
     editProfile(editUserProps);
     if (user.imageUrl && user.imageUrl !== imageUrl) {
-      deleteAvatar(user.imageUrl);
+      deleteAWSObject(user.imageUrl);
     }
   };
 
