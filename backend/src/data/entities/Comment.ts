@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn, RelationId } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, RelationId, ManyToMany } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
 import { User } from './User';
 import { Post } from './Post';
@@ -21,4 +21,7 @@ export class Comment extends AbstractEntity {
 
   @RelationId((comment: Comment) => comment.post)
   readonly postId: string;
+
+  @ManyToMany(() => User, user => user.unreadComments)
+  unreadByUsers: User[];
 }

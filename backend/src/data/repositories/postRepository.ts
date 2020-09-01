@@ -186,7 +186,7 @@ class PostRepository extends Repository<Post> {
       .andWhere('chat."workspaceId" = :activeworkspaceid', { activeworkspaceid })
       .orWhere('comments."createdByUserId" = :id', { id })
       .andWhere('"commentsPostChat"."workspaceId" = :activeworkspaceid', { activeworkspaceid })
-      .orderBy('comments."createdAt"', 'ASC')
+      .orderBy('comments."createdAt"', 'DESC')
       .getMany();
     return posts;
   }
