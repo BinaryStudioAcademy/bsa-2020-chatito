@@ -15,7 +15,7 @@ class ChatRepository extends Repository<Chat> {
     return this.findOne({ where: { id }, relations: ['posts'] });
   }
 
-  async getNameAndTypeById(id: string) {
+  async getNameAndTypeAndIdById(id: string) {
     const chatInfoToSend = await this.createQueryBuilder('chat')
       .select([
         'chat.name',

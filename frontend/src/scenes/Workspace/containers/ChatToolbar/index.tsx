@@ -31,13 +31,17 @@ import { Routes } from 'common/enums/Routes';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 import { useLocation } from 'react-router-dom';
 import { createDirectChannelName } from 'common/helpers/nameHelper';
+import { IUnreadChat } from 'common/models/chat/IUnreadChats';
+import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
 
 interface IProps {
   channels: IChat[];
   directMessages: IChat[];
   selectedChat: IChat;
+  unreadChats: IUnreadChat[];
   selectedWorkspace: IWorkspace;
   currentUserId: string;
+  unreadPostComments: IUnreadPostComments[];
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
 }
@@ -46,7 +50,9 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
   selectedChat,
+  unreadChats,
   currentUserId,
+  unreadPostComments,
   showModal,
   router,
   selectedWorkspace
@@ -75,7 +81,24 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     }
     return styles.channelSelect;
   };
-
+  const unreadThreadsMarker = () => {
+    let unreadThreadsStatus = false;
+    if (unreadPostComments.length) {
+      unreadPostComments.forEach(unreadPost => {
+        if (unreadPost.unreadComments.length) {
+          unreadThreadsStatus = true;
+        }
+      });
+      if (unreadThreadsStatus) {
+        return (
+          <div className={styles.unreadContainer}>
+            <div className={styles.unreadCircle} />
+          </div>
+        );
+      }
+    }
+    return '';
+  };
   // eslint-disable-next-line
   const isActiveChanneSelector = (route: Routes) => location.pathname.includes(route.replace(':whash', selectedWorkspace.hash));
 
@@ -86,7 +109,27 @@ const ChatToolbar: FunctionComponent<IProps> = ({
         <FontAwesomeIcon icon={iconFa} color="black" />
       </div>
       <span className={styles.buttonText}>{text}</span>
+      {text === 'Threads' ? unreadThreadsMarker() : ''}
     </button>
+  );
+
+  const unreadChatsMarker = (chatId: string) => (
+    unreadChats.map(unreadChat => {
+      if (unreadChat.id === chatId && unreadChat.unreadPosts.length) {
+        return (
+          <div className={styles.unreadContainer} key={unreadChat.id}>
+            <div className={styles.unreadCircle}>
+              {unreadChat.unreadPosts.length < 10 ? (
+                <span className={styles.unreadAmount}>{unreadChat.unreadPosts.length}</span>
+              ) : (
+                <span className={`${styles.unreadAmountNineMore} ${styles.unreadAmount}`}>9+</span>
+              )}
+            </div>
+          </div>
+        );
+      }
+      return '';
+    })
   );
 
   const userChannel = (channel: IChat) => {
@@ -106,8 +149,8 @@ const ChatToolbar: FunctionComponent<IProps> = ({
               ? <FontAwesomeIcon icon={faPencilAlt} size="xs" />
               : null
           }
-
         </div>
+        {unreadChatsMarker(id)}
       </button>
     );
   };
@@ -137,6 +180,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
               : null
           }
         </div>
+        {unreadChatsMarker(id)}
       </button>
     );
   };
@@ -241,7 +285,9 @@ const mapStateToProps = (state: IAppState) => ({
   directMessages: state.workspace.directMessages || [],
   selectedWorkspace: state.workspace.workspace,
   isLoading: state.workspace.loading,
-  selectedChat: state.chat.chat as IChat
+  selectedChat: state.chat.chat as IChat,
+  unreadChats: state.workspace.unreadChats,
+  unreadPostComments: state.workspace.unreadPostComments
 });
 
 const mapDispatchToProps = {
