@@ -26,7 +26,7 @@ import {
   fetchNavigationPost
 } from 'services/chatService';
 import { IPost } from 'common/models/post/IPost';
-import { toastrError, toastrSuccess } from 'services/toastrService';
+import { toastrError } from 'services/toastrService';
 import { showModalRoutine } from 'routines/modal';
 import { IUser } from 'common/models/user/IUser';
 import { addReminder } from 'services/reminderService';

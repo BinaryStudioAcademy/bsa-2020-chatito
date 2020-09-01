@@ -29,7 +29,6 @@ import { IPostsToRead } from 'common/models/chat/IPostsToRead';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { IMarkAsUnreadPost } from 'common/models/post/IMarkAsUnreadPost';
-import { ChatType } from 'common/enums/ChatType';
 import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
 import { ICommentsToRead } from 'common/models/chat/ICommentsToRead';
 import { IServerComment } from 'common/models/post/IServerComment';
@@ -52,22 +51,19 @@ interface IProps {
   currentChatId: string;
   readPost: IBindingCallback1<IPostsToRead>;
   readComment: IBindingCallback1<ICommentsToRead>;
-  currentChatType: ChatType;
   markAsUnreadPost: IBindingCallback1<IMarkAsUnreadPost>;
   markAsUnreadComment: IBindingCallback1<IMarkAsUnreadComment>;
   postRef?: MutableRefObject<any> | null;
 }
 
-const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, currentChatId, currentChatType,
+const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, currentChatId,
   unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, isShown, unreadChats,
   readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
-
   useEffect(() => {
     setPost(postData);
   }, [postData]);
-
   useEffect(() => {
     if (changedReaction) {
       if (postData.postReactions.length < post.postReactions.length) {
@@ -199,9 +195,9 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread, curr
 
   const markAsUnreadOptionClick = () => {
     if (type === PostType.Post) {
-      markAsUnreadPost({ chatId: currentChatId, chatType: currentChatType, unreadPost: post });
-    } else {
-      markAsUnreadComment({ postId: mainPostId!, unreadComment: post });
+      markAsUnreadPost({ unreadPost: post });
+    } else if (mainPostId) {
+      markAsUnreadComment({ postId: mainPostId, unreadComment: post });
     }
     document.body.click();
   };
@@ -340,8 +336,7 @@ const mapStateToProps = (state: IAppState) => ({
   isShown: state.modal.setReminder,
   unreadChats: state.workspace.unreadChats,
   unreadPostComments: state.workspace.unreadPostComments,
-  currentChatId: state.chat.chat!.id,
-  currentChatType: state.chat.chat!.type
+  currentChatId: state.chat.chat ? state.chat.chat.id : ''
 });
 
 const mapDispatchToProps = {

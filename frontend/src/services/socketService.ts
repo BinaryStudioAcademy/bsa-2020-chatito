@@ -59,8 +59,8 @@ export const connectSockets = () => {
 
   chatSocket.on(ClientSockets.NotifyAndMarkAsUnread, (post: IPost, user: IUser, chat: IChat) => {
     const state = store.getState();
-    const currentUser = state.user.user!;
-    if (user.id !== currentUser.id) {
+    const currentUser = state.user.user;
+    if (currentUser && user.id !== currentUser.id) {
       toastrCustomNotification(
         chat.type === 'DirectMessage' ? (
           `from ${user.displayName}`
@@ -69,6 +69,7 @@ export const connectSockets = () => {
         ),
         5000,
         'blueToastrNotification',
+        // eslint-disable-next-line no-console
         () => { console.log('OnClickFunction'); }
       );
       store.dispatch(markAsUnreadPostWithSocketRoutine({ chatId: chat.id, chatType: chat.type, unreadPost: post }));
@@ -108,8 +109,8 @@ export const connectSockets = () => {
     threadParticipants: string[]
   ) => {
     const state = store.getState();
-    const currentUser = state.user.user!;
-    if (threadParticipants.includes(currentUser.id) && comment.createdByUser.id !== currentUser.id) {
+    const currentUser = state.user.user;
+    if (currentUser && threadParticipants.includes(currentUser.id) && comment.createdByUser.id !== currentUser.id) {
       store.dispatch(markAsUnreadCommentWithSocketRoutine({ postId, comment }));
     }
   });

@@ -59,7 +59,6 @@ const Thread: FunctionComponent<IProps> = ({
   const { whash } = useParams();
   const [showAll, setShowAll] = useState(false);
   const [commentIdForLine, setCommentIdForLine] = useState('');
-
   const setNewCommentLine = () => {
     unreadPostComments.forEach(unreadPost => {
       if (unreadPost.id === post.id) {
@@ -71,7 +70,6 @@ const Thread: FunctionComponent<IProps> = ({
       }
     });
   };
-
   useEffect(() => {
     if (post.id) {
       setNewCommentLine();

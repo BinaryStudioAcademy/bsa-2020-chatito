@@ -10,6 +10,7 @@ import { fromCreatedWorkspaceToClient } from '../common/mappers/workspace';
 import { verifyToken } from '../common/utils/tokenHelper';
 import CustomError from '../common/models/CustomError';
 import { ErrorCode } from '../common/enums/ErrorCode';
+import PostRepository from '../data/repositories/postRepository';
 
 export const getUsers = async () => {
   const users = await getCustomRepository(UserRepository).getAll();
@@ -72,8 +73,9 @@ export const addWorkspaceToUser = async (userId: string, workspaceId: string) =>
 };
 
 export const markAsUnreadPost = async (userId: string, postId: string) => {
-  const responsePostId = await getCustomRepository(UserRepository).markAsUnreadPost(userId, postId);
-  return [responsePostId];
+  await getCustomRepository(UserRepository).markAsUnreadPost(userId, postId);
+  const post = await getCustomRepository(PostRepository).getById(postId);
+  return { ...post };
 };
 
 export const markAsReadPosts = async (userId: string, postIds: string[]) => {

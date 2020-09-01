@@ -305,7 +305,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       };
     }
     case markAsUnreadPostWithOptionRoutine.SUCCESS: {
-      const unreadChatsforState = markAsUnreadPosts(state.unreadChats, payload.chatId, payload.unreadPost);
+      const unreadChatsforState = markAsUnreadPosts(state.unreadChats, payload.chatId, payload);
       return {
         ...state, unreadChats: [...unreadChatsforState]
       };
@@ -341,8 +341,8 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
               }
             });
           }
-          if (!chatExists) {
-            unreadChats.push({ id: unreadPost.chatId!, unreadPosts: [unreadPost] });
+          if (!chatExists && unreadPost.chatId) {
+            unreadChats.push({ id: unreadPost.chatId, unreadPosts: [unreadPost] });
           }
         });
       }
@@ -398,11 +398,10 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       return {
         ...state
       };
-    case readPostRoutine.SUCCESS: {
+    case readPostRoutine.SUCCESS:
       return {
         ...state, unreadChats: payload
       };
-    }
     case readPostRoutine.FAILURE:
       return {
         ...state

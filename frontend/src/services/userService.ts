@@ -1,3 +1,4 @@
+import { IPost } from '../common/models/post/IPost';
 import { IUserUnreadPostComments } from '../common/models/user/IUserUnreadPostComments';
 import api from '../common/helpers/apiHelper';
 import { IUser } from 'common/models/user/IUser';
@@ -45,8 +46,9 @@ export const deleteUnreadComments = async (commentIds: string[]): Promise<void> 
   await api.post('/api/users/read-comments', { commentIds });
 };
 
-export const markPostAsUnread = async (postId: string): Promise<void> => {
-  await api.post('/api/users/unread-post', { postId });
+export const markPostAsUnread = async (postId: string): Promise<IPost> => {
+  const post: IPost = await api.post('/api/users/unread-post', { postId });
+  return post;
 };
 
 export const markCommentAsUnread = async (commentId: string): Promise<void> => {

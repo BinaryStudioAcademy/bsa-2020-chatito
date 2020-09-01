@@ -157,8 +157,8 @@ function* watchReadCommentRoutine() {
 
 function* markAsUnreadPost({ payload }: Routine<any>) {
   try {
-    yield call(markPostAsUnread, payload.unreadPost.id);
-    yield put(markAsUnreadPostWithOptionRoutine.success(payload));
+    const post = yield call(markPostAsUnread, payload.unreadPost.id);
+    yield put(markAsUnreadPostWithOptionRoutine.success(post));
   } catch (error) {
     yield call(toastrError, error.message);
   }
