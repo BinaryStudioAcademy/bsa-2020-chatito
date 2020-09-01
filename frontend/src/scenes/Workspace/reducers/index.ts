@@ -10,7 +10,8 @@ import {
   fetchWorkspaceUsersRoutine,
   addActiveCommentWithSocketRoutine,
   updateChatDraftPostRoutine,
-  newUserNotificationWithSocketRoutine } from '../routines';
+  newUserNotificationWithSocketRoutine,
+  removeUserFromChatInWorkspaceRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
@@ -226,6 +227,32 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       }
       return state;
     }
+    case removeUserFromChatInWorkspaceRoutine.SUCCESS: {
+      const { chatId, userId } = payload;
+      const chat = [...state.channels, ...state.directMessages].filter(({ id: _chatId }) => _chatId === chatId)[0];
+      chat.users = [...chat.users.filter(user => user.id !== userId)];
+
+      if (chat.type === ChatType.Channel) {
+        return {
+          ...state,
+          channels: [...state.channels.filter(({ id: _chatId }) => _chatId !== chatId), chat]
+        };
+      }
+
+      if (chat.type === ChatType.DirectMessage) {
+        return {
+          ...state,
+          directMessages: [...state.directMessages.filter(({ id: _chatId }) => _chatId !== chatId), chat]
+        };
+      }
+
+      return { ...state };
+    }
+    case removeUserFromChatInWorkspaceRoutine.FAILURE:
+      return {
+        ...state,
+        loading: false
+      };
     default:
       return state;
   }

@@ -6,35 +6,72 @@ import { showModalRoutine } from 'routines/modal';
 import { editProfileRoutine, deleteAccountRoutine } from 'routines/user';
 import styles from './styles.module.sass';
 import { IUser } from 'common/models/user/IUser';
-import { getUserImgLink } from 'common/helpers/imageHelper';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { CropAvatar } from 'components/CropAvatar';
+import { env } from 'env';
+import { userLogoDefaultUrl } from 'common/configs/defaults';
+import { deleteAvatar } from 'services/awsService';
+import { allowedFileTypes } from 'config/allowedFileTypes';
+import { toastr } from 'react-redux-toastr';
 
 interface IProps {
   editProfile: IBindingCallback1<IUser>;
   deleteAccount: IBindingAction;
   handleClose: IBindingAction;
-  user?: IUser | null;
+  user: IUser | undefined;
 }
 
 const EditProfileForm: FunctionComponent<IProps> = ({
   editProfile,
   deleteAccount,
   handleClose,
-  user = undefined
+  user
 }: IProps) => {
   if (!user) return <></>;
   const [fullName, setFullName] = useState(user.fullName);
   const [displayName, setDisplayName] = useState(user.displayName);
   const [title, setTitle] = useState(user.title ? user.title : '');
+  const [imageUrl, setImageUrl] = useState(user.imageUrl || '');
   const [showMoreOptions, setshowMoreOptions] = useState(false);
+  const [avatar, setAvatar] = useState('');
+  const [avatarLoading, setAvatarLoading] = useState(false);
+
   const handleSubmit = () => {
-    const editUserProps = { ...user, fullName, displayName, title };
+    const editUserProps = { ...user, fullName, displayName, title, imageUrl };
     editProfile(editUserProps);
+    if (user.imageUrl && user.imageUrl !== imageUrl) {
+      deleteAvatar(user.imageUrl);
+    }
   };
 
   const handleDeleteAccount = () => {
     deleteAccount();
+  };
+
+  const onSelectFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      if (!allowedFileTypes.includes(e.target.files[0].type)) {
+        toastr.error('Error', 'Forbidden file type. Please choose image with type .png, .jpg or .jpeg');
+      }
+      const reader = new FileReader();
+      setAvatarLoading(true);
+      reader.addEventListener('load', () => {
+        setAvatar(reader.result as string);
+        setAvatarLoading(false);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const clearAvatarData = () => {
+    setAvatar('');
+  };
+
+  const setImageUrlHandler = (filename: string) => setImageUrl(`/avatars/${filename}`);
+
+  const handleDeleteAvatar = () => {
+    setImageUrl('');
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +93,29 @@ const EditProfileForm: FunctionComponent<IProps> = ({
         break;
     }
   };
+
+  const getImageSource = () => {
+    if (imageUrl.startsWith('https')) {
+      return imageUrl;
+    }
+    if (imageUrl) {
+      return `${env.urls.aws}${imageUrl}`;
+    }
+    return userLogoDefaultUrl;
+  };
+
+  if (avatar || avatarLoading) {
+    return (
+      <CropAvatar
+        src={avatar}
+        avatarLoading={avatarLoading}
+        clearAvatarData={clearAvatarData}
+        setImageUrl={setImageUrlHandler}
+        handleClose={handleClose}
+      />
+    );
+  }
+
   return (
     <div className={styles.mainContainer}>
       <header className={styles.modalHeader}>Edit your profile</header>
@@ -86,16 +146,16 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             </div>
           </Form.Group>
           <Form.Group controlId="formEditTitle" className={styles.inputBlock}>
-            <span className={styles.inputHeader}>Live position</span>
+            <span className={styles.inputHeader}>Life position</span>
             <Form.Control
               className={styles.inputGroup}
               type="text"
-              placeholder="Live position"
+              placeholder="Life position"
               value={title}
               onChange={handleChange}
             />
             <div className={styles.description}>
-              Let people know what you do at this channel.
+              Write here your life principles, your motto, or some fun facts about yourself.
             </div>
           </Form.Group>
 
@@ -115,14 +175,29 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             <Image
               className={styles.image}
               height={150}
-              src={getUserImgLink(user.imageUrl as string)}
+              src={getImageSource()}
             />
             <div className={`${styles.imageFooter} w-100`}>
-              <button type="submit" className={styles.link}>
-                Upload an Image
-              </button>
+              <div className={styles.uploadWrp}>
+                <Form.Label
+                  htmlFor="uploadAvatar"
+                  className={[styles.uploadAvatarLabel, styles.link].join(' ')}
+                >
+                  Upload an image
+                </Form.Label>
+                <Form.Control
+                  id="uploadAvatar"
+                  type="file"
+                  onChange={onSelectFile}
+                  className={styles.uploadAvatar}
+                />
+              </div>
               {user.imageUrl ? (
-                <button type="submit" className={styles.link}>
+                <button
+                  type="button"
+                  className={[styles.link, styles.removePhoto].join(' ')}
+                  onClick={handleDeleteAvatar}
+                >
                   Remove photo
                 </button>
               ) : null}
@@ -161,10 +236,6 @@ const mapDispatchToProps = {
   showModal: showModalRoutine,
   editProfile: editProfileRoutine,
   deleteAccount: deleteAccountRoutine
-};
-
-EditProfileForm.defaultProps = {
-  user: null
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProfileForm);

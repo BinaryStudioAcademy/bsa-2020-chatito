@@ -59,7 +59,6 @@ const PreferencesForm: FunctionComponent<IProps> = ({
   const handleSubmit = () => {
     console.log('SUBMIT');
     // handleClose();
-
   };
 
   const onRecordingError = (error: string) => setRecordingErr(error);
