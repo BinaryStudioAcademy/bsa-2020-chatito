@@ -5,6 +5,7 @@ import PostReactionRepository from '../data/repositories/postReactionRepository'
 import { ICreatePost } from '../common/models/post/ICreatePost';
 import { IEditPost } from '../common/models/post/IEditPost';
 import { IPost } from '../common/models/post/IPost';
+import { createWhaleMeeting } from './integrationService';
 import { ICreateComment } from '../common/models/comment/ICreateComment';
 import ChatRepository from '../data/repositories/chatRepository';
 import { fromPostToPostClient } from '../common/mappers/post';
@@ -13,10 +14,18 @@ import { fromPostCommentsToPostCommentsClient } from '../common/mappers/comment'
 import { emitToChatRoom } from '../common/utils/socketHelper';
 import { ClientSockets } from '../common/enums/ClientSockets';
 import { fromUserToUserClient } from '../common/mappers/user';
+// import { ChatCommands } from '../common/enums/ChatCommands';
 
 export const addPost = async (id: string, post: ICreatePost) => {
   const user = await getCustomRepository(UserRepository).getById(id);
   const chat = await getCustomRepository(ChatRepository).getById(post.chatId);
+
+  console.log(post.text);
+  if (post.text) {
+    createWhaleMeeting('slavik@gmail.com');
+    return 1;
+  }
+
   const newPost: ICreatePost = { ...post, createdByUser: user, chat };
   const createdPost: IPost = await getCustomRepository(PostRepository).addPost(newPost);
   const clientPost = await fromPostToPostClient(createdPost);
