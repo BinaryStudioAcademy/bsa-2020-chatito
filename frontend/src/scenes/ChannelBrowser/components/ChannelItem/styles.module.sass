@@ -1,0 +1,62 @@
+.channel
+  padding: 16px 92px 16px 12px
+  border-bottom: 1px solid var(--browser-channel-border)
+  position: relative
+  cursor: pointer
+
+.channel:hover
+  background-color: var(--chat-background-secondary)
+
+.channelName
+  font-size: 15px
+  font-weight: 600
+  margin-bottom: 8px
+  color: var(--main-text)
+
+.chatInfo
+  font-size: 13px
+  color: var(--secondary-text)
+
+.channelBtn
+  visibility: hidden
+  position: absolute
+  top: 50%
+  right: 12px
+  transform: translateY(-50%)
+  font-size: 15px
+  font-weight: 600
+
+.channel:hover .channelBtn
+  visibility: visible
+
+.joinBtn
+  background-color: var(--browser-channel-primary-button)
+  border: none
+  width: 67px
+
+.joinBtn:hover,
+.channel .channelBtn.joinBtn:active,
+.joinBtn:focus
+  background-color: var(--browser-channel-primary-button-hover)
+
+.leaveBtn
+  background-color: var(--browser-channel-secondary-button)
+  border: 1px solid var(--browser-channel-border)
+  color: var(--main-text)
+
+.leaveBtn:hover,
+.channel .channelBtn.leaveBtn:active,
+.leaveBtn:focus
+  background-color: var(--browser-channel-secondary-button-hover)
+  border: 1px solid var(--browser-channel-border)
+  color: var(--main-text)
+
+.chatInfo
+  display: flex
+
+.joined
+  margin-right: 10px
+  color: var(--browser-channel-joined)
+
+.joined .checkIcon
+  margin-right: 4px

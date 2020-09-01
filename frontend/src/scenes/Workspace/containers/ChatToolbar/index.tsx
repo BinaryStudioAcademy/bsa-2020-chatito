@@ -13,7 +13,8 @@ import {
   faDatabase,
   faCaretRight,
   faPlus,
-  faPencilAlt
+  faPencilAlt,
+  faBookmark
 } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
@@ -191,10 +192,13 @@ const ChatToolbar: FunctionComponent<IProps> = ({
         () => goToRoute(Routes.Threads),
         () => isActiveChanneSelector(Routes.Threads))}
       {channelSelector('Mentions & reactions', faAt)}
+      {channelSelector('Channel browser', faSearch,
+        () => goToRoute(Routes.ChannelBrowser),
+        () => isActiveChanneSelector(Routes.ChannelBrowser))}
       {channelSelector('Drafts', faListAlt,
         () => goToRoute(Routes.Drafts),
         () => isActiveChanneSelector(Routes.Drafts))}
-      {channelSelector('Saved Items', faSearch)}
+      {channelSelector('Saved Items', faBookmark)}
       {channelSelector('File Browser', faDatabase)}
 
       <div className={styles.buttonChannel}>

@@ -11,6 +11,7 @@ export enum Routes {
   Post = '/w/:whash/c/:chash/:postId',
   Threads = '/w/:whash/threads',
   Drafts = '/w/:whash/drafts',
+  ChannelBrowser = '/w/:whash/channel-browser',
   AddWorkspace = '/add-workspace',
   JoinInvitedWorkspace = '/invite/:token',
   Room = '/room',
