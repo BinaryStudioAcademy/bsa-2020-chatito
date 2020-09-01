@@ -110,3 +110,21 @@ export const getUnreadCommentsById = async (userId: string) => {
   const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadCommentsById(userId);
   return unreadUserPostIds;
 };
+
+export const createGithubUser = async () => {
+  const newUserData = {
+    fullName: 'GitHub Bot',
+    displayName: 'GitHub Bot',
+    email: 'github@github.com',
+    password: ''
+  };
+  const user = await getCustomRepository(UserRepository).addUser(newUserData);
+  // await addWorkspaceToUser(user.id, workspaceId);
+
+  return user;
+};
+
+export const getGithubUser = async () => {
+  const user = await getCustomRepository(UserRepository).getByEmail('github@github.com');
+  return user || createGithubUser();
+};

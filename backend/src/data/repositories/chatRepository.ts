@@ -3,6 +3,7 @@ import { Chat } from '../entities/Chat';
 import { ICreateChat } from '../../common/models/chat/ICreateChat';
 import { User } from '../entities/User';
 import { IUser } from '../../common/models/user/IUser';
+import { ChatType } from '../../common/enums/ChatType';
 
 @EntityRepository(Chat)
 class ChatRepository extends Repository<Chat> {
@@ -133,6 +134,24 @@ class ChatRepository extends Repository<Chat> {
     });
     chat.users = chat.users.filter((user: IUser) => user.id !== userId);
     chat.save();
+  }
+
+  async getGithubRepositoryChat(repositoryName: string, repositoryOwner: string) {
+    const chat = await this.createQueryBuilder('chat')
+      .select([
+        'chat.id',
+        'chat.name'
+      ])
+      .leftJoin(
+        'chat.users',
+        'currentUser'
+      )
+      .where('chat.type = :chatType', { chatType: ChatType.GithubRepository })
+      .andWhere('chat.name = :repositoryName', { repositoryName })
+      .andWhere('currentUser.name = :repositoryOwner', { repositoryOwner })
+      .getOne();
+
+    return chat;
   }
 }
 
