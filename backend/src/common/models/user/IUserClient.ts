@@ -6,4 +6,5 @@ export interface IUserClient {
   imageUrl: string;
   title: string;
   status?: string;
+  githubUsername?: string;
 }

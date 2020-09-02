@@ -15,6 +15,7 @@ import { ChatType } from '../common/enums/ChatType';
 import { fromPostToPostClient } from '../common/mappers/post';
 import { IUser } from '../common/models/user/IUser';
 import { IGetChatPosts } from '../common/models/chat/IGetChatPosts';
+import { getGithubUser } from './userService';
 
 export const getAllChatPosts = async (filterData: IGetChatPosts) => {
   const { postId, ...filter } = filterData;
@@ -41,19 +42,23 @@ export const getAllUserChats = async (userId: string) => {
 
   const directs = chats.filter(({ type }) => type === ChatType.DirectMessage);
   const channels = chats.filter(({ type }) => type === ChatType.Channel);
+  const githubRepositories = chats.filter(({ type }) => type === ChatType.GithubRepository);
 
-  return { directs, channels };
+  return { directs, channels, githubRepositories };
 };
 
 export const addChat = async (userId: string, body: IChatData) => {
   const { workspaceName, users = [], ...chatFields } = body;
   const userCreator: User = await getCustomRepository(UserRepository).getById(userId);
   const workspace: Workspace = await getCustomRepository(WorkspaceRepository).findByName(workspaceName);
+
+  const githubUser = chatFields.type === ChatType.GithubRepository ? [await getGithubUser()] : [];
+
   const newChat: ICreateChat = {
     ...chatFields,
     workspace,
     createdByUser: userCreator,
-    users: [userCreator, ...users],
+    users: [userCreator, ...users, ...githubUser],
     hash: cryptoRandomString({ length: 7, type: 'url-safe' }).toUpperCase()
   };
   const chat: IChat = await getCustomRepository(ChatRepository).addChat(newChat);
@@ -72,5 +77,10 @@ export const removeUserFromChat = async (chatId: string, userId: string): Promis
 
 export const getChatById = async (chatId: string) => {
   const chat: IChat = await getCustomRepository(ChatRepository).getNameAndTypeAndIdById(chatId);
+  return chat;
+};
+
+export const getGithubRepositoryChat = async (repositoryName: string, repositoryOwner: string) => {
+  const chat = await getCustomRepository(ChatRepository).getGithubRepositoryChat(repositoryName, repositoryOwner);
   return chat;
 };

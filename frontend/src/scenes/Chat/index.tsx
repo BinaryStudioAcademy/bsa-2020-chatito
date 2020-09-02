@@ -9,6 +9,7 @@ import { IChat } from 'common/models/chat/IChat';
 import { setCurrentChatRoutine } from './routines';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { IUser } from 'common/models/user/IUser';
+import { ChatType } from 'common/enums/ChatType';
 
 interface IProps {
   isLoading: boolean;
@@ -19,11 +20,13 @@ interface IProps {
       postId: string;
     };
   };
+  chat?: IChat;
   chats: IChat[];
   currentUser: IUser | undefined;
   selectChat: (chat: IChat | null) => void;
 }
-const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, currentUser, selectChat }) => {
+const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats, currentUser, selectChat }) => {
+
   useEffect(() => {
     const { chash } = match.params;
     if (chash) {
@@ -39,19 +42,19 @@ const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, currentUser,
       <div className={styles.chatContainer}>
         <ChatHeader />
         <ChatBody postId={match?.params?.postId} />
-        <ChatFooter />
+        { chat?.type === ChatType.GithubRepository ? '' : <ChatFooter /> }
       </div>
     </LoaderWrapper>
   );
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { channels, directMessages } = state.workspace;
+  const { channels, directMessages, githubRepositories } = state.workspace;
   return {
     chat: state.chat.chat,
     isLoading: state.workspace.loading,
-    chats: [...channels, ...directMessages] as IChat[],
     currentUser: state.user.user
+    chats: [...channels, ...directMessages, ...githubRepositories] as IChat[]
   };
 };
 

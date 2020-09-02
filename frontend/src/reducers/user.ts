@@ -48,11 +48,11 @@ const reducer = (state = initialState, { type, payload }: Routine<any>): IUserSt
     case loginUserRoutine.SUCCESS:
     case loginWithGoogleRoutine.SUCCESS:
     case loginWithFacebookRoutine.SUCCESS: {
-      const { id, fullName, displayName, email, imageUrl, title, workspaces, status } = payload;
+      const { id, fullName, displayName, email, imageUrl, title, githubUsername, workspaces, status } = payload;
 
       return {
         ...state,
-        user: { id, fullName, displayName, email, imageUrl, title, status },
+        user: { id, fullName, displayName, email, imageUrl, title, githubUsername, status },
         workspaceList: workspaces,
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
