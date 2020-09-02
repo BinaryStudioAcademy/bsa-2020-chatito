@@ -45,7 +45,6 @@ interface IProps {
   deletePostReaction: IBindingCallback1<IPostReactionRoutine>;
   showUserProfile: IBindingCallback1<IUser>;
   showModal: IBindingCallback1<IModalRoutine>;
-  isShown: boolean;
   unreadChats: IUnreadChat[];
   unreadPostComments: IUnreadPostComments[];
   readPost: IBindingCallback1<IPostsToRead>;
@@ -56,7 +55,7 @@ interface IProps {
 }
 
 const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
-  unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, isShown, unreadChats,
+  unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, unreadChats,
   readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
@@ -308,7 +307,6 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
 
 const mapStateToProps = (state: IAppState) => ({
   userId: state.user.user?.id as string,
-  isShown: state.modal.setReminder,
   unreadChats: state.workspace.unreadChats,
   unreadPostComments: state.workspace.unreadPostComments
 });
