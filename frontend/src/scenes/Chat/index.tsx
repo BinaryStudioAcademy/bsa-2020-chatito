@@ -47,11 +47,11 @@ const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats, select
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { channels, directMessages } = state.workspace;
+  const { channels, directMessages, githubRepositories } = state.workspace;
   return {
     chat: state.chat.chat,
     isLoading: state.workspace.loading,
-    chats: [...channels, ...directMessages] as IChat[]
+    chats: [...channels, ...directMessages, ...githubRepositories] as IChat[]
   };
 };
 

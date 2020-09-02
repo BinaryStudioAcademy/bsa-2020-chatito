@@ -13,7 +13,8 @@ import {
   faDatabase,
   faCaretRight,
   faPlus,
-  faPencilAlt
+  faPencilAlt,
+  faCodeBranch
 } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
@@ -33,6 +34,7 @@ import { useLocation } from 'react-router-dom';
 import { createDirectChannelName } from 'common/helpers/nameHelper';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
+import CreateRepositoryChatModal from 'containers/CreateRepositoryChatModal';
 
 interface IProps {
   channels: IChat[];
@@ -200,7 +202,9 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       >
         <div className={styles.chatBlock}>
           <div className={styles.chatBlockContainer}>
-            <div className={styles.iconWrapper} />
+            <div className={styles.iconWrapper}>
+              <FontAwesomeIcon icon={faCodeBranch} size="xs" />
+            </div>
             <span className={styles.buttonText}>{name}</span>
           </div>
         </div>
@@ -249,7 +253,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     <button
       type="button"
       className={styles.channelSelect}
-    // onClick={() => showModal({ modalType: ModalTypes.CreateGithubRepository, show: true })}
+      onClick={() => showModal({ modalType: ModalTypes.CreateRepositoryChat, show: true })}
     >
       <div className={styles.iconWrapper}>
         <div className={styles.iconBorder}>
@@ -333,6 +337,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       <InvitePopup />
       <CreateChannelModal />
       <CreateDirectModal />
+      <CreateRepositoryChatModal />
     </div>
   );
 };
