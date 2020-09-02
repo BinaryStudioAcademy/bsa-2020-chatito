@@ -14,16 +14,39 @@ import { fromPostCommentsToPostCommentsClient } from '../common/mappers/comment'
 import { emitToChatRoom } from '../common/utils/socketHelper';
 import { ClientSockets } from '../common/enums/ClientSockets';
 import { fromUserToUserClient } from '../common/mappers/user';
-// import { ChatCommands } from '../common/enums/ChatCommands';
+import { ChatCommands } from '../common/enums/ChatCommands';
 
 export const addPost = async (id: string, post: ICreatePost) => {
   const user = await getCustomRepository(UserRepository).getById(id);
   const chat = await getCustomRepository(ChatRepository).getById(post.chatId);
 
-  console.log(post.text);
-  if (post.text) {
-    createWhaleMeeting('slavik@gmail.com');
-    return 1;
+  if (post.text.indexOf(ChatCommands.CreateWhaleMeeting) >= 0) {
+    const whalePost = {
+      createdByUserId: user.id,
+      createdByUser: user,
+      chatId: chat.id,
+      chat,
+      ...post
+    };
+    try {
+      whalePost.text = (await createWhaleMeeting('slavakdudin2@gmail.com')).url;
+      const createdPost: IPost = await getCustomRepository(PostRepository).addPost(whalePost);
+      const clientPost = await fromPostToPostClient(createdPost);
+      emitToChatRoom(clientPost.chatId, ClientSockets.AddPost, clientPost);
+
+      return clientPost;
+    } catch (err) {
+      whalePost.text = `${err.response.data.text} <a href=${err.response.data.url} target="_blank">Sign up</a>`;
+      const createdPost: IPost = {
+        id: '1a111a1a-1111-1111-1a1a-1a11a1a1a111',
+        postReactions: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        ...whalePost
+      };
+      const clientPost = await fromPostToPostClient(createdPost);
+      return clientPost;
+    }
   }
 
   const newPost: ICreatePost = { ...post, createdByUser: user, chat };

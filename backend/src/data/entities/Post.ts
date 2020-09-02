@@ -5,11 +5,19 @@ import { Chat } from './Chat';
 import { Comment } from './Comment';
 import { PostReaction } from './PostReaction';
 import { DraftComment } from './DraftComment';
+import { Integration } from './Integration';
 
 @Entity()
 export class Post extends AbstractEntity {
   @Column()
   text: string;
+
+  @ManyToOne(() => Integration, integr => integr.posts)
+  @JoinColumn({ name: 'integration' })
+  integration: Integration;
+
+  @RelationId((post: Post) => post.integration)
+  readonly integrationName: string;
 
   @OneToMany(() => Comment, comment => comment.post)
   comments: Comment[];

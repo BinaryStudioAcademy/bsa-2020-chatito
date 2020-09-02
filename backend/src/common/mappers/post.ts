@@ -17,8 +17,7 @@ export const fromPostToPostClient = async (post: IPost) => {
     ? postReactions.map(reaction => fromReactionToReactionClient(reaction))
     : [];
   const comments = await getCustomRepository(CommentRepository).getAllPostComments(id);
-
-  return {
+  const postClient = {
     ...post,
     postReactions: postReactionsClient,
     commentsInfo: fromPostCommentsToCommentsInfo(comments),
@@ -31,6 +30,7 @@ export const fromPostToPostClient = async (post: IPost) => {
       imageUrl: getImageUrl(post.createdByUser.imageUrl)
     }
   };
+  return postClient;
 };
 
 export const fromCommentsToCommentsWithUserImageUrl = (comments: Comment[]) => (
