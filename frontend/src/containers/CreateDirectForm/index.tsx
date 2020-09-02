@@ -81,6 +81,7 @@ const CreateDirect = ({ workspace, directMessages, currentUserId,
   const addMembers = (
     <Form.Group>
       <MultiSelect
+        className={styles.multiSelect}
         options={options}
         value={DirectUsers}
         onChange={setDirectUsers}
