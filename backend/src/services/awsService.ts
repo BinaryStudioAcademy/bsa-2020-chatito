@@ -1,5 +1,5 @@
 import { URL } from 'url';
-import { s3, bucket, signedUrlExpireSeconds } from '../config/awsConfig';
+import { s3, bucket, signedUrlExpireSeconds, AWSUrl } from '../config/awsConfig';
 import { ISignS3 } from '../common/models/aws/ISignS3';
 
 export const signS3 = (userId: string, folder: string, fileType: string): Promise<ISignS3> => {
@@ -20,7 +20,8 @@ export const signS3 = (userId: string, folder: string, fileType: string): Promis
 
       const returnData = {
         signedRequest: data,
-        fileName
+        fileName,
+        link: `${AWSUrl}/avatars/${fileName}`
       };
 
       resolve(returnData);
