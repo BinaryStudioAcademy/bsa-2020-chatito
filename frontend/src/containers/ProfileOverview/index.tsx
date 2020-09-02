@@ -51,7 +51,7 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
       setUsers(fetchedUser);
       setLoading(false);
     });
-  }, []);
+  }, [tempUser, currentUser]);
   const inputRef = useRef(null);
   const onClose = () => {
     hideRightMenu();

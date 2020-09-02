@@ -28,7 +28,7 @@ const ProfilePreview: FunctionComponent<IProps> = ({ tempUser, openProfile }) =>
           style={{ objectFit: 'cover' }}
           width={40}
           height={40}
-          className="mr-3 rounded"
+          className="rounded"
           alt={tempUser.fullName}
           roundedCircle
         />
