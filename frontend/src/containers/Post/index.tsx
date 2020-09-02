@@ -136,7 +136,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
   };
 
   const popoverRemindOptions = (
-    <Popover id="popover-basic" className={isShown ? styles.dNone : ''}>
+    <Popover id="popover-basic">
       <Popover.Content>
         <ReminderItem
           text="In 20 minutes"
@@ -169,29 +169,6 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
     </Popover>
   );
 
-  const popoverMore = (
-    <Popover id="popover-basic">
-      <Popover.Title as="h3">More actions</Popover.Title>
-      <Popover.Content>
-        <OverlayTrigger trigger="click" placement="right" overlay={popoverRemindOptions}>
-          <button type="button" className={styles.optionsSelect}>
-            <span>Remind me about that &gt;</span>
-          </button>
-        </OverlayTrigger>
-      </Popover.Content>
-    </Popover>
-  );
-
-  const ButtonMore = () => (
-    <OverlayTrigger trigger="click" rootClose placement="top" overlay={popoverMore}>
-      <Card.Link
-        bsPrefix={styles.openThreadBtn}
-      >
-        More
-      </Card.Link>
-    </OverlayTrigger>
-  );
-
   const markAsUnreadOptionClick = () => {
     if (type === PostType.Post) {
       markAsUnreadPost({ unreadPost: post });
@@ -211,9 +188,11 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
       >
         <span>Mark as unread</span>
       </button>
-      <button type="button" className={`${styles.optionsSelect} ${styles.moreOptionsSelect}`}>
-        <span>Other option</span>
-      </button>
+      <OverlayTrigger trigger="click" placement="left" overlay={popoverRemindOptions}>
+        <button type="button" className={`${styles.optionsSelect} ${styles.moreOptionsSelect}`}>
+          <span>&lt; Remind me about that</span>
+        </button>
+      </OverlayTrigger>
     </Popover>
   );
 
@@ -319,7 +298,6 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
               </Card.Link>
             )}
             {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
-            <ButtonMore />
           </div>
           <ButtonOptions />
         </Media.Body>
