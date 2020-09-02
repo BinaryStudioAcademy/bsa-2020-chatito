@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { IChat } from 'common/models/chat/IChat';
 import { setCurrentChatRoutine } from './routines';
 import LoaderWrapper from 'components/LoaderWrapper';
+import { IUser } from 'common/models/user/IUser';
 
 interface IProps {
   isLoading: boolean;
@@ -19,9 +20,10 @@ interface IProps {
     };
   };
   chats: IChat[];
+  currentUser: IUser | undefined;
   selectChat: (chat: IChat | null) => void;
 }
-const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, selectChat }) => {
+const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, currentUser, selectChat }) => {
   useEffect(() => {
     const { chash } = match.params;
     if (chash) {
@@ -30,7 +32,7 @@ const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, selectChat }
     } else {
       selectChat(null);
     }
-  }, [isLoading, match.params.chash]);
+  }, [isLoading, match.params.chash, currentUser]);
 
   return (
     <LoaderWrapper loading={isLoading}>
@@ -48,7 +50,8 @@ const mapStateToProps = (state: IAppState) => {
   return {
     chat: state.chat.chat,
     isLoading: state.workspace.loading,
-    chats: [...channels, ...directMessages] as IChat[]
+    chats: [...channels, ...directMessages] as IChat[],
+    currentUser: state.user.user
   };
 };
 
