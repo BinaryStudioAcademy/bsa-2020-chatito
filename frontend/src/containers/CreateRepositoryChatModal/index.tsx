@@ -15,25 +15,33 @@ import { ChatType } from 'common/enums/ChatType';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { editProfileRoutine } from 'routines/user';
 import { IUser } from 'common/models/user/IUser';
+import CreateWebhookInstructionModal from 'containers/CreateWebhookInstructionModal';
+import { Routes } from 'common/enums/Routes';
+import { push } from 'connected-react-router';
+import { IChat } from 'common/models/chat/IChat';
 
 interface IProps {
   isShown: boolean;
   githubUsername?: string;
   workspace: IWorkspace;
+  githubRepositories: Array<IChat>;
   user?: IUser;
   createRepositoryChat: IBindingCallback1<ICreateChat>;
   editProfile: IBindingCallback1<IUser>;
   showModal: IBindingCallback1<IModalRoutine>;
+  router: (route: string) => void;
 }
 
 const CreateRepositoryChatModal: FunctionComponent<IProps> = ({
   isShown,
   githubUsername,
   workspace,
+  githubRepositories,
   user,
   createRepositoryChat,
   editProfile,
-  showModal
+  showModal,
+  router
 }) => {
   const [selectedRepository, setSelectedRepository] = useState('');
   const [repositories, setRepositories] = useState<string[]>([]);
@@ -49,15 +57,26 @@ const CreateRepositoryChatModal: FunctionComponent<IProps> = ({
     showModal({ modalType: ModalTypes.CreateRepositoryChat, show: false });
   };
 
+  const findRepositoryByName = (repositoryName: string) => {
+    const chat = githubRepositories.find(repo => repo.name === repositoryName);
+    return chat;
+  };
+
   const handleSubmit = () => {
-    createRepositoryChat({
-      name: selectedRepository,
-      type: ChatType.GithubRepository,
-      isPrivate: false,
-      workspaceName: workspace.name
-    });
+    const chat = findRepositoryByName(selectedRepository);
+    if (chat) {
+      router(Routes.Chat.replace(':whash', workspace.hash).replace(':chash', chat.hash));
+    } else {
+      createRepositoryChat({
+        name: selectedRepository,
+        type: ChatType.GithubRepository,
+        isPrivate: false,
+        workspaceName: workspace.name
+      });
+    }
 
     handleCloseModal();
+    showModal({ modalType: ModalTypes.CreateWebhookInstructions, show: true });
   };
 
   const handleUpdateGithubUsername = () => {
@@ -115,14 +134,17 @@ const CreateRepositoryChatModal: FunctionComponent<IProps> = ({
   );
 
   return (
-    <ModalWindow isShown={isShown} onHide={handleCloseModal}>
-      {modalHeader}
-      <Form.Group>
-        {githubUsernameForm}
-        {selectRepositoryForm}
-      </Form.Group>
-      {modalFooter}
-    </ModalWindow>
+    <>
+      <ModalWindow isShown={isShown} onHide={handleCloseModal}>
+        {modalHeader}
+        <Form.Group>
+          {githubUsernameForm}
+          {selectRepositoryForm}
+        </Form.Group>
+        {modalFooter}
+      </ModalWindow>
+      <CreateWebhookInstructionModal selectedRepository={selectedRepository} />
+    </>
   );
 };
 
@@ -130,13 +152,15 @@ const mapStateToProps = (state: IAppState) => ({
   isShown: state.modal.createRepositoryChat,
   githubUsername: state.user.user?.githubUsername,
   workspace: state.workspace.workspace,
+  githubRepositories: state.workspace.githubRepositories,
   user: state.user.user
 });
 
 const mapDispatchToProps = {
   createRepositoryChat: createChatRoutine,
   editProfile: editProfileRoutine,
-  showModal: showModalRoutine
+  showModal: showModalRoutine,
+  router: push
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateRepositoryChatModal);

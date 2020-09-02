@@ -3,6 +3,7 @@ export enum ModalTypes {
   CreateChannel,
   CreateDirect,
   CreateRepositoryChat,
+  CreateWebhookInstructions,
   InvitePopup,
   ChatMembers,
   SetReminder,
