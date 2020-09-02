@@ -48,7 +48,7 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     getUserById(tempUser.id).then(fetchedUser => setUsers(fetchedUser));
-  }, [currentUser]);
+  }, [tempUser]);
   const inputRef = useRef(null);
 
   useEffect(() => {
