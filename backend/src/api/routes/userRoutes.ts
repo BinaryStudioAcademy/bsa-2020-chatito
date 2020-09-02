@@ -13,7 +13,8 @@ import {
   markAsReadPosts,
   getUnreadCommentsById,
   markAsUnreadComment,
-  markAsReadComments
+  markAsReadComments,
+  getUserByIdWithoutRelations
 } from '../../services/userService';
 
 const router = Router();
@@ -21,6 +22,7 @@ const router = Router();
 router
   .get('/', run(getUsers))
   .get('/:id', run((req: Request) => getUserById(req.params.id)))
+  .get('/:id/basic', run((req: Request) => getUserByIdWithoutRelations(req.params.id)))
   .delete('/', run((req: Request) => deleteUser(req.user.id)))
   .get('/:id/unread-posts', run((req: Request) => getUnreadPostsById(req.params.id)))
   .get('/:id/unread-comments', run((req: Request) => getUnreadCommentsById(req.params.id)))

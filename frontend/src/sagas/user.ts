@@ -27,9 +27,7 @@ import { connectSockets } from 'services/socketService';
 function* fetchUserRequest() {
   try {
     const user: IUserWithWorkspaces = yield call(fetchUser);
-
     yield put(fetchUserRoutine.success(user));
-
     yield call(connectSockets);
   } catch (error) {
     yield call(toastrError, error.message);

@@ -13,6 +13,7 @@ interface IProps {
   modalClassName?: string;
   hideCloseBtn?: boolean;
   modalBody?: string;
+  withoutPaddings?: boolean;
 }
 
 const ModalWindow: React.FC<IProps> = ({
@@ -22,7 +23,8 @@ const ModalWindow: React.FC<IProps> = ({
   contentClassName = '',
   modalClassName = '',
   hideCloseBtn = false,
-  modalBody = ''
+  modalBody = '',
+  withoutPaddings = false
 }) => (
   <Modal
     className={modalClassName}
@@ -37,7 +39,7 @@ const ModalWindow: React.FC<IProps> = ({
         <FontAwesomeIcon onClick={onHide} icon={faTimesCircle} className={styles.closeBtn} />
       </button>
     )}
-    <Modal.Body bsPrefix={modalBody}>
+    <Modal.Body bsPrefix={modalBody} className={withoutPaddings ? styles.modalBody : ''}>
       {children}
     </Modal.Body>
   </Modal>

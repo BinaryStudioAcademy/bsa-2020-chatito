@@ -23,8 +23,8 @@ export const getUserById = async (id: string) => {
   return fromUserToUserWithWorkspaces(user);
 };
 
-export const getUserByIdWithoutWorkspaces = async (id: string) => {
-  const user = await getCustomRepository(UserRepository).getByIdWithoutWorkspaces(id);
+export const getUserByIdWithoutRelations = async (id: string) => {
+  const user = await getCustomRepository(UserRepository).getByIdWithoutRelations(id);
   return user;
 };
 
@@ -48,7 +48,7 @@ export const editProfile = async (user: IUserClient) => {
 
 export const editStatus = async ({ id, status }: IEditStatus) => {
   const newStatus = await getCustomRepository(UserRepository).editStatus(id, status);
-  return newStatus;
+  return [newStatus];
 };
 
 export const checkInvitedUserRegistered = async ({ token }: ICheckInvitedUserRegistered) => {

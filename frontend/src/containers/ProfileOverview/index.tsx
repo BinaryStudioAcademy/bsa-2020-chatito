@@ -23,7 +23,7 @@ import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
-import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
+import { faTimesCircle, faSmileWink } from '@fortawesome/free-regular-svg-icons';
 
 interface IProps {
   user: IUser;
@@ -80,6 +80,10 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, 
     showModal({ modalType: ModalTypes.EditProfile, show: true });
   };
 
+  const onSetStatus = () => {
+    showModal({ modalType: ModalTypes.ChangeStatus, show: true });
+  };
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
@@ -125,6 +129,11 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, 
       </InputGroup>
 
       <div className={styles.toolbar}>
+        {user.id === currentUser.id && (
+          <button type="button" className="button-unstyled" onClick={onSetStatus}>
+            <FontAwesomeIcon icon={faSmileWink} />
+          </button>
+        )}
         {user.id === currentUser.id && (
         <button type="button" className="button-unstyled" onClick={onEdit}>
           <FontAwesomeIcon icon={faEdit} />

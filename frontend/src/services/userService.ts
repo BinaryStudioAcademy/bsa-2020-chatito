@@ -7,8 +7,8 @@ import { IEditStatusData } from 'common/models/status/IEditStatusData';
 import { IUserUnreadPosts } from 'common/models/user/IUserUnreadPosts';
 
 export const editStatus = async (editStatusData: IEditStatusData) => {
-  const response = await api.put('/api/users/edit-status', editStatusData);
-  return response;
+  const response: string[] = await api.put('/api/users/edit-status', editStatusData);
+  return response[0];
 };
 
 export const deleteUser = async () => {
@@ -53,4 +53,9 @@ export const markPostAsUnread = async (postId: string): Promise<IPost> => {
 
 export const markCommentAsUnread = async (commentId: string): Promise<void> => {
   await api.post('/api/users/unread-comment', { commentId });
+};
+
+export const getUserById = async (id: string) => {
+  const user: IUser = await api.get(`/api/users/${id}/basic`);
+  return user;
 };

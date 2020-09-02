@@ -7,24 +7,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './styles.module.sass';
 import EmojiPopUp from 'components/EmojiPopUp';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
-import ModalWindow from 'components/ModalWindow';
 import { editStatusRoutine } from 'routines/user';
 import { IAppState } from 'common/models/store';
 import { IEditStatusData } from 'common/models/status/IEditStatusData';
+import { IBindingAction } from 'common/models/callback/IBindingActions';
 
 interface IProps {
   id: string;
   editStatus: (obj: IEditStatusData) => void;
+  handleClose: IBindingAction;
 }
 
-const ChangeStatus: FunctionComponent<IProps> = ({ id, editStatus }) => {
+const ChangeStatusForm: FunctionComponent<IProps> = ({ id, editStatus, handleClose }) => {
   const [chosenEmoji, setChosenEmoji] = useState('');
   const [crossStatus, setCrossStatus] = useState(false);
   const [status, setStatus] = useState('');
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const hideCloseBtn = true;
+  const [wasAutoChosen, setWasAutoChosen] = useState(false);
   const onEmojiClick = (event: MouseEvent, emojiObject: IEmojiData) => {
     setChosenEmoji(emojiObject.emoji);
     setCrossStatus(true);
@@ -35,13 +33,20 @@ const ChangeStatus: FunctionComponent<IProps> = ({ id, editStatus }) => {
     setChosenEmoji('');
     setCrossStatus(false);
     setStatus('');
+    setWasAutoChosen(false);
   };
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setStatus(e.target.value);
+    if (!chosenEmoji) {
+      setChosenEmoji('💬');
+      setWasAutoChosen(true);
+    }
     if (e.target.value) {
       setCrossStatus(true);
-    } else {
+    } else if (wasAutoChosen) {
       setCrossStatus(false);
+      setChosenEmoji('');
+      setWasAutoChosen(false);
     }
   };
   const suggestedStatuses = [
@@ -67,7 +72,7 @@ const ChangeStatus: FunctionComponent<IProps> = ({ id, editStatus }) => {
       )}
     </button>
   );
-  const childrenForModal = (
+  return (
     <div className={styles.childrenContainer}>
       <header className={styles.modalHeader}>Set a status</header>
       <InputGroup className={styles.inputBlock}>
@@ -130,8 +135,7 @@ const ChangeStatus: FunctionComponent<IProps> = ({ id, editStatus }) => {
           className={`${styles.setStatusButton} ${styles.cancel}`}
           variant="outline-secondary"
           onClick={() => {
-            setShow(!show);
-            setTimeout(() => { reset(); }, 200);
+            handleClose();
           }}
         >
           Cancel
@@ -142,26 +146,12 @@ const ChangeStatus: FunctionComponent<IProps> = ({ id, editStatus }) => {
           disabled={!crossStatus}
           onClick={() => {
             editStatus({ id, status: `${chosenEmoji} ${status}` });
-            setShow(!show);
-            setTimeout(() => { reset(); }, 200);
+            handleClose();
           }}
         >
           Save
         </Button>
       </div>
-    </div>
-  );
-  return (
-    <div>
-      <Button variant="primary" onClick={handleShow}>Button to change</Button>
-      <ModalWindow
-        isShown={show}
-        onHide={handleClose}
-        hideCloseBtn={hideCloseBtn}
-        modalBody={styles.modalBody}
-      >
-        {childrenForModal}
-      </ModalWindow>
     </div>
   );
 };
@@ -172,4 +162,4 @@ const mapDispatchToProps = {
   editStatus: editStatusRoutine
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChangeStatus);
+export default connect(mapStateToProps, mapDispatchToProps)(ChangeStatusForm);

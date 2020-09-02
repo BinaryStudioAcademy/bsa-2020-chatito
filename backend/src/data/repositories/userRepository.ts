@@ -69,7 +69,7 @@ class UserRepository extends Repository<User> {
     return this.findOne({ where: { id }, relations: ['workspaces', 'workspacesCreated', 'chats'] });
   }
 
-  getByIdWithoutWorkspaces(id: string): Promise<IUser> {
+  getByIdWithoutRelations(id: string): Promise<IUser> {
     return this.findOne({ where: { id } });
   }
 

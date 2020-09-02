@@ -29,6 +29,7 @@
   width: 250px
   max-width: 250px
   background-color: var(--workspace-toolbar-background)
+  z-index: 102
   
 .avatarContainer
   width: 100%
@@ -98,3 +99,13 @@
     color: var(--offline)
   &_reset
     @include buttonReset
+
+.contentBody
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+
+.userStatus
+  font-size: 16px
+  margin: 5px 0
+  color: var(--text-color-for-dark-bg)  

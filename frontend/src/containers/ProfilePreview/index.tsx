@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useRef } from 'react';
+import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { OverlayTrigger, Image, Popover, Form } from 'react-bootstrap';
 import { IUser } from 'common/models/user/IUser';
@@ -17,9 +17,14 @@ import { ICreateChat } from 'common/models/chat/ICreateChat';
 import { addPostRoutine, createChatAndAddPostRoutine } from 'scenes/Chat/routines';
 import { push } from 'connected-react-router';
 import { ChatType } from 'common/enums/ChatType';
+import { showModalRoutine } from 'routines/modal';
+import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import { IBindingAction } from 'common/models/callback/IBindingActions';
+import { getUserById } from 'services/userService';
 
 interface IProps {
-  user: IUser;
+  tempUser: IUser;
   currentUser: IUser;
   directMessages: IChat[];
   workspaceName: string;
@@ -28,14 +33,26 @@ interface IProps {
   addPost: IBindingCallback1<ICreatePost>;
   createChatAndAddPost: IBindingCallback1<ICreateChatAndAddPost>;
   router: (route: string) => void;
+  showModal: ({ modalType, show }: IModalRoutine) => void;
 }
 
-const ProfilePreview: FunctionComponent<IProps> = ({ user, currentUser, directMessages, workspaceName,
-  workspaceHash, addPost, createChatAndAddPost, router, openProfile }) => {
+const ProfilePreview: FunctionComponent<IProps> = ({ tempUser, currentUser, directMessages, workspaceName,
+  workspaceHash, addPost, createChatAndAddPost, router, openProfile, showModal }) => {
+  const [user, setUsers] = useState<IUser>(tempUser);
+  useEffect(() => {
+    getUserById(tempUser.id).then(fetchedUser => setUsers(fetchedUser));
+  }, []);
   const [message, setMessage] = useState('');
   const inputRef = useRef(null);
   const onViewProfile = () => {
     openProfile(user);
+    document.body.click();
+  };
+  const showChangeStatusModal = () => {
+    showModal({ modalType: ModalTypes.ChangeStatus, show: true });
+  };
+  const buttonClick = (callback: IBindingAction) => {
+    callback();
     document.body.click();
   };
   const onSend = () => {
@@ -72,40 +89,56 @@ const ProfilePreview: FunctionComponent<IProps> = ({ user, currentUser, directMe
         <Image className={styles.userAvatar} src={user.imageUrl || userLogoDefaultUrl} alt="User avatar" thumbnail />
       </div>
       <Popover.Content>
-        {user.status === 'online' ? (
-          <p className={`${styles.fullname} ${styles.online}`}>{user.fullName}</p>
-        ) : (
-          <p className={`${styles.fullname} ${styles.offline}`}>{user.fullName}</p>
-        )}
-        <p className={styles.title}>{user.title}</p>
-        <button
-          type="button"
-          onClick={onViewProfile}
-          className={styles.link}
-        >
-          View full profile
-        </button>
-        <Form.Group
-          className={styles.sendMessageBlock}
-        >
-          <Form.Control
-            ref={inputRef}
-            className={styles.textField}
-            type="text"
-            value={message}
-            onChange={onChange}
-          />
+        <div className={styles.contentBody}>
+          {user.status === 'online' ? (
+            <p className={`${styles.fullname} ${styles.online}`}>{user.fullName}</p>
+          ) : (
+            <p className={`${styles.fullname} ${styles.offline}`}>{user.fullName}</p>
+          )}
+          <p className={styles.title}>{user.title}</p>
           <button
             type="button"
-            className={`${styles.arrowButton} ${styles.arrowButton_reset}`}
-            onClick={onSend}
+            onClick={onViewProfile}
+            className={styles.link}
           >
-            <FontAwesomeIcon
-              className={styles.arrowIcon}
-              icon={faLocationArrow}
-            />
+            View full profile
           </button>
-        </Form.Group>
+          {user.id === currentUser.id ? (
+            <>
+              <span className={styles.userStatus}>{currentUser.status}</span>
+              <button
+                type="button"
+                onClick={() => { buttonClick(showChangeStatusModal); }}
+                className={styles.link}
+              >
+                Set a status
+              </button>
+            </>
+          ) : (
+            <span className={styles.userStatus}>{user.status}</span>
+          )}
+          <Form.Group
+            className={styles.sendMessageBlock}
+          >
+            <Form.Control
+              ref={inputRef}
+              className={styles.textField}
+              type="text"
+              value={message}
+              onChange={onChange}
+            />
+            <button
+              type="button"
+              className={`${styles.arrowButton} ${styles.arrowButton_reset}`}
+              onClick={onSend}
+            >
+              <FontAwesomeIcon
+                className={styles.arrowIcon}
+                icon={faLocationArrow}
+              />
+            </button>
+          </Form.Group>
+        </div>
       </Popover.Content>
     </Popover>
   );
@@ -140,7 +173,8 @@ const mapStateToProps = (state: IAppState) => ({
 const mapDispatchToProps = {
   addPost: addPostRoutine,
   createChatAndAddPost: createChatAndAddPostRoutine,
-  router: push
+  router: push,
+  showModal: showModalRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfilePreview);

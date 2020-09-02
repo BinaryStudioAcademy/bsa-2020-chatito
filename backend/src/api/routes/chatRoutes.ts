@@ -1,6 +1,6 @@
 import { Router, Request } from 'express';
 import { emitToChatRoom } from '../../common/utils/socketHelper';
-import { getUserByIdWithoutWorkspaces } from '../../services/userService';
+import { getUserByIdWithoutRelations } from '../../services/userService';
 import { run } from '../../common/utils/routeHelper';
 import {
   getAllChatPosts,
@@ -43,7 +43,7 @@ router
 
     // eslint-disable-next-line no-restricted-syntax
     for (const userId of req.body.userIds) {
-      const user = await getUserByIdWithoutWorkspaces(userId);
+      const user = await getUserByIdWithoutRelations(userId);
       usersToEmit.push(user);
     }
     const chatInfoToSend = await getChatById(req.body.chatId);
