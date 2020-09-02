@@ -27,7 +27,9 @@ const ChangeStatusForm: FunctionComponent<IProps> = ({ id, editStatus, handleClo
     setChosenEmoji(emojiObject.emoji);
     setCrossStatus(true);
     const emojiButton = document.getElementById('openSmilePopUp');
-    emojiButton!.click();
+    if (emojiButton) {
+      emojiButton.click();
+    }
   };
   const reset = () => {
     setChosenEmoji('');
@@ -156,7 +158,7 @@ const ChangeStatusForm: FunctionComponent<IProps> = ({ id, editStatus, handleClo
   );
 };
 
-const mapStateToProps = (state: IAppState) => ({ id: state.user.user!.id });
+const mapStateToProps = (state: IAppState) => ({ id: state.user.user ? state.user.user.id : '' });
 
 const mapDispatchToProps = {
   editStatus: editStatusRoutine
