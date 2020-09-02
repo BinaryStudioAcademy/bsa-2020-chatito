@@ -18,6 +18,9 @@ export class User extends AbstractEntity {
   @Column({ length: 100 })
   displayName: string;
 
+  @Column({ length: 100, nullable: true })
+  githubUsername: string;
+
   @Column({ unique: true })
   email: string;
 

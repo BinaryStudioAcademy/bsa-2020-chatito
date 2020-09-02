@@ -9,6 +9,7 @@ export const initJoinToChatRoom = async (socket: Socket) => {
 
   chats.channels.forEach(chat => socket.join(chat.id));
   chats.directs.forEach(chat => socket.join(chat.id));
+  chats.githubRepositories.forEach(chat => socket.join(chat.id));
 };
 
 export const joinToChatRoom = async (socket: Socket, chatId: string) => {
