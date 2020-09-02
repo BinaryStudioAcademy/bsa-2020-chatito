@@ -101,7 +101,7 @@ const Workspace: React.FC<IProps> = ({
 
   const renderProfile = () => (
     <ProfileOverview
-      user={userProfile}
+      tempUser={userProfile}
       hideRightMenu={hideRightMenu}
     />
   );
