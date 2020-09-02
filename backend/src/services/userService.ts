@@ -41,8 +41,8 @@ export const deleteUser = async (id: string): Promise<unknown> => {
   return {};
 };
 
-export const editProfile = async (user: IUserClient) => {
-  const editUser = await getCustomRepository(UserRepository).editUser(user.id, user);
+export const editProfile = async (userId: string, data: Partial<IUserClient>) => {
+  const editUser = await getCustomRepository(UserRepository).editUser(userId, data);
   return fromUserToUserClient(editUser);
 };
 
