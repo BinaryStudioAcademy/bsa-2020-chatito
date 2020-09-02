@@ -8,6 +8,7 @@ import threadSaga from 'containers/Thread/sagas';
 import postSaga from 'containers/Post/sagas';
 import threadsSaga from 'containers/ThreadsContainer/sagas/sagas';
 import draftsSaga from 'scenes/Drafts/sagas';
+import channelBrowser from 'scenes/ChannelBrowser/sagas';
 
 export default function* rootSaga() {
   yield all([
@@ -19,6 +20,7 @@ export default function* rootSaga() {
     threadsSaga(),
     draftsSaga(),
     threadSaga(),
-    postSaga()
+    postSaga(),
+    channelBrowser()
   ]);
 }

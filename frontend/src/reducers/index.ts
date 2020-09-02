@@ -10,6 +10,7 @@ import errorBoundary from './errorBoundary';
 import threadsReducer from 'containers/ThreadsContainer/reducers/reducer';
 import drafts from 'scenes/Drafts/reducer';
 import joinInvitedWorkspaceReducer from 'containers/JoinInvitedWorkspace/reducer';
+import channelBrowser from 'scenes/ChannelBrowser/reducer';
 
 const rootReducer = () => combineReducers({
   router: connectRouter(history),
@@ -21,7 +22,8 @@ const rootReducer = () => combineReducers({
   toastr: toastrReducer,
   threads: threadsReducer,
   drafts,
-  inviteWorkspace: joinInvitedWorkspaceReducer
+  inviteWorkspace: joinInvitedWorkspaceReducer,
+  channelBrowser
 });
 
 export default rootReducer;

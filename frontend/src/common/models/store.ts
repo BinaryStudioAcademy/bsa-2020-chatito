@@ -7,6 +7,7 @@ import { IChatState } from 'scenes/Chat/reducers';
 import { IThreadsState } from 'containers/ThreadsContainer/reducers/reducer'
 import { IDraftState } from 'scenes/Drafts/reducer';
 import { IJoinInvitedWorkspaceState } from 'containers/JoinInvitedWorkspace/reducer';
+import { IChannelBrowserState } from 'scenes/ChannelBrowser/reducer';
 
 export interface IAppState {
   router: RouterState;
@@ -18,4 +19,5 @@ export interface IAppState {
   errorBoundary: IErrorBoundaryState;
   drafts: IDraftState;
   inviteWorkspace: IJoinInvitedWorkspaceState;
+  channelBrowser: IChannelBrowserState;
 }

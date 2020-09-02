@@ -3,27 +3,33 @@ import styles from './styles.module.sass';
 import { Routes } from 'common/enums/Routes';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faLock, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'react-bootstrap';
+import { IBrowserChat } from 'common/models/chat/IBrowserChat';
 
 interface IProps {
   whash: string;
   currentUserId: string;
-  channel: any;
+  channel: IBrowserChat;
 }
 
 export const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel }) => {
-  const getChatRoute = (chash: string) => (
+  const { users, isPrivate, name, hash: chash } = channel;
+
+  const isUserChatMember = users.find(user => user.id === currentUserId);
+  const membersCount = users.length;
+
+  const getChatRoute = () => (
     Routes.Chat.replace(':whash', whash).replace(':chash', chash)
   );
 
-  const isUserChatMember = channel.users.find((user: any) => user.id === currentUserId);
-  const membersCount = channel.users.length;
-
   return (
-    <Link to={getChatRoute(channel.hash)} key={channel.id}>
+    <Link to={getChatRoute()}>
       <div className={styles.channel}>
-        <h4 className={styles.channelName}>{`#${channel.name}`}</h4>
+        <h4 className={styles.channelName}>
+          <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} size="xs" />
+          <span>{name}</span>
+        </h4>
         <div className={styles.chatInfo}>
           {isUserChatMember && (
             <div className={styles.joined}>
@@ -39,8 +45,8 @@ export const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel })
         </div>
         {
           isUserChatMember
-            ? <Button className={[styles.joinBtn, styles.channelBtn].join(' ')}>Join</Button>
-            : <Button className={[styles.leaveBtn, styles.channelBtn].join(' ')}>Leave</Button>
+            ? <Button className={[styles.leaveBtn, styles.channelBtn].join(' ')}>Leave</Button>
+            : <Button className={[styles.joinBtn, styles.channelBtn].join(' ')}>Join</Button>
         }
       </div>
     </Link>

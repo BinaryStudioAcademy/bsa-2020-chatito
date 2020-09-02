@@ -1,6 +1,6 @@
 .ChannelBrowser
   background-color: var(--chat-background-primary)
-  min-height: calc(100vh - 62px)
+  height: calc(100vh - 62px)
 
 .header
   display: flex
@@ -16,6 +16,10 @@
 
 .main
   padding: 15px 20px
+  display: flex
+  flex-direction: column
+  flex: 1 1
+  height: calc(100vh - 104px)
 
 .search
   margin-bottom: 25px
@@ -52,11 +56,21 @@
 .filterBtn:hover
   background-color: var(--chat-background-secondary)
 
+.channelsWrp
+  overflow-y: auto
+  display: flex
+  flex-direction: column
+  flex: 1 1
+
+.channelsWrp::-webkit-scrollbar
+  width: 8px
+
+.channelsWrp::-webkit-scrollbar-thumb
+  background: var(--scrollbar)
+  border-radius: 5px
+
 .channelsWrp a:hover
   text-decoration: none
-
-.channelsWrp .createBtn
-  margin-top: 40px
 
 .center
   text-align: center
@@ -67,6 +81,10 @@
   background-color: var(--browser-channel-secondary-button)
   border: 1px solid var(--browser-channel-border)
   color: var(--main-text)
+
+.channelsWrp .createBtn
+  margin-top: 40px
+  margin-bottom: 40px
 
 .createBtn:hover,
 .createBtn:focus,

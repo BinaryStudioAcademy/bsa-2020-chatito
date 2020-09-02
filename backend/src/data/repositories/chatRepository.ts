@@ -3,6 +3,7 @@ import { Chat } from '../entities/Chat';
 import { ICreateChat } from '../../common/models/chat/ICreateChat';
 import { User } from '../entities/User';
 import { IUser } from '../../common/models/user/IUser';
+import { ChatType } from '../../common/enums/ChatType';
 
 @EntityRepository(Chat)
 class ChatRepository extends Repository<Chat> {
@@ -74,6 +75,23 @@ class ChatRepository extends Repository<Chat> {
       .getMany();
 
     return chats;
+  }
+
+  async getBrowserChannelsByWorkspaceId(workspaceId: string) {
+    const channels = await this.createQueryBuilder('chat')
+      .select([
+        'chat.id',
+        'chat.name',
+        'chat.hash',
+        'chat.isPrivate',
+        'user.id'
+      ])
+      .leftJoin('chat.users', 'user')
+      .leftJoin('chat.workspace', 'workspace')
+      .where('workspace.id = :workspaceId', { workspaceId })
+      .andWhere('chat.type = :type', { type: ChatType.Channel })
+      .getMany();
+    return channels;
   }
 
   async getAllByUser(userId: string): Promise<any> {
