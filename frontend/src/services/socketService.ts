@@ -70,8 +70,8 @@ export const connectSockets = () => {
         chat.type === 'DirectMessage' ? (
           `from ${user.displayName}`
         ) : (
-            `in channel "${chat.name}" from ${user.displayName}`
-          ),
+          `in channel "${chat.name}" from ${user.displayName}`
+        ),
         5000,
         'blueToastrNotification',
         // eslint-disable-next-line no-console

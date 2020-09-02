@@ -14,7 +14,6 @@ interface IProps {
 }
 
 const AudioRecorder: React.FC<IProps> = ({ onRecord, maxDuration, onError, showPlayer = false }) => {
-  const a = 5;
   const [isBlocked, setBlocked] = useState(true);
   const [isRecording, setRecording] = useState(false);
   const [blobUrl, setBlobUrl] = useState<null | string>(null);
@@ -25,14 +24,12 @@ const AudioRecorder: React.FC<IProps> = ({ onRecord, maxDuration, onError, showP
   });
 
   const start = () => {
-    if (isBlocked) {
-      console.log('Permission Denied');
-    } else {
+    if (!isBlocked) {
       Mp3Recorder
         .start()
         .then(() => {
           setRecording(true);
-        }).catch((e: any) => console.error(e));
+        });
     }
   };
 
@@ -40,7 +37,7 @@ const AudioRecorder: React.FC<IProps> = ({ onRecord, maxDuration, onError, showP
     Mp3Recorder
       .stop()
       .getMp3()
-      .then(([buffer, blob]: [any[], Blob]) => {
+      .then(([buffer, blob]: [any[], Blob]) => { // eslint-disable-line
         const blobURL = URL.createObjectURL(blob);
         setBlobUrl(blobURL);
         setRecording(false);
@@ -51,20 +48,19 @@ const AudioRecorder: React.FC<IProps> = ({ onRecord, maxDuration, onError, showP
           onError(`Max duration is ${Math.floor(maxDuration)}, but yours - ${Math.floor(duration)}`);
         }
       })
-      .catch((e: any) => console.error(e));
+      .catch(() => onError && onError('Some problems with player'));
   };
 
   const cancel = () => {
     Mp3Recorder
       .stop()
       .getMp3()
-      .then(([buffer, blob]: [any, any]) => {
-        const blobURL = URL.createObjectURL(blob);
+      .then(() => {
         setBlobUrl(null);
         setRecording(false);
         onRecord(null, '');
       })
-      .catch((e: any) => console.error(e));
+      .catch(() => onError && onError('Some problems with player'));
   };
 
   return (

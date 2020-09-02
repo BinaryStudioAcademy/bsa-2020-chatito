@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faEdit, faEllipsisH, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faEdit, faEllipsisH, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { IUser } from 'common/models/user/IUser';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { useKey } from 'common/hooks/onInputSubmit';
@@ -23,10 +23,12 @@ import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
-import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
+import { faTimesCircle, faSmileWink } from '@fortawesome/free-regular-svg-icons';
+import { getUserById } from 'services/userService';
+import LoaderWrapper from 'components/LoaderWrapper';
 
 interface IProps {
-  user: IUser;
+  tempUser: IUser;
   currentUser: IUser;
   directMessages: IChat[];
   workspaceName: string;
@@ -38,11 +40,22 @@ interface IProps {
   showModal: IBindingCallback1<IModalRoutine>;
 }
 
-const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, workspaceName,
+const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessages, workspaceName,
   workspaceHash, hideRightMenu, addPost, createChatAndAddPost, router, showModal }) => {
   const [showAbout, setShowAbout] = useState(false);
   const [message, setMessage] = useState('');
+  const [user, setUsers] = useState<IUser>(tempUser);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    getUserById(tempUser.id).then(fetchedUser => setUsers(fetchedUser));
+  }, [tempUser]);
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (user.status) {
+      setLoading(false);
+    }
+  }, [user]);
 
   const onClose = () => {
     hideRightMenu();
@@ -80,6 +93,10 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, 
     showModal({ modalType: ModalTypes.EditProfile, show: true });
   };
 
+  const onSetStatus = () => {
+    showModal({ modalType: ModalTypes.ChangeStatus, show: true });
+  };
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
@@ -98,55 +115,60 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, 
       </div>
     </>
   );
-
   const imageUrl = user.id === currentUser.id ? currentUser.imageUrl : user.imageUrl;
-
   return (
-    <div className={styles.profileOverview}>
-      <div className={styles.header}>
-        <FontAwesomeIcon icon={faTimesCircle} onClick={onClose} className={styles.closeBtn} />
-      </div>
+    <LoaderWrapper loading={loading}>
+      <div className={styles.profileOverview}>
+        <div className={styles.header}>
+          <FontAwesomeIcon icon={faTimesCircle} onClick={onClose} className={styles.closeBtn} />
+        </div>
 
-      <div className={styles.avatar}>
-        <Image src={imageUrl || userLogoDefaultUrl} alt="avatar" roundedCircle />
-      </div>
-      <div className={styles.nameWrp}>
-        <i className={styles.online} />
-        <span className={styles.fullName}>{user.fullName}</span>
-      </div>
-      {user.title && <div className={styles.title}>{user.title}</div>}
-      {user.status && <div className={styles.status}>{user.status}</div>}
+        <div className={styles.avatar}>
+          <Image src={imageUrl || userLogoDefaultUrl} alt="avatar" roundedCircle />
+        </div>
+        <div className={styles.nameWrp}>
+          <i className={styles.online} />
+          <span className={styles.fullName}>{user.fullName}</span>
+        </div>
+        {user.title && <div className={styles.title}>{user.title}</div>}
+        {user.status && <div className={styles.status}>{user.status}</div>}
 
-      <InputGroup className={styles.inputWrp}>
-        <FormControl ref={inputRef} placeholder="Write a message" value={message} onChange={onChange} />
-        <InputGroup.Append>
-          <button type="button" className="button-unstyled" onClick={onSend}>
-            <FontAwesomeIcon icon={faPaperPlane} />
+        <InputGroup className={styles.inputWrp}>
+          <FormControl ref={inputRef} placeholder="Write a message" value={message} onChange={onChange} />
+          <InputGroup.Append>
+            <button type="button" className="button-unstyled" onClick={onSend}>
+              <FontAwesomeIcon icon={faPaperPlane} />
+            </button>
+          </InputGroup.Append>
+        </InputGroup>
+
+        <div className={styles.toolbar}>
+          {user.id === currentUser.id && (
+            <button type="button" className="button-unstyled" onClick={onSetStatus}>
+              <FontAwesomeIcon icon={faSmileWink} />
+            </button>
+          )}
+          {user.id === currentUser.id && (
+          <button type="button" className="button-unstyled" onClick={onEdit}>
+            <FontAwesomeIcon icon={faEdit} />
           </button>
-        </InputGroup.Append>
-      </InputGroup>
+          )}
+          <button type="button" className="button-unstyled">
+            <FontAwesomeIcon icon={faEllipsisH} />
+          </button>
+        </div>
 
-      <div className={styles.toolbar}>
-        {user.id === currentUser.id && (
-        <button type="button" className="button-unstyled" onClick={onEdit}>
-          <FontAwesomeIcon icon={faEdit} />
+        <button
+          className={`${styles.aboutBtn} button-unstyled`}
+          type="button"
+          onClick={() => setShowAbout(!showAbout)}
+        >
+          <div>About</div>
+          <FontAwesomeIcon icon={showAbout ? faChevronUp : faChevronDown} />
         </button>
-        )}
-        <button type="button" className="button-unstyled">
-          <FontAwesomeIcon icon={faEllipsisH} />
-        </button>
+        {showAbout && renderAbout()}
       </div>
-
-      <button
-        className={`${styles.aboutBtn} button-unstyled`}
-        type="button"
-        onClick={() => setShowAbout(!showAbout)}
-      >
-        <div>About</div>
-        <FontAwesomeIcon icon={faChevronDown} />
-      </button>
-      {showAbout && renderAbout()}
-    </div>
+    </LoaderWrapper>
   );
 };
 

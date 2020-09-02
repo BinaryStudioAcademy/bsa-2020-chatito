@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
-import Header from '../../../../containers/Header';
+import Header from 'containers/Header';
 import WorkspaceToolbar from '../WorkspaceToolbar';
 import NoChatMessage from '../NoChatMessage';
 import ProfileOverview from 'containers/ProfileOverview';
@@ -29,6 +29,7 @@ import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { Route, Switch } from 'react-router-dom';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { IFetchWorkspaceChat } from 'common/models/chat/IFetchWorkspaceChat';
+import ChangeStatusModal from 'containers/ChangeStatusModal';
 
 interface IProps {
   currentUserId?: string;
@@ -100,7 +101,7 @@ const Workspace: React.FC<IProps> = ({
 
   const renderProfile = () => (
     <ProfileOverview
-      user={userProfile}
+      tempUser={userProfile}
       hideRightMenu={hideRightMenu}
     />
   );
@@ -150,6 +151,7 @@ const Workspace: React.FC<IProps> = ({
 
         </div>
       </div>
+      <ChangeStatusModal />
     </LoaderWrapper>
   );
 };

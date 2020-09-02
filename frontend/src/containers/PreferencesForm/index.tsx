@@ -1,30 +1,26 @@
 import React, { useState, FunctionComponent } from 'react';
 import { connect } from 'react-redux';
-import { Button, Image, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { IAppState } from 'common/models/store';
 import { showModalRoutine } from 'routines/modal';
-import { editProfileRoutine, updateAudioRoutine } from 'routines/user';
+import { updateAudioRoutine } from 'routines/user';
 import styles from './styles.module.sass';
 import { IUser } from 'common/models/user/IUser';
-import { getUserImgLink } from 'common/helpers/imageHelper';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
-import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import AudioRecorder from 'containers/AudioRecorder';
 import PlayAudioButton from 'components/PlayAudioButton';
-import { uploadOnAWS, signS3Avatar, signS3Audio, deleteAWSObject } from 'services/awsService';
+import { uploadOnAWS, signS3Audio } from 'services/awsService';
 import { toastr } from 'react-redux-toastr';
 import LoaderWrapper from 'components/LoaderWrapper';
 
 interface IProps {
   user?: IUser | null;
-  editProfile: IBindingCallback1<IUser>;
   handleClose: IBindingAction;
   updateAudio: (url: string) => void;
 }
 
 const PreferencesForm: FunctionComponent<IProps> = ({
   handleClose,
-  editProfile,
   updateAudio,
   user = undefined
 }: IProps) => {
@@ -114,7 +110,6 @@ const mapStateToProps = (state: IAppState) => ({
 
 const mapDispatchToProps = {
   showModal: showModalRoutine,
-  editProfile: editProfileRoutine,
   updateAudio: updateAudioRoutine
 };
 
