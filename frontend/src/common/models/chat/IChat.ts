@@ -1,3 +1,4 @@
+import { IPost } from './../post/IPost';
 import { ChatType } from "common/enums/ChatType";
 import { IUser } from "../user/IUser";
 import { IWorkspace } from "../workspace/IWorkspace";

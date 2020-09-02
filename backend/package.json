@@ -14,7 +14,7 @@
     "migration-revert": "node_modules/.bin/ts-node node_modules/typeorm/cli.js migration:revert",
     "generate-seed": "node_modules/.bin/ts-node node_modules/typeorm/cli.js migration:create -d ./src/data/seeders -n",
     "seed": "node_modules/.bin/ts-node ./src/data/seeders",
-    "prod": "npm install && npm run migrate && node --max-old-space-size=1024 -r ts-node/register ./src/server.ts"
+    "prod": "npm install && npm run migrate && node -r ts-node/register ./src/server.ts"
   },
   "author": "",
   "license": "ISC",

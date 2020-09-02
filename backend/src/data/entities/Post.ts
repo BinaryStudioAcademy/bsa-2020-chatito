@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, OneToMany, JoinColumn, RelationId } from 'typeorm';
+import { Entity, Column, ManyToOne, ManyToMany, OneToMany, JoinColumn, RelationId } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
 import { User } from './User';
 import { Chat } from './Chat';
@@ -41,4 +41,7 @@ export class Post extends AbstractEntity {
 
   @OneToMany(() => PostReaction, postReaction => postReaction.post)
   postReactions: PostReaction[];
+
+  @ManyToMany(() => User, user => user.unreadPosts)
+  unreadByUsers: User[];
 }

@@ -1,4 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { IUserUnreadPosts } from '../../common/models/user/IUserUnreadPosts';
 import { User } from '../entities/User';
 import { ICreateUser } from '../../common/models/user/ICreateUser';
 import { IUserClient } from '../../common/models/user/IUserClient';
@@ -16,6 +17,48 @@ class UserRepository extends Repository<User> {
   async addWorkspace(id: string, workspaceId: string): Promise<User> {
     await this.createQueryBuilder().relation(User, 'workspaces').of(id).add(workspaceId);
     return this.findOne({ where: { id }, relations: ['workspaces'] });
+  }
+
+  async markAsUnreadPost(id: string, postId: string): Promise<string> {
+    await this.createQueryBuilder().relation(User, 'unreadPosts').of(id).add(postId);
+    return postId;
+  }
+
+  async markAsReadPosts(id: string, postId: string): Promise<string> {
+    await this.createQueryBuilder().relation(User, 'unreadPosts').of(id).remove(postId);
+    return postId;
+  }
+
+  async getUnreadPostsById(id: string): Promise<IUserUnreadPosts> {
+    const postIds = await this.createQueryBuilder('user')
+      .select([
+        'user.id'
+      ])
+      .leftJoinAndSelect('user.unreadPosts', 'unreadposts')
+      .where('user.id = :id', { id })
+      .getOne();
+    return postIds;
+  }
+
+  async markAsUnreadComment(id: string, postId: string): Promise<string> {
+    await this.createQueryBuilder().relation(User, 'unreadComments').of(id).add(postId);
+    return postId;
+  }
+
+  async markAsReadComments(id: string, postId: string): Promise<string> {
+    await this.createQueryBuilder().relation(User, 'unreadComments').of(id).remove(postId);
+    return postId;
+  }
+
+  async getUnreadCommentsById(id: string): Promise<IUserUnreadPosts> {
+    const postIds = await this.createQueryBuilder('user')
+      .select([
+        'user.id'
+      ])
+      .leftJoinAndSelect('user.unreadComments', 'unreadcomments')
+      .where('user.id = :id', { id })
+      .getOne();
+    return postIds;
   }
 
   getAll(): Promise<User[]> {
@@ -46,7 +89,7 @@ class UserRepository extends Repository<User> {
     return user;
   }
 
-  async editUser(id: string, data: IUserClient): Promise<User> {
+  async editUser(id: string, data: Partial<IUserClient>): Promise<User> {
     await this.update(
       id,
       data
