@@ -99,6 +99,7 @@ export const CropAvatar: React.FC<IProps> = ({ src, avatarLoading, clearAvatarDa
             circularCrop
             minHeight={100}
             onImageLoaded={onImageLoaded}
+            imageStyle={{ maxWidth: '460px', maxHeight: '460px' }}
           />
         </div>
       </LoaderWrapper>
