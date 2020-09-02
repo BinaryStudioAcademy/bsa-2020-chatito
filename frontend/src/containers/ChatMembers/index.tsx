@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { connect } from 'react-redux';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IAppState } from 'common/models/store';
@@ -10,6 +10,9 @@ import { IChat } from 'common/models/chat/IChat';
 import { fetchChatUsersRoutine, removeUserFromChatRoutine } from 'scenes/Chat/routines';
 import { IUser } from 'common/models/user/IUser';
 import ChatMember from 'components/ChatMember';
+import styles from './styles.module.sass';
+import Button from 'react-bootstrap/Button';
+import SearchInput from 'components/SearchInput';
 
 interface IProps {
   isShown: boolean;
@@ -28,6 +31,7 @@ const ChatMembers: FunctionComponent<any> = ({
   chat,
   currentUser
 }: IProps) => {
+  const [searchStr, setSearchStr] = useState('');
   const handleCloseModal = () => {
     toggleModal({ modalType: ModalTypes.ChatMembers, show: false });
   };
@@ -40,7 +44,7 @@ const ChatMembers: FunctionComponent<any> = ({
   const onInvite = () => {
     toggleModal({ modalType: ModalTypes.InviteChat, show: true });
   };
-
+  const isSuitable = (user: IUser) => user.displayName.includes(searchStr) || user.email.includes(searchStr);
   const isCreator = chat.createdByUserId === currentUser.id;
 
   return (
@@ -49,12 +53,23 @@ const ChatMembers: FunctionComponent<any> = ({
       onHide={handleCloseModal}
     >
       <div>
-        <button type="button" onClick={onInvite}>Add user</button>
+        {chat.users.length > 1
+          && (
+            <Button
+              type="button"
+              variant="secondary"
+              className={styles.addButton}
+              onClick={onInvite}
+            >
+              Add user
+            </Button>
+          )}
+        <SearchInput onSearch={setSearchStr} stylesClassName={styles.searchInput} />
         {
           chat.users.length <= 1
             ? 'You are the only member of this chat!'
             : chat.users.map((user: IUser) => {
-              if (currentUser.id === user.id) {
+              if (currentUser.id === user.id || !isSuitable(user)) {
                 return null;
               }
               return (
