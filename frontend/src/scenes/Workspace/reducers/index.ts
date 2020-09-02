@@ -1,3 +1,7 @@
+import { IServerComment } from 'common/models/post/IServerComment';
+import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
+import { IPost } from 'common/models/post/IPost';
+import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 import { Routine } from 'redux-saga-routines';
 import {
   selectWorkspaceRoutine,
@@ -11,6 +15,14 @@ import {
   addActiveCommentWithSocketRoutine,
   updateChatDraftPostRoutine,
   newUserNotificationWithSocketRoutine,
+  markAsUnreadPostWithSocketRoutine,
+  fetchUnreadUserPostsRoutine,
+  readPostRoutine,
+  markAsUnreadPostWithOptionRoutine,
+  markAsUnreadCommentWithSocketRoutine,
+  fetchUnreadUserCommentsRoutine,
+  readCommentRoutine,
+  markAsUnreadCommentWithOptionRoutine,
   removeUserFromChatInWorkspaceRoutine } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
@@ -35,6 +47,9 @@ export interface IWorkspaceState {
   activeThread: IActiveThread | null;
   userProfile: IUser;
   threadLoading: boolean;
+  someField: string;
+  unreadChats: IUnreadChat[];
+  unreadPostComments: IUnreadPostComments[];
 }
 
 const initialState: IWorkspaceState = {
@@ -47,7 +62,52 @@ const initialState: IWorkspaceState = {
   showRightSideMenu: RightMenuTypes.None,
   activeThread: null,
   userProfile: { id: '', email: '', fullName: '', displayName: '', audio: 'https://mobcup.net/d/c76xxfvk/mp3' },
-  threadLoading: false
+  threadLoading: false,
+  someField: 'string',
+  unreadChats: [],
+  unreadPostComments: []
+};
+
+const markAsUnreadPosts = (unreadChats: IUnreadChat[], chatId: string, unreadPost: IPost) => {
+  let currentChatExist = false;
+  if (unreadChats.length) {
+    unreadChats.forEach(unreadChat => {
+      if (unreadChat.id === chatId) {
+        currentChatExist = true;
+        unreadChat.unreadPosts.push(unreadPost);
+      }
+    });
+  }
+  if (!currentChatExist) {
+    unreadChats.push({ id: chatId, unreadPosts: [unreadPost] });
+  }
+  unreadChats.forEach(unreadChat => {
+    unreadChat.unreadPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  });
+  return unreadChats;
+};
+
+const markAsUnreadComments = (
+  unreadPostComments: IUnreadPostComments[],
+  postId: string,
+  unreadComment: IServerComment
+) => {
+  let currentPostExist = false;
+  if (unreadPostComments.length) {
+    unreadPostComments.forEach(unreadPostComment => {
+      if (unreadPostComment.id === postId) {
+        currentPostExist = true;
+        unreadPostComment.unreadComments.push(unreadComment);
+      }
+    });
+  }
+  if (!currentPostExist) {
+    unreadPostComments.push({ id: postId, unreadComments: [unreadComment] });
+  }
+  unreadPostComments.forEach(unreadPostComment => {
+    unreadPostComment.unreadComments.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  });
+  return unreadPostComments;
 };
 
 const workspace = (state: IWorkspaceState = initialState, { type, payload }: Routine<any>): IWorkspaceState => {
@@ -227,6 +287,137 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       }
       return state;
     }
+    case markAsUnreadPostWithSocketRoutine.TRIGGER: {
+      const unreadChatsforState = markAsUnreadPosts(state.unreadChats, payload.chatId, payload.unreadPost);
+      return {
+        ...state, unreadChats: [...unreadChatsforState]
+      };
+    }
+    case markAsUnreadCommentWithSocketRoutine.TRIGGER: {
+      const unreadPostsforState = markAsUnreadComments(state.unreadPostComments, payload.postId, payload.comment);
+      return {
+        ...state, unreadPostComments: [...unreadPostsforState]
+      };
+    }
+    case markAsUnreadPostWithOptionRoutine.TRIGGER: {
+      return {
+        ...state
+      };
+    }
+    case markAsUnreadPostWithOptionRoutine.SUCCESS: {
+      const unreadChatsforState = markAsUnreadPosts(state.unreadChats, payload.chatId, payload);
+      return {
+        ...state, unreadChats: [...unreadChatsforState]
+      };
+    }
+    case markAsUnreadCommentWithOptionRoutine.TRIGGER: {
+      return {
+        ...state
+      };
+    }
+    case markAsUnreadCommentWithOptionRoutine.SUCCESS: {
+      const unreadPostCommentsforState = markAsUnreadComments(
+        state.unreadPostComments, payload.postId, payload.unreadComment
+      );
+      return {
+        ...state, unreadPostComments: [...unreadPostCommentsforState]
+      };
+    }
+    case fetchUnreadUserPostsRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case fetchUnreadUserPostsRoutine.SUCCESS: {
+      const unreadPosts: IPost[] = [...payload.unreadPosts];
+      const unreadChats = [...state.unreadChats];
+      if (unreadPosts.length) {
+        unreadPosts.forEach(unreadPost => {
+          let chatExists = false;
+          if (unreadChats.length) {
+            unreadChats.forEach(unreadChat => {
+              if (unreadPost.chatId === unreadChat.id) {
+                unreadChat.unreadPosts.push(unreadPost);
+                chatExists = true;
+              }
+            });
+          }
+          if (!chatExists && unreadPost.chatId) {
+            unreadChats.push({ id: unreadPost.chatId, unreadPosts: [unreadPost] });
+          }
+        });
+      }
+      unreadChats.forEach(unreadChat => {
+        unreadChat.unreadPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      });
+      return {
+        ...state, loading: false, unreadChats
+      };
+    }
+    case fetchUnreadUserPostsRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
+
+    case fetchUnreadUserCommentsRoutine.TRIGGER:
+      return {
+        ...state, loading: true
+      };
+    case fetchUnreadUserCommentsRoutine.SUCCESS: {
+      const unreadComments: IServerComment[] = [...payload.unreadComments];
+      const unreadPostComments = [...state.unreadPostComments];
+      if (unreadComments.length) {
+        unreadComments.forEach(unreadComment => {
+          let postExists = false;
+          if (unreadPostComments.length) {
+            unreadPostComments.forEach(unreadPost => {
+              if (unreadComment.postId === unreadPost.id) {
+                unreadPost.unreadComments.push(unreadComment);
+                postExists = true;
+              }
+            });
+          }
+          if (!postExists) {
+            unreadPostComments.push({ id: unreadComment.postId, unreadComments: [unreadComment] });
+          }
+        });
+      }
+      unreadPostComments.forEach(unreadPost => {
+        unreadPost.unreadComments.sort((a, b) => (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()));
+      });
+      return {
+        ...state, loading: false, unreadPostComments
+      };
+    }
+    case fetchUnreadUserCommentsRoutine.FAILURE:
+      return {
+        ...state, loading: false
+      };
+
+    case readPostRoutine.TRIGGER:
+      return {
+        ...state
+      };
+    case readPostRoutine.SUCCESS:
+      return {
+        ...state, unreadChats: payload
+      };
+    case readPostRoutine.FAILURE:
+      return {
+        ...state
+      };
+    case readCommentRoutine.TRIGGER:
+      return {
+        ...state
+      };
+    case readCommentRoutine.SUCCESS:
+      return {
+        ...state, unreadPostComments: payload
+      };
+    case readCommentRoutine.FAILURE:
+      return {
+        ...state
+      };
     case removeUserFromChatInWorkspaceRoutine.SUCCESS: {
       const { chatId, userId } = payload;
       const chat = [...state.channels, ...state.directMessages].filter(({ id: _chatId }) => _chatId === chatId)[0];

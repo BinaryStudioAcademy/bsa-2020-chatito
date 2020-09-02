@@ -9,7 +9,9 @@ import {
   resetPasswordRoutine,
   editStatusRoutine,
   loginWithGoogleRoutine,
-  loginWithFacebookRoutine
+  loginWithFacebookRoutine,
+  updateAvatarRoutine,
+  updateAudioRoutine
 } from '../routines/user';
 import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
 import { showModalRoutine } from 'routines/modal';
@@ -23,6 +25,7 @@ import { push } from 'connected-react-router';
 import { IUserWithWorkspaces } from 'common/models/user/IUserWithWorkspaces';
 import { Routes } from 'common/enums/Routes';
 import { connectSockets } from 'services/socketService';
+import { toastr } from 'react-redux-toastr';
 
 function* fetchUserRequest() {
   try {
@@ -191,6 +194,32 @@ function* watchEditStatusRequest() {
   yield takeEvery(editStatusRoutine.TRIGGER, editStatusRequest);
 }
 
+function* updateAvatarRequest({ payload }: Routine<any>) {
+  try {
+    const user = yield call(editUser, { imageUrl: payload });
+    yield put(updateAvatarRoutine.success(user.imageUrl));
+  } catch (error) {
+    toastr.error('Error', 'Updating avatar was failed. Please try again later.');
+  }
+}
+
+function* watchUpdateAvatarRequest() {
+  yield takeEvery(updateAvatarRoutine.TRIGGER, updateAvatarRequest);
+}
+
+function* updateAudioRequest({ payload }: Routine<any>) {
+  try {
+    const user = yield call(editUser, { audio: payload });
+    yield put(updateAudioRoutine.success(user.audio));
+  } catch (error) {
+    toastr.error('Error', 'Updating audio was failed. Please try again later.');
+  }
+}
+
+function* watchUpdateAudioRequest() {
+  yield takeEvery(updateAudioRoutine.TRIGGER, updateAudioRequest);
+}
+
 export default function* userSaga() {
   yield all([
     watchAddNewUserRequest(),
@@ -202,6 +231,8 @@ export default function* userSaga() {
     watchLoginWithFacebookRequest(),
     watchDeleteAccount(),
     watchResetPasswordRequest(),
-    watchEditStatusRequest()
+    watchEditStatusRequest(),
+    watchUpdateAvatarRequest(),
+    watchUpdateAudioRequest()
   ]);
 }

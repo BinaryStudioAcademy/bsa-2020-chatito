@@ -3,15 +3,14 @@ import { connect } from 'react-redux';
 import { Button, Image, Form } from 'react-bootstrap';
 import { IAppState } from 'common/models/store';
 import { showModalRoutine } from 'routines/modal';
-import { editProfileRoutine, deleteAccountRoutine } from 'routines/user';
+import { editProfileRoutine, deleteAccountRoutine, updateAvatarRoutine } from 'routines/user';
 import styles from './styles.module.sass';
 import { IUser } from 'common/models/user/IUser';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { CropAvatar } from 'components/CropAvatar';
-import { env } from 'env';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
-import { deleteAvatar } from 'services/awsService';
+import { deleteAWSObject } from 'services/awsService';
 import { allowedFileTypes } from 'config/allowedFileTypes';
 import { toastr } from 'react-redux-toastr';
 
@@ -20,15 +19,18 @@ interface IProps {
   deleteAccount: IBindingAction;
   handleClose: IBindingAction;
   user: IUser | undefined;
+  updateAvatar: (imageUrl: string | null) => void;
 }
 
 const EditProfileForm: FunctionComponent<IProps> = ({
   editProfile,
   deleteAccount,
   handleClose,
-  user
+  user,
+  updateAvatar
 }: IProps) => {
   if (!user) return <></>;
+
   const [fullName, setFullName] = useState(user.fullName);
   const [displayName, setDisplayName] = useState(user.displayName);
   const [title, setTitle] = useState(user.title ? user.title : '');
@@ -38,11 +40,9 @@ const EditProfileForm: FunctionComponent<IProps> = ({
   const [avatarLoading, setAvatarLoading] = useState(false);
 
   const handleSubmit = () => {
-    const editUserProps = { ...user, fullName, displayName, title, imageUrl };
+    const editUserProps = { ...user, fullName, displayName, title };
+    delete editUserProps.imageUrl;
     editProfile(editUserProps);
-    if (user.imageUrl && user.imageUrl !== imageUrl) {
-      deleteAvatar(user.imageUrl);
-    }
   };
 
   const handleDeleteAccount = () => {
@@ -68,10 +68,17 @@ const EditProfileForm: FunctionComponent<IProps> = ({
     setAvatar('');
   };
 
-  const setImageUrlHandler = (filename: string) => setImageUrl(`/avatars/${filename}`);
+  const setImageUrlHandler = (url: string) => setImageUrl(url);
 
-  const handleDeleteAvatar = () => {
-    setImageUrl('');
+  const handleDeleteAvatar = async () => {
+    try {
+      if (!imageUrl) return;
+      await deleteAWSObject(imageUrl);
+      updateAvatar(null);
+      setImageUrl('');
+    } catch (erorr) {
+      toastr.error('Error', 'Removing avatar was failed. Please try again later.');
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,27 +101,21 @@ const EditProfileForm: FunctionComponent<IProps> = ({
     }
   };
 
-  const getImageSource = () => {
-    if (imageUrl.startsWith('https')) {
-      return imageUrl;
-    }
-    if (imageUrl) {
-      return `${env.urls.aws}${imageUrl}`;
-    }
-    return userLogoDefaultUrl;
-  };
-
   if (avatar || avatarLoading) {
     return (
       <CropAvatar
         src={avatar}
         avatarLoading={avatarLoading}
+        handleClose={handleClose}
+        imageUrl={imageUrl}
+        updateAvatar={updateAvatar}
         clearAvatarData={clearAvatarData}
         setImageUrl={setImageUrlHandler}
-        handleClose={handleClose}
       />
     );
   }
+
+  const imageSource = imageUrl || userLogoDefaultUrl;
 
   return (
     <div className={styles.mainContainer}>
@@ -175,7 +176,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             <Image
               className={styles.image}
               height={150}
-              src={getImageSource()}
+              src={imageSource}
             />
             <div className={`${styles.imageFooter} w-100`}>
               <div className={styles.uploadWrp}>
@@ -235,7 +236,8 @@ const mapStateToProps = (state: IAppState) => ({
 const mapDispatchToProps = {
   showModal: showModalRoutine,
   editProfile: editProfileRoutine,
-  deleteAccount: deleteAccountRoutine
+  deleteAccount: deleteAccountRoutine,
+  updateAvatar: updateAvatarRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditProfileForm);

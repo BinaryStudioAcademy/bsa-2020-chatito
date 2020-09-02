@@ -10,6 +10,7 @@ import { fromCreatedWorkspaceToClient } from '../common/mappers/workspace';
 import { verifyToken } from '../common/utils/tokenHelper';
 import CustomError from '../common/models/CustomError';
 import { ErrorCode } from '../common/enums/ErrorCode';
+import PostRepository from '../data/repositories/postRepository';
 
 export const getUsers = async () => {
   const users = await getCustomRepository(UserRepository).getAll();
@@ -40,8 +41,8 @@ export const deleteUser = async (id: string): Promise<unknown> => {
   return {};
 };
 
-export const editProfile = async (user: IUserClient) => {
-  const editUser = await getCustomRepository(UserRepository).editUser(user.id, user);
+export const editProfile = async (userId: string, data: Partial<IUserClient>) => {
+  const editUser = await getCustomRepository(UserRepository).editUser(userId, data);
   return fromUserToUserClient(editUser);
 };
 
@@ -71,3 +72,44 @@ export const addWorkspaceToUser = async (userId: string, workspaceId: string) =>
   }
 };
 
+export const markAsUnreadPost = async (userId: string, postId: string) => {
+  await getCustomRepository(UserRepository).markAsUnreadPost(userId, postId);
+  const post = await getCustomRepository(PostRepository).getById(postId);
+  return { ...post };
+};
+
+export const markAsReadPosts = async (userId: string, postIds: string[]) => {
+  const response: string[] = [];
+  // eslint-disable-next-line no-restricted-syntax
+  for (const postId of postIds) {
+    const responsePostId = await getCustomRepository(UserRepository).markAsReadPosts(userId, postId);
+    response.push(responsePostId);
+  }
+  return response;
+};
+
+export const getUnreadPostsById = async (userId: string) => {
+  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadPostsById(userId);
+  // eslint-disable-next-line no-console
+  return unreadUserPostIds;
+};
+
+export const markAsUnreadComment = async (userId: string, postId: string) => {
+  const responsePostId = await getCustomRepository(UserRepository).markAsUnreadComment(userId, postId);
+  return [responsePostId];
+};
+
+export const markAsReadComments = async (userId: string, postIds: string[]) => {
+  const response: string[] = [];
+  // eslint-disable-next-line no-restricted-syntax
+  for (const postId of postIds) {
+    const responsePostId = await getCustomRepository(UserRepository).markAsReadComments(userId, postId);
+    response.push(responsePostId);
+  }
+  return response;
+};
+
+export const getUnreadCommentsById = async (userId: string) => {
+  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadCommentsById(userId);
+  return unreadUserPostIds;
+};

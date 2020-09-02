@@ -33,7 +33,7 @@ export class User extends AbstractEntity {
   @Column({ nullable: true, length: 100 })
   status: string;
 
-  @Column({ default: 'https://mobcup.net/d/c76xxfvk/mp3' })
+  @Column({ default: 'https://bsa-chatito-storage.s3.amazonaws.com/audios/Tuturu.mp3' })
   audio: string
 
   @OneToMany(() => Post, post => post.createdByUser)
@@ -70,4 +70,12 @@ export class User extends AbstractEntity {
   @ManyToMany(() => Chat, chat => chat.users)
   @JoinTable()
   chats: Chat[];
+
+  @ManyToMany(() => Post, post => post.unreadByUsers)
+  @JoinTable()
+  unreadPosts: Post[];
+
+  @ManyToMany(() => Comment, comment => comment.unreadByUsers)
+  @JoinTable()
+  unreadComments: Comment[];
 }

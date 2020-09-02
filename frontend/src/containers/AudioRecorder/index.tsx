@@ -7,7 +7,7 @@ import styles from './styles.module.sass';
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 
 interface IProps {
-  onRecord: (buffer: any[], blobUrl: string | null) => void;
+  onRecord: (blob: Blob | null, blobUrl: string | null) => void;
   maxDuration?: number;
   onError?: (err: string) => void;
   showPlayer?: boolean;
@@ -18,7 +18,6 @@ const AudioRecorder: React.FC<IProps> = ({ onRecord, maxDuration, onError, showP
   const [isBlocked, setBlocked] = useState(true);
   const [isRecording, setRecording] = useState(false);
   const [blobUrl, setBlobUrl] = useState<null | string>(null);
-  const [bufferStr, setBuffer] = useState([]);
   useEffect(() => {
     navigator.getUserMedia({ audio: true },
       () => setBlocked(false),
@@ -41,19 +40,16 @@ const AudioRecorder: React.FC<IProps> = ({ onRecord, maxDuration, onError, showP
     Mp3Recorder
       .stop()
       .getMp3()
-      .then(([buffer, blob]: [any, any]) => {
+      .then(([buffer, blob]: [any[], Blob]) => {
         const blobURL = URL.createObjectURL(blob);
         setBlobUrl(blobURL);
         setRecording(false);
-        setBuffer(buffer);
-
-        onRecord(buffer, blobURL);
+        onRecord(blob, blobURL);
         return getBlobDuration(blob);
       }).then((duration: number) => {
         if (onError && maxDuration && duration > maxDuration) {
           onError(`Max duration is ${Math.floor(maxDuration)}, but yours - ${Math.floor(duration)}`);
         }
-        console.log('Duration ', duration);
       })
       .catch((e: any) => console.error(e));
   };
@@ -65,9 +61,8 @@ const AudioRecorder: React.FC<IProps> = ({ onRecord, maxDuration, onError, showP
       .then(([buffer, blob]: [any, any]) => {
         const blobURL = URL.createObjectURL(blob);
         setBlobUrl(null);
-        setBuffer([]);
         setRecording(false);
-        onRecord([], '');
+        onRecord(null, '');
       })
       .catch((e: any) => console.error(e));
   };

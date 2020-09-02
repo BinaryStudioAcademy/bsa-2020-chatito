@@ -17,8 +17,22 @@ import { PostType } from 'common/enums/PostType';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
-import { showUserProfileRoutine } from 'scenes/Workspace/routines';
+import {
+  showUserProfileRoutine,
+  readPostRoutine,
+  markAsUnreadPostWithOptionRoutine,
+  readCommentRoutine,
+  markAsUnreadCommentWithOptionRoutine } from 'scenes/Workspace/routines';
 import ReminderItem from 'components/ReminderItem/ReminderItem';
+import { IUnreadChat } from 'common/models/chat/IUnreadChats';
+import { IPostsToRead } from 'common/models/chat/IPostsToRead';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { IMarkAsUnreadPost } from 'common/models/post/IMarkAsUnreadPost';
+import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
+import { ICommentsToRead } from 'common/models/chat/ICommentsToRead';
+import { IServerComment } from 'common/models/post/IServerComment';
+import { IMarkAsUnreadComment } from 'common/models/post/IMarkAsUnreadComment';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 
 interface IProps {
@@ -26,23 +40,29 @@ interface IProps {
   userId: string;
   type: PostType;
   openThread?: IBindingCallback1<IPost>;
+  mainPostId?: string;
   addPostReaction: IBindingCallback1<IPostReactionRoutine>;
   deletePostReaction: IBindingCallback1<IPostReactionRoutine>;
   showUserProfile: IBindingCallback1<IUser>;
   showModal: IBindingCallback1<IModalRoutine>;
   isShown: boolean;
+  unreadChats: IUnreadChat[];
+  unreadPostComments: IUnreadPostComments[];
+  readPost: IBindingCallback1<IPostsToRead>;
+  readComment: IBindingCallback1<ICommentsToRead>;
+  markAsUnreadPost: IBindingCallback1<IMarkAsUnreadPost>;
+  markAsUnreadComment: IBindingCallback1<IMarkAsUnreadComment>;
   postRef?: MutableRefObject<any> | null;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
-  showUserProfile, addPostReaction, deletePostReaction, showModal, isShown, postRef }) => {
+  unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, isShown, unreadChats,
+  readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
-
   useEffect(() => {
     setPost(postData);
   }, [postData]);
-
   useEffect(() => {
     if (changedReaction) {
       if (postData.postReactions.length < post.postReactions.length) {
@@ -163,7 +183,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
   );
 
   const ButtonMore = () => (
-    <OverlayTrigger trigger="click" placement="top" overlay={popoverMore}>
+    <OverlayTrigger trigger="click" rootClose placement="top" overlay={popoverMore}>
       <Card.Link
         bsPrefix={styles.openThreadBtn}
       >
@@ -172,9 +192,105 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
     </OverlayTrigger>
   );
 
+  const markAsUnreadOptionClick = () => {
+    if (type === PostType.Post) {
+      markAsUnreadPost({ unreadPost: post });
+    } else if (mainPostId) {
+      markAsUnreadComment({ postId: mainPostId, unreadComment: post });
+    }
+    document.body.click();
+  };
+
+  const popoverOptions = (
+    <Popover id="popover-basic">
+      <Popover.Title as="h3">More options</Popover.Title>
+      <button
+        type="button"
+        className={`${styles.optionsSelect} ${styles.moreOptionsSelect}`}
+        onClick={markAsUnreadOptionClick}
+      >
+        <span>Mark as unread</span>
+      </button>
+      <button type="button" className={`${styles.optionsSelect} ${styles.moreOptionsSelect}`}>
+        <span>Other option</span>
+      </button>
+    </Popover>
+  );
+
+  const ButtonOptions = () => (
+    <OverlayTrigger trigger="click" rootClose placement="left" overlay={popoverOptions}>
+      <Card.Link
+        bsPrefix={styles.optionsBlock}
+      >
+        <FontAwesomeIcon icon={faEllipsisV} className={styles.optionsIcon} />
+      </Card.Link>
+    </OverlayTrigger>
+  );
+
+  const postsToRead = (id: string) => {
+    const postId = id;
+    const unreadChatsCopy = [...unreadChats];
+    let postsToDelete: IPost[] = [];
+    const postIdsToDelete: string[] = [];
+    unreadChatsCopy.forEach((unreadChat, chatIndex) => {
+      const unreadPostCopy = unreadChat.unreadPosts;
+      unreadChat.unreadPosts.forEach((unreadPost, index) => {
+        if (unreadPost.id === postId) {
+          postsToDelete = [...unreadPostCopy.splice(0, index + 1)];
+        }
+      });
+      unreadChatsCopy[chatIndex].unreadPosts = [...unreadPostCopy];
+    });
+    postsToDelete.forEach(postToDelete => {
+      postIdsToDelete.push(postToDelete.id);
+    });
+    readPost({ postIdsToDelete, unreadChatsCopy });
+  };
+
+  const commentsToRead = (id: string) => {
+    const commentId = id;
+    const unreadCommentsCopy = [...unreadPostComments];
+    let commentsToDelete: IServerComment[] = [];
+    const commentIdsToDelete: string[] = [];
+    unreadCommentsCopy.forEach((unreadChat, chatIndex) => {
+      const unreadCommentCopy = unreadChat.unreadComments;
+      unreadChat.unreadComments.forEach((unreadComment, index) => {
+        if (unreadComment.id === commentId) {
+          commentsToDelete = [...unreadCommentCopy.splice(0, index + 1)];
+        }
+      });
+      unreadCommentsCopy[chatIndex].unreadComments = [...unreadCommentCopy];
+    });
+    commentsToDelete.forEach(commentToDelete => {
+      commentIdsToDelete.push(commentToDelete.id);
+    });
+    readComment({ commentIdsToDelete, unreadCommentsCopy });
+  };
+
+  const onHoverRead = () => {
+    if (type === PostType.Post) {
+      unreadChats.forEach(unreadChat => {
+        unreadChat.unreadPosts.forEach(unreadPost => {
+          if (unreadPost.id === post.id) {
+            postsToRead(unreadPost.id);
+          }
+        });
+      });
+    } else {
+      unreadPostComments.forEach(UnreadPost => {
+        if (UnreadPost.id === mainPostId) {
+          UnreadPost.unreadComments.forEach(unreadComment => {
+            if (unreadComment.id === post.id) {
+              commentsToRead(unreadComment.id);
+            }
+          });
+        }
+      });
+    }
+  };
   return (
     <div ref={postRef}>
-      <Media className={styles.postWrapper}>
+      <Media className={styles.postWrapper} onMouseEnter={onHoverRead}>
         <ProfilePreview user={createdByUser} openProfile={showUserProfile} />
         <Media.Body bsPrefix={styles.body}>
           <button
@@ -202,14 +318,10 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
                 Reply
               </Card.Link>
             )}
-            {type === PostType.Post && (
-              <EmojiPopUp
-                trigger={trigger}
-                onEmojiClick={onEmojiClick}
-              />
-            )}
+            {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
             <ButtonMore />
           </div>
+          <ButtonOptions />
         </Media.Body>
       </Media>
     </div>
@@ -218,14 +330,20 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
 
 const mapStateToProps = (state: IAppState) => ({
   userId: state.user.user?.id as string,
-  isShown: state.modal.setReminder
+  isShown: state.modal.setReminder,
+  unreadChats: state.workspace.unreadChats,
+  unreadPostComments: state.workspace.unreadPostComments
 });
 
 const mapDispatchToProps = {
   addPostReaction: addPostReactionRoutine,
   deletePostReaction: deletePostReactionRoutine,
   showModal: showModalRoutine,
-  showUserProfile: showUserProfileRoutine
+  showUserProfile: showUserProfileRoutine,
+  readPost: readPostRoutine,
+  readComment: readCommentRoutine,
+  markAsUnreadPost: markAsUnreadPostWithOptionRoutine,
+  markAsUnreadComment: markAsUnreadCommentWithOptionRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

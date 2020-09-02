@@ -1,4 +1,4 @@
-import { toastrSuccess } from 'services/toastrService';
+import { toastrSuccess, toastrCustomNotification } from 'services/toastrService';
 import io from 'socket.io-client';
 import { env } from '../env';
 import { getAccessToken } from 'common/helpers/storageHelper';
@@ -18,7 +18,9 @@ import {
   incUnreadCountRoutine,
   addActiveCommentWithSocketRoutine,
   newUserNotificationWithSocketRoutine,
-  updateChatDraftPostRoutine
+  updateChatDraftPostRoutine,
+  markAsUnreadPostWithSocketRoutine,
+  markAsUnreadCommentWithSocketRoutine
 } from 'scenes/Workspace/routines';
 import { IChat } from 'common/models/chat/IChat';
 import { ClientSockets } from 'common/enums/ClientSockets';
@@ -42,6 +44,7 @@ import {
 import UIfx from 'uifx';
 import HatDance from 'common/sounds/hat_dance.mp3';
 import { playByUrl } from 'common/helpers/audioHelper';
+import { defaultNotificationAudio } from 'common/configs/defaults';
 
 const { server } = env.urls;
 
@@ -54,8 +57,27 @@ export const connectSockets = () => {
     if (post.chatId === state.chat.chat?.id) {
       store.dispatch(addPostWithSocketRoutine(post));
     } else {
-      playByUrl(audio);
+      playByUrl(audio || defaultNotificationAudio);
       store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
+    }
+  });
+
+  chatSocket.on(ClientSockets.NotifyAndMarkAsUnread, (post: IPost, user: IUser, chat: IChat) => {
+    const state = store.getState();
+    const currentUser = state.user.user;
+    if (currentUser && user.id !== currentUser.id) {
+      toastrCustomNotification(
+        chat.type === 'DirectMessage' ? (
+          `from ${user.displayName}`
+        ) : (
+            `in channel "${chat.name}" from ${user.displayName}`
+          ),
+        5000,
+        'blueToastrNotification',
+        // eslint-disable-next-line no-console
+        () => { console.log('OnClickFunction'); }
+      );
+      store.dispatch(markAsUnreadPostWithSocketRoutine({ chatId: chat.id, chatType: chat.type, unreadPost: post }));
     }
   });
 
@@ -68,7 +90,6 @@ export const connectSockets = () => {
 
   chatSocket.on(ClientSockets.JoinChat, (chatId: string) => {
     chatSocket.emit(ServerSockets.JoinChatRoom, chatId);
-    console.log('played');
     const sound = new UIfx(HatDance, {
       throttleMs: 5000
     });
@@ -88,6 +109,18 @@ export const connectSockets = () => {
     const { activeThread } = state.workspace;
     if (activeThread && activeThread.post.id === comment.postId) {
       store.dispatch(addActiveCommentWithSocketRoutine(comment));
+    }
+  });
+
+  chatSocket.on(ClientSockets.MarkAsUnreadComment, (
+    postId: string,
+    comment: IServerComment,
+    threadParticipants: string[]
+  ) => {
+    const state = store.getState();
+    const currentUser = state.user.user;
+    if (currentUser && threadParticipants.includes(currentUser.id) && comment.createdByUser.id !== currentUser.id) {
+      store.dispatch(markAsUnreadCommentWithSocketRoutine({ postId, comment }));
     }
   });
 

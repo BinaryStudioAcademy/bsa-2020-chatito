@@ -3,7 +3,7 @@ export interface IUser {
   email: string;
   fullName: string;
   displayName: string;
-  imageUrl?: string;
+  imageUrl?: string | null;
   title?: string;
   status?: string;
   audio: string;

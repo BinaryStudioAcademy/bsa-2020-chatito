@@ -99,6 +99,8 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, 
     </>
   );
 
+  const imageUrl = user.id === currentUser.id ? currentUser.imageUrl : user.imageUrl;
+
   return (
     <div className={styles.profileOverview}>
       <div className={styles.header}>
@@ -106,7 +108,7 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, 
       </div>
 
       <div className={styles.avatar}>
-        <Image src={user.imageUrl || userLogoDefaultUrl} alt="avatar" roundedCircle />
+        <Image src={imageUrl || userLogoDefaultUrl} alt="avatar" roundedCircle />
       </div>
       <div className={styles.nameWrp}>
         <i className={styles.online} />
