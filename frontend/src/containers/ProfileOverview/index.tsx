@@ -5,7 +5,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faEdit, faEllipsisH, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faEdit, faEllipsisH, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { IUser } from 'common/models/user/IUser';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { useKey } from 'common/hooks/onInputSubmit';
@@ -128,9 +128,9 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, 
 
       <div className={styles.toolbar}>
         {user.id === currentUser.id && (
-        <button type="button" className="button-unstyled" onClick={onEdit}>
-          <FontAwesomeIcon icon={faEdit} />
-        </button>
+          <button type="button" className="button-unstyled" onClick={onEdit}>
+            <FontAwesomeIcon icon={faEdit} />
+          </button>
         )}
         <button type="button" className="button-unstyled">
           <FontAwesomeIcon icon={faEllipsisH} />
@@ -143,7 +143,7 @@ const ProfileOverview: React.FC<IProps> = ({ user, currentUser, directMessages, 
         onClick={() => setShowAbout(!showAbout)}
       >
         <div>About</div>
-        <FontAwesomeIcon icon={faChevronDown} />
+        <FontAwesomeIcon icon={showAbout ? faChevronUp : faChevronDown} />
       </button>
       {showAbout && renderAbout()}
     </div>
