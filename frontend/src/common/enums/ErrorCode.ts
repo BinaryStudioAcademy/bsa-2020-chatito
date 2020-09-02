@@ -1,6 +1,7 @@
 export enum ErrorCode {
+  Unauthorized,
+  UserNotFound,
+  UserExistsInWorkspace,
   InvalidAccessToken,
-  InvalidRefreshToken,
-  Forbidden,
-  NotFound
+  InvalidRefreshToken
 }

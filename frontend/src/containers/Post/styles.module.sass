@@ -1,0 +1,132 @@
+.postWrapper
+  padding: 5px 40px 10px 25px
+  color: var(--main-text)
+  position: relative
+  
+  &:hover
+    .body
+      .footer
+        color: var(--main-text)
+    .optionsBlock
+      display: flex
+
+.body
+  overflow: hidden
+
+.author
+  display: inline-block
+  font-size: 14px
+  color: var(--title-text)
+  font-weight: 600
+  margin-bottom: 2px
+  background: none
+  border: none
+  &:hover
+    text-decoration: underline
+
+.metadata
+  font-weight: 400
+  color: var(--secondary-text)
+  font-size: 12px
+  font-family: var(--secondary-font-family), sans-serif
+  margin-bottom: 14px
+  padding: 0
+  background: none
+  border: none
+  &:hover
+    text-decoration: underline
+
+.text
+  text-align: left
+  font-size: 16px
+  margin-bottom: 15px
+  overflow-wrap: break-word
+  line-height: 1.2
+  letter-spacing: .1px
+
+.emojiStats
+  display: flex
+  flex-wrap: wrap
+
+.emojiStatItem
+  margin-right: 5px
+  margin-bottom: 5px
+  padding: 2px 4px
+  border: 1px solid transparent
+  cursor: pointer
+  background-color: var(--post-emoji-bg)
+  border-radius: 20px
+
+.emojiStatItem:hover
+  border: 1px solid var(--border)
+  border-radius: 20px
+  background-color: var(--post-emoji-bg-hover)
+
+.emojiStatItem.active
+  background-color: var(--post-active-emoji-bg)
+  border-color: var(--post-active-emoji-border)
+
+.emoji
+  margin-right: 7px
+  font-size: 14px
+
+.footer
+  display: flex
+  color: var(--chat-background-primary)
+
+.postWrapper .openThreadBtn,
+.reactBtn
+  font-size: 12px
+  line-height: 14px
+  margin-right: 18px
+  cursor: pointer
+
+.postWrapper .openThreadBtn:hover,
+.reactBtn:hover
+  text-decoration: underline
+
+.dNone
+  display: none
+
+.optionsSelect
+  background: none
+  display: flex
+  flex-direction: row
+  align-items: center
+  border: 0
+  padding: 8px
+  padding-left: 23px
+  margin-top: 5px
+  align-content: left
+  outline: none
+  width: 100%
+  &:hover
+    cursor: pointer
+
+.moreOptionsSelect
+  margin: 0
+  padding: 5px 14px
+  &:hover
+    background: var(--post-bg)
+
+@media screen and (max-width: 1440px)
+  .text
+    line-height: 1.3
+
+.optionsBlock
+  width: 20px
+  height: 30px
+  border: 2px solid var(--options-border)
+  border-radius: 4px
+  display: none
+  justify-content: center
+  align-items: center
+  position: absolute
+  top: 3px
+  right: 47px
+  &:hover
+    cursor: pointer
+
+.optionsIcon
+  font-size: 18px
+  color: var(--workspace-toolbar-background)

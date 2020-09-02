@@ -1,0 +1,29 @@
+.userLogo
+  object-fit: cover
+  width: 45px
+  height: 45px
+  border: 5px solid var(--header-user-logo-border)
+
+.userLogoWrapper
+  width: 45px
+  height: 45px
+  position: relative
+  margin-right: 15px
+
+.detector
+  width: 10px
+  height: 10px
+  border-radius: 50%
+
+  position: absolute
+  bottom: 6px
+  right: 6px
+  border: 1px solid var(--user-detector-border)
+
+.isOnline
+  composes: detector
+  background-color: var(--user-detector-online)
+
+.isOffline
+  composes: detector
+  background-color: var(--user-detector-offline)

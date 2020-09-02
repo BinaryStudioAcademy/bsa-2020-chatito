@@ -1,0 +1,31 @@
+import { Comment } from '../../data/entities/Comment';
+import { fromUserToUserClient } from './user';
+
+export const fromPostCommentsToPostCommentsClient = (comments: Comment[]) => {
+  const updated = comments.map(comment => {
+    const { id, createdAt, updatedAt, text, postId, createdByUser } = comment;
+    return {
+      id,
+      createdAt,
+      updatedAt,
+      text,
+      postId,
+      createdByUser: fromUserToUserClient(createdByUser)
+    };
+  });
+
+  return updated;
+};
+
+const maxAvatarsCount = 3;
+
+export const fromPostCommentsToCommentsInfo = (comments: Comment[]) => {
+  const count = comments.length;
+  const lastAt = comments.length > 0 ? comments[0].createdAt : new Date();
+  const avatars = [];
+  for (let i = 0; i < Math.min(count, maxAvatarsCount); i += 1) {
+    const { createdByUser: { imageUrl } } = comments[i];
+    avatars.push(imageUrl);
+  }
+  return { count, lastAt, avatars };
+};

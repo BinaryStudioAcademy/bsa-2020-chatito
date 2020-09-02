@@ -1,0 +1,85 @@
+.chatContainer
+    height: 64px
+    display: flex
+    align-items: center
+    justify-content: space-between
+    border-bottom: 1px solid var(--chat-background-secondary)
+    padding: 5px 40px 5px 25px
+
+    .headerInfo
+      display: flex
+      flex-direction: column
+      align-items: center
+
+      .titleBlock
+        display: flex
+        align-items: center
+        cursor: pointer
+
+        .title
+          font-size: 16px
+          font-weight: 600
+          margin-left: 3px
+
+        .icon
+          font-size: 20px
+
+        .iconChatType
+          font-size: 10px
+
+          &.active
+            color: var(--icon-active)
+
+    .rightHeaderBlock
+      display: flex
+      align-items: center
+
+      .memberAvatarBlock
+        display: flex
+        align-items: center
+        cursor: pointer
+        border-radius: 4px
+        margin-right: 8px
+
+        &:hover
+          background-color: var(--icon-hover-background)
+
+        .memberAvatarIcon
+          width: 25px
+          height: 25px
+          margin-right: -4px
+          position: relative
+          background-color: var(--chat-background-primary)
+          box-shadow: 0 0 0 2px var(--member-avatar-box-shadow)
+
+          &:nth-child(1)
+            z-index: 3
+
+          &:nth-child(2)
+            z-index: 2
+
+          &:nth-child(3)
+            z-index: 1
+
+        .memberCounter
+          font-size: 12px
+          font-weight: 600
+          padding: 0 8px 0 14px
+
+.icon
+  font-size: 30px
+  line-height: 0
+  opacity: 0.4
+  color: var(--icon)
+  margin-left: 4px
+  padding: 5px
+  border-radius: 4px
+
+  &:hover
+    opacity: 1
+    background-color: var(--icon-hover-background)
+    cursor: pointer
+
+.userLogo
+  width: 30px
+  height: 30px

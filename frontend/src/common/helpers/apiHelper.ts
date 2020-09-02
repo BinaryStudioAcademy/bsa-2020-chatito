@@ -1,16 +1,18 @@
 import { stringifyUrl, ParsedQuery } from 'query-string';
 import { FetchMethod } from '../enums/FetchMethod';
-import { env } from '../../env';
+import { env } from 'env';
 import { pipe, anyPass, map, mergeRight, pickBy, is } from 'ramda';
 import { ErrorCode } from '../enums/ErrorCode';
 import { IFetchParams } from '../models/fetch/IFetchParams';
 import { IResponseError } from '../models/fetch/IResponseError';
 import { IFetchConfig } from '../models/fetch/IFetchConfig';
+import { setTokens, getRefreshToken, getAccessToken } from './storageHelper';
+import { ITokens } from '../models/ITokens';
 
 const getInitHeaders = (contentType = 'application/json', hasContent = true) => {
   const headers: HeadersInit = new Headers();
 
-  headers.set('Authorization', 'Bearer '); // needs a token
+  headers.set('Authorization', `Bearer ${getAccessToken()}`);
   if (hasContent) {
     headers.set('Content-Type', contentType);
   }
@@ -63,6 +65,22 @@ const throwIfResponseFailed = async (res: Response) => {
   throw exception;
 };
 
+export const refreshToken = async () => {
+  const url = `${env.urls.server}/api/auth/tokens`;
+  const fetchOptions = {
+    method: FetchMethod.POST,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ refreshToken: getRefreshToken() })
+  };
+  const res = await fetch(url, fetchOptions);
+
+  await throwIfResponseFailed(res);
+
+  const tokens: ITokens = await res.json();
+
+  setTokens(tokens);
+};
+
 const makeRequest = (
   method: FetchMethod
 ) => async <T>(url: string, params?: IFetchParams, config: IFetchConfig = {}) => {
@@ -74,8 +92,8 @@ const makeRequest = (
   const fetchOptions = getFetchOptions(method, body);
 
   let res = await fetch(fetchUrl, fetchOptions);
-  if (res.status === 401 /* && getRefreshToken() */) {
-    // await refreshToken();
+  if (res.status === 401 && getRefreshToken()) {
+    await refreshToken();
     const newfetchOptions = getFetchOptions(method, body);
     res = await fetch(fetchUrl, newfetchOptions);
   }

@@ -1,0 +1,37 @@
+@mixin buttonReset
+  border: none
+  padding: 0
+  width: auto
+  overflow: visible
+  background: transparent
+  color: inherit
+  font: inherit
+  line-height: normal
+  -webkit-font-smoothing: inherit
+  -moz-osx-font-smoothing: inherit
+  -webkit-appearance: none
+  &::-moz-focus-inner
+      border: 0
+      padding: 0
+  &:focus
+    outline: none
+
+.closeBtn
+  font-size: 20px
+  line-height: 20px
+
+.closeContainer
+  @include buttonReset
+  color: var(--offline)
+  position: absolute
+  z-index: 1000
+  top: 16px
+  right: 16px
+  width: 20px
+  height: 20px
+  display: flex
+  justify-content: center
+  align-items: center
+  &:hover
+    color: var(--presence-ofline)
+    cursor: pointer

@@ -1,0 +1,32 @@
+.workspaceToolbarContainer
+  background-color: var(--workspace-toolbar-background)
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: flex-start
+  overflow-y: auto
+
+  -ms-overflow-style: none  /* Internet Explorer 10+ */
+  scrollbar-width: none  /* Firefox */
+  &::-webkit-scrollbar
+    display: none  /* Safari and Chrome */
+
+.plusIconContainer
+  width: 50px
+  height: 50px
+  margin-top: 10px
+  display: flex
+  justify-content: center
+  align-items: center
+  transition: all .3s
+  border: none
+  border-radius: 50%
+  background-color: var(--workspace-toolbar-background)
+  &:hover
+    background-color: var(--workspace-toolbar-select-background)
+  &:hover .plusIcon
+    color: var(--workspace-icon-background)
+
+.plusIcon
+  color: var(--workspace-toolbar-font-color-primary)
+  transition: all .3s

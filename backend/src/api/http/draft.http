@@ -1,0 +1,41 @@
+POST http://localhost:3001/api/draft/posts
+Content-Type: application/json
+Authorization: Bearer <insert token here>
+
+{
+
+  "text": "Draft post",
+  "chatId": "f9fab562-85ff-4abe-bae4-7451d1ba56b9"
+}
+###
+
+DELETE http://localhost:3001/api/drafts/posts
+Content-Type: application/json
+Authorization: Bearer <insert token here>
+
+{
+  "chatId": "42879827-9eca-44cc-8d21-9afeffa4a345"
+}
+###
+
+POST http://localhost:3001/api/drafts/comments
+Content-Type: application/json
+Authorization: Bearer <insert token here>
+
+{
+  "id": "3b96f77d-eb4f-497f-9998-2026224bb277",
+  "text": "Draft comment updated",
+  "createdByUserId": "9a4a3f47-7dd0-40d2-9347-2fab9a4a54cd",
+  "postId": "68cbac7c-8440-4017-81dc-936f261123d1"
+
+}
+###
+
+DELETE http://localhost:3001/api/drafts/comments
+Content-Type: application/json
+Authorization: Bearer <insert token here>
+
+{
+  "postId": "68cbac7c-8440-4017-81dc-936f261123d1"
+}
+###

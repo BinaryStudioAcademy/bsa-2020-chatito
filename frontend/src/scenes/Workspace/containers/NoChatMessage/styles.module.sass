@@ -1,0 +1,36 @@
+.wrapper
+  height: 100%
+  padding: 20px 70px
+
+  .header
+    margin: 0 auto 15px auto
+    text-align: center
+    font-size: 1.5em
+    font-weight: bold
+
+  .paragh
+    margin: 10px 0
+    line-height: 1.35
+    text-align: justify
+    &:last-child
+      margin: 15px 0
+
+  .text
+    max-height: calc( 100vh - 220px )
+    overflow-y: scroll
+
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+    &::-webkit-scrollbar
+      display: none;  /* Safari and Chrome */
+
+  .direction
+    font-weight: 600
+
+.chatContainerMessage
+  display: flex
+  justify-content: center
+  align-content: center
+  align-items: center
+  height: 100%
+  background-color: var(--left-bar)

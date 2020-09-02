@@ -1,0 +1,43 @@
+.mainContainer
+  display: flex
+  flex-direction: column
+  height: 100vh
+  min-height: 100vh
+
+  .contentContainer
+    display: flex
+    flex: 1
+    overflow: hidden
+
+    .workspaceViewContainer
+      display: flex
+      flex: 1
+
+      .leftPanelWrapper
+        width: 275px
+
+      .chatWrapper
+        flex: 1
+        height: 100%
+
+      .rightPanelWrapper
+        width: 400px
+
+@media screen and (max-width: 1440px)
+  .mainContainer
+    .contentContainer
+      .workspaceViewContainer
+
+        .leftPanelWrapper
+          width: 250px
+
+        .rightPanelWrapper
+          width: 375px
+
+@media screen and (max-width: 1200px)
+  .mainContainer
+   .contentContainer
+      .workspaceViewContainer
+
+        .rightPanelWrapper
+          width: 350px

@@ -1,0 +1,133 @@
+@mixin buttonReset
+  border: none
+  padding: 0
+  width: auto
+  overflow: visible
+  background: transparent
+  color: inherit
+  font: inherit
+  line-height: normal
+  -webkit-font-smoothing: inherit
+  -moz-osx-font-smoothing: inherit
+  -webkit-appearance: none
+  &::-moz-focus-inner
+      border: 0
+      padding: 0
+  &:focus
+    outline: none
+
+.mainContainer
+  padding: 5px 10px 10px
+
+.body
+  display: flex
+
+.modalHeader
+  font-size: 18px
+  margin-bottom: 10px
+
+.inputBlock
+  margin-top: 20px
+
+.inputGroup
+  margin: 7px 0 5px
+  background-color: var(--auth-form-background) !important
+  &:focus
+    border-color: var(--auth-scene-btn-background) !important
+    box-shadow: 0 0 0 0.05rem var(--auth-scene-btn-background) !important
+
+.description
+  margin: 5px 0 0 2px
+  width: 100%
+  font-size: 13px
+  color: var(--auth-scene-text-secondary-color)
+
+.inputHeader
+  margin-left: 2px
+  font-size: 16px
+  font-weight: 600
+
+.image
+  margin: 20px 0 0
+  height: 150px
+  width: 150px
+  border-radius: 100px
+  border: 8px solid var(--not-found-background)
+
+.imageEditBlock
+  margin: 20px 0 0 25px
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+
+.formFooter
+  margin-top: 30px
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+  .primaryBtn:global(.btn-primary)
+    width: 135px
+    height: 40px
+    background-color: var(--auth-scene-btn-background)
+    border-color: var(--auth-scene-btn-background)
+    &:hover, &:active,
+      background-color: var(--auth-scene-btn-background)
+      border-color: var(--auth-scene-btn-background)
+      cursor: pointer
+
+  .primaryBtnCancel:global(.btn-primary)
+    width: 120px
+    height: 40px
+    background-color: var(--close-button)
+    border-color: var(--close-button)
+    &:hover, &:active,
+      background-color: var(--close-button)
+      border-color: var(--close-button)
+      cursor: pointer
+
+.imageFooter
+  margin-top: 15px
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  align-items: center
+
+.link
+  @include buttonReset
+  color: var(--icon-active)
+  font-size: 16px
+  margin-top: 7px
+  &:hover
+    text-decoration: underline
+    cursor: pointer
+
+.options
+  height: 75px
+  width: 150px
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: flex-end
+  .showMore
+    margin-bottom: 10px
+  .primaryBtnDelete:global(.btn-primary)
+    font-size: 15px
+    height: 40px
+    background-color: var(--close-button)
+    border-color: var(--close-button)
+    &:hover, &:active,
+      background-color: var(--not-found-background)
+      border-color: var(--not-found-background)
+      cursor: pointer
+
+.uploadWrp
+  position: relative
+
+.uploadAvatar
+  position: absolute
+  opacity: 0
+  z-index: -1
+
+.removePhoto
+  color: var(--remove-photo)

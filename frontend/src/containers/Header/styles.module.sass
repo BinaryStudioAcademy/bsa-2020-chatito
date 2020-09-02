@@ -1,0 +1,90 @@
+@mixin unSelectable
+  -webkit-touch-callout: none
+  -webkit-user-select: none
+  -khtml-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+
+.headerContainer
+  width: 100%
+  color: var(--main-text)
+  display: flex
+  align-items: center
+  justify-content: space-between
+  padding: 10px 0
+
+.rightAlignContainer
+  display: flex
+  justify-content: space-between
+  padding-right: 40px
+  align-items: center
+
+.userLogoWrapper
+  display: flex
+  align-items: center
+  justify-content: space-between
+
+.popUpWrapper
+  position: relative
+  display: flex
+  cursor: pointer
+  outline: none
+
+.profileText
+  margin-right: 10px
+  font-size: 16px
+  font-weight: 500
+
+.logoWrapper
+  display: flex
+  @include unSelectable
+  &:hover
+    text-decoration: none
+    color: var(--title-text)
+    cursor: pointer
+  &:visited
+    color: var(--title-text)
+
+.logoImageWrapper
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 85px
+  padding: 0 7px
+
+.logoImg
+  height: 58px
+  width: 58px
+
+.logoText
+  font-weight: 600
+  font-size: 25px
+  color: var(--title-text)
+  margin: auto
+
+.searchInput
+  width: 400px
+  height: 40px
+  margin-right: 70px
+
+  input
+    background-color: var(--chat-background-primary)
+    padding-left: 40px
+    border-radius: 20px
+    border: none
+
+@media screen and (max-width: 1440px)
+  .headerContainer
+    padding: 6px 0
+
+  .logoImageWrapper
+    width: 75px
+
+  .logoImg
+    height: 50px
+    width: 50px
+
+  .searchInput
+    input
+      height: 35px

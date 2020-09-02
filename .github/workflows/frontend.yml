@@ -1,0 +1,42 @@
+name: Stage - Frontend Build
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [dev]
+    paths: 'frontend/**/*.*'
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        cd frontend
+        npm install
+    - name: Build
+      env:
+        REACT_APP_SERVER: https://api.chatito.xyz
+        REACT_APP_TEXT_EDITOR_API_KEY: s6niz722pb00m2ooiso61hxrl4aagohexy5do56fe6p89l57
+        REACT_APP_GOOGLE_AUTH_CLIENT_ID: 627723626736-bs36n6mrlarii014r4c9rr6roj7mn0ig.apps.googleusercontent.com
+        REACT_APP_GOOGLE_AUTH_CLIENT_SECRET: tOLTH__MfxzR4Kw4RtqN6RwX
+        REACT_APP_FACEBOOK_LOGIN_APP_ID: 609625143090274
+        REACT_APP_AWS_URL: https://bsa-chatito-storage.s3.amazonaws.com
+      run: |
+        cd frontend
+        npm run build
+        
+    - name: Deploy to S3
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read --delete
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_NAME }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        SOURCE_DIR: 'frontend/build'
