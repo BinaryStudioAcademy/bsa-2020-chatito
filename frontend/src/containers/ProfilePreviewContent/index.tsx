@@ -39,9 +39,16 @@ interface IProps {
 const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUser, directMessages, workspaceName,
   workspaceHash, addPost, createChatAndAddPost, router, openProfile, showModal }) => {
   const [user, setUsers] = useState<IUser>(tempUser);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     getUserById(tempUser.id).then(fetchedUser => setUsers(fetchedUser));
   }, []);
+
+  useEffect(() => {
+    if (user.status) {
+      setLoading(false);
+    }
+  }, [user]);
   const [message, setMessage] = useState('');
   const inputRef = useRef(null);
   const onViewProfile = () => {
@@ -83,6 +90,11 @@ const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUse
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setMessage(e.target.value);
   };
+  if (loading) {
+    return (
+      <div />
+    );
+  }
   return (
     <>
       <div className={styles.avatarContainer}>
