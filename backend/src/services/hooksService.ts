@@ -6,6 +6,7 @@ export const addGithubNotification = async (githubPayload: any) => {
   const post = await fromGithubPayloadToPost(githubPayload);
   const githubUser = await getGithubUser();
 
-  const notificationPost = addPost(githubUser.id, post);
+  const notificationPost = await addPost(githubUser.id, post);
+
   return notificationPost;
 };

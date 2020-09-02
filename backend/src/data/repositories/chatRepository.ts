@@ -143,12 +143,12 @@ class ChatRepository extends Repository<Chat> {
         'chat.name'
       ])
       .leftJoin(
-        'chat.users',
-        'currentUser'
+        'chat.createdByUser',
+        'user'
       )
       .where('chat.type = :chatType', { chatType: ChatType.GithubRepository })
       .andWhere('chat.name = :repositoryName', { repositoryName })
-      .andWhere('currentUser.name = :repositoryOwner', { repositoryOwner })
+      .andWhere('user.githubUsername = :repositoryOwner', { repositoryOwner })
       .getOne();
 
     return chat;
