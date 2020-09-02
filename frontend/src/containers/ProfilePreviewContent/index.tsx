@@ -41,14 +41,12 @@ const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUse
   const [user, setUsers] = useState<IUser>(tempUser);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getUserById(tempUser.id).then(fetchedUser => setUsers(fetchedUser));
+    getUserById(tempUser.id).then(fetchedUser => {
+      setUsers(fetchedUser);
+      setLoading(false);
+    });
   }, []);
 
-  useEffect(() => {
-    if (user.status) {
-      setLoading(false);
-    }
-  }, [user]);
   const [message, setMessage] = useState('');
   const inputRef = useRef(null);
   const onViewProfile = () => {

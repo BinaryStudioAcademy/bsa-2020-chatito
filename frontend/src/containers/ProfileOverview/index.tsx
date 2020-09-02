@@ -47,16 +47,12 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
   const [user, setUsers] = useState<IUser>(tempUser);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getUserById(tempUser.id).then(fetchedUser => setUsers(fetchedUser));
-  }, [tempUser]);
-  const inputRef = useRef(null);
-
-  useEffect(() => {
-    if (user.status) {
+    getUserById(tempUser.id).then(fetchedUser => {
+      setUsers(fetchedUser);
       setLoading(false);
-    }
-  }, [user]);
-
+    });
+  }, []);
+  const inputRef = useRef(null);
   const onClose = () => {
     hideRightMenu();
   };
@@ -117,12 +113,11 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
   );
   const imageUrl = user.id === currentUser.id ? currentUser.imageUrl : user.imageUrl;
   return (
-    <LoaderWrapper loading={loading}>
-      <div className={styles.profileOverview}>
-        <div className={styles.header}>
-          <FontAwesomeIcon icon={faTimesCircle} onClick={onClose} className={styles.closeBtn} />
-        </div>
-
+    <div className={styles.profileOverview}>
+      <div className={styles.header}>
+        <FontAwesomeIcon icon={faTimesCircle} onClick={onClose} className={styles.closeBtn} />
+      </div>
+      <LoaderWrapper loading={loading}>
         <div className={styles.avatar}>
           <Image src={imageUrl || userLogoDefaultUrl} alt="avatar" roundedCircle />
         </div>
@@ -167,8 +162,8 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
           <FontAwesomeIcon icon={showAbout ? faChevronUp : faChevronDown} />
         </button>
         {showAbout && renderAbout()}
-      </div>
-    </LoaderWrapper>
+      </LoaderWrapper>
+    </div>
   );
 };
 
