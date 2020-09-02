@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { IChat } from 'common/models/chat/IChat';
 import { setCurrentChatRoutine } from './routines';
 import LoaderWrapper from 'components/LoaderWrapper';
-// eslint-disable-next-line
+
 interface IProps {
   isLoading: boolean;
   match: {
@@ -21,7 +21,6 @@ interface IProps {
   chats: IChat[];
   selectChat: (chat: IChat | null) => void;
 }
-// eslint-disable-next-line
 const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, selectChat }) => {
   useEffect(() => {
     const { chash } = match.params;

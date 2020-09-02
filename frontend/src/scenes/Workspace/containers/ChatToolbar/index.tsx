@@ -99,8 +99,8 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     }
     return '';
   };
-  // eslint-disable-next-line
-  const isActiveChanneSelector = (route: Routes) => location.pathname.includes(route.replace(':whash', selectedWorkspace.hash));
+  const isActiveChanneSelector = (route: Routes) => (
+    location.pathname.includes(route.replace(':whash', selectedWorkspace.hash)));
 
   // eslint-disable-next-line
   const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => { }, isActive = () => false) => (
