@@ -6,6 +6,7 @@ import { fetchDraftsRoutine } from './routines';
 import DraftCard from './components/DraftCard';
 import NoDraftsMessage from './components/NoDraftsMessage';
 import { IDraftClient } from 'common/models/draft/IDraftClient';
+import LoaderWrapper from 'components/LoaderWrapper';
 
 interface IProps {
   posts: IDraftClient[];
@@ -13,9 +14,10 @@ interface IProps {
   fetchDrafts: (wpId: string) => void;
   workspaceId: string;
   whash: string;
+  loading: boolean;
 }
 
-const Drafts: React.FC<IProps> = ({ posts, comments, fetchDrafts, workspaceId, whash }) => {
+const Drafts: React.FC<IProps> = ({ posts, comments, fetchDrafts, workspaceId, whash, loading }) => {
   useEffect(() => {
     if (workspaceId) {
       fetchDrafts(workspaceId);
@@ -27,20 +29,22 @@ const Drafts: React.FC<IProps> = ({ posts, comments, fetchDrafts, workspaceId, w
   ));
 
   return (
-    <div className={styles.body}>
-      {[...posts, ...comments].length
-        ? (
-          <div className={styles.wrapper}>
-            {createCards([...posts, ...comments])}
-          </div>
-        )
-        : <NoDraftsMessage />}
-
-    </div>
+    <LoaderWrapper loading={loading}>
+      <div className={styles.body}>
+        {[...posts, ...comments].length
+          ? (
+            <div className={styles.wrapper}>
+              {createCards([...posts, ...comments])}
+            </div>
+          )
+          : <NoDraftsMessage />}
+      </div>
+    </LoaderWrapper>
   );
 };
 
 const mapStateToProps = (state: IAppState) => ({
+  loading: state.drafts.loading,
   posts: state.drafts.posts,
   comments: state.drafts.comments,
   workspaceId: state.workspace.workspace.id,

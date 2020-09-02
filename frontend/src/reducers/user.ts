@@ -10,7 +10,8 @@ import {
   editStatusRoutine,
   setInvitedUserRoutine,
   loginWithGoogleRoutine,
-  loginWithFacebookRoutine
+  loginWithFacebookRoutine,
+  updateAvatarRoutine
 } from 'routines/user';
 import { IUser } from 'common/models/user/IUser';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
@@ -142,7 +143,6 @@ const reducer = (state = initialState, { type, payload }: Routine<any>): IUserSt
     case addWorkspaceRoutine.FAILURE: {
       return { ...state, isLoading: false };
     }
-
     case setInvitedUserRoutine.TRIGGER: {
       return {
         ...state,
@@ -150,6 +150,11 @@ const reducer = (state = initialState, { type, payload }: Routine<any>): IUserSt
         invitedUserRegistered: payload.invitedUserRegistered };
     }
 
+    case updateAvatarRoutine.SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user as IUser, imageUrl: payload }
+      };
     default:
       return state;
   }

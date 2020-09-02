@@ -4,7 +4,7 @@ import 'react-image-crop/lib/ReactCrop.scss';
 import styles from './styles.module.sass';
 import { Button, Spinner } from 'react-bootstrap';
 import LoaderWrapper from 'components/LoaderWrapper';
-import { signS3, uploadPhoto } from 'services/awsService';
+import { uploadOnAWS, signS3Avatar, deleteAWSObject } from 'services/awsService';
 import { toastr } from 'react-redux-toastr';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { ICropData } from 'common/models/cropAvatar/ICropData';
@@ -15,9 +15,12 @@ interface IProps {
   clearAvatarData: IBindingAction;
   setImageUrl: (fileName: string) => void;
   handleClose: IBindingAction;
+  imageUrl: string;
+  updateAvatar: (imageUrl: string | null) => void;
 }
 
-export const CropAvatar: React.FC<IProps> = ({ src, avatarLoading, clearAvatarData, setImageUrl, handleClose }) => {
+export const CropAvatar: React.FC<IProps> = ({ src, avatarLoading, clearAvatarData,
+  setImageUrl, handleClose, imageUrl, updateAvatar }) => {
   const [crop, setCrop] = useState<ReactCrop.Crop>({
     unit: '%',
     height: 100,
@@ -69,9 +72,11 @@ export const CropAvatar: React.FC<IProps> = ({ src, avatarLoading, clearAvatarDa
     try {
       setCroppedAvatarLoading(true);
       const croppedImage = await getCroppedImg(image as HTMLImageElement, crop as ICropData);
-      const { signedRequest, fileName } = await signS3();
-      await uploadPhoto(signedRequest, fileName, croppedImage);
-      setImageUrl(fileName);
+      const { signedRequest, fileName, link } = await signS3Avatar();
+      await uploadOnAWS(signedRequest, croppedImage, fileName, 'jpeg');
+      if (imageUrl) await deleteAWSObject(imageUrl);
+      await updateAvatar(`/avatars/${fileName}`);
+      setImageUrl(link);
       clearAvatarData();
     } catch (erorr) {
       toastr.error('Error', erorr.message);
@@ -94,6 +99,7 @@ export const CropAvatar: React.FC<IProps> = ({ src, avatarLoading, clearAvatarDa
             circularCrop
             minHeight={100}
             onImageLoaded={onImageLoaded}
+            imageStyle={{ maxWidth: '460px', maxHeight: '460px' }}
           />
         </div>
       </LoaderWrapper>

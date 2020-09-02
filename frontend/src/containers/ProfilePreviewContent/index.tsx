@@ -90,6 +90,7 @@ const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUse
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setMessage(e.target.value);
   };
+  const imageUrl = user.id === currentUser.id ? currentUser.imageUrl : user.imageUrl;
   if (loading) {
     return (
       <div />
@@ -98,7 +99,7 @@ const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUse
   return (
     <>
       <div className={styles.avatarContainer}>
-        <Image className={styles.userAvatar} src={user.imageUrl || userLogoDefaultUrl} alt="User avatar" thumbnail />
+        <Image className={styles.userAvatar} src={imageUrl || userLogoDefaultUrl} alt="User avatar" thumbnail />
       </div>
       <Popover.Content>
         <div className={styles.contentBody}>

@@ -40,15 +40,19 @@ router
   .post('/invite-users', run(async (req: Request) => {
     const users = await addUsersToChat(req.body.chatId, req.body.userIds);
     const usersToEmit: IUser[] = [];
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const userId of req.body.userIds) {
-      const user = await getUserByIdWithoutRelations(userId);
+    for (let i = 0; i < req.body.userIds.length; i += 1) {
+      const user = await getUserByIdWithoutRelations(req.body.userIds[i]);
       usersToEmit.push(user);
     }
     const chatInfoToSend = await getChatById(req.body.chatId);
-    // eslint-disable-next-line max-len
-    emitToChatRoom(req.body.chatId, ClientSockets.NewUserNotification, usersToEmit, chatInfoToSend.name, chatInfoToSend.type, chatInfoToSend.id);
+    emitToChatRoom(
+      req.body.chatId,
+      ClientSockets.NewUserNotification,
+      usersToEmit,
+      chatInfoToSend.name,
+      chatInfoToSend.type,
+      chatInfoToSend.id
+    );
     return users;
   }));
 

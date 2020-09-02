@@ -17,7 +17,7 @@ const ProfilePreview: FunctionComponent<IProps> = ({ tempUser, openProfile }) =>
       <ProfilePreviewContent tempUser={tempUser} openProfile={openProfile} />
     </Popover>
   );
-
+  const imageUrl = tempUser.imageUrl;
   return (
     <OverlayTrigger trigger="click" rootClose placement="right" overlay={popOver}>
       <button
@@ -25,7 +25,7 @@ const ProfilePreview: FunctionComponent<IProps> = ({ tempUser, openProfile }) =>
         className={styles.link}
       >
         <Image
-          src={tempUser.imageUrl || userLogoDefaultUrl}
+          src={imageUrl || userLogoDefaultUrl}
           style={{ objectFit: 'cover' }}
           width={40}
           height={40}

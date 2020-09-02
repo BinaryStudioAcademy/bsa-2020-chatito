@@ -15,7 +15,7 @@ export const deleteUser = async () => {
   await api.delete('/api/users');
 };
 
-export const editUser = async (data: IUser) => {
+export const editUser = async (data: Partial<IUser>) => {
   const response = await api.put<IUser>('/api/users', data);
   return response;
 };

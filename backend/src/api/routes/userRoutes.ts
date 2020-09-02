@@ -26,7 +26,7 @@ router
   .delete('/', run((req: Request) => deleteUser(req.user.id)))
   .get('/:id/unread-posts', run((req: Request) => getUnreadPostsById(req.params.id)))
   .get('/:id/unread-comments', run((req: Request) => getUnreadCommentsById(req.params.id)))
-  .put('/', run((req: Request) => editProfile(req.body)))
+  .put('/', run((req: Request) => editProfile(req.user.id, req.body)))
   .put('/edit-status', run((req: Request) => editStatus({ id: req.body.id, status: req.body.status })))
   .post('/invite', run((req: Request) => checkInvitedUserRegistered(req.body)))
   .post('/add-to-workspace', run((req: Request) => addWorkspaceToUser(req.user.id, req.body.workspaceId)))

@@ -173,7 +173,6 @@ const mapStateToProps = (state: IAppState) => {
   const draftComments = state.workspace.activeThread?.post.draftComments;
   const currChatHash = state.chat.chat ? state.chat.chat.hash : null;
   return {
-    // eslint-disable-next-line
     currChatHash,
     draftCommentId: draftComments?.length ? draftComments[0].id : undefined,
     draftCommentText: draftComments?.length ? draftComments[0].text : undefined,

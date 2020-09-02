@@ -5,7 +5,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faEdit, faEllipsisH, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faEdit, faEllipsisH, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { IUser } from 'common/models/user/IUser';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { useKey } from 'common/hooks/onInputSubmit';
@@ -115,6 +115,7 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
       </div>
     </>
   );
+  const imageUrl = user.id === currentUser.id ? currentUser.imageUrl : user.imageUrl;
   return (
     <LoaderWrapper loading={loading}>
       <div className={styles.profileOverview}>
@@ -123,7 +124,7 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
         </div>
 
         <div className={styles.avatar}>
-          <Image src={user.imageUrl || userLogoDefaultUrl} alt="avatar" roundedCircle />
+          <Image src={imageUrl || userLogoDefaultUrl} alt="avatar" roundedCircle />
         </div>
         <div className={styles.nameWrp}>
           <i className={styles.online} />
@@ -163,7 +164,7 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
           onClick={() => setShowAbout(!showAbout)}
         >
           <div>About</div>
-          <FontAwesomeIcon icon={faChevronDown} />
+          <FontAwesomeIcon icon={showAbout ? faChevronUp : faChevronDown} />
         </button>
         {showAbout && renderAbout()}
       </div>
