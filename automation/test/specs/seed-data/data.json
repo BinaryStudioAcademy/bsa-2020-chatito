@@ -1,0 +1,13 @@
+{
+    "login": {
+        "email": "johnlennon@gmail.com",
+        "password": "Chatito2020!!"
+    },
+
+    "workspaces": {
+        "workspaceOne": "Testing 1",
+        "workspaceTwo": "Testing 2",
+        "workspaceThree": "Testing 3",
+        "workspaceFour": "Testing 4"
+    }
+}
