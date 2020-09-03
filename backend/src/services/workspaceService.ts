@@ -42,7 +42,10 @@ export const getThreads = async (workspaceId: string, userId: string) => {
 export const getWorkspaceUserChats = async (workspaceId: string, userId: string): Promise<any> => {
   const chats = await (await getCustomRepository(ChatRepository).getAllByWorkspaceIdAndUserId(workspaceId, userId));
   const clientChats = chats.map(chat => fromChatToClientChat(chat));
+
   const channels = clientChats.filter(chat => chat.type === ChatType.Channel);
   const directMessages = clientChats.filter(chat => chat.type === ChatType.DirectMessage);
-  return { channels, directMessages };
+  const githubRepositories = clientChats.filter(chat => chat.type === ChatType.GithubRepository);
+
+  return { channels, directMessages, githubRepositories };
 };

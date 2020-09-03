@@ -17,7 +17,6 @@ interface IProps {
   router: (url: string) => {};
 }
 
-// eslint-disable-next-line
 const DraftCard: React.FC<IProps> = ({ draft, whash, router }) => {
   const onGoToChat = () => router(Routes.Chat.replace(':whash', whash).replace(':chash', draft.chat.hash));
   return (

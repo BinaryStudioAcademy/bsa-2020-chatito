@@ -48,11 +48,11 @@ const reducer = (state = initialState, { type, payload }: Routine<any>): IUserSt
     case loginUserRoutine.SUCCESS:
     case loginWithGoogleRoutine.SUCCESS:
     case loginWithFacebookRoutine.SUCCESS: {
-      const { id, fullName, displayName, email, imageUrl, title, workspaces } = payload;
+      const { id, fullName, displayName, email, imageUrl, title, githubUsername, workspaces, status } = payload;
 
       return {
         ...state,
-        user: { id, fullName, displayName, email, imageUrl, title },
+        user: { id, fullName, displayName, email, imageUrl, title, githubUsername, status },
         workspaceList: workspaces,
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
@@ -124,16 +124,16 @@ const reducer = (state = initialState, { type, payload }: Routine<any>): IUserSt
       return { ...state, isLoading: false };
     }
     case editStatusRoutine.TRIGGER: {
-      return { ...state, isLoading: true };
+      return state;
     }
     case editStatusRoutine.SUCCESS: {
       if (state.user) {
-        return { ...state, isLoading: false, user: { ...state.user, status: payload } };
+        return { ...state, user: { ...state.user, status: payload } };
       }
       return state;
     }
     case editStatusRoutine.FAILURE: {
-      return { ...state, isLoading: false };
+      return state;
     }
     case addWorkspaceRoutine.SUCCESS: {
       const workspaces = [...state.workspaceList];

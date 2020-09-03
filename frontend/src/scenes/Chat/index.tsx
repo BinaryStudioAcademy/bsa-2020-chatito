@@ -8,7 +8,8 @@ import { connect } from 'react-redux';
 import { IChat } from 'common/models/chat/IChat';
 import { setCurrentChatRoutine } from './routines';
 import LoaderWrapper from 'components/LoaderWrapper';
-// eslint-disable-next-line
+import { ChatType } from 'common/enums/ChatType';
+
 interface IProps {
   isLoading: boolean;
   match: {
@@ -18,11 +19,12 @@ interface IProps {
       postId: string;
     };
   };
+  chat?: IChat;
   chats: IChat[];
   selectChat: (chat: IChat | null) => void;
 }
-// eslint-disable-next-line
-const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, selectChat }) => {
+
+const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats, selectChat }) => {
   useEffect(() => {
     const { chash } = match.params;
     if (chash) {
@@ -38,18 +40,18 @@ const ChatContainer: React.FC<IProps> = ({ isLoading, match, chats, selectChat }
       <div className={styles.chatContainer}>
         <ChatHeader />
         <ChatBody postId={match?.params?.postId} />
-        <ChatFooter />
+        { chat?.type === ChatType.GithubRepository ? '' : <ChatFooter /> }
       </div>
     </LoaderWrapper>
   );
 };
 
 const mapStateToProps = (state: IAppState) => {
-  const { channels, directMessages } = state.workspace;
+  const { channels, directMessages, githubRepositories } = state.workspace;
   return {
     chat: state.chat.chat,
     isLoading: state.workspace.loading,
-    chats: [...channels, ...directMessages] as IChat[]
+    chats: [...channels, ...directMessages, ...githubRepositories] as IChat[]
   };
 };
 

@@ -83,8 +83,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
 
 const mapStateToProps = (state: IAppState) => ({
   loading: state.threads.loading,
-  // eslint-disable-next-line
-  userId: state.user.user!.id,
+  userId: state.user.user ? state.user.user.id : '',
   activeWorkspaceId: state.workspace.workspace.id,
   threads: state.threads.threads
 });

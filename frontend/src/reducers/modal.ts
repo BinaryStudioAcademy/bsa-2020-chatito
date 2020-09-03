@@ -6,20 +6,26 @@ export interface IModalState {
   editProfile: boolean;
   createChannel: boolean;
   createDirect: boolean;
+  createRepositoryChat: boolean;
+  createWebhookInstructions: boolean;
   invitePopup: boolean;
   inviteChat: boolean;
   chatMembers: boolean;
   setReminder: boolean;
+  changeStatus: boolean;
 }
 
 const initialState: IModalState = {
   editProfile: false,
   createChannel: false,
   createDirect: false,
+  createRepositoryChat: false,
+  createWebhookInstructions: false,
   invitePopup: false,
   chatMembers: false,
   setReminder: false,
-  inviteChat: false
+  inviteChat: false,
+  changeStatus: false
 };
 
 export default (state = initialState, action: Routine<any>) => {
@@ -36,6 +42,12 @@ export default (state = initialState, action: Routine<any>) => {
         case ModalTypes.CreateDirect: {
           return { ...state, createDirect: show };
         }
+        case ModalTypes.CreateRepositoryChat: {
+          return { ...state, createRepositoryChat: show };
+        }
+        case ModalTypes.CreateWebhookInstructions: {
+          return { ...state, createWebhookInstructions: show };
+        }
         case ModalTypes.InvitePopup: {
           return { ...state, invitePopup: show };
         }
@@ -47,6 +59,9 @@ export default (state = initialState, action: Routine<any>) => {
         }
         case ModalTypes.SetReminder: {
           return { ...state, setReminder: show };
+        }
+        case ModalTypes.ChangeStatus: {
+          return { ...state, changeStatus: show };
         }
         default:
           return state;
