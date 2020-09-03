@@ -45,10 +45,9 @@ class DraftPostRepository extends Repository<DraftPost> {
     return this.createQueryBuilder()
       .select('draft_post')
       .from(DraftPost, 'draft_post')
+      .leftJoinAndSelect('draft_post.chat', 'chat')
       .where('draft_post."createdByUserId" = :userId', { userId })
-      .leftJoinAndSelect('draft_post.chat',
-        'chat')
-      .where('chat."workspaceId" = :workspaceId', { workspaceId })
+      .andWhere('chat."workspaceId" = :workspaceId', { workspaceId })
       .getMany();
   }
 }
