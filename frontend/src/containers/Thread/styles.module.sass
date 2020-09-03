@@ -36,25 +36,22 @@ $colorBackground: var(--workspace-toolbar-select-background-second)
   height: 100%
   display: flex
   flex-direction: column
-  justify-content: flex-start
-
   p
     margin: 0
 
-  header
+  .threadHeader
     height: 64px
     display: flex
     padding: 0 40px 0 25px
     border-bottom: 1px solid var(--chat-background-secondary)
-
-    div
-      font-size: 11px
+      
 
 .threadHeaderBlock
   display: flex
   flex-direction: column
   align-items: flex-start
   justify-content: center
+  font-size: 11px
 
 .threadChatName
   font-size: 1.5em
@@ -74,21 +71,11 @@ $colorBackground: var(--workspace-toolbar-select-background-second)
 
 .threadBlock
   overflow-y: auto
-  display: flex
-  flex-direction: column
   padding-top: 10px
 
 .threadPost
   border-bottom: 2px solid var(--chat-background-secondary)
   margin-bottom: 20px
-
-.threadComments
-  display: flex
-  flex-direction: column
-  justify-items: center
-
-  .postWrapper
-    color: red
 
 .commentsMore
   margin: 5px
@@ -97,6 +84,10 @@ $colorBackground: var(--workspace-toolbar-select-background-second)
 .textEditor
   padding: 10px 40px 15px 25px
 
+.showMoreContainer
+  width: 100%
+  display: flex
+  justify-content: center
 .link
   @include buttonReset
   color: var(--show-more-replies-link)
