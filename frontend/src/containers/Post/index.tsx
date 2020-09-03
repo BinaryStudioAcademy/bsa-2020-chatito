@@ -34,6 +34,9 @@ import { ICommentsToRead } from 'common/models/chat/ICommentsToRead';
 import { IServerComment } from 'common/models/post/IServerComment';
 import { IMarkAsUnreadComment } from 'common/models/post/IMarkAsUnreadComment';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
+import JoinButton from 'scenes/Chat/components/JoinBtn';
+import { MessageType } from 'common/enums/MessageType';
+import { IntegrationName } from 'common/enums/IntegrationName';
 
 interface IProps {
   post: IPost;
@@ -288,6 +291,8 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
       });
     }
   };
+  const isJoinBtn = post.integration === IntegrationName.Whale && post.type !== MessageType.WhaleSignUpUser;
+
   return (
     <div ref={postRef}>
       <Media className={styles.postWrapper} onMouseEnter={onHoverRead}>
@@ -305,7 +310,11 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
 
           <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
           {/* eslint-disable-next-line */}
-          <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
+          {
+            isJoinBtn
+              ? (<JoinButton url={text} />)
+              : (<div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />)
+          }
           <div className={styles.emojiStats}>
             {type === PostType.Post && renderEmojis()}
           </div>

@@ -78,20 +78,11 @@ function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
   try {
     const addedPost = yield call(addPost, payload);
     if (addedPost.integration === IntegrationName.Whale) {
-      const whaleBotMock = {
-        id: '1',
-        fullName: 'Whale Bot',
-        displayName: 'Whale Bot',
-        email: 'whale@gmail.com'
-      };
-      addedPost.createdByUser = whaleBotMock;
-
       if (addedPost.type === MessageType.WhaleSignUpUser) {
         yield put(addPostRoutine.success(addedPost));
       } else if (addedPost.type === MessageType.CommonPost) {
         yield put(deleteDraftPostRoutine.trigger({ chatId: payload.chatId }));
       }
-      console.log(addedPost);
     }
   } catch (error) {
     yield call(toastrError, error.message);

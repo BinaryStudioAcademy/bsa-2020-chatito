@@ -8,5 +8,5 @@ export interface ICreatePost {
   text: string;
   createdByUserId?: string;
   createdByUser?: User;
-  integration: IIntegration;
+  integration?: IIntegration;
 }

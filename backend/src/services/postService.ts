@@ -35,7 +35,7 @@ export const addPost = async (id: string, post: ICreatePost) => {
       ...post
     };
     try {
-      whalePost.text = (await createWhaleMeeting('slavakdudin2@gmail.com')).url;
+      whalePost.text = (await createWhaleMeeting(user.email)).url;
       const createdPost: IPost = await getCustomRepository(PostRepository).addPost(whalePost);
       const clientPost = await fromPostToPostClient({ ...createdPost, type: ClientPostType.WhaleJoinMeetingLink });
       emitToChatRoom(clientPost.chatId, ClientSockets.AddPost, clientPost);

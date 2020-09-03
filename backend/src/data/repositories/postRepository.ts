@@ -33,7 +33,8 @@ class PostRepository extends Repository<Post> {
         'draft_comment.id',
         'draft_comment.text',
         'chat.name',
-        'chat.hash'
+        'chat.hash',
+        'integration.name'
       ])
       .leftJoin(
         'post.draftComments',
@@ -52,6 +53,10 @@ class PostRepository extends Repository<Post> {
       .leftJoin(
         'post.chat',
         'chat'
+      )
+      .leftJoin(
+        'post.integration',
+        'integration'
       )
       .where('post.chat = :chatId', { chatId })
       .orderBy('post.createdAt', 'DESC')
