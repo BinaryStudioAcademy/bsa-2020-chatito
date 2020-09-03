@@ -6,5 +6,6 @@ export default [
   '/auth/tokens',
   '/auth/forgotpass',
   '/auth/resetpass',
-  '/users/invite'
+  '/users/invite',
+  '/hooks/github'
 ];
