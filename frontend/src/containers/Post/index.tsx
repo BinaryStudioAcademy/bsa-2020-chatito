@@ -293,7 +293,12 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
           {
             isJoinBtn
               ? (<JoinButton url={text} />)
-              : (<div className={`${styles.text} ${isNew ? styles.unread : ''}`} dangerouslySetInnerHTML={{ __html: text }} />)
+              : (
+                <div
+                  className={`${styles.text} ${isNew ? styles.unread : ''}`}
+                  dangerouslySetInnerHTML={{ __html: text }}
+                />
+              )
           }
           <div className={styles.emojiStats}>
             {type === PostType.Post && renderEmojis()}
