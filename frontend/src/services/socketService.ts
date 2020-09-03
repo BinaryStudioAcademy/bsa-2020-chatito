@@ -43,6 +43,7 @@ import {
 } from 'containers/Thread/routines';
 import { playByUrl } from 'common/helpers/audioHelper';
 import { defaultNotificationAudio } from 'common/configs/defaults';
+import { IncomingSoundOptions } from 'common/enums/IncomingSoundOptions';
 
 const { server } = env.urls;
 
@@ -55,7 +56,17 @@ export const connectSockets = () => {
     if (post.chatId === state.chat.chat?.id) {
       store.dispatch(addPostWithSocketRoutine(post));
     } else {
-      playByUrl(audio || defaultNotificationAudio);
+      switch (state.user.user?.incomingSoundOptions) {
+        case IncomingSoundOptions.AllowCustom:
+          playByUrl(audio);
+          break;
+        case IncomingSoundOptions.UseDefault:
+          playByUrl(defaultNotificationAudio);
+          break;
+        case IncomingSoundOptions.MuteAll:
+        default:
+          break;
+      }
       store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
     }
   });

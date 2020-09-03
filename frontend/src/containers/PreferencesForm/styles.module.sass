@@ -1,50 +1,64 @@
+.modalBody
+  display: flex
+  flex-direction: row
+
+.radioFormGroup
+
 .mainWrapper
   display: flex
   flex-direction: column
   padding: 20px
   padding-top: 0
 
-  .modalHeader
-    font-size: 18px
-    margin-bottom: 10px
+.modalNav
+  margin: 0 10px
+  padding: 0 5px
 
-  .subHeader
-    font-size: 16px
-    font-weight: 600
-    margin-bottom: 7px
+.modalHeader
+  font-size: 1.5em
+  margin-bottom: 20px
 
-  .recordingErr
-    color: red
+.subHeader
+  font-size: 16px
+  margin-bottom: 10px
+  font-weight: 600
+  margin-bottom: 7px
 
-  .audioNotificationsWrapper
-    display: flex
-    align-items: center
+.recordingErr
+  color: red
 
-    .recorderWrapper
-      margin-left: 20px
+.audioNotificationsWrapper
+  display: flex
+  align-items: center
+  margin-bottom: 10px
 
-  .formFooter
-    margin-top: 30px
-    display: flex
-    justify-content: space-between
-    align-items: center
+  .recorderWrapper
+    margin-left: 20px
+    button
+      height: 35px
 
-    .primaryBtn:global(.btn-primary)
-      width: 135px
-      height: 40px
+.formFooter
+  margin-top: 30px
+  display: flex
+  justify-content: space-around
+  align-items: center
+
+  .primaryBtn:global(.btn-primary)
+    width: 135px
+    height: 40px
+    // background-color: var(--auth-scene-btn-background)
+    // border-color: var(--auth-scene-btn-background)
+    &:hover, &:active,
       // background-color: var(--auth-scene-btn-background)
       // border-color: var(--auth-scene-btn-background)
-      &:hover, &:active,
-        // background-color: var(--auth-scene-btn-background)
-        // border-color: var(--auth-scene-btn-background)
-        cursor: pointer
+      cursor: pointer
 
-    .primaryBtnCancel:global(.btn-primary)
-      width: 120px
-      height: 40px
+  .primaryBtnCancel:global(.btn-primary)
+    width: 120px
+    height: 40px
+    // background-color: var(--close-button)
+    // border-color: var(--close-button)
+    &:hover, &:active,
       // background-color: var(--close-button)
       // border-color: var(--close-button)
-      &:hover, &:active,
-        // background-color: var(--close-button)
-        // border-color: var(--close-button)
-        cursor: pointer
+      cursor: pointer

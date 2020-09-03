@@ -49,10 +49,33 @@ const reducer = (state = initialState, { type, payload }: Routine<any>): IUserSt
     case loginUserRoutine.SUCCESS:
     case loginWithGoogleRoutine.SUCCESS:
     case loginWithFacebookRoutine.SUCCESS: {
-      const { id, fullName, displayName, email, imageUrl, title, githubUsername, workspaces, status, audio } = payload;
+      const {
+        id,
+        incomingSoundOptions,
+        fullName,
+        displayName,
+        email,
+        imageUrl,
+        title,
+        githubUsername,
+        workspaces,
+        status,
+        audio
+      } = payload;
       return {
         ...state,
-        user: { id, fullName, displayName, email, imageUrl, title, githubUsername, status, audio },
+        user: {
+          id,
+          fullName,
+          displayName,
+          email,
+          imageUrl,
+          title,
+          githubUsername,
+          status,
+          audio,
+          incomingSoundOptions
+        },
         workspaceList: workspaces,
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
@@ -76,13 +99,16 @@ const reducer = (state = initialState, { type, payload }: Routine<any>): IUserSt
         isAuthorized: false
       };
     case editProfileRoutine.TRIGGER: {
-      return state;
+      return {
+        ...state,
+        isLoading: true
+      };
     }
     case editProfileRoutine.SUCCESS: {
-      return { ...state, user: { ...payload } };
+      return { ...state, user: { ...payload }, isLoading: false };
     }
     case editProfileRoutine.FAILURE: {
-      return state;
+      return { ...state, isLoading: false };
     }
     case deleteAccountRoutine.TRIGGER:
       return { ...state, isLoading: true };
