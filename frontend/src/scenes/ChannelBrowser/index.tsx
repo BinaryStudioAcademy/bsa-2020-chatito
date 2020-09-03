@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './styles.module.sass';
-import { InputGroup, FormControl, Button } from 'react-bootstrap';
+import { InputGroup, FormControl, Button, OverlayTrigger } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faSort, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
@@ -13,6 +13,7 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { showModalRoutine } from 'routines/modal';
+import { searchChannels } from 'common/helpers/searchHelper';
 
 interface IProps {
   match: {
@@ -29,11 +30,31 @@ interface IProps {
 
 const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels = [],
   loading, fetchBrowserChannels, showModal }) => {
+  const [channelList, setChannelList] = useState(channels);
+  const [text, setText] = useState('');
   useEffect(() => {
     fetchBrowserChannels(currentWorkspaceId);
   }, []);
+  useEffect(() => {
+    let copiedChannels = [...channels];
+    if (text) {
+      copiedChannels = searchChannels(copiedChannels, text.trim());
+    }
+    setChannelList(copiedChannels);
+  }, [channels]);
 
   const onCreateChannel = () => showModal({ modalType: ModalTypes.CreateChannel, show: true });
+
+  const searchChannelHandler = (value: string) => {
+    const result = searchChannels(channels, value.trim());
+    setChannelList(result);
+  };
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setText(value);
+    searchChannelHandler(value);
+  };
 
   return (
     <div className={styles.ChannelBrowser}>
@@ -46,26 +67,28 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
           <InputGroup.Prepend className={styles.searchPrepend}>
             <FontAwesomeIcon icon={faSearch} />
           </InputGroup.Prepend>
-          <FormControl
-            placeholder="Search by channel name or description"
-          />
+          <FormControl placeholder="Search by channel name" value={text} onChange={onChange} />
         </InputGroup>
         <div className={styles.controlsWrp}>
-          <div>{channels.length > 1 ? `${channels.length} channels` : `${channels.length} channel`}</div>
+          <div>{channelList.length > 1 ? `${channelList.length} channels` : `${channelList.length} channel`}</div>
           <div>
-            <button type="button" className={`${styles.sortBtn} button-unstyled`}>
-              <FontAwesomeIcon icon={faSort} size="lg" />
-              <span>Sort: A to Z</span>
-            </button>
-            <button type="button" className={`${styles.filterBtn} button-unstyled`}>
-              <FontAwesomeIcon icon={faFilter} />
-              <span>Filter</span>
-            </button>
+            <OverlayTrigger trigger="click" placement="bottom" overlay={<div />}>
+              <button type="button" className={`${styles.sortBtn} button-unstyled`}>
+                <FontAwesomeIcon icon={faSort} size="lg" />
+                <span>Sort: A to Z</span>
+              </button>
+            </OverlayTrigger>
+            <OverlayTrigger trigger="click" placement="bottom" overlay={<div />}>
+              <button type="button" className={`${styles.filterBtn} button-unstyled`}>
+                <FontAwesomeIcon icon={faFilter} />
+                <span>Filter</span>
+              </button>
+            </OverlayTrigger>
           </div>
         </div>
         <div className={styles.channelsWrp}>
           <LoaderWrapper loading={loading}>
-            {channels.map(channel => (
+            {channelList.map(channel => (
               <ChannelItem
                 key={channel.id}
                 whash={match.params.whash}
