@@ -10,7 +10,8 @@ import {
   editStatusRoutine,
   loginWithGoogleRoutine,
   loginWithFacebookRoutine,
-  updateAvatarRoutine
+  updateAvatarRoutine,
+  updateAudioRoutine
 } from '../routines/user';
 import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
 import { showModalRoutine } from 'routines/modal';
@@ -204,6 +205,19 @@ function* watchUpdateAvatarRequest() {
   yield takeEvery(updateAvatarRoutine.TRIGGER, updateAvatarRequest);
 }
 
+function* updateAudioRequest({ payload }: Routine<any>) {
+  try {
+    const user = yield call(editUser, { audio: payload });
+    yield put(updateAudioRoutine.success(user.audio));
+  } catch (error) {
+    toastr.error('Error', 'Updating audio was failed. Please try again later.');
+  }
+}
+
+function* watchUpdateAudioRequest() {
+  yield takeEvery(updateAudioRoutine.TRIGGER, updateAudioRequest);
+}
+
 export default function* userSaga() {
   yield all([
     watchAddNewUserRequest(),
@@ -216,6 +230,7 @@ export default function* userSaga() {
     watchDeleteAccount(),
     watchResetPasswordRequest(),
     watchEditStatusRequest(),
-    watchUpdateAvatarRequest()
+    watchUpdateAvatarRequest(),
+    watchUpdateAudioRequest()
   ]);
 }
