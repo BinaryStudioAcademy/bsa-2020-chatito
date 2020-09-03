@@ -9,13 +9,13 @@ export const fromGithubPayloadToPost = async (githubPayload: any): Promise<ICrea
 
   const chat = await getGithubRepositoryChat(repositoryName, repositoryOwner);
 
-  let messageText;
   if (pullRequest && action === 'opened') {
-    messageText = `New PR by ${pullRequest.user.login} has been created.
-      Follow the link to see ${pullRequest.url}`;
-  } else {
-    messageText = `Github event in ${repositoryName}.`;
+    const messageText = `
+      <p>New PR <b><a href=${pullRequest.html_url}>${pullRequest.title}</a></b> has been created
+      by <b><a href=${pullRequest.user.html_url}>${pullRequest.user.login}</a></b>.<p>`;
+
+    return { chatId: chat.id, text: messageText };
   }
 
-  return { chatId: chat.id, text: messageText };
+  return null;
 };

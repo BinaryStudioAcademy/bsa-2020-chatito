@@ -56,21 +56,20 @@ const ChatMembers: FunctionComponent<any> = ({
         <header className={styles.title}>Chat members</header>
         <SearchInput onSearch={setSearchStr} stylesClassName={styles.searchInput} />
         {
-          chat.users.length <= 1
-            ? 'You are the only member of this chat!'
-            : chat.users.map((user: IUser) => {
-              if (currentUser.id === user.id || !isSuitable(user)) {
-                return null;
-              }
-              return (
-                <ChatMember
-                  removeUser={removeUserFromChat}
-                  user={user}
-                  key={user.id}
-                  isCreator={isCreator}
-                />
-              );
-            })
+          chat.users.map((user: IUser) => {
+            if (!isSuitable(user)) {
+              return null;
+            }
+            return (
+              <ChatMember
+                removeUser={removeUserFromChat}
+                user={user}
+                key={user.id}
+                isCreator={isCreator}
+                currentUser={currentUser}
+              />
+            );
+          })
         }
         <div className={styles.buttonWrapper}>
           <Button

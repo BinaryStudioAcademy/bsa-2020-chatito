@@ -12,7 +12,7 @@ import {
   getChatById } from '../../services/chatService';
 import { addReminder } from '../../services/reminderService';
 import { ClientSockets } from '../../common/enums/ClientSockets';
-import { IUser } from '../../common/models/user/IUser';
+import { IUserClient } from '../../common/models/user/IUserClient';
 
 const router = Router();
 
@@ -39,7 +39,7 @@ router
   )))
   .post('/invite-users', run(async (req: Request) => {
     const users = await addUsersToChat(req.body.chatId, req.body.userIds);
-    const usersToEmit: IUser[] = [];
+    const usersToEmit: IUserClient[] = [];
     for (let i = 0; i < req.body.userIds.length; i += 1) {
       const user = await getUserByIdWithoutRelations(req.body.userIds[i]);
       usersToEmit.push(user);

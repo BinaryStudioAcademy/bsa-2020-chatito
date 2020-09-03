@@ -42,9 +42,14 @@ const createRefreshToken = async (user: User): Promise<IRefreshToken> => {
   return refreshToken;
 };
 
-export const register = async ({ password, workspaceId, ...userData }: IRegisterUser) => {
+export const register = async ({ password, workspaceId, email, ...userData }: IRegisterUser) => {
   const passwordHash = await hash(password);
-  const createUserData = fromRegisterUserToCreateUser({ ...userData, password: passwordHash, workspaceId });
+  const createUserData = fromRegisterUserToCreateUser({
+    ...userData,
+    email: email.toLocaleLowerCase(),
+    password: passwordHash,
+    workspaceId
+  });
 
   const newUser = await getCustomRepository(UserRepository).addUser(createUserData);
   const user = workspaceId ? await addWorkspaceToUser(newUser.id, workspaceId) : newUser;
@@ -59,7 +64,7 @@ export const register = async ({ password, workspaceId, ...userData }: IRegister
 };
 
 export const login = async ({ email, password, workspaceId }: ILoginUser) => {
-  const loginUser = await getCustomRepository(UserRepository).getByEmail(email);
+  const loginUser = await getCustomRepository(UserRepository).getByEmail(email.toLocaleLowerCase());
   if (!loginUser) {
     throw new CustomError(404, 'No user exists. Please, sign up first.', ErrorCode.UserNotFound);
   }
