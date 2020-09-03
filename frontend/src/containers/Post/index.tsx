@@ -141,36 +141,34 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
   };
 
   const popoverRemindOptions = (
-    <Popover id="popover-basic">
-      <Popover.Content>
-        <ReminderItem
-          text="In 20 minutes"
-          addedTime={twentyMinutes}
-        />
-        <ReminderItem
-          text="In 1 hour"
-          addedTime={oneHour}
-        />
-        <ReminderItem
-          text="In 3 hours"
-          addedTime={threeHours}
-        />
-        <ReminderItem
-          text="Tomorrow"
-          addedTime={oneDay}
-        />
-        <ReminderItem
-          text="Next week"
-          addedTime={oneWeek}
-        />
-        <button
-          type="button"
-          className={styles.optionsSelect}
-          onClick={() => showModal({ modalType: ModalTypes.SetReminder, show: true })}
-        >
-          <span>Custom</span>
-        </button>
-      </Popover.Content>
+    <Popover id="popover-basic" className={styles.popOverOptions}>
+      <ReminderItem
+        text="In 20 minutes"
+        addedTime={twentyMinutes}
+      />
+      <ReminderItem
+        text="In 1 hour"
+        addedTime={oneHour}
+      />
+      <ReminderItem
+        text="In 3 hours"
+        addedTime={threeHours}
+      />
+      <ReminderItem
+        text="Tomorrow"
+        addedTime={oneDay}
+      />
+      <ReminderItem
+        text="Next week"
+        addedTime={oneWeek}
+      />
+      <button
+        type="button"
+        className={styles.optionsSelect}
+        onClick={() => showModal({ modalType: ModalTypes.SetReminder, show: true })}
+      >
+        <span>Custom</span>
+      </button>
     </Popover>
   );
 
@@ -184,18 +182,23 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
   };
 
   const popoverOptions = (
-    <Popover id="popover-basic">
-      <Popover.Title as="h3">More options</Popover.Title>
+    <Popover id="popover-basic" className={styles.popOverOptions}>
+      <header className={styles.popoverHeader}>More options</header>
       <button
         type="button"
-        className={`${styles.optionsSelect} ${styles.moreOptionsSelect}`}
+        className={styles.optionsSelect}
         onClick={markAsUnreadOptionClick}
       >
         <span>Mark as unread</span>
       </button>
-      <OverlayTrigger trigger="click" placement="left" overlay={popoverRemindOptions}>
-        <button type="button" className={`${styles.optionsSelect} ${styles.moreOptionsSelect}`}>
-          <span>&lt; Remind me about that</span>
+      <OverlayTrigger
+        // delay={{ show: 0, hide: Infinity }}
+        trigger="click"
+        placement="left"
+        overlay={popoverRemindOptions}
+      >
+        <button type="button" className={styles.optionsSelect}>
+          <span>Remind about that</span>
         </button>
       </OverlayTrigger>
     </Popover>
