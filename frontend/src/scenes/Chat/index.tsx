@@ -26,7 +26,6 @@ interface IProps {
   selectChat: (chat: IChat | null) => void;
 }
 const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats, currentUser, selectChat }) => {
-
   useEffect(() => {
     const { chash } = match.params;
     if (chash) {
@@ -53,7 +52,7 @@ const mapStateToProps = (state: IAppState) => {
   return {
     chat: state.chat.chat,
     isLoading: state.workspace.loading,
-    currentUser: state.user.user
+    currentUser: state.user.user,
     chats: [...channels, ...directMessages, ...githubRepositories] as IChat[]
   };
 };
