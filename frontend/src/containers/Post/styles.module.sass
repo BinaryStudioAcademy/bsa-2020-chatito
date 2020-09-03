@@ -1,3 +1,11 @@
+@mixin unselectable
+  -webkit-touch-callout: none
+  -webkit-user-select: none
+  -khtml-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+
 .postWrapper
   padding: 5px 40px 10px 25px
   color: var(--main-text)
@@ -98,44 +106,54 @@
   display: none
 
 .optionsSelect
+  font-weight: 500
+  font-size: 14px
   background: none
   display: flex
   flex-direction: row
   align-items: center
   border: 0
-  padding: 8px
-  padding-left: 23px
-  margin-top: 5px
+  padding: 5px 24px
   align-content: left
   outline: none
   width: 100%
   &:hover
-    cursor: pointer
-
-.moreOptionsSelect
-  margin: 0
-  padding: 5px 14px
-  &:hover
-    background: var(--post-bg)
+    background-color: var(--workspace-background-color)
+    color: var(--text-color-for-dark-bg)
 
 @media screen and (max-width: 1440px)
   .text
     line-height: 1.3
 
 .optionsBlock
-  width: 20px
+  width: 22px
   height: 30px
-  border: 2px solid var(--options-border)
+  box-shadow: 0 0 0 1px rgba(29, 28, 29, 0.1),0 0px 12px 0 rgba(0,0,0,.05)
+  background-color: var(--white-bg)
   border-radius: 4px
   display: none
   justify-content: center
   align-items: center
   position: absolute
-  top: 3px
+  top: 5px
   right: 47px
   &:hover
     cursor: pointer
 
 .optionsIcon
   font-size: 18px
-  color: var(--workspace-toolbar-background)
+  color: var(--offline)
+
+.popoverHeader
+  font-size: 16px
+  font-weight: 700
+  padding: 5px 24px
+  letter-spacing: 0.2px
+  @include unselectable
+
+.popOverOptions
+  box-shadow: 0 0 0 1px rgba(29, 28, 29, 0.1),0 0px 12px 0 rgba(0,0,0,.05)
+  border-radius: 6px
+  border: none
+  padding: 12px 0
+

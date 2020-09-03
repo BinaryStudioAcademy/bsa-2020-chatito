@@ -39,11 +39,11 @@ interface IProps {
 const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUser, directMessages, workspaceName,
   workspaceHash, addPost, createChatAndAddPost, router, openProfile, showModal }) => {
   const [user, setUsers] = useState<IUser>(tempUser);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   useEffect(() => {
     getUserById(tempUser.id).then(fetchedUser => {
       setUsers(fetchedUser);
-      setLoading(false);
+      // setLoading(false);
     });
   }, []);
 
@@ -89,69 +89,80 @@ const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUse
     setMessage(e.target.value);
   };
   const imageUrl = user.id === currentUser.id ? currentUser.imageUrl : user.imageUrl;
-  if (loading) {
-    return (
-      <div />
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div />
+  //   );
+  // }
   return (
-    <>
-      <div className={styles.avatarContainer}>
-        <Image className={styles.userAvatar} src={imageUrl || userLogoDefaultUrl} alt="User avatar" thumbnail />
-      </div>
-      <Popover.Content>
-        <div className={styles.contentBody}>
+    <div className={styles.profilePreviewContainer}>
+      <div className={styles.contentBody}>
+        <div className={styles.infoContainer}>
           {user.status === 'online' ? (
             <p className={`${styles.fullname} ${styles.online}`}>{user.fullName}</p>
           ) : (
             <p className={`${styles.fullname} ${styles.offline}`}>{user.fullName}</p>
           )}
-          <p className={styles.title}>{user.title}</p>
-          <button
-            type="button"
-            onClick={onViewProfile}
-            className={styles.link}
-          >
-            View full profile
-          </button>
+          {user.title && <p className={styles.title}>{user.title}</p>}
           {user.id === currentUser.id ? (
-            <>
-              <span className={styles.userStatus}>{currentUser.status}</span>
-              <button
-                type="button"
-                onClick={() => { buttonClick(showChangeStatusModal); }}
-                className={styles.link}
-              >
-                Set a status
-              </button>
-            </>
+            <span className={styles.userStatus}>{currentUser.status}</span>
           ) : (
             <span className={styles.userStatus}>{user.status}</span>
           )}
-          <Form.Group
-            className={styles.sendMessageBlock}
-          >
-            <Form.Control
-              ref={inputRef}
-              className={styles.textField}
-              type="text"
-              value={message}
-              onChange={onChange}
-            />
+          <div className={styles.buttonsBlock}>
             <button
               type="button"
-              className={`${styles.arrowButton} ${styles.arrowButton_reset}`}
-              onClick={onSend}
+              onClick={onViewProfile}
+              className={styles.link}
             >
-              <FontAwesomeIcon
-                className={styles.arrowIcon}
-                icon={faPlay}
-              />
+              View full profile
             </button>
-          </Form.Group>
+            {user.id === currentUser.id ? (
+              <button
+                type="button"
+                onClick={() => { buttonClick(showChangeStatusModal); }}
+                className={`${styles.link} ${styles.setStatus}`}
+              >
+                Set a status
+              </button>
+            ) : (
+              ''
+            )}
+          </div>
         </div>
-      </Popover.Content>
-    </>
+        <Image
+          // src={tempUser.imageUrl || userLogoDefaultUrl}
+          src="https://media.macphun.com/img/uploads/customer/how-to/579/15531840725c93b5489d84e9.43781620.jpg?q=85&w=1340" // eslint-disable-line
+          width={80}
+          height={80}
+          className={styles.avatar}
+          alt="User avatar"
+          roundedCircle
+        />
+      </div>
+      <div className={styles.line} />
+      <Form.Group
+        className={styles.sendMessageBlock}
+      >
+        <Form.Control
+          ref={inputRef}
+          className={styles.textField}
+          type="text"
+          value={message}
+          onChange={onChange}
+        />
+        <button
+          type="button"
+          className={`${styles.arrowButton} ${styles.arrowButton_reset}`}
+          onClick={onSend}
+        >
+          <FontAwesomeIcon
+            className={styles.arrowIcon}
+            icon={faPlay}
+          />
+        </button>
+      </Form.Group>
+    </div>
   );
 };
 
