@@ -76,13 +76,13 @@ const reducer = (state = initialState, { type, payload }: Routine<any>): IUserSt
         isAuthorized: false
       };
     case editProfileRoutine.TRIGGER: {
-      return { ...state, isLoading: true };
+      return state;
     }
     case editProfileRoutine.SUCCESS: {
-      return { ...state, isLoading: false, user: { ...payload } };
+      return { ...state, user: { ...payload } };
     }
     case editProfileRoutine.FAILURE: {
-      return { ...state, isLoading: false };
+      return state;
     }
     case deleteAccountRoutine.TRIGGER:
       return { ...state, isLoading: true };
