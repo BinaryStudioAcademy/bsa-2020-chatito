@@ -53,17 +53,7 @@ const ChatMembers: FunctionComponent<any> = ({
       onHide={handleCloseModal}
     >
       <div>
-        {chat.users.length > 1
-          && (
-            <Button
-              type="button"
-              variant="secondary"
-              className={styles.addButton}
-              onClick={onInvite}
-            >
-              Add user
-            </Button>
-          )}
+        <header className={styles.title}>Chat members</header>
         <SearchInput onSearch={setSearchStr} stylesClassName={styles.searchInput} />
         {
           chat.users.length <= 1
@@ -82,6 +72,16 @@ const ChatMembers: FunctionComponent<any> = ({
               );
             })
         }
+        <div className={styles.buttonWrapper}>
+          <Button
+            type="button"
+            variant="secondary"
+            className={styles.addButton}
+            onClick={onInvite}
+          >
+            Add user
+          </Button>
+        </div>
       </div>
     </ModalWindow>
   );
