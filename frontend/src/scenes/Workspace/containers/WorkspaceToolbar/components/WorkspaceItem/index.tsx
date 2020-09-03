@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './styles.module.sass';
-import { ListGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { ListGroup, OverlayTrigger, Popover } from 'react-bootstrap';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 
 interface IProps {
@@ -14,12 +14,21 @@ export default function WorkspaceItem({
   isSelected,
   onItemClick
 }: IProps) {
+  const workspaceItemPopover = (
+    <Popover id="workspaceItemPopover" className={styles.popOverWindow}>
+      <span>
+        {workspace.name}
+      </span>
+    </Popover>
+  );
+
   return (
     <OverlayTrigger
-      trigger={['hover', 'hover']}
+      trigger="hover"
+      delay={{ show: 300, hide: 0 }}
+      rootClose
       placement="right"
-      delay={{ show: 200, hide: 250 }}
-      overlay={<Tooltip id="workspace-tooltip">{workspace.name}</Tooltip>}
+      overlay={workspaceItemPopover}
     >
       <ListGroup.Item
         onClick={onItemClick}
