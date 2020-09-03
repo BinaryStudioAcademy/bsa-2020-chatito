@@ -12,6 +12,8 @@
 
 .body
   overflow: hidden
+  width: 100%
+
 
 .author
   display: inline-block
@@ -21,28 +23,35 @@
   margin-bottom: 2px
   background: none
   border: none
+  margin-left: 14px
   &:hover
     text-decoration: underline
 
 .metadata
+  margin-left: 14px
   font-weight: 400
   color: var(--secondary-text)
   font-size: 12px
   font-family: var(--secondary-font-family), sans-serif
-  margin-bottom: 14px
   padding: 0
   background: none
   border: none
+  margin-bottom: 3px
   &:hover
     text-decoration: underline
 
 .text
   text-align: left
   font-size: 16px
-  margin-bottom: 15px
   overflow-wrap: break-word
   line-height: 1.2
   letter-spacing: .1px
+  padding: 14px
+  width: calc( 100% - 7px )
+  margin-bottom: 5px
+
+.unread
+  background-color: var(--post-bg)
 
 .emojiStats
   display: flex

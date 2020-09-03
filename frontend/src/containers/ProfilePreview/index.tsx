@@ -1,22 +1,26 @@
 import React, { FunctionComponent } from 'react';
+import { connect } from 'react-redux';
 import { OverlayTrigger, Image, Popover } from 'react-bootstrap';
 import { IUser } from 'common/models/user/IUser';
 import styles from './styles.module.sass';
 import { userLogoDefaultUrl } from 'common/configs/defaults';
 import ProfilePreviewContent from 'containers/ProfilePreviewContent';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { IAppState } from 'common/models/store';
 
 interface IProps {
   tempUser: IUser;
   openProfile: IBindingCallback1<IUser>;
+  currentUser?: IUser;
 }
 
-const ProfilePreview: FunctionComponent<IProps> = ({ tempUser, openProfile }) => {
+const ProfilePreview: FunctionComponent<IProps> = ({ tempUser, openProfile, currentUser }) => {
   const popOver = (
     <Popover id={tempUser.id} className={styles.popOverWindow}>
       <ProfilePreviewContent tempUser={tempUser} openProfile={openProfile} />
     </Popover>
   );
+  const imageUrl = tempUser.id === currentUser?.id ? currentUser?.imageUrl : tempUser.imageUrl;
   return (
     <OverlayTrigger trigger="click" rootClose placement="right" overlay={popOver}>
       <button
@@ -24,11 +28,11 @@ const ProfilePreview: FunctionComponent<IProps> = ({ tempUser, openProfile }) =>
         className={styles.link}
       >
         <Image
-          src={tempUser.imageUrl || userLogoDefaultUrl}
+          src={imageUrl || userLogoDefaultUrl}
           style={{ objectFit: 'cover' }}
           width={40}
           height={40}
-          className="mr-3 rounded"
+          className="rounded"
           alt={tempUser.fullName}
           roundedCircle
         />
@@ -37,4 +41,8 @@ const ProfilePreview: FunctionComponent<IProps> = ({ tempUser, openProfile }) =>
   );
 };
 
-export default ProfilePreview;
+const mapStateToProps = (state: IAppState) => ({
+  currentUser: state.user.user as IUser
+});
+
+export default connect(mapStateToProps, null)(ProfilePreview);

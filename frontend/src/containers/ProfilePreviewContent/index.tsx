@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Image, Popover, Form } from 'react-bootstrap';
 import { IUser } from 'common/models/user/IUser';
-import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import styles from './styles.module.sass';
@@ -145,7 +145,7 @@ const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUse
             >
               <FontAwesomeIcon
                 className={styles.arrowIcon}
-                icon={faLocationArrow}
+                icon={faPlay}
               />
             </button>
           </Form.Group>

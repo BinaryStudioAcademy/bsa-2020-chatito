@@ -1,4 +1,4 @@
-import { toastrSuccess, toastrCustomNotification } from 'services/toastrService';
+import { toastrSuccess } from 'services/toastrService';
 import io from 'socket.io-client';
 import { env } from '../env';
 import { getAccessToken } from 'common/helpers/storageHelper';
@@ -62,17 +62,6 @@ export const connectSockets = () => {
     const state = store.getState();
     const currentUser = state.user.user;
     if (currentUser && user.id !== currentUser.id) {
-      toastrCustomNotification(
-        chat.type === 'DirectMessage' ? (
-          `from ${user.displayName}`
-        ) : (
-          `in channel "${chat.name}" from ${user.displayName}`
-        ),
-        5000,
-        'blueToastrNotification',
-        // eslint-disable-next-line no-console
-        () => { console.log('OnClickFunction'); }
-      );
       store.dispatch(markAsUnreadPostWithSocketRoutine({ chatId: chat.id, chatType: chat.type, unreadPost: post }));
     }
   });

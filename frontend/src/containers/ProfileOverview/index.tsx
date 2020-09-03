@@ -5,7 +5,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faEdit, faEllipsisH, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faEdit, faEllipsisH, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { IUser } from 'common/models/user/IUser';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { useKey } from 'common/hooks/onInputSubmit';
@@ -51,7 +51,7 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
       setUsers(fetchedUser);
       setLoading(false);
     });
-  }, []);
+  }, [tempUser, currentUser]);
   const inputRef = useRef(null);
   const onClose = () => {
     hideRightMenu();
@@ -132,7 +132,7 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
           <FormControl ref={inputRef} placeholder="Write a message" value={message} onChange={onChange} />
           <InputGroup.Append>
             <button type="button" className="button-unstyled" onClick={onSend}>
-              <FontAwesomeIcon icon={faPaperPlane} />
+              <FontAwesomeIcon icon={faPlay} />
             </button>
           </InputGroup.Append>
         </InputGroup>
