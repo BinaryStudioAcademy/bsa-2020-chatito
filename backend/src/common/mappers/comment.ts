@@ -1,5 +1,6 @@
 import { Comment } from '../../data/entities/Comment';
 import { fromUserToUserClient } from './user';
+import { getImageUrl } from '../utils/imageHelper';
 
 export const fromPostCommentsToPostCommentsClient = (comments: Comment[]) => {
   const updated = comments.map(comment => {
@@ -29,3 +30,13 @@ export const fromPostCommentsToCommentsInfo = (comments: Comment[]) => {
   }
   return { count, lastAt, avatars };
 };
+
+export const fromCommentsToCommentsWithUserImageUrl = (comments: Comment[]) => (
+  comments.map(comment => ({
+    ...comment,
+    createdByUser: {
+      ...comment.createdByUser,
+      imageUrl: getImageUrl(comment.createdByUser.imageUrl)
+    }
+  }))
+);

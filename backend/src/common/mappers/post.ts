@@ -2,9 +2,9 @@ import { getCustomRepository } from 'typeorm';
 import { IPost } from '../models/post/IPost';
 import { IPostReaction } from '../models/postReaction/IPostReaction';
 import CommentRepository from '../../data/repositories/commentRepository';
-import { fromPostCommentsToCommentsInfo } from './comment';
+import { fromPostCommentsToCommentsInfo, fromCommentsToCommentsWithUserImageUrl } from './comment';
 import { getImageUrl } from '../utils/imageHelper';
-import { Comment } from '../../data/entities/Comment';
+import { Post } from '../../data/entities/Post';
 
 export const fromReactionToReactionClient = ({ reaction, userId }: IPostReaction) => ({
   reaction, userId
@@ -33,12 +33,13 @@ export const fromPostToPostClient = async (post: IPost) => {
   };
 };
 
-export const fromCommentsToCommentsWithUserImageUrl = (comments: Comment[]) => (
-  comments.map(comment => ({
-    ...comment,
+export const fromThreadsToThreadsClient = (posts: Post[]) => (
+  posts.map(post => ({
+    ...post,
     createdByUser: {
-      ...comment.createdByUser,
-      imageUrl: getImageUrl(comment.createdByUser.imageUrl)
-    }
+      ...post.createdByUser,
+      imageUrl: getImageUrl(post.createdByUser.imageUrl)
+    },
+    comments: fromCommentsToCommentsWithUserImageUrl(post.comments)
   }))
 );
