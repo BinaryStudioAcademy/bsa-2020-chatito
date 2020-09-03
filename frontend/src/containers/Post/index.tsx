@@ -56,7 +56,7 @@ interface IProps {
   markAsUnreadPost: IBindingCallback1<IMarkAsUnreadPost>;
   markAsUnreadComment: IBindingCallback1<IMarkAsUnreadComment>;
   postRef?: MutableRefObject<any> | null;
-  chatUsers: IUser[];
+  chatUsers?: IUser[];
 }
 
 const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, openThread,
