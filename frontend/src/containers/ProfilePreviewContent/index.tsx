@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Image, Popover, Form } from 'react-bootstrap';
+import { Image, Form } from 'react-bootstrap';
 import { IUser } from 'common/models/user/IUser';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -89,11 +89,6 @@ const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUse
     setMessage(e.target.value);
   };
   const imageUrl = user.id === currentUser.id ? currentUser.imageUrl : user.imageUrl;
-  // if (loading) {
-  //   return (
-  //     <div />
-  //   );
-  // }
   return (
     <div className={styles.profilePreviewContainer}>
       <div className={styles.contentBody}>
@@ -131,8 +126,7 @@ const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUse
           </div>
         </div>
         <Image
-          // src={tempUser.imageUrl || userLogoDefaultUrl}
-          src="https://media.macphun.com/img/uploads/customer/how-to/579/15531840725c93b5489d84e9.43781620.jpg?q=85&w=1340" // eslint-disable-line
+          src={imageUrl || userLogoDefaultUrl}
           width={80}
           height={80}
           className={styles.avatar}
