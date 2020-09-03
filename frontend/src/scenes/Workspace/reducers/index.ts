@@ -247,6 +247,11 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         directMessages.push(newChat);
         return { ...state, directMessages };
       }
+      if (newChat.type === ChatType.GithubRepository) {
+        const githubRepositories = [...state.githubRepositories];
+        githubRepositories.push(newChat);
+        return { ...state, githubRepositories };
+      }
       return state;
     }
     case fetchWorkspaceUsersRoutine.TRIGGER:
