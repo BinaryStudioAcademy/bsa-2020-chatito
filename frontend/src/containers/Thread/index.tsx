@@ -162,7 +162,7 @@ const Thread: FunctionComponent<IProps> = ({
             <TextEditor
               key={draftCommentText}
               placeholder="write a comment!"
-              height={110}
+              height={100}
               draftPayload={{ postId: post.id }}
               draftInput={{
                 id: draftCommentId,

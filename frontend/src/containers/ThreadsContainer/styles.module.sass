@@ -21,7 +21,7 @@
 .threadsContainer
   padding: 15px
   overflow: scroll
-  max-height: calc(100vh - 91px - 62px)
+  max-height: calc(100vh - 63px - 78px)
 
 .thread
   padding: 10px
@@ -38,3 +38,7 @@
   display: flex
   justify-content: center
   align-items: center
+
+@media screen and (max-width: 1440px)
+  .threadsContainer
+    max-height: calc(100vh - 63px - 62px)
