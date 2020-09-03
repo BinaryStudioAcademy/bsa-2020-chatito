@@ -14,7 +14,8 @@ import {
   faCaretRight,
   faPlus,
   faPencilAlt,
-  faBookmark
+  faBookmark,
+  faCodeBranch
 } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
@@ -32,13 +33,19 @@ import { Routes } from 'common/enums/Routes';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
 import { useLocation } from 'react-router-dom';
 import { createDirectChannelName } from 'common/helpers/nameHelper';
+import { IUnreadChat } from 'common/models/chat/IUnreadChats';
+import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
+import CreateRepositoryChatModal from 'containers/CreateRepositoryChatModal';
 
 interface IProps {
   channels: IChat[];
   directMessages: IChat[];
+  githubRepositories: IChat[];
   selectedChat: IChat;
+  unreadChats: IUnreadChat[];
   selectedWorkspace: IWorkspace;
   currentUserId: string;
+  unreadPostComments: IUnreadPostComments[];
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
 }
@@ -46,14 +53,18 @@ interface IProps {
 const ChatToolbar: FunctionComponent<IProps> = ({
   channels,
   directMessages,
+  githubRepositories,
   selectedChat,
+  unreadChats,
   currentUserId,
+  unreadPostComments,
   showModal,
   router,
   selectedWorkspace
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
   const [directPanel, setDirectPanel] = useState<boolean>(false);
+  const [githubPanel, setGithubPanel] = useState<boolean>(false);
   const location = useLocation();
   const doSelectChannel = (chat: IChat) => {
     if (selectedWorkspace && chat) {
@@ -76,9 +87,26 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     }
     return styles.channelSelect;
   };
-
-  // eslint-disable-next-line
-  const isActiveChanneSelector = (route: Routes) => location.pathname.includes(route.replace(':whash', selectedWorkspace.hash));
+  const unreadThreadsMarker = () => {
+    let unreadThreadsStatus = false;
+    if (unreadPostComments.length) {
+      unreadPostComments.forEach(unreadPost => {
+        if (unreadPost.unreadComments.length) {
+          unreadThreadsStatus = true;
+        }
+      });
+      if (unreadThreadsStatus) {
+        return (
+          <div className={styles.unreadContainer}>
+            <div className={styles.unreadCircle} />
+          </div>
+        );
+      }
+    }
+    return '';
+  };
+  const isActiveChanneSelector = (route: Routes) => (
+    location.pathname.includes(route.replace(':whash', selectedWorkspace.hash)));
 
   // eslint-disable-next-line
   const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => { }, isActive = () => false) => (
@@ -87,7 +115,27 @@ const ChatToolbar: FunctionComponent<IProps> = ({
         <FontAwesomeIcon icon={iconFa} color="black" />
       </div>
       <span className={styles.buttonText}>{text}</span>
+      {text === 'Threads' ? unreadThreadsMarker() : ''}
     </button>
+  );
+
+  const unreadChatsMarker = (chatId: string) => (
+    unreadChats.map(unreadChat => {
+      if (unreadChat.id === chatId && unreadChat.unreadPosts.length) {
+        return (
+          <div className={styles.unreadContainer} key={unreadChat.id}>
+            <div className={styles.unreadCircle}>
+              {unreadChat.unreadPosts.length < 10 ? (
+                <span className={styles.unreadAmount}>{unreadChat.unreadPosts.length}</span>
+              ) : (
+                <span className={`${styles.unreadAmountNineMore} ${styles.unreadAmount}`}>9+</span>
+              )}
+            </div>
+          </div>
+        );
+      }
+      return '';
+    })
   );
 
   const userChannel = (channel: IChat) => {
@@ -107,8 +155,8 @@ const ChatToolbar: FunctionComponent<IProps> = ({
               ? <FontAwesomeIcon icon={faPencilAlt} size="xs" />
               : null
           }
-
         </div>
+        {unreadChatsMarker(id)}
       </button>
     );
   };
@@ -137,6 +185,29 @@ const ChatToolbar: FunctionComponent<IProps> = ({
               ? <FontAwesomeIcon icon={faPencilAlt} color="black" />
               : null
           }
+        </div>
+        {unreadChatsMarker(id)}
+      </button>
+    );
+  };
+
+  const githubChannel = (githubRepository: IChat) => {
+    const { id, name } = githubRepository;
+
+    return (
+      <button
+        type="button"
+        key={id}
+        className={getChannelSelect(githubRepository)}
+        onClick={() => doSelectChannel(githubRepository)}
+      >
+        <div className={styles.chatBlock}>
+          <div className={styles.chatBlockContainer}>
+            <div className={styles.iconWrapper}>
+              <FontAwesomeIcon icon={faCodeBranch} size="xs" />
+            </div>
+            <span className={styles.buttonText}>{name}</span>
+          </div>
         </div>
       </button>
     );
@@ -175,6 +246,24 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 
       <span className={styles.addButtonText}>
         Add a direct
+      </span>
+    </button>
+  );
+
+  const addRepositoryButton = () => (
+    <button
+      type="button"
+      className={styles.channelSelect}
+      onClick={() => showModal({ modalType: ModalTypes.CreateRepositoryChat, show: true })}
+    >
+      <div className={styles.iconWrapper}>
+        <div className={styles.iconBorder}>
+          <FontAwesomeIcon icon={faPlus} />
+        </div>
+      </div>
+
+      <span className={styles.addButtonText}>
+        Add a repository
       </span>
     </button>
   );
@@ -233,9 +322,26 @@ const ChatToolbar: FunctionComponent<IProps> = ({
         {addDirectButton()}
       </div>
 
+      <div className={styles.buttonChannel}>
+        <button type="button" className={styles.buttonSelect} onClick={() => setGithubPanel(!githubPanel)}>
+          <div className={styles.iconWrapper}>
+            <FontAwesomeIcon icon={faCaretRight} className={getClassNameImg(githubPanel)} />
+          </div>
+
+          <span className={styles.buttonText}>GitHub</span>
+        </button>
+      </div>
+
+      <div className={getClassNameDiv(githubPanel)}>
+        {githubRepositories.map(githubRepository => (
+          githubChannel(githubRepository)))}
+        {addRepositoryButton()}
+      </div>
+
       <InvitePopup />
       <CreateChannelModal />
       <CreateDirectModal />
+      <CreateRepositoryChatModal />
     </div>
   );
 };
@@ -243,9 +349,12 @@ const ChatToolbar: FunctionComponent<IProps> = ({
 const mapStateToProps = (state: IAppState) => ({
   channels: state.workspace.channels || [],
   directMessages: state.workspace.directMessages || [],
+  githubRepositories: state.workspace.githubRepositories || [],
   selectedWorkspace: state.workspace.workspace,
   isLoading: state.workspace.loading,
-  selectedChat: state.chat.chat as IChat
+  selectedChat: state.chat.chat as IChat,
+  unreadChats: state.workspace.unreadChats,
+  unreadPostComments: state.workspace.unreadPostComments
 });
 
 const mapDispatchToProps = {

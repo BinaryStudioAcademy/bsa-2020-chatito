@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, Brackets } from 'typeorm';
 import { Post } from '../entities/Post';
 import { ICreatePost } from '../../common/models/post/ICreatePost';
 import { IGetChatPosts } from '../../common/models/chat/IGetChatPosts';
@@ -160,6 +160,7 @@ class PostRepository extends Repository<Post> {
 
       .leftJoinAndSelect('post.postReactions', 'post_reaction')
 
+      .leftJoin('post.comments', 'allcomments')
       .leftJoin('post.comments', 'comments')
       .addSelect([
         'comments.id',
@@ -178,15 +179,22 @@ class PostRepository extends Repository<Post> {
         'commentuser.title',
         'commentuser.status'
       ])
-
       .leftJoin('comments.post', 'commentsPost')
 
       .leftJoin('commentsPost.chat', 'commentsPostChat')
-      .where('post."createdByUserId" = :id', { id })
-      .andWhere('chat."workspaceId" = :activeworkspaceid', { activeworkspaceid })
-      .orWhere('comments."createdByUserId" = :id', { id })
-      .andWhere('"commentsPostChat"."workspaceId" = :activeworkspaceid', { activeworkspaceid })
-      .orderBy('comments."createdAt"', 'ASC')
+
+      .where(new Brackets(qb => {
+        qb
+          .where('post."createdByUserId" = :id', { id })
+          .andWhere('chat."workspaceId" = :activeworkspaceid', { activeworkspaceid })
+          .andWhere('comments."postId" = post.id');
+      }))
+      .orWhere(new Brackets(qb => {
+        qb
+          .where('allcomments."createdByUserId" = :id', { id })
+          .andWhere('"commentsPostChat"."workspaceId" = :activeworkspaceid', { activeworkspaceid });
+      }))
+      .orderBy('comments."createdAt"', 'DESC')
       .getMany();
     return posts;
   }

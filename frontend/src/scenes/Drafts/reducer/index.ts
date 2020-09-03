@@ -27,6 +27,11 @@ const reducer = (state: IDraftState = initialState, { type, payload }: Routine<a
         comments: payload.comments || [],
         loading: false
       };
+    case fetchDraftsRoutine.TRIGGER:
+      return {
+        ...state,
+        loading: true
+      };
     case usertDraftsPagePostRoutine.TRIGGER:
       const postsCopy = [...state.posts];
       const postIndex = postsCopy.findIndex(p => p.id === payload.id);
@@ -61,11 +66,6 @@ const reducer = (state: IDraftState = initialState, { type, payload }: Routine<a
       return {
         ...state,
         comments: state.comments.filter(c => c.postId !== payload)
-      };
-    case fetchDraftsRoutine.TRIGGER:
-      return {
-        ...state,
-        loading: true
       };
     default:
       return state;

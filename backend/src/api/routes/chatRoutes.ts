@@ -1,6 +1,6 @@
 import { Router, Request } from 'express';
 import { emitToChatRoom } from '../../common/utils/socketHelper';
-import { getUserByIdWithoutWorkspaces } from '../../services/userService';
+import { getUserByIdWithoutRelations } from '../../services/userService';
 import { run } from '../../common/utils/routeHelper';
 import {
   getAllChatPosts,
@@ -40,13 +40,19 @@ router
   .post('/invite-users', run(async (req: Request) => {
     const users = await addUsersToChat(req.body.chatId, req.body.userIds);
     const usersToEmit: IUser[] = [];
-
-    for (const userId of req.body.userIds) {
-      const user = await getUserByIdWithoutWorkspaces(userId);
+    for (let i = 0; i < req.body.userIds.length; i += 1) {
+      const user = await getUserByIdWithoutRelations(req.body.userIds[i]);
       usersToEmit.push(user);
     }
     const chatInfoToSend = await getChatById(req.body.chatId);
-    emitToChatRoom(req.body.chatId, ClientSockets.NewUserNotification, usersToEmit, chatInfoToSend.name, chatInfoToSend.type, chatInfoToSend.id);
+    emitToChatRoom(
+      req.body.chatId,
+      ClientSockets.NewUserNotification,
+      usersToEmit,
+      chatInfoToSend.name,
+      chatInfoToSend.type,
+      chatInfoToSend.id
+    );
     return users;
   }));
 

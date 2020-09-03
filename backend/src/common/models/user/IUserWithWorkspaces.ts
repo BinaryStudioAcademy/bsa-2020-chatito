@@ -8,5 +8,6 @@ export interface IUserWithWorkspaces {
   imageUrl: string;
   title: string;
   status: string;
+  githubUsername: string;
   workspaces: IWorkspaceResponse[];
 }

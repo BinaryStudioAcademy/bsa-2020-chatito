@@ -1,9 +1,23 @@
 import {
+  getUnreadPosts,
+  deleteUnreadPosts,
+  markPostAsUnread,
+  getUnreadComments,
+  deleteUnreadComments,
+  markCommentAsUnread
+} from 'services/userService';
+import {
   addWorkspaceRoutine,
   setActiveThreadRoutine,
   fetchWorkspaceChatsRoutine,
   fetchPostCommentsRoutine,
-  fetchWorkspaceUsersRoutine
+  fetchWorkspaceUsersRoutine,
+  fetchUnreadUserPostsRoutine,
+  readPostRoutine,
+  markAsUnreadPostWithOptionRoutine,
+  fetchUnreadUserCommentsRoutine,
+  readCommentRoutine,
+  markAsUnreadCommentWithOptionRoutine
 } from 'scenes/Workspace/routines';
 import { Routine } from 'redux-saga-routines';
 import { takeEvery, put, call, all } from 'redux-saga/effects';
@@ -85,12 +99,100 @@ function* watchFetchWorkspaceUsers() {
   yield takeEvery(fetchWorkspaceUsersRoutine.TRIGGER, fetchWorkspaceUsers);
 }
 
+function* fetchUnreadUserPosts({ payload }: Routine<any>) {
+  try {
+    const unreadUserPosts = yield call(getUnreadPosts, payload);
+    yield put(fetchUnreadUserPostsRoutine.success(unreadUserPosts));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(fetchUnreadUserPostsRoutine.failure(error));
+  }
+}
+
+function* watchfetchUnreadUserPosts() {
+  yield takeEvery(fetchUnreadUserPostsRoutine.TRIGGER, fetchUnreadUserPosts);
+}
+
+function* fetchUnreadUserComments({ payload }: Routine<any>) {
+  try {
+    const unreadUserComments = yield call(getUnreadComments, payload);
+    yield put(fetchUnreadUserCommentsRoutine.success(unreadUserComments));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(fetchUnreadUserCommentsRoutine.failure(error));
+  }
+}
+
+function* watchfetchUnreadUserComments() {
+  yield takeEvery(fetchUnreadUserCommentsRoutine.TRIGGER, fetchUnreadUserComments);
+}
+
+function* readPost({ payload }: Routine<any>) {
+  try {
+    yield call(deleteUnreadPosts, payload.postIdsToDelete);
+    yield put(readPostRoutine.success(payload.unreadChatsCopy));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(readPostRoutine.failure(error));
+  }
+}
+
+function* watchReadPostRoutine() {
+  yield takeEvery(readPostRoutine.TRIGGER, readPost);
+}
+
+function* readComment({ payload }: Routine<any>) {
+  try {
+    yield call(deleteUnreadComments, payload.commentIdsToDelete);
+    yield put(readCommentRoutine.success(payload.unreadCommentsCopy));
+  } catch (error) {
+    yield call(toastrError, error.message);
+    yield put(readCommentRoutine.failure(error));
+  }
+}
+
+function* watchReadCommentRoutine() {
+  yield takeEvery(readCommentRoutine.TRIGGER, readComment);
+}
+
+function* markAsUnreadPost({ payload }: Routine<any>) {
+  try {
+    const post = yield call(markPostAsUnread, payload.unreadPost.id);
+    yield put(markAsUnreadPostWithOptionRoutine.success(post));
+  } catch (error) {
+    yield call(toastrError, error.message);
+  }
+}
+
+function* watchMarkAsUnreadPost() {
+  yield takeEvery(markAsUnreadPostWithOptionRoutine.TRIGGER, markAsUnreadPost);
+}
+
+function* markAsUnreadComment({ payload }: Routine<any>) {
+  try {
+    yield call(markCommentAsUnread, payload.unreadComment.id);
+    yield put(markAsUnreadCommentWithOptionRoutine.success(payload));
+  } catch (error) {
+    yield call(toastrError, error.message);
+  }
+}
+
+function* watchMarkAsUnreadComment() {
+  yield takeEvery(markAsUnreadCommentWithOptionRoutine.TRIGGER, markAsUnreadComment);
+}
+
 export default function* workspaceSaga() {
   yield all([
     watchPostWorkspaceName(),
     watchFetchPostCommentsRequest(),
     watchSetActiveThread(),
     watchFetchUserChatsRequest(),
-    watchFetchWorkspaceUsers()
+    watchFetchWorkspaceUsers(),
+    watchfetchUnreadUserPosts(),
+    watchReadPostRoutine(),
+    watchMarkAsUnreadPost(),
+    watchfetchUnreadUserComments(),
+    watchReadCommentRoutine(),
+    watchMarkAsUnreadComment()
   ]);
 }

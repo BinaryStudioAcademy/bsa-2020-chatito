@@ -21,7 +21,6 @@ interface IProps {
   activeWorkspace: string;
 }
 
-// eslint-disable-next-line
 const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showModal }) => {
   const toggleButtonClick = () => {
     // @todo decide which button to trigger
@@ -34,7 +33,7 @@ const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showModal })
       tabIndex={0}
       onKeyDown={toggleButtonClick}
     >
-      <span className={styles.profileText}>Profile</span>
+      <span className={styles.profileText}>{user ? user.displayName : 'Profile'}</span>
       <FontAwesomeIcon icon={faCaretDown} />
     </div>
   );

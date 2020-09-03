@@ -16,7 +16,7 @@ class ChatRepository extends Repository<Chat> {
     return this.findOne({ where: { id }, relations: ['posts'] });
   }
 
-  async getNameAndTypeById(id: string) {
+  async getNameAndTypeAndIdById(id: string) {
     const chatInfoToSend = await this.createQueryBuilder('chat')
       .select([
         'chat.name',
@@ -151,6 +151,24 @@ class ChatRepository extends Repository<Chat> {
     });
     chat.users = chat.users.filter((user: IUser) => user.id !== userId);
     chat.save();
+  }
+
+  async getGithubRepositoryChat(repositoryName: string, repositoryOwner: string) {
+    const chat = await this.createQueryBuilder('chat')
+      .select([
+        'chat.id',
+        'chat.name'
+      ])
+      .leftJoin(
+        'chat.createdByUser',
+        'user'
+      )
+      .where('chat.type = :chatType', { chatType: ChatType.GithubRepository })
+      .andWhere('chat.name = :repositoryName', { repositoryName })
+      .andWhere('user.githubUsername = :repositoryOwner', { repositoryOwner })
+      .getOne();
+
+    return chat;
   }
 }
 

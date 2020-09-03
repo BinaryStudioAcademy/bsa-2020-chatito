@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.module.sass';
-import Header from '../../../../containers/Header';
+import Header from 'containers/Header';
 import WorkspaceToolbar from '../WorkspaceToolbar';
 import NoChatMessage from '../NoChatMessage';
 import ProfileOverview from 'containers/ProfileOverview';
@@ -19,7 +19,9 @@ import {
   selectWorkspaceRoutine,
   setActiveThreadRoutine,
   showRightSideMenuRoutine,
-  fetchWorkspaceChatsRoutine
+  fetchWorkspaceChatsRoutine,
+  fetchUnreadUserPostsRoutine,
+  fetchUnreadUserCommentsRoutine
 } from 'scenes/Workspace/routines';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IPost } from 'common/models/post/IPost';
@@ -28,6 +30,7 @@ import { Route, Switch } from 'react-router-dom';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { IFetchWorkspaceChat } from 'common/models/chat/IFetchWorkspaceChat';
 import ChannelBrowser from 'scenes/ChannelBrowser';
+import ChangeStatusModal from 'containers/ChangeStatusModal';
 
 interface IProps {
   currentUserId?: string;
@@ -47,6 +50,8 @@ interface IProps {
   userProfile: IUser;
   selectedHash: string;
   fetchWorkspaceChats: IBindingCallback1<IFetchWorkspaceChat>;
+  fetchUnreadUserPosts: IBindingCallback1<string>;
+  fetchUnreadUserComments: IBindingCallback1<string>;
 }
 
 const Workspace: React.FC<IProps> = ({
@@ -59,10 +64,13 @@ const Workspace: React.FC<IProps> = ({
   isLoader,
   userProfile,
   selectedHash,
-  fetchWorkspaceChats
+  fetchWorkspaceChats,
+  fetchUnreadUserPosts,
+  fetchUnreadUserComments
 }) => {
   if (!currentUserId) return <></>;
-
+  const [workspaceChatsStatus, setWorkspaceChatsStatus] = useState(false);
+  const [fetchUnreadCommentsStatus, setFetchUnreadCommentsStatus] = useState(false);
   useEffect(() => {
     const { whash } = match.params;
     if (selectedHash !== whash) {
@@ -70,9 +78,23 @@ const Workspace: React.FC<IProps> = ({
       if (currWorkspace) {
         selectWorkspace(currWorkspace);
         fetchWorkspaceChats({ workspaceId: currWorkspace.id });
+        setWorkspaceChatsStatus(true);
       }
     }
   }, [match]);
+
+  useEffect(() => {
+    if (workspaceChatsStatus) {
+      fetchUnreadUserPosts(currentUserId);
+      setFetchUnreadCommentsStatus(true);
+    }
+  }, [workspaceChatsStatus]);
+
+  useEffect(() => {
+    if (fetchUnreadCommentsStatus) {
+      fetchUnreadUserComments(currentUserId);
+    }
+  }, [fetchUnreadCommentsStatus]);
 
   const hideRightMenu = () => {
     toggleRightMenu(RightMenuTypes.None);
@@ -80,7 +102,7 @@ const Workspace: React.FC<IProps> = ({
 
   const renderProfile = () => (
     <ProfileOverview
-      user={userProfile}
+      tempUser={userProfile}
       hideRightMenu={hideRightMenu}
     />
   );
@@ -131,6 +153,7 @@ const Workspace: React.FC<IProps> = ({
 
         </div>
       </div>
+      <ChangeStatusModal />
     </LoaderWrapper>
   );
 };
@@ -156,7 +179,9 @@ const mapDispatchToProps = {
   selectWorkspace: selectWorkspaceRoutine,
   toggleActiveThread: setActiveThreadRoutine,
   toggleRightMenu: showRightSideMenuRoutine,
-  fetchWorkspaceChats: fetchWorkspaceChatsRoutine
+  fetchWorkspaceChats: fetchWorkspaceChatsRoutine,
+  fetchUnreadUserPosts: fetchUnreadUserPostsRoutine,
+  fetchUnreadUserComments: fetchUnreadUserCommentsRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Workspace);

@@ -9,7 +9,8 @@ import {
   resetPasswordRoutine,
   editStatusRoutine,
   loginWithGoogleRoutine,
-  loginWithFacebookRoutine
+  loginWithFacebookRoutine,
+  updateAvatarRoutine
 } from '../routines/user';
 import { IAuthServerResponse } from 'common/models/auth/IAuthServerResponse';
 import { showModalRoutine } from 'routines/modal';
@@ -23,13 +24,12 @@ import { push } from 'connected-react-router';
 import { IUserWithWorkspaces } from 'common/models/user/IUserWithWorkspaces';
 import { Routes } from 'common/enums/Routes';
 import { connectSockets } from 'services/socketService';
+import { toastr } from 'react-redux-toastr';
 
 function* fetchUserRequest() {
   try {
     const user: IUserWithWorkspaces = yield call(fetchUser);
-
     yield put(fetchUserRoutine.success(user));
-
     yield call(connectSockets);
   } catch (error) {
     yield call(toastrError, error.message);
@@ -191,6 +191,19 @@ function* watchEditStatusRequest() {
   yield takeEvery(editStatusRoutine.TRIGGER, editStatusRequest);
 }
 
+function* updateAvatarRequest({ payload }: Routine<any>) {
+  try {
+    const user = yield call(editUser, { imageUrl: payload });
+    yield put(updateAvatarRoutine.success(user.imageUrl));
+  } catch (error) {
+    toastr.error('Error', 'Updating avatar was failed. Please try again later.');
+  }
+}
+
+function* watchUpdateAvatarRequest() {
+  yield takeEvery(updateAvatarRoutine.TRIGGER, updateAvatarRequest);
+}
+
 export default function* userSaga() {
   yield all([
     watchAddNewUserRequest(),
@@ -202,6 +215,7 @@ export default function* userSaga() {
     watchLoginWithFacebookRequest(),
     watchDeleteAccount(),
     watchResetPasswordRequest(),
-    watchEditStatusRequest()
+    watchEditStatusRequest(),
+    watchUpdateAvatarRequest()
   ]);
 }

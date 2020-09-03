@@ -42,7 +42,7 @@ const NoChatReminder = () => (
         </p>
         <p>
           We provide a lot of useful tools for you, which are easy to understand.
-          Moreover, we are integrating services like GitHub and Trello in order to allow you
+          Moreover, we are integrating GitHub to allow you
           not to waste your precious time on following links or swapping browser tabs.
         </p>
 

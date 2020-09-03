@@ -35,21 +35,24 @@ const publicChannelIcon = (
 interface IProps {
   chat?: IChat;
   showModal: IBindingCallback1<IModalRoutine>;
-  currentUserId: string;
+  currentUser: IUser;
 }
 
-const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUserId }) => {
+const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUser }) => {
   const maxAvatarsDisplayed = 5;
   const userAvatars = (users: IUser[]) => {
     const usersToDisplay = users.slice(0, maxAvatarsDisplayed);
-    return usersToDisplay.map(user => (
-      <Image
-        src={user.imageUrl || userLogoDefaultUrl}
-        key={user.id}
-        rounded
-        className={styles.memberAvatarIcon}
-      />
-    ));
+    return usersToDisplay.map(user => {
+      const imageUrl = user.id === currentUser.id ? currentUser.imageUrl : user.imageUrl;
+      return (
+        <Image
+          src={imageUrl || userLogoDefaultUrl}
+          key={user.id}
+          rounded
+          className={styles.memberAvatarIcon}
+        />
+      );
+    });
   };
 
   const onInviteUser = () => {
@@ -65,7 +68,7 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUserId }) => {
   };
 
   const chatName = chat.type === ChatType.DirectMessage
-    ? createDirectChannelName(chat.users, currentUserId) : chat.name;
+    ? createDirectChannelName(chat.users, currentUser.id) : chat.name;
 
   return (
     <div className={styles.chatContainer} key={chat.id}>
@@ -110,7 +113,7 @@ const mapStateToProps = (state: IAppState) => {
   const { chat } = state.chat;
   return {
     chat,
-    currentUserId: state.user.user?.id as string
+    currentUser: state.user.user as IUser
   };
 };
 

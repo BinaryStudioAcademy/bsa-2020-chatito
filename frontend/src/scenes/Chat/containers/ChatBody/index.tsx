@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, RefObject } from 'react';
+import React, { useRef, useEffect, useState, RefObject } from 'react';
 import styles from './styles.module.sass';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
@@ -13,6 +13,7 @@ import LoaderWrapper from 'components/LoaderWrapper';
 import { PostType } from 'common/enums/PostType';
 import { IFetchNavPost } from 'common/models/post/IFetchNavPost';
 import CustomReminderModal from 'containers/CustomReminderModal';
+import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 
 interface IProps {
   chatId: string | undefined;
@@ -24,6 +25,7 @@ interface IProps {
   loading: boolean;
   from: number;
   count: number;
+  unreadChats: IUnreadChat[];
   postId?: string;
   fetchNavigationPost: IBindingCallback1<IFetchNavPost>;
 }
@@ -38,30 +40,50 @@ const ChatBody: React.FC<IProps> = ({
   loading,
   from,
   count,
+  unreadChats,
   postId,
   fetchNavigationPost
 }) => {
+  const isNew = true;
+  const [postIdForLine, setPostIdForLine] = useState('');
   const chatBody = useRef<HTMLDivElement>(null);
-
+  const [unreadChatPostIds, setUnreadChatPostIds] = useState<string[]>();
   const getMorePosts = () => {
     loadMorePosts({ chatId, from, count });
   };
-
-  const scrollToRef = (ref: RefObject<HTMLElement>) => {
-    // eslint-disable-next-line
-    ref.current!.scrollIntoView({
-      block: 'start'
+  const setNewPostLine = () => {
+    unreadChats.forEach(unreadChat => {
+      if (unreadChat.id === chatId) {
+        if (unreadChat.unreadPosts.length) {
+          setPostIdForLine(unreadChat.unreadPosts[0].id);
+          const unreadPostIds: string[] = [];
+          unreadChat.unreadPosts.forEach(unreadPost => {
+            unreadPostIds.push(unreadPost.id);
+          });
+          setUnreadChatPostIds(unreadPostIds);
+        } else {
+          setPostIdForLine('');
+          setUnreadChatPostIds([]);
+        }
+      }
     });
+  };
+  const scrollToRef = (ref: RefObject<HTMLElement>) => {
+    if (ref.current) {
+      ref.current.scrollIntoView({
+        block: 'start'
+      });
+    }
   };
 
   const postRef = useRef(null);
-
   useEffect(() => {
     if (chatId && loading) {
       if (postId) {
         fetchNavigationPost({ chatId, from: 0, postId });
       } else {
         getMorePosts();
+        setNewPostLine();
       }
     }
     if (chatBody.current !== null && !loading) {
@@ -72,11 +94,20 @@ const ChatBody: React.FC<IProps> = ({
       scrollToRef(postRef);
     }
   }, [loading, chatId]);
-
+  useEffect(() => {
+    setNewPostLine();
+  }, [unreadChats]);
   const handleOpenThread = (post: IPost) => {
     if (activeThreadPostId === post.id) return;
     openThread(post);
   };
+
+  const newPostLineElement = (
+    <div className={styles.newPostBlock}>
+      <div className={styles.line} />
+      <span>New</span>
+    </div>
+  );
 
   return (
     <LoaderWrapper
@@ -92,13 +123,17 @@ const ChatBody: React.FC<IProps> = ({
           useWindow={false}
         >
           {messages.map(m => (
-            <Post
-              post={m}
-              key={m.id}
-              postRef={m.id === postId ? postRef : null}
-              openThread={handleOpenThread}
-              type={PostType.Post}
-            />
+            <div key={m.id} className={styles.postContainer}>
+              {postIdForLine === m.id ? newPostLineElement : ''}
+              <Post
+                // eslint-disable-next-line no-nested-ternary
+                isNew={unreadChatPostIds ? unreadChatPostIds.includes(m.id) ? isNew : !isNew : !isNew}
+                post={m}
+                postRef={m.id === postId ? postRef : null}
+                openThread={handleOpenThread}
+                type={PostType.Post}
+              />
+            </div>
           ))}
           <CustomReminderModal />
         </InfiniteScroll>
@@ -114,7 +149,8 @@ const mapStateToProps = (state: IAppState) => ({
   hasMorePosts: state.chat.hasMorePosts,
   loading: state.chat.loading,
   from: state.chat.fetchFrom,
-  count: state.chat.fetchCount
+  count: state.chat.fetchCount,
+  unreadChats: state.workspace.unreadChats
 });
 
 const mapDispatchToProps = {

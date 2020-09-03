@@ -18,6 +18,9 @@ export class User extends AbstractEntity {
   @Column({ length: 100 })
   displayName: string;
 
+  @Column({ length: 100, nullable: true })
+  githubUsername: string;
+
   @Column({ unique: true })
   email: string;
 
@@ -67,4 +70,12 @@ export class User extends AbstractEntity {
   @ManyToMany(() => Chat, chat => chat.users)
   @JoinTable()
   chats: Chat[];
+
+  @ManyToMany(() => Post, post => post.unreadByUsers)
+  @JoinTable()
+  unreadPosts: Post[];
+
+  @ManyToMany(() => Comment, comment => comment.unreadByUsers)
+  @JoinTable()
+  unreadComments: Comment[];
 }

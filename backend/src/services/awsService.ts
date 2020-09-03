@@ -1,13 +1,14 @@
-import { s3, bucket, signedUrlExpireSeconds } from '../config/awsConfig';
+import { URL } from 'url';
+import { s3, bucket, signedUrlExpireSeconds, AWSUrl } from '../config/awsConfig';
 import { ISignS3 } from '../common/models/aws/ISignS3';
 
-export const signS3 = (userId: string): Promise<ISignS3> => {
+export const signS3 = (userId: string, folder: string, fileType: string): Promise<ISignS3> => {
   const fileName = `${userId}-${Date.now()}`;
   const s3Params = {
     Bucket: bucket,
-    Key: `avatars/${fileName}`,
+    Key: `${folder}/${fileName}`,
     Expires: signedUrlExpireSeconds,
-    ContentType: 'jpeg',
+    ContentType: fileType,
     ACL: 'bucket-owner-full-control'
   };
 
@@ -19,7 +20,8 @@ export const signS3 = (userId: string): Promise<ISignS3> => {
 
       const returnData = {
         signedRequest: data,
-        fileName
+        fileName,
+        link: `${AWSUrl}/avatars/${fileName}`
       };
 
       resolve(returnData);
@@ -27,11 +29,11 @@ export const signS3 = (userId: string): Promise<ISignS3> => {
   });
 };
 
-export const deleteAvatar = (imageUrl: string) => {
-  const fileName = imageUrl.slice(imageUrl.lastIndexOf('/') + 1);
+export const deleteObject = (url: string) => {
+  const key = new URL(url).pathname.slice(1);
   const s3Params = {
     Bucket: bucket,
-    Key: `avatars/${fileName}`
+    Key: key
   };
 
   return new Promise((resolve, reject) => {

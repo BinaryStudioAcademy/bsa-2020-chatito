@@ -10,7 +10,8 @@ import {
   editStatusRoutine,
   setInvitedUserRoutine,
   loginWithGoogleRoutine,
-  loginWithFacebookRoutine
+  loginWithFacebookRoutine,
+  updateAvatarRoutine
 } from 'routines/user';
 import { IUser } from 'common/models/user/IUser';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
@@ -47,11 +48,11 @@ const reducer = (state = initialState, { type, payload }: Routine<any>): IUserSt
     case loginUserRoutine.SUCCESS:
     case loginWithGoogleRoutine.SUCCESS:
     case loginWithFacebookRoutine.SUCCESS: {
-      const { id, fullName, displayName, email, imageUrl, title, workspaces } = payload;
+      const { id, fullName, displayName, email, imageUrl, title, githubUsername, workspaces, status } = payload;
 
       return {
         ...state,
-        user: { id, fullName, displayName, email, imageUrl, title },
+        user: { id, fullName, displayName, email, imageUrl, title, githubUsername, status },
         workspaceList: workspaces,
         isLoading: false,
         isAuthorized: Boolean(payload?.id)
@@ -75,13 +76,13 @@ const reducer = (state = initialState, { type, payload }: Routine<any>): IUserSt
         isAuthorized: false
       };
     case editProfileRoutine.TRIGGER: {
-      return { ...state, isLoading: true };
+      return state;
     }
     case editProfileRoutine.SUCCESS: {
-      return { ...state, isLoading: false, user: { ...payload } };
+      return { ...state, user: { ...payload } };
     }
     case editProfileRoutine.FAILURE: {
-      return { ...state, isLoading: false };
+      return state;
     }
     case deleteAccountRoutine.TRIGGER:
       return { ...state, isLoading: true };
@@ -123,16 +124,16 @@ const reducer = (state = initialState, { type, payload }: Routine<any>): IUserSt
       return { ...state, isLoading: false };
     }
     case editStatusRoutine.TRIGGER: {
-      return { ...state, isLoading: true };
+      return state;
     }
     case editStatusRoutine.SUCCESS: {
       if (state.user) {
-        return { ...state, isLoading: false, user: { ...state.user, status: payload } };
+        return { ...state, user: { ...state.user, status: payload } };
       }
       return state;
     }
     case editStatusRoutine.FAILURE: {
-      return { ...state, isLoading: false };
+      return state;
     }
     case addWorkspaceRoutine.SUCCESS: {
       const workspaces = [...state.workspaceList];
@@ -142,7 +143,6 @@ const reducer = (state = initialState, { type, payload }: Routine<any>): IUserSt
     case addWorkspaceRoutine.FAILURE: {
       return { ...state, isLoading: false };
     }
-
     case setInvitedUserRoutine.TRIGGER: {
       return {
         ...state,
@@ -150,6 +150,11 @@ const reducer = (state = initialState, { type, payload }: Routine<any>): IUserSt
         invitedUserRegistered: payload.invitedUserRegistered };
     }
 
+    case updateAvatarRoutine.SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user as IUser, imageUrl: payload }
+      };
     default:
       return state;
   }

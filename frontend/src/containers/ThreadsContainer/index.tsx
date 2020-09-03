@@ -43,7 +43,6 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
       </header>
     );
   }
-
   return (
     <div className={styles.threadsContainerComponent}>
       <header className={styles.headerContainer}>
@@ -68,10 +67,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
                     id: post.id,
                     chatId: post.chat.id,
                     postReactions: post.postReactions,
-                    commentsInfo: noInfo,
-                    chat: {
-                      name: post.chat.name || ''
-                    }
+                    commentsInfo: noInfo
                   }}
                   comments={post.comments}
                   hideCloseBtn={hideCloseBtn}
@@ -87,8 +83,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
 
 const mapStateToProps = (state: IAppState) => ({
   loading: state.threads.loading,
-  // eslint-disable-next-line
-  userId: state.user.user!.id,
+  userId: state.user.user ? state.user.user.id : '',
   activeWorkspaceId: state.workspace.workspace.id,
   threads: state.threads.threads
 });

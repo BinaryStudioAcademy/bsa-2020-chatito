@@ -76,9 +76,11 @@ $colorBackground: var(--workspace-toolbar-select-background-second)
   overflow-y: auto
   display: flex
   flex-direction: column
+  padding-top: 10px
 
 .threadPost
   border-bottom: 2px solid var(--chat-background-secondary)
+  margin-bottom: 20px
 
 .threadComments
   display: flex
@@ -103,3 +105,28 @@ $colorBackground: var(--workspace-toolbar-select-background-second)
   margin-bottom: 5px
   &:hover
     text-decoration: underline
+
+.postContainer
+  width: 100%
+  position: relative
+  &:hover
+    cursor: pointer
+
+.newPostBlock
+  width: 100%
+  display: flex
+  align-items: center
+  font-size: 14px
+  font-weight: 600
+  color: var(--presence-offline)
+  padding-right: 50px
+  margin: 5px 0
+  position: absolute
+  top: -15px
+  left: 0
+
+.line
+  width: 100%
+  height: 1px
+  background-color: var(--presence-offline)
+  margin-right: 5px
