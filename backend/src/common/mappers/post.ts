@@ -5,7 +5,6 @@ import CommentRepository from '../../data/repositories/commentRepository';
 import { fromPostCommentsToCommentsInfo, fromCommentsToCommentsWithUserImageUrl } from './comment';
 import { getImageUrl } from '../utils/imageHelper';
 import { Post } from '../../data/entities/Post';
-import { Comment } from '../../data/entities/Comment';
 import { IntegrationType } from '../enums/IntegrationType';
 import { ClientPostType } from '../enums/ClientPostType';
 
