@@ -10,3 +10,9 @@ export const addGithubNotification = async (githubPayload: any) => {
 
   return notificationPost;
 };
+
+export const sendScheduliaMessage = async (payload: any): null => {
+  console.log('schedulia');
+  console.log(payload);
+  return null;
+};
