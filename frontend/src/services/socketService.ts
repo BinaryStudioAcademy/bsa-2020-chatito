@@ -53,12 +53,13 @@ export const connectSockets = () => {
   const chatSocket = io(`${server}/chat`, { query: `auth_token=${getAccessToken()}` });
 
   chatSocket.on(ClientSockets.AddPost, (post: IPost, audio: string) => {
+    const addedPost = { ...post };
     const state = store.getState();
-    if (post.chatId === state.chat.chat?.id) {
-      store.dispatch(addPostWithSocketRoutine(post));
+    if (addedPost.chatId === state.chat.chat?.id) {
+      store.dispatch(addPostWithSocketRoutine(addedPost));
     } else {
       playByUrl(audio || defaultNotificationAudio);
-      store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
+      store.dispatch(incUnreadCountRoutine({ chatId: addedPost.chatId }));
     }
   });
 
