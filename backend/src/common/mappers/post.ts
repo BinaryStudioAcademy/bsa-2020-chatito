@@ -11,7 +11,7 @@ export const fromReactionToReactionClient = ({ reaction, userId }: IPostReaction
 });
 
 export const fromPostToPostClient = async (post: IPost) => {
-  const { id, postReactions, chat } = post;
+  const { id, postReactions, chat, integration, type } = post;
 
   const postReactionsClient = postReactions
     ? postReactions.map(reaction => fromReactionToReactionClient(reaction))
@@ -28,7 +28,9 @@ export const fromPostToPostClient = async (post: IPost) => {
     createdByUser: {
       ...post.createdByUser,
       imageUrl: getImageUrl(post.createdByUser.imageUrl)
-    }
+    },
+    integration: integration.name,
+    type
   };
   return postClient;
 };

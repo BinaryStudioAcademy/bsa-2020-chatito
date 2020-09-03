@@ -41,6 +41,8 @@ import {
   upsertDraftPageCommentRoutine,
   deleteDraftCommentFromDraftsRoutine
 } from 'containers/Thread/routines';
+import { MessageType } from 'common/enums/MessageType';
+import { IntegrationName } from 'common/enums/IntegrationName';
 
 const { server } = env.urls;
 
@@ -49,11 +51,22 @@ export const connectSockets = () => {
   const chatSocket = io(`${server}/chat`, { query: `auth_token=${getAccessToken()}` });
 
   chatSocket.on(ClientSockets.AddPost, (post: IPost) => {
+    const addedPost = { ...post };
     const state = store.getState();
-    if (post.chatId === state.chat.chat?.id) {
-      store.dispatch(addPostWithSocketRoutine(post));
+    if (addedPost.type === MessageType.WhaleJoinMeetingLink && addedPost.integration === IntegrationName.Whale) {
+      const whaleBotMock = {
+        id: '1',
+        fullName: 'Whale Bot',
+        displayName: 'Whale Bot',
+        email: 'whale@gmail.com'
+      };
+      addedPost.createdByUser = whaleBotMock;
+      addedPost.text = `<a href=${addedPost.text}>Join</a>`;
+    }
+    if (addedPost.chatId === state.chat.chat?.id) {
+      store.dispatch(addPostWithSocketRoutine(addedPost));
     } else {
-      store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
+      store.dispatch(incUnreadCountRoutine({ chatId: addedPost.chatId }));
     }
   });
 

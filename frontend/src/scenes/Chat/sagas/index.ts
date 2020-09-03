@@ -34,6 +34,8 @@ import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
 import { upsertDraftPost, deleteDraftPost } from 'services/draftService';
 import { removeUserFromChatInWorkspaceRoutine } from 'scenes/Workspace/routines';
+import { IntegrationName } from 'common/enums/IntegrationName';
+import { MessageType } from 'common/enums/MessageType';
 
 function* fetchChatPostsRequest({ payload }: Routine<any>): Routine<any> {
   try {
@@ -74,9 +76,23 @@ function* watchDeleteDraftPostRequest() {
 
 function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
   try {
-    yield call(addPost, payload);
+    const addedPost = yield call(addPost, payload);
+    if (addedPost.integration === IntegrationName.Whale) {
+      const whaleBotMock = {
+        id: '1',
+        fullName: 'Whale Bot',
+        displayName: 'Whale Bot',
+        email: 'whale@gmail.com'
+      };
+      addedPost.createdByUser = whaleBotMock;
 
-    yield put(deleteDraftPostRoutine.trigger({ chatId: payload.chatId }));
+      if (addedPost.type === MessageType.WhaleSignUpUser) {
+        yield put(addPostRoutine.success(addedPost));
+      } else if (addedPost.type === MessageType.CommonPost) {
+        yield put(deleteDraftPostRoutine.trigger({ chatId: payload.chatId }));
+      }
+      console.log(addedPost);
+    }
   } catch (error) {
     yield call(toastrError, error.message);
   }

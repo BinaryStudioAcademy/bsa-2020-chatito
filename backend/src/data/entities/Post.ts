@@ -17,7 +17,7 @@ export class Post extends AbstractEntity {
   integration: Integration;
 
   @RelationId((post: Post) => post.integration)
-  readonly integrationName: string;
+  readonly IntegrationId: string;
 
   @OneToMany(() => Comment, comment => comment.post)
   comments: Comment[];

@@ -15,43 +15,53 @@ import { emitToChatRoom } from '../common/utils/socketHelper';
 import { ClientSockets } from '../common/enums/ClientSockets';
 import { fromUserToUserClient } from '../common/mappers/user';
 import { ChatCommands } from '../common/enums/ChatCommands';
+import { IntegrationName } from '../common/enums/IntegrationName';
+import IntegrationRepository from '../data/repositories/integrationRepository';
+import CustomError from '../common/models/CustomError';
+import { ClientPostType } from '../common/enums/ClientPostType';
 
 export const addPost = async (id: string, post: ICreatePost) => {
   const user = await getCustomRepository(UserRepository).getById(id);
   const chat = await getCustomRepository(ChatRepository).getById(post.chatId);
 
   if (post.text.indexOf(ChatCommands.CreateWhaleMeeting) >= 0) {
+    const whaleIntegration = await getCustomRepository(IntegrationRepository).findByName(IntegrationName.Whale);
     const whalePost = {
       createdByUserId: user.id,
       createdByUser: user,
       chatId: chat.id,
       chat,
+      integration: whaleIntegration,
       ...post
     };
     try {
       whalePost.text = (await createWhaleMeeting('slavakdudin2@gmail.com')).url;
       const createdPost: IPost = await getCustomRepository(PostRepository).addPost(whalePost);
-      const clientPost = await fromPostToPostClient(createdPost);
+      const clientPost = await fromPostToPostClient({ ...createdPost, type: ClientPostType.WhaleJoinMeetingLink });
       emitToChatRoom(clientPost.chatId, ClientSockets.AddPost, clientPost);
 
       return clientPost;
     } catch (err) {
-      whalePost.text = `${err.response.data.text} <a href=${err.response.data.url} target="_blank">Sign up</a>`;
-      const createdPost: IPost = {
-        id: '1a111a1a-1111-1111-1a1a-1a11a1a1a111',
-        postReactions: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        ...whalePost
-      };
-      const clientPost = await fromPostToPostClient(createdPost);
-      return clientPost;
+      if (err.response.status === 401) {
+        whalePost.text = `${err.response.data.text} <a href=${err.response.data.url} target="_blank">Sign up</a>`;
+        const createdPost: IPost = {
+          id: '1a111a1a-1111-1111-1a1a-1a11a1a1a111',
+          postReactions: [],
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          ...whalePost
+        };
+        const clientPost = await fromPostToPostClient({ ...createdPost, type: ClientPostType.WhaleSignUpUser });
+        return clientPost;
+      }
+      throw new CustomError(err.status, 'Cannot create meeting. Please, try again later.');
     }
   }
 
-  const newPost: ICreatePost = { ...post, createdByUser: user, chat };
+  const noIntegration = await getCustomRepository(IntegrationRepository).findByName(IntegrationName.None);
+  const newPost: ICreatePost = { ...post, createdByUser: user, chat, integration: noIntegration };
   const createdPost: IPost = await getCustomRepository(PostRepository).addPost(newPost);
-  const clientPost = await fromPostToPostClient(createdPost);
+  const clientPost = await fromPostToPostClient({ ...createdPost, type: ClientPostType.CommonPost });
   emitToChatRoom(clientPost.chatId, ClientSockets.AddPost, clientPost);
   const users = await getCustomRepository(ChatRepository).getAllChatUsers(chat.id);
   users.forEach(async chatUser => {

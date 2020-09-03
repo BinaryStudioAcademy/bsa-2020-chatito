@@ -2,6 +2,7 @@ import { IUser } from '../user/IUser';
 import { IPostReaction } from '../postReaction/IPostReaction';
 import { ICommentsInfo } from './ICommentsInfo';
 import { IDraftComment } from '../draft/IDraftComment';
+import { MessageType } from 'common/enums/MessageType';
 
 export interface IPost {
   createdByUser: IUser;
@@ -16,4 +17,6 @@ export interface IPost {
     hash?: string;
   }
   draftComments?: IDraftComment[];
+  integration?: string;
+  type?: MessageType;
 }
