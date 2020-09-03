@@ -37,6 +37,7 @@ import { IBindingAction } from 'common/models/callback/IBindingActions';
 import JoinButton from 'scenes/Chat/components/JoinBtn';
 import { MessageType } from 'common/enums/MessageType';
 import { IntegrationType } from 'common/enums/IntegrationType';
+import DOMPurify from 'dompurify';
 
 interface IProps {
   post: IPost;
@@ -305,7 +306,8 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
               : (
                 <div
                   className={`${styles.text} ${isNew ? styles.unread : ''}`}
-                  dangerouslySetInnerHTML={{ __html: text }}
+                  // eslint-disable-next-line react/no-danger
+                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text) }}
                 />
               )
           }
