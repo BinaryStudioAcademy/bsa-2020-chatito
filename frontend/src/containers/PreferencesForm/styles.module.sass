@@ -1,0 +1,50 @@
+.mainWrapper
+  display: flex
+  flex-direction: column
+  padding: 20px
+  padding-top: 0
+
+  .modalHeader
+    font-size: 18px
+    margin-bottom: 10px
+
+  .subHeader
+    font-size: 16px
+    font-weight: 600
+    margin-bottom: 7px
+
+  .recordingErr
+    color: red
+
+  .audioNotificationsWrapper
+    display: flex
+    align-items: center
+
+    .recorderWrapper
+      margin-left: 20px
+
+  .formFooter
+    margin-top: 30px
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+    .primaryBtn:global(.btn-primary)
+      width: 135px
+      height: 40px
+      // background-color: var(--auth-scene-btn-background)
+      // border-color: var(--auth-scene-btn-background)
+      &:hover, &:active,
+        // background-color: var(--auth-scene-btn-background)
+        // border-color: var(--auth-scene-btn-background)
+        cursor: pointer
+
+    .primaryBtnCancel:global(.btn-primary)
+      width: 120px
+      height: 40px
+      // background-color: var(--close-button)
+      // border-color: var(--close-button)
+      &:hover, &:active,
+        // background-color: var(--close-button)
+        // border-color: var(--close-button)
+        cursor: pointer

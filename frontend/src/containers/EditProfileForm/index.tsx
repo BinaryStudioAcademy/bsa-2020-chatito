@@ -174,11 +174,12 @@ const EditProfileForm: FunctionComponent<IProps> = ({
               Write here your life principles, your motto, or some fun facts about yourself.
             </div>
           </Form.Group>
+
           <div className={`${styles.formFooter} w-100`}>
-            <Button className={styles.primaryBtnCancel} variant="primary" onClick={handleClose}>
+            <Button className={styles.primaryBtnCancel} variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button className={styles.primaryBtn} type="button" variant="primary" onClick={handleSubmit}>
+            <Button className={styles.primaryBtn} type="button" variant="success" onClick={handleSubmit}>
               Save Changes
             </Button>
           </div>

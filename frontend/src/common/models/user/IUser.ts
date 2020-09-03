@@ -6,5 +6,6 @@ export interface IUser {
   imageUrl?: string | null;
   title?: string;
   status?: string;
+  audio: string;
   githubUsername?: string;
 }
