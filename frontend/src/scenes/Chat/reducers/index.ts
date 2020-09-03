@@ -259,7 +259,8 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         id: '0',
         fullName: 'Chatito Bot',
         displayName: 'Chatito Bot',
-        email: 'chatito@gmail.com'
+        email: 'chatito@gmail.com',
+        audio: 'https://mobcup.net/d/c76xxfvk/mp3'
       };
       const newPost: IPost = {
         createdByUser: chatitoBotMock,
