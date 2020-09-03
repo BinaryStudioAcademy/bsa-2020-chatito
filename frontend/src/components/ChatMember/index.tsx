@@ -7,17 +7,19 @@ interface IProps {
   user: IUser;
   removeUser: CallableFunction;
   isCreator: boolean;
+  currentUser: IUser;
 }
 
 const ChatMember = ({
   user,
   removeUser,
-  isCreator
+  isCreator,
+  currentUser
 }: IProps) => (
   <div className="mb-1 w-100 d-flex align-items-center position-relative">
     <img className={styles.avatar} src={getUserImgLink(user.imageUrl as string)} alt={user.displayName} />
-    <span>{user.displayName}</span>
-    {isCreator
+    <span>{user.id === currentUser.id ? `${user.displayName} (you)` : user.displayName}</span>
+    {isCreator && user.id !== currentUser.id
       ? (
         <span
           className={styles.removeUser}
