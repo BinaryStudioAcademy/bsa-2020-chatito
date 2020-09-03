@@ -7,4 +7,5 @@ export interface IUser {
   title?: string;
   status?: string;
   audio: string;
+  githubUsername?: string;
 }

@@ -42,6 +42,7 @@ export interface IWorkspaceState {
   error: string;
   channels: Array<IChat>;
   directMessages: Array<IChat>;
+  githubRepositories: Array<IChat>;
   users: Array<IUser>;
   showRightSideMenu: RightMenuTypes;
   activeThread: IActiveThread | null;
@@ -58,6 +59,7 @@ const initialState: IWorkspaceState = {
   error: '',
   channels: [],
   directMessages: [],
+  githubRepositories: [],
   users: [],
   showRightSideMenu: RightMenuTypes.None,
   activeThread: null,
@@ -126,6 +128,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state,
         channels: payload.channels || [],
         directMessages: payload.directMessages || [],
+        githubRepositories: payload.githubRepositories || [],
         loading: false
       };
     case fetchWorkspaceChatsRoutine.FAILURE:

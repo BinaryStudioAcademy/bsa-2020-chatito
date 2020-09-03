@@ -37,6 +37,7 @@ import { IBindingAction } from 'common/models/callback/IBindingActions';
 
 interface IProps {
   post: IPost;
+  isNew?: boolean;
   userId: string;
   type: PostType;
   openThread?: IBindingCallback1<IPost>;
@@ -45,7 +46,6 @@ interface IProps {
   deletePostReaction: IBindingCallback1<IPostReactionRoutine>;
   showUserProfile: IBindingCallback1<IUser>;
   showModal: IBindingCallback1<IModalRoutine>;
-  isShown: boolean;
   unreadChats: IUnreadChat[];
   unreadPostComments: IUnreadPostComments[];
   readPost: IBindingCallback1<IPostsToRead>;
@@ -55,8 +55,9 @@ interface IProps {
   postRef?: MutableRefObject<any> | null;
 }
 
-const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
-  unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, isShown, unreadChats,
+const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, openThread,
+  unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, unreadChats,
+
   readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
@@ -136,7 +137,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
   };
 
   const popoverRemindOptions = (
-    <Popover id="popover-basic" className={isShown ? styles.dNone : ''}>
+    <Popover id="popover-basic">
       <Popover.Content>
         <ReminderItem
           text="In 20 minutes"
@@ -169,29 +170,6 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
     </Popover>
   );
 
-  const popoverMore = (
-    <Popover id="popover-basic">
-      <Popover.Title as="h3">More actions</Popover.Title>
-      <Popover.Content>
-        <OverlayTrigger trigger="click" placement="right" overlay={popoverRemindOptions}>
-          <button type="button" className={styles.optionsSelect}>
-            <span>Remind me about that &gt;</span>
-          </button>
-        </OverlayTrigger>
-      </Popover.Content>
-    </Popover>
-  );
-
-  const ButtonMore = () => (
-    <OverlayTrigger trigger="click" rootClose placement="top" overlay={popoverMore}>
-      <Card.Link
-        bsPrefix={styles.openThreadBtn}
-      >
-        More
-      </Card.Link>
-    </OverlayTrigger>
-  );
-
   const markAsUnreadOptionClick = () => {
     if (type === PostType.Post) {
       markAsUnreadPost({ unreadPost: post });
@@ -211,9 +189,11 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
       >
         <span>Mark as unread</span>
       </button>
-      <button type="button" className={`${styles.optionsSelect} ${styles.moreOptionsSelect}`}>
-        <span>Other option</span>
-      </button>
+      <OverlayTrigger trigger="click" placement="left" overlay={popoverRemindOptions}>
+        <button type="button" className={`${styles.optionsSelect} ${styles.moreOptionsSelect}`}>
+          <span>&lt; Remind me about that</span>
+        </button>
+      </OverlayTrigger>
     </Popover>
   );
 
@@ -305,7 +285,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
 
           <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
           {/* eslint-disable-next-line */}
-          <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
+          <div className={`${styles.text} ${isNew ? styles.unread : ''}`} dangerouslySetInnerHTML={{ __html: text }} />
           <div className={styles.emojiStats}>
             {type === PostType.Post && renderEmojis()}
           </div>
@@ -319,7 +299,6 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
               </Card.Link>
             )}
             {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
-            <ButtonMore />
           </div>
           <ButtonOptions />
         </Media.Body>
@@ -330,7 +309,6 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
 
 const mapStateToProps = (state: IAppState) => ({
   userId: state.user.user?.id as string,
-  isShown: state.modal.setReminder,
   unreadChats: state.workspace.unreadChats,
   unreadPostComments: state.workspace.unreadPostComments
 });

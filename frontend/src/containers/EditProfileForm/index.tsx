@@ -33,6 +33,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
 
   const [fullName, setFullName] = useState(user.fullName);
   const [displayName, setDisplayName] = useState(user.displayName);
+  const [githubUsername, setGithubUsername] = useState(user.githubUsername ? user.githubUsername : '');
   const [title, setTitle] = useState(user.title ? user.title : '');
   const [imageUrl, setImageUrl] = useState(user.imageUrl || '');
   const [showMoreOptions, setshowMoreOptions] = useState(false);
@@ -40,7 +41,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
   const [avatarLoading, setAvatarLoading] = useState(false);
 
   const handleSubmit = () => {
-    const editUserProps = { ...user, fullName, displayName, title };
+    const editUserProps = { ...user, fullName, displayName, title, githubUsername };
     delete editUserProps.imageUrl;
     editProfile(editUserProps);
   };
@@ -90,6 +91,10 @@ const EditProfileForm: FunctionComponent<IProps> = ({
       }
       case 'formEditDisplayName': {
         setDisplayName(value);
+        break;
+      }
+      case 'formEditGithubUsername': {
+        setGithubUsername(value);
         break;
       }
       case 'formEditTitle': {
@@ -145,6 +150,16 @@ const EditProfileForm: FunctionComponent<IProps> = ({
               This could be your nickname — however you’d like
               people to refer to you in Chatito.
             </div>
+          </Form.Group>
+          <Form.Group controlId="formEditGithubUsername" className={styles.inputBlock}>
+            <span className={styles.inputHeader}>GitHub username</span>
+            <Form.Control
+              className={styles.inputGroup}
+              type="text"
+              placeholder="GitHub username"
+              value={githubUsername}
+              onChange={handleChange}
+            />
           </Form.Group>
           <Form.Group controlId="formEditTitle" className={styles.inputBlock}>
             <span className={styles.inputHeader}>Life position</span>

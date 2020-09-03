@@ -7,6 +7,8 @@ export interface IModalState {
   createChannel: boolean;
   preferences: boolean;
   createDirect: boolean;
+  createRepositoryChat: boolean;
+  createWebhookInstructions: boolean;
   invitePopup: boolean;
   inviteChat: boolean;
   chatMembers: boolean;
@@ -19,6 +21,8 @@ const initialState: IModalState = {
   preferences: false,
   createChannel: false,
   createDirect: false,
+  createRepositoryChat: false,
+  createWebhookInstructions: false,
   invitePopup: false,
   chatMembers: false,
   setReminder: false,
@@ -39,6 +43,12 @@ export default (state = initialState, action: Routine<any>) => {
         }
         case ModalTypes.CreateDirect: {
           return { ...state, createDirect: show };
+        }
+        case ModalTypes.CreateRepositoryChat: {
+          return { ...state, createRepositoryChat: show };
+        }
+        case ModalTypes.CreateWebhookInstructions: {
+          return { ...state, createWebhookInstructions: show };
         }
         case ModalTypes.InvitePopup: {
           return { ...state, invitePopup: show };

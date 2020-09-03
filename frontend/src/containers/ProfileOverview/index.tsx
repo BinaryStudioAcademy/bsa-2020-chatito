@@ -5,7 +5,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faEdit, faEllipsisH, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faEdit, faEllipsisH, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { IUser } from 'common/models/user/IUser';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { useKey } from 'common/hooks/onInputSubmit';
@@ -47,16 +47,12 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
   const [user, setUsers] = useState<IUser>(tempUser);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getUserById(tempUser.id).then(fetchedUser => setUsers(fetchedUser));
-  }, [tempUser]);
-  const inputRef = useRef(null);
-
-  useEffect(() => {
-    if (user.status) {
+    getUserById(tempUser.id).then(fetchedUser => {
+      setUsers(fetchedUser);
       setLoading(false);
-    }
-  }, [user]);
-
+    });
+  }, [tempUser, currentUser]);
+  const inputRef = useRef(null);
   const onClose = () => {
     hideRightMenu();
   };
@@ -117,12 +113,11 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
   );
   const imageUrl = user.id === currentUser.id ? currentUser.imageUrl : user.imageUrl;
   return (
-    <LoaderWrapper loading={loading}>
-      <div className={styles.profileOverview}>
-        <div className={styles.header}>
-          <FontAwesomeIcon icon={faTimesCircle} onClick={onClose} className={styles.closeBtn} />
-        </div>
-
+    <div className={styles.profileOverview}>
+      <div className={styles.header}>
+        <FontAwesomeIcon icon={faTimesCircle} onClick={onClose} className={styles.closeBtn} />
+      </div>
+      <LoaderWrapper loading={loading}>
         <div className={styles.avatar}>
           <Image src={imageUrl || userLogoDefaultUrl} alt="avatar" roundedCircle />
         </div>
@@ -137,7 +132,7 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
           <FormControl ref={inputRef} placeholder="Write a message" value={message} onChange={onChange} />
           <InputGroup.Append>
             <button type="button" className="button-unstyled" onClick={onSend}>
-              <FontAwesomeIcon icon={faPaperPlane} />
+              <FontAwesomeIcon icon={faPlay} />
             </button>
           </InputGroup.Append>
         </InputGroup>
@@ -167,8 +162,8 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
           <FontAwesomeIcon icon={showAbout ? faChevronUp : faChevronDown} />
         </button>
         {showAbout && renderAbout()}
-      </div>
-    </LoaderWrapper>
+      </LoaderWrapper>
+    </div>
   );
 };
 

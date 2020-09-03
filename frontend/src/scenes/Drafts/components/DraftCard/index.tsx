@@ -3,7 +3,7 @@ import { IDraftClient } from 'common/models/draft/IDraftClient';
 import styles from './styles.module.sass';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faPaperPlane,
+  faPlay,
   faTrashAlt,
   faPen
 } from '@fortawesome/free-solid-svg-icons';
@@ -25,7 +25,7 @@ const DraftCard: React.FC<IProps> = ({ draft, whash, router }) => {
       {/* eslint-disable-next-line */}
       <p dangerouslySetInnerHTML={{ __html: draft.text }} />
       <div className={styles.buttons}>
-        <FontAwesomeIcon className={styles.button} icon={faPaperPlane} />
+        <FontAwesomeIcon className={styles.button} icon={faPlay} />
         <FontAwesomeIcon className={styles.button} icon={faTrashAlt} />
         <FontAwesomeIcon className={styles.button} icon={faPen} />
       </div>

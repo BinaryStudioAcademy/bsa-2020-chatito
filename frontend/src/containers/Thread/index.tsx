@@ -56,16 +56,24 @@ const Thread: FunctionComponent<IProps> = ({
   isLoading,
   unreadPostComments
 }) => {
+  const isNew = true;
   const { whash } = useParams();
   const [showAll, setShowAll] = useState(false);
   const [commentIdForLine, setCommentIdForLine] = useState('');
+  const [unreadCommentIds, setUnreadCommentIds] = useState<string[]>();
   const setNewCommentLine = () => {
     unreadPostComments.forEach(unreadPost => {
       if (unreadPost.id === post.id) {
         if (unreadPost.unreadComments.length) {
           setCommentIdForLine(unreadPost.unreadComments[0].id);
+          const unreadCommentsIds: string[] = [];
+          unreadPost.unreadComments.forEach(unreadComment => {
+            unreadCommentsIds.push(unreadComment.id);
+          });
+          setUnreadCommentIds(unreadCommentsIds);
         } else {
           setCommentIdForLine('');
+          setUnreadCommentIds([]);
         }
       }
     });
@@ -74,7 +82,7 @@ const Thread: FunctionComponent<IProps> = ({
     if (post.id) {
       setNewCommentLine();
     }
-  }, [post.id]);
+  }, [post.id, unreadPostComments]);
 
   const newCommentLineElement = (
     <div className={styles.newPostBlock}>
@@ -126,9 +134,11 @@ const Thread: FunctionComponent<IProps> = ({
             {comments.map((comment, index) => (
               index < maxComment
                 ? (
-                  <div key={comment.id}>
+                  <div key={comment.id} className={styles.postContainer}>
                     {commentIdForLine === comment.id ? newCommentLineElement : ''}
                     <Post
+                      // eslint-disable-next-line no-nested-ternary
+                      isNew={unreadCommentIds ? unreadCommentIds.includes(comment.id) ? isNew : !isNew : !isNew}
                       post={comment}
                       type={PostType.Comment}
                       mainPostId={post.id}

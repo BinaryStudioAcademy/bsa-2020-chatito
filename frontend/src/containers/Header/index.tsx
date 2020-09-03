@@ -34,7 +34,7 @@ const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showModal })
       tabIndex={0}
       onKeyDown={toggleButtonClick}
     >
-      <span className={styles.profileText}>Profile</span>
+      <span className={styles.profileText}>{user ? user.displayName : 'Profile'}</span>
       <FontAwesomeIcon icon={faCaretDown} />
     </div>
   );
