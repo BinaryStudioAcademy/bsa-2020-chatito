@@ -1,4 +1,4 @@
-export enum IntegrationName {
+export enum IntegrationType {
   Whale = 'Whale',
   None = 'None'
 }

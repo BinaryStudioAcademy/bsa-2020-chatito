@@ -36,7 +36,7 @@ import { IMarkAsUnreadComment } from 'common/models/post/IMarkAsUnreadComment';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import JoinButton from 'scenes/Chat/components/JoinBtn';
 import { MessageType } from 'common/enums/MessageType';
-import { IntegrationName } from 'common/enums/IntegrationName';
+import { IntegrationType } from 'common/enums/IntegrationType';
 
 interface IProps {
   post: IPost;
@@ -56,12 +56,13 @@ interface IProps {
   markAsUnreadPost: IBindingCallback1<IMarkAsUnreadPost>;
   markAsUnreadComment: IBindingCallback1<IMarkAsUnreadComment>;
   postRef?: MutableRefObject<any> | null;
+  chatUsers: IUser[];
 }
 
 const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, openThread,
   unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, unreadChats,
 
-  readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef }) => {
+  readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef, chatUsers }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
   useEffect(() => {
@@ -271,7 +272,7 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
       });
     }
   };
-  const isJoinBtn = post.integration === IntegrationName.Whale && post.type !== MessageType.WhaleSignUpUser;
+  const isJoinBtn = post.integration === IntegrationType.Whale && post.type !== MessageType.WhaleSignUpUser;
 
   return (
     <div ref={postRef}>
@@ -292,7 +293,12 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
           {/* eslint-disable-next-line */}
           {
             isJoinBtn
-              ? (<JoinButton url={text} />)
+              ? (
+                <JoinButton
+                  url={text}
+                  creator={chatUsers?.find(user => user.id === post.createdByUser.id)?.displayName}
+                />
+              )
               : (
                 <div
                   className={`${styles.text} ${isNew ? styles.unread : ''}`}
@@ -324,7 +330,8 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
 const mapStateToProps = (state: IAppState) => ({
   userId: state.user.user?.id as string,
   unreadChats: state.workspace.unreadChats,
-  unreadPostComments: state.workspace.unreadPostComments
+  unreadPostComments: state.workspace.unreadPostComments,
+  chatUsers: state.chat.chat?.users
 });
 
 const mapDispatchToProps = {

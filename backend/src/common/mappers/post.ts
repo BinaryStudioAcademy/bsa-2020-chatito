@@ -5,7 +5,7 @@ import CommentRepository from '../../data/repositories/commentRepository';
 import { fromPostCommentsToCommentsInfo } from './comment';
 import { getImageUrl } from '../utils/imageHelper';
 import { Comment } from '../../data/entities/Comment';
-import { IntegrationName } from '../enums/IntegrationName';
+import { IntegrationType } from '../enums/IntegrationType';
 import { ClientPostType } from '../enums/ClientPostType';
 
 export const fromReactionToReactionClient = ({ reaction, userId }: IPostReaction) => ({
@@ -17,7 +17,7 @@ const whaleBotMock = {
   fullName: 'Whale Bot',
   displayName: 'Whale Bot',
   email: 'whale@gmail.com',
-  imageUrl: getImageUrl(null),
+  imageUrl: 'https://img.icons8.com/flat_round/64/000000/whale--v1.png',
   password: 'whalePassword'
 };
 
@@ -27,14 +27,14 @@ export const fromPostToPostClient = async (post: IPost) => {
     ? postReactions.map(reaction => fromReactionToReactionClient(reaction))
     : [];
   const comments = await getCustomRepository(CommentRepository).getAllPostComments(id);
-  const integrationName = integration ? integration.name : IntegrationName.None;
 
   let createdByUser = {
     ...post.createdByUser,
     imageUrl: getImageUrl(post.createdByUser.imageUrl)
   };
 
-  if (integrationName === IntegrationName.Whale) {
+  if (integration === IntegrationType.Whale) {
+    whaleBotMock.id = post.createdByUser.id;
     createdByUser = whaleBotMock;
   }
 
@@ -47,7 +47,7 @@ export const fromPostToPostClient = async (post: IPost) => {
       hash: chat.hash
     },
     createdByUser,
-    integration: integrationName,
+    integration,
     type: type || ClientPostType.CommonPost
   };
 

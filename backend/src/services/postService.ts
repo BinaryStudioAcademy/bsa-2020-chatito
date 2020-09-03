@@ -15,23 +15,21 @@ import { emitToChatRoom } from '../common/utils/socketHelper';
 import { ClientSockets } from '../common/enums/ClientSockets';
 import { fromUserToUserClient } from '../common/mappers/user';
 import { ChatCommands } from '../common/enums/ChatCommands';
-import { IntegrationName } from '../common/enums/IntegrationName';
-import IntegrationRepository from '../data/repositories/integrationRepository';
 import CustomError from '../common/models/CustomError';
 import { ClientPostType } from '../common/enums/ClientPostType';
+import { IntegrationType } from '../common/enums/IntegrationType';
 
 export const addPost = async (id: string, post: ICreatePost) => {
   const user = await getCustomRepository(UserRepository).getById(id);
   const chat = await getCustomRepository(ChatRepository).getById(post.chatId);
 
   if (post.text.indexOf(ChatCommands.CreateWhaleMeeting) >= 0) {
-    const whaleIntegration = await getCustomRepository(IntegrationRepository).findByName(IntegrationName.Whale);
     const whalePost = {
       createdByUserId: user.id,
       createdByUser: user,
       chatId: chat.id,
       chat,
-      integration: whaleIntegration,
+      integration: IntegrationType.Whale,
       ...post
     };
     try {
@@ -58,8 +56,7 @@ export const addPost = async (id: string, post: ICreatePost) => {
     }
   }
 
-  const noIntegration = await getCustomRepository(IntegrationRepository).findByName(IntegrationName.None);
-  const newPost: ICreatePost = { ...post, createdByUser: user, chat, integration: noIntegration };
+  const newPost: ICreatePost = { ...post, createdByUser: user, chat, integration: IntegrationType.None };
   const createdPost: IPost = await getCustomRepository(PostRepository).addPost(newPost);
   const clientPost = await fromPostToPostClient({ ...createdPost, type: ClientPostType.CommonPost });
   emitToChatRoom(clientPost.chatId, ClientSockets.AddPost, clientPost);

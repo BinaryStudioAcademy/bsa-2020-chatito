@@ -4,7 +4,6 @@ import WorkspaceSeeder from './workspaceSeeder';
 import ChatSeeder from './chatSeeder';
 import PostSeeder from './postSeeder';
 import CommentSeeder from './commentSeeder';
-import IntegrationSeeder from './integrationSeeder';
 
 createConnection()
   .then(async () => {
@@ -13,7 +12,6 @@ createConnection()
     await ChatSeeder.execute();
     await PostSeeder.execute();
     await CommentSeeder.execute();
-    await IntegrationSeeder.execute();
   })
   .catch(e => {
     // eslint-disable-next-line no-console
