@@ -44,9 +44,10 @@ const ChatBody: React.FC<IProps> = ({
   postId,
   fetchNavigationPost
 }) => {
+  const isNew = true;
   const [postIdForLine, setPostIdForLine] = useState('');
   const chatBody = useRef<HTMLDivElement>(null);
-
+  const [unreadChatPostIds, setUnreadChatPostIds] = useState<string[]>();
   const getMorePosts = () => {
     loadMorePosts({ chatId, from, count });
   };
@@ -55,8 +56,14 @@ const ChatBody: React.FC<IProps> = ({
       if (unreadChat.id === chatId) {
         if (unreadChat.unreadPosts.length) {
           setPostIdForLine(unreadChat.unreadPosts[0].id);
+          const unreadPostIds: string[] = [];
+          unreadChat.unreadPosts.forEach(unreadPost => {
+            unreadPostIds.push(unreadPost.id);
+          });
+          setUnreadChatPostIds(unreadPostIds);
         } else {
           setPostIdForLine('');
+          setUnreadChatPostIds([]);
         }
       }
     });
@@ -70,7 +77,6 @@ const ChatBody: React.FC<IProps> = ({
   };
 
   const postRef = useRef(null);
-
   useEffect(() => {
     if (chatId && loading) {
       if (postId) {
@@ -88,7 +94,9 @@ const ChatBody: React.FC<IProps> = ({
       scrollToRef(postRef);
     }
   }, [loading, chatId]);
-
+  useEffect(() => {
+    setNewPostLine();
+  }, [unreadChats]);
   const handleOpenThread = (post: IPost) => {
     if (activeThreadPostId === post.id) return;
     openThread(post);
@@ -115,9 +123,11 @@ const ChatBody: React.FC<IProps> = ({
           useWindow={false}
         >
           {messages.map(m => (
-            <div key={m.id}>
+            <div key={m.id} className={styles.postContainer}>
               {postIdForLine === m.id ? newPostLineElement : ''}
               <Post
+                // eslint-disable-next-line no-nested-ternary
+                isNew={unreadChatPostIds ? unreadChatPostIds.includes(m.id) ? isNew : !isNew : !isNew}
                 post={m}
                 postRef={m.id === postId ? postRef : null}
                 openThread={handleOpenThread}

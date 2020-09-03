@@ -37,6 +37,7 @@ import { IBindingAction } from 'common/models/callback/IBindingActions';
 
 interface IProps {
   post: IPost;
+  isNew?: boolean;
   userId: string;
   type: PostType;
   openThread?: IBindingCallback1<IPost>;
@@ -54,8 +55,9 @@ interface IProps {
   postRef?: MutableRefObject<any> | null;
 }
 
-const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
+const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, openThread,
   unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, unreadChats,
+
   readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
@@ -283,7 +285,7 @@ const Post: React.FC<IProps> = ({ post: postData, userId, type, openThread,
 
           <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
           {/* eslint-disable-next-line */}
-          <div className={styles.text} dangerouslySetInnerHTML={{ __html: text }} />
+          <div className={`${styles.text} ${isNew ? styles.unread : ''}`} dangerouslySetInnerHTML={{ __html: text }} />
           <div className={styles.emojiStats}>
             {type === PostType.Post && renderEmojis()}
           </div>
