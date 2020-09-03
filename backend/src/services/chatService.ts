@@ -84,3 +84,7 @@ export const getGithubRepositoryChat = async (repositoryName: string, repository
   const chat = await getCustomRepository(ChatRepository).getGithubRepositoryChat(repositoryName, repositoryOwner);
   return chat;
 };
+
+export const getChatByUsers = async (userId1, userId2) => {
+  const chatUsers: IUser[] = await getCustomRepository(ChatRepository).getAllChatUsers(chatId);
+};

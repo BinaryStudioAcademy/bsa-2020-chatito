@@ -20,7 +20,9 @@ export const sendScheduliaMessage = async (payload: any): Promise<null> => {
 
   console.log('schedulia');
   console.log(payload);
+  // check if wp exists
   const wp = getWorkspaceByName(payload.workspace);
-  // Check if users have common chats
+  // Check if users have common direct chat
+  // const chat = ;
   return null;
 };

@@ -153,6 +153,15 @@ class ChatRepository extends Repository<Chat> {
 
     return chat;
   }
+
+  async getCommonDirectChat(id: string): Promise<User[]> {
+    const chat = await this.findOne({
+      where: { id },
+      relations: ['users']
+    });
+
+    return chat.users;
+  }
 }
 
 export default ChatRepository;
