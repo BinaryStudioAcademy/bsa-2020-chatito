@@ -5,9 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faSort, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
-import { ChannelItem } from './components/ChannelItem';
+import ChannelItem from './containers/ChannelItem';
 import { fetchBrowserChannelsRoutine } from './routines';
-import { IBrowserChat } from 'common/models/chat/IBrowserChat';
+import { IBrowserChannel } from 'common/models/chat/IBrowserChannel';
+import LoaderWrapper from 'components/LoaderWrapper';
+import { ModalTypes } from 'common/enums/ModalTypes';
+import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { showModalRoutine } from 'routines/modal';
 
 interface IProps {
   match: {
@@ -15,23 +20,26 @@ interface IProps {
       whash: string;
     };
   };
-  currentUserId: string;
   currentWorkspaceId: string;
+  channels: IBrowserChannel[];
+  loading: boolean;
   fetchBrowserChannels: (workspaceId: string) => void;
-  channels: IBrowserChat[];
+  showModal: IBindingCallback1<IModalRoutine>;
 }
 
-const ChannelBrowser: React.FC<IProps> = ({ match, currentUserId, currentWorkspaceId,
-  channels = [], fetchBrowserChannels }) => {
+const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels = [],
+  loading, fetchBrowserChannels, showModal }) => {
   useEffect(() => {
     fetchBrowserChannels(currentWorkspaceId);
   }, []);
+
+  const onCreateChannel = () => showModal({ modalType: ModalTypes.CreateChannel, show: true });
 
   return (
     <div className={styles.ChannelBrowser}>
       <header className={styles.header}>
         <h1>Channel browser</h1>
-        <Button className={styles.createBtn}>Create Channel</Button>
+        <Button className={styles.createBtn} onClick={onCreateChannel}>Create Channel</Button>
       </header>
       <div className={styles.main}>
         <InputGroup className={styles.search}>
@@ -56,12 +64,18 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentUserId, currentWorkspa
           </div>
         </div>
         <div className={styles.channelsWrp}>
-          {channels.map((channel: any) => (
-            <ChannelItem key={channel.id} whash={match.params.whash} currentUserId={currentUserId} channel={channel} />
-          ))}
-          <div className={styles.center}>
-            <Button className={styles.createBtn}>Create Channel</Button>
-          </div>
+          <LoaderWrapper loading={loading}>
+            {channels.map(channel => (
+              <ChannelItem
+                key={channel.id}
+                whash={match.params.whash}
+                channel={channel}
+              />
+            ))}
+            <div className={styles.center}>
+              <Button className={styles.createBtn} onClick={onCreateChannel}>Create Channel</Button>
+            </div>
+          </LoaderWrapper>
         </div>
       </div>
     </div>
@@ -69,13 +83,14 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentUserId, currentWorkspa
 };
 
 const mapStateToProps = (state: IAppState) => ({
-  currentUserId: state.user.user?.id as string,
   channels: state.channelBrowser.channels,
-  currentWorkspaceId: state.workspace.workspace.id
+  currentWorkspaceId: state.workspace.workspace.id,
+  loading: state.channelBrowser.loading
 });
 
 const mapDispatchToProps = {
-  fetchBrowserChannels: fetchBrowserChannelsRoutine
+  fetchBrowserChannels: fetchBrowserChannelsRoutine,
+  showModal: showModalRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChannelBrowser);

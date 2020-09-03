@@ -56,7 +56,7 @@ export const getBrowserChannels = async (workspaceId: string, userId: string) =>
     if (channel.isPrivate) {
       return !!channel.users.find(user => user.id === userId);
     }
-    return channel;
+    return true;
   });
   return filteredChannels;
 };

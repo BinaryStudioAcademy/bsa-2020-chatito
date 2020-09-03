@@ -125,14 +125,17 @@ export const connectSockets = () => {
     chatId: string
   ) => {
     store.dispatch(newUserNotificationWithSocketRoutine({ users, chatType, chatId }));
+    const state = store.getState();
+    const currentUserId = state.user.user?.id;
     if (users.length === 1) {
-      toastrSuccess(`User ${users[0].displayName} was invited to channel "${chatName}"`);
+      if (currentUserId === users[0].id) return;
+      toastrSuccess(`User ${users[0].displayName} joined to channel "${chatName}"`);
     } else {
       let usersString = '';
       users.forEach((user, index) => {
         usersString += `${user.displayName}${index === users.length - 1 ? '' : ', '}`;
       });
-      toastrSuccess(`Users ${usersString} were invited to channel "${chatName}"`);
+      toastrSuccess(`Users ${usersString} joined to channel "${chatName}"`);
     }
   });
 

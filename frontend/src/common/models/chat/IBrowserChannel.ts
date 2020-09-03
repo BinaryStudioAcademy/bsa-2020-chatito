@@ -1,4 +1,4 @@
-export interface IBrowserChat {
+export interface IBrowserChannel {
   id: string;
   hash: string;
   name: string;

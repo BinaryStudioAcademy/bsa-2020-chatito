@@ -1,11 +1,14 @@
+.channelItem
+  position: relative
+
+.channelItem:hover
+  background-color: var(--chat-background-secondary)
+
 .channel
   padding: 16px 92px 16px 12px
   border-bottom: 1px solid var(--browser-channel-border)
   position: relative
   cursor: pointer
-
-.channel:hover
-  background-color: var(--chat-background-secondary)
 
 .channelName
   font-size: 15px
@@ -28,19 +31,23 @@
   transform: translateY(-50%)
   font-size: 15px
   font-weight: 600
+  width: 75px
 
-.channel:hover .channelBtn
+.channelItem:hover .channelBtn
   visibility: visible
+
+.channelBtn span
+  margin-right: 5px
 
 .joinBtn
   background-color: var(--browser-channel-primary-button)
   border: none
-  width: 67px
 
 .joinBtn:hover,
-.channel .channelBtn.joinBtn:active,
+.channelItem .channelBtn.joinBtn:active,
 .joinBtn:focus
   background-color: var(--browser-channel-primary-button-hover)
+  box-shadow: none !important
 
 .leaveBtn
   background-color: var(--browser-channel-secondary-button)
@@ -48,11 +55,12 @@
   color: var(--main-text)
 
 .leaveBtn:hover,
-.channel .channelBtn.leaveBtn:active,
+.channelItem .channelBtn.leaveBtn:active,
 .leaveBtn:focus
   background-color: var(--browser-channel-secondary-button-hover)
   border: 1px solid var(--browser-channel-border)
   color: var(--main-text)
+  box-shadow: none !important
 
 .chatInfo
   display: flex
