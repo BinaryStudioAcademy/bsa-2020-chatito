@@ -33,7 +33,9 @@
     "eslint-plugin-react": "7.20.5",
     "eslint-plugin-react-hooks": "4.0.8",
     "formik": "2.1.5",
+    "get-blob-duration": "1.1.2",
     "history": "4.10.1",
+    "mic-recorder-to-mp3": "2.2.2",
     "node-sass": "4.14.1",
     "query-string": "6.13.1",
     "ramda": "0.27.1",
@@ -55,6 +57,7 @@
     "redux-saga-routines": "3.2.3",
     "socket.io-client": "2.3.0",
     "typescript": "3.9.7",
+    "uifx": "2.0.7",
     "yup": "0.29.2"
   },
   "scripts": {

@@ -20,32 +20,36 @@
   -moz-osx-font-smoothing: inherit
   -webkit-appearance: none
   &::-moz-focus-inner
-      border: 0
-      padding: 0
+    border: 0
+    padding: 0
   &:focus
     outline: none
 
-.popOverWindow
-  width: 250px
-  max-width: 250px
-  background-color: var(--workspace-toolbar-background)
-  z-index: 102
-
-.avatarContainer
+.profilePreviewContainer
   width: 100%
-  height: 250px
+  height: 100%
   display: flex
-  justify-content: center
+  flex-direction: column
+  justify-content: space-between
+  padding: 12px 0
 
-.userAvatar
+.contentBody
+  display: flex
+  justify-content: space-between
+  padding: 0 12px
+
+.infoContainer
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+
+.avatar
   object-fit: cover
-  min-width: 100%
+  margin-bottom: 10px
 
 .fullname
-  margin-top: 15px
   font-size: larger
   font-weight: bold
-  color: var(--text-color-for-dark-bg)
   margin-bottom: 5px
   font-weight: 900
   letter-spacing: 0.5px
@@ -59,52 +63,55 @@
   background-color: var(--offline)
 
 .title
-  color: var(--text-color-for-dark-bg)
-  margin-bottom: 5px
-  font-size: 16px
+  margin: 2px 0
+  font-size: 14px
 
 .link
   @include buttonReset
   color: var(--icon-active)
-  font-size: 16px
+  font-size: 15px
+  font-weight: 500
+  margin: 6px 0 2px
   &:hover
     text-decoration: underline
+  &:nth-child(2)
+    margin-left: 15px
 
 .textField
-  margin-top: 10px
   resize: none
 
 .arrowIcon
-  color: var(--text-color-for-dark-bg)
-  font-size: 30px
+  color: var(--offline)
+  font-size: 23px
   transition: all .3s
 
 .sendMessageBlock
   display: flex
   align-items: flex-end
-  margin-bottom: 3px
+  margin: 5px 0 0 0
+  padding: 0 12px
 
 .arrowButton
   width: 40px
   height: 38px
   cursor: pointer
-  margin: 0 5px 0 5px
+  margin: 0 0 0 10px
   display: flex
   justify-content: center
   align-items: center
   outline: none
   background-color: transparent
   &:hover .arrowIcon
-    color: var(--offline)
+    color: var(--close-button-hover)
   &_reset
     @include buttonReset
 
-.contentBody
-  display: flex
-  flex-direction: column
-  align-items: flex-start
-
 .userStatus
-  font-size: 16px
+  font-size: 14px
+  margin: 2px 0
+
+.line
+  height: 2px
+  width: 100%
+  background: var(--crop-bg)
   margin: 5px 0
-  color: var(--text-color-for-dark-bg)

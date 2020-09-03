@@ -19,7 +19,8 @@ import {
   updatePostDraftCommentRoutine,
   upsertDraftPostWithSocketRoutine,
   deleteDraftPostWithSocketRoutine,
-  fetchNavigationPostRoutine
+  fetchNavigationPostRoutine,
+  addPostRoutine
 } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
@@ -258,7 +259,8 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         id: '0',
         fullName: 'Chatito Bot',
         displayName: 'Chatito Bot',
-        email: 'chatito@gmail.com'
+        email: 'chatito@gmail.com',
+        audio: 'https://mobcup.net/d/c76xxfvk/mp3'
       };
       const newPost: IPost = {
         createdByUser: chatitoBotMock,
@@ -281,6 +283,15 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     case createChatAndAddPostRoutine.FAILURE:
       return {
         ...state, loading: false
+      };
+    case addPostRoutine.SUCCESS:
+      return {
+        ...state,
+        posts: [
+          ...state.posts,
+          payload
+        ],
+        loading: false
       };
     default:
       return state;

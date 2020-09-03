@@ -10,4 +10,5 @@ export interface IUserWithWorkspaces {
   status: string;
   githubUsername: string;
   workspaces: IWorkspaceResponse[];
+  audio?: string;
 }

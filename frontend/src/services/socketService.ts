@@ -41,6 +41,10 @@ import {
   upsertDraftPageCommentRoutine,
   deleteDraftCommentFromDraftsRoutine
 } from 'containers/Thread/routines';
+import UIfx from 'uifx';
+import HatDance from 'common/sounds/hat_dance.mp3';
+import { playByUrl } from 'common/helpers/audioHelper';
+import { defaultNotificationAudio } from 'common/configs/defaults';
 
 const { server } = env.urls;
 
@@ -48,12 +52,14 @@ export const connectSockets = () => {
   // eslint-disable-next-line
   const chatSocket = io(`${server}/chat`, { query: `auth_token=${getAccessToken()}` });
 
-  chatSocket.on(ClientSockets.AddPost, (post: IPost) => {
+  chatSocket.on(ClientSockets.AddPost, (post: IPost, audio: string) => {
+    const addedPost = { ...post };
     const state = store.getState();
-    if (post.chatId === state.chat.chat?.id) {
-      store.dispatch(addPostWithSocketRoutine(post));
+    if (addedPost.chatId === state.chat.chat?.id) {
+      store.dispatch(addPostWithSocketRoutine(addedPost));
     } else {
-      store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
+      playByUrl(audio || defaultNotificationAudio);
+      store.dispatch(incUnreadCountRoutine({ chatId: addedPost.chatId }));
     }
   });
 
@@ -74,6 +80,10 @@ export const connectSockets = () => {
 
   chatSocket.on(ClientSockets.JoinChat, (chatId: string) => {
     chatSocket.emit(ServerSockets.JoinChatRoom, chatId);
+    const sound = new UIfx(HatDance, {
+      throttleMs: 5000
+    });
+    sound.play();
   });
 
   chatSocket.on(ClientSockets.AddChat, (chat: IChat) => {
