@@ -23,7 +23,7 @@ import {
   markAsUnreadPostWithOptionRoutine,
   readCommentRoutine,
   markAsUnreadCommentWithOptionRoutine } from 'scenes/Workspace/routines';
-import ReminderItem from 'components/ReminderItem/ReminderItem';
+import ReminderItem from 'containers/ReminderItem/ReminderItem';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 import { IPostsToRead } from 'common/models/chat/IPostsToRead';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -199,7 +199,6 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
 
   const popoverOptions = (
     <Popover id="popover-basic" className={styles.popOverOptions}>
-      <header className={styles.popoverHeader}>More options</header>
       <button
         type="button"
         className={styles.optionsSelect}
