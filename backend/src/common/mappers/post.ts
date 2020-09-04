@@ -19,6 +19,18 @@ const whaleBotMock = {
   email: 'whale@gmail.com',
   imageUrl: 'https://img.icons8.com/flat_round/64/000000/whale--v1.png',
   password: '',
+  originalUserId: '',
+  audio: 'https://bsa-chatito-storage.s3.amazonaws.com/audios/Tuturu.mp3'
+};
+
+const scheduliaBotMock = {
+  id: '2',
+  fullName: 'Schedulia Bot',
+  displayName: 'Schedulia Bot',
+  email: 'Schedulia@gmail.com',
+  imageUrl: 'https://schedulia.xyz/img/logo.02b82edf.svg',
+  password: '',
+  audio: 'https://bsa-chatito-storage.s3.amazonaws.com/audios/Tuturu.mp3',
   originalUserId: ''
 };
 
@@ -37,6 +49,9 @@ export const fromPostToPostClient = async (post: IPost) => {
   if (integration === IntegrationType.Whale) {
     whaleBotMock.originalUserId = post.createdByUser.id;
     createdByUser = whaleBotMock;
+  } else if (integration === IntegrationType.Schedulia) {
+    scheduliaBotMock.originalUserId = post.createdByUser.id;
+    createdByUser = scheduliaBotMock;
   }
 
   const postClient = {

@@ -155,8 +155,6 @@ class ChatRepository extends Repository<Chat> {
   }
 
   async getCommonDirectChat(id1: string, id2: string, wpId: string): Promise<Chat> {
-    console.log([id1, id2]);
-
     const chat = await this.createQueryBuilder('chat')
       .leftJoin(
         'chat.workspace',
