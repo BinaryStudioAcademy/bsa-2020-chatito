@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.sass';
-import { InputGroup, FormControl, Button, OverlayTrigger } from 'react-bootstrap';
+import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import ChannelItem from './containers/ChannelItem';
@@ -17,6 +17,8 @@ import { searchChannels } from 'common/helpers/searchHelper';
 import { SortOption } from './components/SortOption';
 import { SortType } from 'common/enums/SortType';
 import { getSortedChannels } from 'common/helpers/sortHelper';
+import { FilterOption } from './components/FilterOption';
+import { FilterType } from 'common/enums/FilterType';
 
 interface IProps {
   match: {
@@ -27,48 +29,50 @@ interface IProps {
   currentWorkspaceId: string;
   channels: IBrowserChannel[];
   loading: boolean;
+  currentUserId: string;
   fetchBrowserChannels: (workspaceId: string) => void;
   showModal: IBindingCallback1<IModalRoutine>;
 }
 
 const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels = [],
-  loading, fetchBrowserChannels, showModal }) => {
-  const [channelList, setChannelList] = useState(channels);
+  loading, currentUserId, fetchBrowserChannels, showModal }) => {
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState<SortType>(SortType.AToZ);
+  const [filterOption, setFilterOption] = useState<FilterType>(FilterType.All);
+  const [isChecked, setIsChecked] = useState(false);
   useEffect(() => {
     fetchBrowserChannels(currentWorkspaceId);
   }, []);
-  useEffect(() => {
-    let copiedChannels = [...channels];
-    if (searchValue) {
-      copiedChannels = searchChannels(copiedChannels, searchValue.trim());
-    }
-    if (sortOption !== SortType.AToZ) {
-      copiedChannels = getSortedChannels(copiedChannels, sortOption);
-    }
-    setChannelList(copiedChannels);
-  }, [channels]);
-  useEffect(() => {
-    setChannelList(getSortedChannels(channelList, sortOption));
-  }, [sortOption]);
+
+  const getPrivateChannels = (channelList: IBrowserChannel[]) => channelList.filter(channel => channel.isPrivate);
+
+  const getNotOwnChannels = (channelList: IBrowserChannel[]) => (
+    channelList.filter(channel => !channel.users.find(user => user.id === currentUserId))
+  );
 
   const onCreateChannel = () => showModal({ modalType: ModalTypes.CreateChannel, show: true });
-
-  const searchChannelHandler = (value: string) => {
-    const result = searchChannels(channels, value.trim());
-    setChannelList(result);
-  };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchValue(value);
-    searchChannelHandler(value);
   };
 
   const sortOptionHandler = (option: SortType) => {
     setSortOption(option);
   };
+
+  const filterOptionHandler = (option: FilterType) => {
+    setFilterOption(option);
+  };
+
+  const checkboxHandler = () => {
+    setIsChecked(!isChecked);
+  };
+
+  let channelList = getSortedChannels(channels, sortOption);
+  if (filterOption === FilterType.Private) channelList = getPrivateChannels(channelList);
+  if (isChecked) channelList = getNotOwnChannels(channelList);
+  if (searchValue) channelList = searchChannels(channelList, searchValue);
 
   return (
     <div className={styles.ChannelBrowser}>
@@ -87,12 +91,12 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
           <div>{channelList.length > 1 ? `${channelList.length} channels` : `${channelList.length} channel`}</div>
           <div>
             <SortOption setSortOption={sortOptionHandler} sortOption={sortOption} />
-            <OverlayTrigger trigger="click" placement="bottom" overlay={<div />} rootClose>
-              <button type="button" className={`${styles.filterBtn} button-unstyled`}>
-                <FontAwesomeIcon icon={faFilter} />
-                <span>Filter</span>
-              </button>
-            </OverlayTrigger>
+            <FilterOption
+              filterOption={filterOption}
+              setFilterOption={filterOptionHandler}
+              isChecked={isChecked}
+              setIsChecked={checkboxHandler}
+            />
           </div>
         </div>
         <div className={styles.channelsWrp}>
@@ -117,7 +121,8 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
 const mapStateToProps = (state: IAppState) => ({
   channels: state.channelBrowser.channels,
   currentWorkspaceId: state.workspace.workspace.id,
-  loading: state.channelBrowser.loading
+  loading: state.channelBrowser.loading,
+  currentUserId: state.user.user?.id as string
 });
 
 const mapDispatchToProps = {
