@@ -41,10 +41,9 @@ import {
   upsertDraftPageCommentRoutine,
   deleteDraftCommentFromDraftsRoutine
 } from 'containers/Thread/routines';
-import UIfx from 'uifx';
-import HatDance from 'common/sounds/hat_dance.mp3';
 import { playByUrl } from 'common/helpers/audioHelper';
 import { defaultNotificationAudio } from 'common/configs/defaults';
+import { IncomingSoundOptions } from 'common/enums/IncomingSoundOptions';
 
 const { server } = env.urls;
 
@@ -58,8 +57,18 @@ export const connectSockets = () => {
     if (addedPost.chatId === state.chat.chat?.id) {
       store.dispatch(addPostWithSocketRoutine(addedPost));
     } else {
-      playByUrl(audio || defaultNotificationAudio);
-      store.dispatch(incUnreadCountRoutine({ chatId: addedPost.chatId }));
+      switch (state.user.user?.incomingSoundOptions) {
+        case IncomingSoundOptions.AllowCustom:
+          playByUrl(audio);
+          break;
+        case IncomingSoundOptions.UseDefault:
+          playByUrl(defaultNotificationAudio);
+          break;
+        case IncomingSoundOptions.MuteAll:
+        default:
+          break;
+      }
+      store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
     }
   });
 
@@ -80,15 +89,12 @@ export const connectSockets = () => {
 
   chatSocket.on(ClientSockets.JoinChat, (chatId: string) => {
     chatSocket.emit(ServerSockets.JoinChatRoom, chatId);
-    const sound = new UIfx(HatDance, {
-      throttleMs: 5000
-    });
-    sound.play();
   });
 
   chatSocket.on(ClientSockets.AddChat, (chat: IChat) => {
     store.dispatch(addChatWithSocketRoutine(chat));
     store.dispatch(push(Routes.Chat.replace(':whash', chat.workspace.hash).replace(':chash', chat.hash)));
+    // play sound ?
   });
 
   chatSocket.on(ClientSockets.AddReply, (comment: IServerComment) => {
