@@ -276,6 +276,12 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
       });
     }
   };
+  const copyToClipBoard = async () => {
+    const chatHash = post.chat?.hash as string;
+    const url = window.location.href;
+    const baseChatUrl = url.substring(0, url.indexOf(chatHash) + chatHash?.length);
+    await navigator.clipboard.writeText(`${baseChatUrl}/${post.id}`);
+  };
   const isJoinBtn = post.integration === IntegrationType.Whale && post.type !== MessageType.WhaleSignUpUser;
 
   return (
@@ -293,7 +299,14 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
 
           <br />
 
-          <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
+          <button
+            type="button"
+            className={`${styles.metadata} ${styles.tooltip}`}
+            onClick={copyToClipBoard}
+          >
+            {dayjs(createdAt).format('hh:mm A')}
+            <span className={styles.tooltipText}>Click here to copy message link</span>
+          </button>
           {/* eslint-disable-next-line */}
           {
             isJoinBtn
