@@ -22,31 +22,24 @@ export const addGithubNotification = async (githubPayload: any) => {
   return {};
 };
 
-export const sendScheduliaMessage = async (payload: any, io: any): Promise<null> => {
+export const sendScheduliaMessage = async (payload: any, io: any) => {
   // PAYLOAD
   // workspace: workspace name
   // users: [] of user emails
-  // message: optional string
+  // data: {message: html string}
   const user1 = await getUserByEmail(payload.users[0]);
   const user2 = await getUserByEmail(payload.users[1]);
-  if (!user1 || !user2) {
-    console.log('inform schedulia');
-  }
 
   const wp = await getWorkspaceByName(payload.workspace);
-  if (!wp) {
-    console.log('inform schedulia');
-  }
 
   let chat = await getDirectChatByUsers(user1.id, user2.id, wp.id);
-
   if (!chat) {
     const chatBody = {
       workspaceName: wp.name,
       type: ChatType.DirectMessage,
       isPrivate: true,
       users: [user1, user2],
-      name: 'Schedulia meeting',
+      name: `<p>Schedulia meeting!</p>${payload.data.message}`,
       createdByUserId: user1.id
     };
     const newChat = await addChat(user1.id, chatBody);
@@ -62,7 +55,4 @@ export const sendScheduliaMessage = async (payload: any, io: any): Promise<null>
     text: 'Let me remind you about meeting!\n'
   };
   await addPostByBotIntoDirect(user1.id, newPost);
-  // await getCustomRepository(UserRepository).markAsUnreadPost(user1.id, createdPost.id);
-
-  return null;
 };
