@@ -8,7 +8,6 @@ import { IntegrationType } from '../common/enums/IntegrationType';
 import { ChatType } from '../common/enums/ChatType';
 import { ClientSockets } from '../common/enums/ClientSockets';
 import ChatRepository from '../data/repositories/chatRepository';
-// import UserRepository from '../data/repositories/userRepository';
 
 export const addGithubNotification = async (githubPayload: any) => {
   const post = await fromGithubPayloadToPost(githubPayload);

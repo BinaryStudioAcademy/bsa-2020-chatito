@@ -56,9 +56,9 @@ export const addPost = async (id: string, post: ICreatePost) => {
     }
   }
 
-  const newPost: ICreatePost = { ...post, createdByUser: user, chat };
+  const newPost: ICreatePost = { ...post, createdByUser: user, chat, integration: IntegrationType.None };
   const createdPost: IPost = await getCustomRepository(PostRepository).addPost(newPost);
-  const clientPost = await fromPostToPostClient(createdPost);
+  const clientPost = await fromPostToPostClient({ ...createdPost, type: ClientPostType.CommonPost });
   emitToChatRoom(clientPost.chatId, ClientSockets.AddPost, clientPost, user.audio);
   const users = await getCustomRepository(ChatRepository).getAllChatUsers(chat.id);
   users.forEach(async chatUser => {
