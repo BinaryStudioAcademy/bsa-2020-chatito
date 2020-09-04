@@ -20,7 +20,7 @@ const JoinButton: React.FC<IProps> = ({ url, creator }) => (
       </span>
     </div>
     <hr className={styles.line} />
-    <a href={url} className={styles.btnJoin}>Join</a>
+    <a href={url} rel="noopener noreferrer" target="_blank" className={styles.btnJoin}>Join</a>
   </div>
 );
 

@@ -48,6 +48,7 @@ const ChatBody: React.FC<IProps> = ({
   const [postIdForLine, setPostIdForLine] = useState('');
   const chatBody = useRef<HTMLDivElement>(null);
   const [unreadChatPostIds, setUnreadChatPostIds] = useState<string[]>();
+  const [copiedPost, setCopiedPost] = useState<string>('');
   const getMorePosts = () => {
     loadMorePosts({ chatId, from, count });
   };
@@ -132,6 +133,8 @@ const ChatBody: React.FC<IProps> = ({
                 postRef={m.id === postId ? postRef : null}
                 openThread={handleOpenThread}
                 type={PostType.Post}
+                setCopiedPost={setCopiedPost}
+                copiedPost={copiedPost}
               />
             </div>
           ))}

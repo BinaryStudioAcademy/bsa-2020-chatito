@@ -11,8 +11,16 @@ export const fromGithubPayloadToPost = async (githubPayload: any): Promise<ICrea
 
   if (pullRequest && action === 'opened') {
     const messageText = `
-      <p>New PR <b><a href=${pullRequest.html_url}>${pullRequest.title}</a></b> has been created
-      by <b><a href=${pullRequest.user.html_url}>${pullRequest.user.login}</a></b>.<p>`;
+      <p>New PR
+      <b>
+        <a href=${pullRequest.html_url} rel="noopener noreferrer" target="_blank">
+          ${pullRequest.title}
+        </a>
+      </b> has been created
+        by <b>
+      <a href=${pullRequest.user.html_url} rel="noopener noreferrer" target="_blank">
+        ${pullRequest.user.login}
+      </a></b>.<p>`;
 
     return { chatId: chat.id, text: messageText };
   }
