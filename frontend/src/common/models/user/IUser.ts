@@ -10,5 +10,6 @@ export interface IUser {
   status?: string;
   audio: string;
   githubUsername?: string;
+  originalUserId?: string;
   incomingSoundOptions?: IncomingSoundOptions;
 }
