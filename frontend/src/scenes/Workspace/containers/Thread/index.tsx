@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import ThreadView from 'containers/Thread';
 import { IAppState } from 'common/models/store';
 import { IPost } from 'common/models/post/IPost';

@@ -161,6 +161,19 @@ const EditProfileForm: FunctionComponent<IProps> = ({
               onChange={handleChange}
             />
           </Form.Group>
+
+          <Form.Group controlId="formEditTitle" className={styles.inputBlock}>
+            <span className={styles.inputHeader}>Email</span>
+            <Form.Control
+              type="text"
+              placeholder={user.email}
+              readOnly
+            />
+            <div className={styles.description}>
+              This field can`t be edited
+            </div>
+          </Form.Group>
+
           <Form.Group controlId="formEditTitle" className={styles.inputBlock}>
             <span className={styles.inputHeader}>Life position</span>
             <Form.Control
@@ -174,11 +187,12 @@ const EditProfileForm: FunctionComponent<IProps> = ({
               Write here your life principles, your motto, or some fun facts about yourself.
             </div>
           </Form.Group>
+
           <div className={`${styles.formFooter} w-100`}>
-            <Button className={styles.primaryBtnCancel} variant="primary" onClick={handleClose}>
+            <Button className={styles.primaryBtnCancel} variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button className={styles.primaryBtn} type="button" variant="primary" onClick={handleSubmit}>
+            <Button className={styles.primaryBtn} type="button" variant="success" onClick={handleSubmit}>
               Save Changes
             </Button>
           </div>

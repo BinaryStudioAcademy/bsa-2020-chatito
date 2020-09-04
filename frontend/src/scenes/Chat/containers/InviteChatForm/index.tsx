@@ -79,28 +79,28 @@ const InviteChatForm: React.FC<IProps> = ({ workspaceId, chatName,
 
   const popover = (
     <Popover id="popover-basic" className={styles.popover}>
-      <Popover.Content className={styles.content}>
-        {searchedUsers.length
-          ? searchedUsers.map(user => {
-            const isUserInChat = !!chatUsers.find(chatUser => chatUser.id === user.id);
-            const statusCls = [styles.status, styles.online];
-            const btnCls = [isUserInChat ? styles.chatUser : '', styles.userItem, 'button-unstyled', 'noselect'];
-            return (
-              <button className={btnCls.join(' ')} onClick={() => onSelectUser(user)} type="button" key={user.id}>
+      {searchedUsers.length
+        ? searchedUsers.map(user => {
+          const isUserInChat = !!chatUsers.find(chatUser => chatUser.id === user.id);
+          const statusCls = [styles.status, styles.online];
+          const btnCls = [isUserInChat ? styles.chatUser : '', styles.userItem, 'button-unstyled', 'noselect'];
+          return (
+            <button className={btnCls.join(' ')} onClick={() => onSelectUser(user)} type="button" key={user.id}>
+              <div className={styles.userInfoBlock}>
                 <span className={styles.fullName}>{user.fullName}</span>
                 <i className={statusCls.join(' ')} />
                 <span className={styles.displayName}>{user.displayName}</span>
-                {isUserInChat && <span className={styles.additional}>Already in this channel</span>}
-              </button>
-            );
-          })
-          : (
-            <div className={styles.notFound}>
-              <span>No one found matching</span>
-              <strong>{text}</strong>
-            </div>
-          )}
-      </Popover.Content>
+              </div>
+              {isUserInChat && <span className={styles.additional}>Already in this channel</span>}
+            </button>
+          );
+        })
+        : (
+          <div className={styles.notFound}>
+            <span>No one found matching</span>
+            <strong>{text}</strong>
+          </div>
+        )}
     </Popover>
   );
 

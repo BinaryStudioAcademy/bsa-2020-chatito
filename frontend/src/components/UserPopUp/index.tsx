@@ -30,6 +30,10 @@ const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditPr
     window.location.href = Routes.SignIn;
   };
 
+  const showPreferences = () => {
+    showModal({ modalType: ModalTypes.Preferences, show: true });
+  };
+
   const showInvitePopup = () => {
     showModal({ modalType: ModalTypes.InvitePopup, show: true });
   };
@@ -37,27 +41,29 @@ const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditPr
   const onAddWorkspaceClick = () => {
     router(Routes.AddWorkspace);
   };
+
   const buttonClick = (callback: IBindingAction) => {
     callback();
     document.body.click();
   };
   const popOver = (
     <Popover id={id} className={styles.panelPopUp}>
-      <button type="button" className={styles.panelSelect}>
+      <button type="button" className={styles.panelSelect} onClick={() => buttonClick(showPreferences)}>
         Preferences
       </button>
-      <button type="button" className={styles.panelSelect} onClick={() => { buttonClick(onEditProfileClick); }}>
+      <button type="button" className={styles.panelSelect} onClick={() => buttonClick(onEditProfileClick)}>
         View Profile
       </button>
-      <button type="button" className={styles.panelSelect} onClick={() => { buttonClick(showInvitePopup); }}>
+      <button type="button" className={styles.panelSelect} onClick={() => buttonClick(showInvitePopup)}>
         Invite People
       </button>
-      <button type="button" className={styles.panelSelect} onClick={() => { buttonClick(onAddWorkspaceClick); }}>
+      <button type="button" className={styles.panelSelect} onClick={() => buttonClick(onAddWorkspaceClick)}>
         Add workspace
       </button>
-      <button type="button" className={styles.panelSelect} onClick={() => { buttonClick(onSingOut); }}>
+      <button type="button" className={styles.panelSelect} onClick={() => buttonClick(onSingOut)}>
         Sign Out
       </button>
+
     </Popover>
   );
 

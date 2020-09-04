@@ -34,6 +34,10 @@ import { ICommentsToRead } from 'common/models/chat/ICommentsToRead';
 import { IServerComment } from 'common/models/post/IServerComment';
 import { IMarkAsUnreadComment } from 'common/models/post/IMarkAsUnreadComment';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
+import JoinButton from 'scenes/Chat/components/JoinBtn';
+import { MessageType } from 'common/enums/MessageType';
+import { IntegrationType } from 'common/enums/IntegrationType';
+import DOMPurify from 'dompurify';
 
 interface IProps {
   post: IPost;
@@ -53,12 +57,13 @@ interface IProps {
   markAsUnreadPost: IBindingCallback1<IMarkAsUnreadPost>;
   markAsUnreadComment: IBindingCallback1<IMarkAsUnreadComment>;
   postRef?: MutableRefObject<any> | null;
+  chatUsers?: IUser[];
 }
 
 const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, openThread,
   unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, unreadChats,
 
-  readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef }) => {
+  readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef, chatUsers }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
   useEffect(() => {
@@ -137,36 +142,34 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
   };
 
   const popoverRemindOptions = (
-    <Popover id="popover-basic">
-      <Popover.Content>
-        <ReminderItem
-          text="In 20 minutes"
-          addedTime={twentyMinutes}
-        />
-        <ReminderItem
-          text="In 1 hour"
-          addedTime={oneHour}
-        />
-        <ReminderItem
-          text="In 3 hours"
-          addedTime={threeHours}
-        />
-        <ReminderItem
-          text="Tomorrow"
-          addedTime={oneDay}
-        />
-        <ReminderItem
-          text="Next week"
-          addedTime={oneWeek}
-        />
-        <button
-          type="button"
-          className={styles.optionsSelect}
-          onClick={() => showModal({ modalType: ModalTypes.SetReminder, show: true })}
-        >
-          <span>Custom</span>
-        </button>
-      </Popover.Content>
+    <Popover id="popover-basic" className={styles.popOverOptions}>
+      <ReminderItem
+        text="In 20 minutes"
+        addedTime={twentyMinutes}
+      />
+      <ReminderItem
+        text="In 1 hour"
+        addedTime={oneHour}
+      />
+      <ReminderItem
+        text="In 3 hours"
+        addedTime={threeHours}
+      />
+      <ReminderItem
+        text="Tomorrow"
+        addedTime={oneDay}
+      />
+      <ReminderItem
+        text="Next week"
+        addedTime={oneWeek}
+      />
+      <button
+        type="button"
+        className={styles.optionsSelect}
+        onClick={() => showModal({ modalType: ModalTypes.SetReminder, show: true })}
+      >
+        <span>Custom</span>
+      </button>
     </Popover>
   );
 
@@ -180,18 +183,22 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
   };
 
   const popoverOptions = (
-    <Popover id="popover-basic">
-      <Popover.Title as="h3">More options</Popover.Title>
+    <Popover id="popover-basic" className={styles.popOverOptions}>
       <button
         type="button"
-        className={`${styles.optionsSelect} ${styles.moreOptionsSelect}`}
+        className={styles.optionsSelect}
         onClick={markAsUnreadOptionClick}
       >
         <span>Mark as unread</span>
       </button>
-      <OverlayTrigger trigger="click" placement="left" overlay={popoverRemindOptions}>
-        <button type="button" className={`${styles.optionsSelect} ${styles.moreOptionsSelect}`}>
-          <span>&lt; Remind me about that</span>
+      <OverlayTrigger
+        // delay={{ show: 0, hide: Infinity }}
+        trigger="click"
+        placement="left"
+        overlay={popoverRemindOptions}
+      >
+        <button type="button" className={styles.optionsSelect}>
+          <span>Remind about that</span>
         </button>
       </OverlayTrigger>
     </Popover>
@@ -268,6 +275,14 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
       });
     }
   };
+  const copyToClipBoard = async () => {
+    const chatHash = post.chat?.hash as string;
+    const url = window.location.href;
+    const baseChatUrl = url.substring(0, url.indexOf(chatHash) + chatHash?.length);
+    await navigator.clipboard.writeText(`${baseChatUrl}/${post.id}`);
+  };
+  const isJoinBtn = post.integration === IntegrationType.Whale && post.type !== MessageType.WhaleSignUpUser;
+
   return (
     <div ref={postRef}>
       <Media className={styles.postWrapper} onMouseEnter={onHoverRead}>
@@ -283,9 +298,31 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
 
           <br />
 
-          <button type="button" className={styles.metadata}>{dayjs(createdAt).format('hh:mm A')}</button>
+          <button
+            type="button"
+            className={`${styles.metadata} ${styles.tooltip}`}
+            onClick={copyToClipBoard}
+          >
+            {dayjs(createdAt).format('hh:mm A')}
+            <span className={styles.tooltipText}>Click here to copy message link</span>
+          </button>
           {/* eslint-disable-next-line */}
-          <div className={`${styles.text} ${isNew ? styles.unread : ''}`} dangerouslySetInnerHTML={{ __html: text }} />
+          {
+            isJoinBtn
+              ? (
+                <JoinButton
+                  url={text}
+                  creator={chatUsers?.find(user => user.id === post.createdByUser?.originalUserId)?.displayName}
+                />
+              )
+              : (
+                <div
+                  className={`${styles.text} ${isNew ? styles.unread : ''}`}
+                  // eslint-disable-next-line react/no-danger
+                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text) }}
+                />
+              )
+          }
           <div className={styles.emojiStats}>
             {type === PostType.Post && renderEmojis()}
           </div>
@@ -310,7 +347,8 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
 const mapStateToProps = (state: IAppState) => ({
   userId: state.user.user?.id as string,
   unreadChats: state.workspace.unreadChats,
-  unreadPostComments: state.workspace.unreadPostComments
+  unreadPostComments: state.workspace.unreadPostComments,
+  chatUsers: state.chat.chat?.users
 });
 
 const mapDispatchToProps = {

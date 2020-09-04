@@ -25,6 +25,7 @@ class PostRepository extends Repository<Post> {
         'post.id',
         'post.createdAt',
         'post.text',
+        'post.integration',
         'user.id',
         'user.fullName',
         'user.displayName',

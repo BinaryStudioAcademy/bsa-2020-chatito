@@ -25,7 +25,8 @@ export const getUserById = async (id: string) => {
 
 export const getUserByIdWithoutRelations = async (id: string) => {
   const user = await getCustomRepository(UserRepository).getByIdWithoutRelations(id);
-  return user;
+  const clientUser = fromUserToUserClient(user);
+  return clientUser;
 };
 
 export const deleteUser = async (id: string): Promise<unknown> => {

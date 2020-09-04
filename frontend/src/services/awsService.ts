@@ -9,6 +9,10 @@ export const signS3Avatar = () => (
   signS3('avatars', 'jpeg')
 );
 
+export const signS3Audio = () => (
+  signS3('audios', 'mp3')
+);
+
 export const uploadOnAWS = (signedRequest: string, file: Blob, fileName: string, fileType: string) => {
   const options = {
     method: 'PUT',

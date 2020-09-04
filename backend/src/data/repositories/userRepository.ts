@@ -10,7 +10,6 @@ import { IUser } from '../../common/models/user/IUser';
 class UserRepository extends Repository<User> {
   addUser(data: ICreateUser): Promise<User> {
     const user = this.create(data);
-
     return user.save();
   }
 
@@ -99,7 +98,7 @@ class UserRepository extends Repository<User> {
     return user;
   }
 
-  async editPassword(id:string, password: string): Promise<User> {
+  async editPassword(id: string, password: string): Promise<User> {
     await this.update(
       id,
       { password }

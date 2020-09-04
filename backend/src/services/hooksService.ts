@@ -6,11 +6,14 @@ import { getDirectChatByUsers } from './chatService';
 
 export const addGithubNotification = async (githubPayload: any) => {
   const post = await fromGithubPayloadToPost(githubPayload);
-  const githubUser = await getGithubUser();
 
-  const notificationPost = await addPost(githubUser.id, post);
+  if (post) {
+    const githubUser = await getGithubUser();
+    const notificationPost = await addPost(githubUser.id, post);
+    return notificationPost;
+  }
 
-  return notificationPost;
+  return {};
 };
 
 export const sendScheduliaMessage = async (payload: any): Promise<null> => {

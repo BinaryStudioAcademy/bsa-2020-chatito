@@ -63,7 +63,7 @@ const initialState: IWorkspaceState = {
   users: [],
   showRightSideMenu: RightMenuTypes.None,
   activeThread: null,
-  userProfile: { id: '', email: '', fullName: '', displayName: '' },
+  userProfile: { id: '', email: '', fullName: '', displayName: '', audio: '' },
   threadLoading: false,
   someField: 'string',
   unreadChats: [],
@@ -246,6 +246,11 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         const directMessages = [...state.directMessages];
         directMessages.push(newChat);
         return { ...state, directMessages };
+      }
+      if (newChat.type === ChatType.GithubRepository) {
+        const githubRepositories = [...state.githubRepositories];
+        githubRepositories.push(newChat);
+        return { ...state, githubRepositories };
       }
       return state;
     }
