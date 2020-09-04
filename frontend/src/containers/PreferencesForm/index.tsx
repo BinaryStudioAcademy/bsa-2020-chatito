@@ -63,6 +63,7 @@ const PreferencesForm: FunctionComponent<IProps> = ({
 
     const editUserProps = { ...user, incomingSoundOptions };
     delete editUserProps.audio;
+    delete editUserProps.imageUrl;
     if (isUserAudioDefault) {
       editUserProps.audio = defaultNotificationAudio;
       setUserAudio(defaultNotificationAudio);
@@ -113,15 +114,17 @@ const PreferencesForm: FunctionComponent<IProps> = ({
               label="Custom sound"
             />
           </Form.Group>
-          {!isUserAudioDefault
-            && (
-              <div className={`${styles.audioNotificationsWrapper}`}>
-                <PlayAudioButton audioUrl={userAudio} />
+
+          <div className={`${styles.audioNotificationsWrapper}`}>
+            <PlayAudioButton audioUrl={isUserAudioDefault ? defaultNotificationAudio : userAudio} />
+            {!isUserAudioDefault
+              && (
                 <div className={styles.recorderWrapper}>
                   <AudioRecorder onRecord={onRecord} maxDuration={3} onError={onRecordingError} />
                 </div>
-              </div>
-            )}
+              )}
+          </div>
+
           {recordingErr && !isUserAudioDefault && (<div className={styles.recordingErr}>{recordingErr}</div>)}
 
           <h3 className={styles.subHeader}>What you hear when users write you:</h3>
