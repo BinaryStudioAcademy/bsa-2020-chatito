@@ -48,7 +48,6 @@ import { IncomingSoundOptions } from 'common/enums/IncomingSoundOptions';
 const { server } = env.urls;
 
 export const connectSockets = () => {
-  // eslint-disable-next-line
   const chatSocket = io(`${server}/chat`, { query: `auth_token=${getAccessToken()}` });
 
   chatSocket.on(ClientSockets.AddPost, (post: IPost, audio: string) => {
