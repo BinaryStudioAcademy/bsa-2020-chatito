@@ -18,7 +18,8 @@ const whaleBotMock = {
   displayName: 'Whale Bot',
   email: 'whale@gmail.com',
   imageUrl: 'https://img.icons8.com/flat_round/64/000000/whale--v1.png',
-  password: 'whalePassword'
+  password: '',
+  originalUserId: ''
 };
 
 export const fromPostToPostClient = async (post: IPost) => {
@@ -34,7 +35,7 @@ export const fromPostToPostClient = async (post: IPost) => {
   };
 
   if (integration === IntegrationType.Whale) {
-    whaleBotMock.id = post.createdByUser.id;
+    whaleBotMock.originalUserId = post.createdByUser.id;
     createdByUser = whaleBotMock;
   }
 

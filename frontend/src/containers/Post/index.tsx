@@ -277,7 +277,7 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
     }
   };
   const isJoinBtn = post.integration === IntegrationType.Whale && post.type !== MessageType.WhaleSignUpUser;
-
+  console.log(post);
   return (
     <div ref={postRef}>
       <Media className={styles.postWrapper} onMouseEnter={onHoverRead}>
@@ -300,7 +300,7 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
               ? (
                 <JoinButton
                   url={text}
-                  creator={chatUsers?.find(user => user.id === post.createdByUser.id)?.displayName}
+                  creator={chatUsers?.find(user => user.id === post.createdByUser?.originalUserId)?.displayName}
                 />
               )
               : (
