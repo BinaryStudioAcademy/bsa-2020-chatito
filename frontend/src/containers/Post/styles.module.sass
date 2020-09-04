@@ -160,3 +160,29 @@
   border: none
   padding: 12px 0
 
+.tooltip
+  position: relative
+  display: inline-block
+
+.tooltip .tooltipText
+  visibility: hidden
+  width: 120px
+  background-color: #555
+  color: #fff
+  text-align: center
+  padding: 5px 0
+  border-radius: 6px
+
+  /* Position the tooltip text */
+  position: absolute
+  z-index: 1
+  bottom: -40px
+  margin-left: -60px
+
+  /* Fade in tooltip */
+  opacity: 0
+  transition: opacity 0.3s
+
+.tooltip:hover .tooltipText
+  visibility: visible
+  opacity: 1
