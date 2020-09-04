@@ -84,3 +84,8 @@ export const getGithubRepositoryChat = async (repositoryName: string, repository
   const chat = await getCustomRepository(ChatRepository).getGithubRepositoryChat(repositoryName, repositoryOwner);
   return chat;
 };
+
+export const getDirectChatByUsers = async (userId1: string, userId2: string, wpId: string) => {
+  const chat = await getCustomRepository(ChatRepository).getCommonDirectChat(userId1, userId2, wpId);
+  return chat;
+};

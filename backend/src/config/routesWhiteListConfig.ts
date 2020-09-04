@@ -7,5 +7,6 @@ export default [
   '/auth/forgotpass',
   '/auth/resetpass',
   '/users/invite',
-  '/hooks/github'
+  '/hooks/github',
+  '/hooks/schedulia'
 ];

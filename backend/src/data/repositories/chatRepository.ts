@@ -153,6 +153,24 @@ class ChatRepository extends Repository<Chat> {
 
     return chat;
   }
+
+  async getCommonDirectChat(id1: string, id2: string, wpId: string): Promise<Chat> {
+    const chat = await this.createQueryBuilder('chat')
+      .leftJoin(
+        'chat.workspace',
+        'wp'
+      )
+      .leftJoinAndSelect(
+        'chat.users',
+        'user'
+      )
+      .where('chat.type = :chatType', { chatType: ChatType.DirectMessage })
+      .andWhere('wp.id = :wpId', { wpId })
+      .andWhere('user.id IN (:...idArr)', { idArr: [id1, id2] })
+      .getMany();
+
+    return chat.find(c => c.users.length === 2);
+  }
 }
 
 export default ChatRepository;

@@ -59,7 +59,7 @@ export const connectSockets = () => {
     } else {
       switch (state.user.user?.incomingSoundOptions) {
         case IncomingSoundOptions.AllowCustom:
-          playByUrl(audio);
+          playByUrl(audio || defaultNotificationAudio);
           break;
         case IncomingSoundOptions.UseDefault:
           playByUrl(defaultNotificationAudio);

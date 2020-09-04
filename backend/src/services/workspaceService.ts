@@ -49,3 +49,8 @@ export const getWorkspaceUserChats = async (workspaceId: string, userId: string)
 
   return { channels, directMessages, githubRepositories };
 };
+
+export const getWorkspaceByName = async (name: string) => {
+  const wp = await getCustomRepository(WorkspaceRepository).findByName(name);
+  return wp;
+};
