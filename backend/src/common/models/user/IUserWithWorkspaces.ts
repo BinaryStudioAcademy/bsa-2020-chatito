@@ -1,4 +1,5 @@
 import { IWorkspaceResponse } from '../workspace/IWorkspaceResponse';
+import { IncomingSoundOptions } from '../../enums/IncomingSoundOptions';
 
 export interface IUserWithWorkspaces {
   id: string;
@@ -11,4 +12,5 @@ export interface IUserWithWorkspaces {
   githubUsername: string;
   workspaces: IWorkspaceResponse[];
   audio?: string;
+  incomingSoundOptions: IncomingSoundOptions;
 }

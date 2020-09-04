@@ -1,6 +1,6 @@
 .notFoundPage
   background: var(--page-not-found-bg)
-  min-height: calc(100vh - 91px)
+  min-height: calc(100vh - 78px)
   min-width: 100vw
   display: flex
   justify-content: center
@@ -48,3 +48,7 @@
   &:hover, &:active
     background-color: var( --presence-online) !important
     border-color: var( --presence-online) !important
+
+@media screen and (max-width: 1440px)
+  .notFoundPage
+    min-height: calc( 100vh - 62px )

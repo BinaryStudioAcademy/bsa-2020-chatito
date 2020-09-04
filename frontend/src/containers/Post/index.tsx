@@ -313,7 +313,7 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
               ? (
                 <JoinButton
                   url={text}
-                  creator={chatUsers?.find(user => user.id === post.createdByUser.id)?.displayName}
+                  creator={chatUsers?.find(user => user.id === post.createdByUser?.originalUserId)?.displayName}
                 />
               )
               : (

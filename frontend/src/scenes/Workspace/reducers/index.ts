@@ -63,7 +63,7 @@ const initialState: IWorkspaceState = {
   users: [],
   showRightSideMenu: RightMenuTypes.None,
   activeThread: null,
-  userProfile: { id: '', email: '', fullName: '', displayName: '', audio: 'https://mobcup.net/d/c76xxfvk/mp3' },
+  userProfile: { id: '', email: '', fullName: '', displayName: '', audio: '' },
   threadLoading: false,
   someField: 'string',
   unreadChats: [],

@@ -23,6 +23,7 @@ import { showModalRoutine } from 'routines/modal';
 import ChatMembers from 'containers/ChatMembers';
 import { ChatType } from 'common/enums/ChatType';
 import { createDirectChannelName } from 'common/helpers/nameHelper';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 
 const privateChannelIcon = (
   <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
@@ -70,6 +71,24 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUser }) => {
   const chatName = chat.type === ChatType.DirectMessage
     ? createDirectChannelName(chat.users, currentUser.id) : chat.name;
 
+  const addPeoplePopover = (
+    <Popover id="addPeoplePopover" className={styles.popOverWindow}>
+      <span>
+        Add people
+        <br />
+        to the channel
+      </span>
+    </Popover>
+  );
+
+  const viewMembersPopover = (
+    <Popover id="viewMembersPopover" className={styles.popOverWindow}>
+      <span>
+        View all members
+      </span>
+    </Popover>
+  );
+
   return (
     <div className={styles.chatContainer} key={chat.id}>
 
@@ -85,20 +104,35 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUser }) => {
       <div className={styles.rightHeaderBlock}>
         {chat.type === ChatType.Channel && (
           <>
-            <div
-              role="button"
-              className={styles.memberAvatarBlock}
-              onClick={showChatMembers}
-              onKeyDown={showChatMembers}
-              tabIndex={0}
+            <OverlayTrigger
+              trigger="hover"
+              delay={{ show: 300, hide: 0 }}
+              rootClose
+              placement="bottom"
+              overlay={viewMembersPopover}
             >
-              {userAvatars(chat.users)}
-              <div className={styles.memberCounter}>{chat.users.length || 0}</div>
-            </div>
-
-            <button type="button" className="button-unstyled" onClick={onInviteUser}>
-              <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
-            </button>
+              <div
+                role="button"
+                className={styles.memberAvatarBlock}
+                onClick={showChatMembers}
+                onKeyDown={showChatMembers}
+                tabIndex={0}
+              >
+                {userAvatars(chat.users)}
+                <div className={styles.memberCounter}>{chat.users.length || 0}</div>
+              </div>
+            </OverlayTrigger>
+            <OverlayTrigger
+              trigger="hover"
+              delay={{ show: 300, hide: 0 }}
+              rootClose
+              placement="bottom"
+              overlay={addPeoplePopover}
+            >
+              <button type="button" className="button-unstyled" onClick={onInviteUser}>
+                <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
+              </button>
+            </OverlayTrigger>
             <InviteChatModal chatName={chat.name} chatId={chat.id} toggleModal={showModal} chatUsers={chat.users} />
             <ChatMembers />
           </>
