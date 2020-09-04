@@ -1,3 +1,5 @@
+import { IncomingSoundOptions } from 'common/enums/IncomingSoundOptions';
+
 export interface IUser {
   id: string;
   email: string;
@@ -8,4 +10,5 @@ export interface IUser {
   status?: string;
   audio: string;
   githubUsername?: string;
+  incomingSoundOptions?: IncomingSoundOptions;
 }
