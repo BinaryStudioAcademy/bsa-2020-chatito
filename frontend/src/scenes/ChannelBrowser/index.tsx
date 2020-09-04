@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './styles.module.sass';
 import { InputGroup, FormControl, Button, OverlayTrigger } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faSort, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import ChannelItem from './containers/ChannelItem';
@@ -14,6 +14,9 @@ import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { showModalRoutine } from 'routines/modal';
 import { searchChannels } from 'common/helpers/searchHelper';
+import { SortOption } from './components/SortOption';
+import { SortType } from 'common/enums/SortType';
+import { getSortedChannels } from 'common/helpers/sortHelper';
 
 interface IProps {
   match: {
@@ -31,17 +34,24 @@ interface IProps {
 const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels = [],
   loading, fetchBrowserChannels, showModal }) => {
   const [channelList, setChannelList] = useState(channels);
-  const [text, setText] = useState('');
+  const [searchValue, setSearchValue] = useState('');
+  const [sortOption, setSortOption] = useState<SortType>(SortType.AToZ);
   useEffect(() => {
     fetchBrowserChannels(currentWorkspaceId);
   }, []);
   useEffect(() => {
     let copiedChannels = [...channels];
-    if (text) {
-      copiedChannels = searchChannels(copiedChannels, text.trim());
+    if (searchValue) {
+      copiedChannels = searchChannels(copiedChannels, searchValue.trim());
+    }
+    if (sortOption !== SortType.AToZ) {
+      copiedChannels = getSortedChannels(copiedChannels, sortOption);
     }
     setChannelList(copiedChannels);
   }, [channels]);
+  useEffect(() => {
+    setChannelList(getSortedChannels(channelList, sortOption));
+  }, [sortOption]);
 
   const onCreateChannel = () => showModal({ modalType: ModalTypes.CreateChannel, show: true });
 
@@ -52,8 +62,12 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setText(value);
+    setSearchValue(value);
     searchChannelHandler(value);
+  };
+
+  const sortOptionHandler = (option: SortType) => {
+    setSortOption(option);
   };
 
   return (
@@ -67,18 +81,13 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
           <InputGroup.Prepend className={styles.searchPrepend}>
             <FontAwesomeIcon icon={faSearch} />
           </InputGroup.Prepend>
-          <FormControl placeholder="Search by channel name" value={text} onChange={onChange} />
+          <FormControl placeholder="Search by channel name" value={searchValue} onChange={onChange} />
         </InputGroup>
         <div className={styles.controlsWrp}>
           <div>{channelList.length > 1 ? `${channelList.length} channels` : `${channelList.length} channel`}</div>
           <div>
-            <OverlayTrigger trigger="click" placement="bottom" overlay={<div />}>
-              <button type="button" className={`${styles.sortBtn} button-unstyled`}>
-                <FontAwesomeIcon icon={faSort} size="lg" />
-                <span>Sort: A to Z</span>
-              </button>
-            </OverlayTrigger>
-            <OverlayTrigger trigger="click" placement="bottom" overlay={<div />}>
+            <SortOption setSortOption={sortOptionHandler} sortOption={sortOption} />
+            <OverlayTrigger trigger="click" placement="bottom" overlay={<div />} rootClose>
               <button type="button" className={`${styles.filterBtn} button-unstyled`}>
                 <FontAwesomeIcon icon={faFilter} />
                 <span>Filter</span>

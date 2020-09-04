@@ -4,4 +4,5 @@ export interface IBrowserChannel {
   name: string;
   isPrivate: boolean;
   users: Array<{ id: string }>
+  createdAt: string;
 }

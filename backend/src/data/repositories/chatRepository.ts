@@ -84,6 +84,7 @@ class ChatRepository extends Repository<Chat> {
         'chat.name',
         'chat.hash',
         'chat.isPrivate',
+        'chat.createdAt',
         'user.id'
       ])
       .leftJoin('chat.users', 'user')
