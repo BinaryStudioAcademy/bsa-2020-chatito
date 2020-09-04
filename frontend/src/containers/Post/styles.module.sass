@@ -132,7 +132,7 @@
 .optionsBlock
   width: 22px
   height: 30px
-  box-shadow: 0 0 0 1px rgba(29, 28, 29, 0.1),0 0px 12px 0 rgba(0,0,0,.05)
+  box-shadow: 0 0 0 1px var(--options-box-shadow-x),0 0px 12px 0 var(--options-box-shadow-y)
   background-color: var(--white-bg)
   border-radius: 4px
   display: none
@@ -161,8 +161,8 @@
 .tooltip .tooltipText
   visibility: hidden
   width: 120px
-  background-color: #555
-  color: #fff
+  background-color: var(--grey-bg)
+  color: var(--text-color-for-dark-bg)
   text-align: center
   padding: 5px 0
   border-radius: 6px
@@ -177,6 +177,12 @@
   opacity: 0
   transition: opacity 0.3s
 
+.tooltip .tooltipTextCopied
+  bottom: -28px
+
 .tooltip:hover .tooltipText
   visibility: visible
   opacity: 1
+
+a:hover
+  color: var(--link-text-color) !important

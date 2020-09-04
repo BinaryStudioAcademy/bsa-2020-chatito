@@ -58,12 +58,15 @@ interface IProps {
   markAsUnreadComment: IBindingCallback1<IMarkAsUnreadComment>;
   postRef?: MutableRefObject<any> | null;
   chatUsers?: IUser[];
+  setCopiedPost?: IBindingCallback1<string>;
+  copiedPost?: string;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, openThread,
   unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, unreadChats,
 
-  readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef, chatUsers }) => {
+  readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef, chatUsers,
+  setCopiedPost, copiedPost }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
   useEffect(() => {
@@ -141,6 +144,20 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
     });
   };
 
+  const chatHash = post.chat?.hash as string;
+  const url = window.location.href;
+  const baseChatUrl = url.substring(0, url.indexOf(chatHash) + chatHash?.length);
+  const resUrl = `${baseChatUrl}/${post.id}`;
+
+  const copyToClipBoard = async (evt: any) => {
+    evt.preventDefault();
+    await navigator.clipboard.writeText(resUrl);
+    if (setCopiedPost) {
+      setCopiedPost(post.id);
+    }
+    document.body.click();
+  };
+
   const popoverRemindOptions = (
     <Popover id="popover-basic" className={styles.popOverOptions}>
       <ReminderItem
@@ -190,6 +207,13 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
         onClick={markAsUnreadOptionClick}
       >
         <span>Mark as unread</span>
+      </button>
+      <button
+        type="button"
+        className={styles.optionsSelect}
+        onClick={copyToClipBoard}
+      >
+        <span>Copy link</span>
       </button>
       <OverlayTrigger
         // delay={{ show: 0, hide: Infinity }}
@@ -275,14 +299,8 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
       });
     }
   };
-  const copyToClipBoard = async () => {
-    const chatHash = post.chat?.hash as string;
-    const url = window.location.href;
-    const baseChatUrl = url.substring(0, url.indexOf(chatHash) + chatHash?.length);
-    await navigator.clipboard.writeText(`${baseChatUrl}/${post.id}`);
-  };
   const isJoinBtn = post.integration === IntegrationType.Whale && post.type !== MessageType.WhaleSignUpUser;
-
+  const isPostCopied = copiedPost === post.id;
   return (
     <div ref={postRef}>
       <Media className={styles.postWrapper} onMouseEnter={onHoverRead}>
@@ -298,14 +316,17 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
 
           <br />
 
-          <button
+          <a
+            href={resUrl}
             type="button"
             className={`${styles.metadata} ${styles.tooltip}`}
             onClick={copyToClipBoard}
           >
             {dayjs(createdAt).format('hh:mm A')}
-            <span className={styles.tooltipText}>Click here to copy message link</span>
-          </button>
+            <span className={`${styles.tooltipText} ${isPostCopied ? styles.tooltipTextCopied : ''}`}>
+              {isPostCopied ? 'Copied!' : 'Click here to copy message link'}
+            </span>
+          </a>
           {/* eslint-disable-next-line */}
           {
             isJoinBtn
