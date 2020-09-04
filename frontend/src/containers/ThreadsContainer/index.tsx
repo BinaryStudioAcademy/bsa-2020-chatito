@@ -20,7 +20,6 @@ interface IProps {
 
 const noInfo: ICommentsInfo = { count: 0, lastAt: new Date(), avatars: [] };
 
-// eslint-disable-next-line
 const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorkspaceId, userId, loading, threads }) => {
   let fetchedThreads: IFetchedThreads[] = [];
   const hideCloseBtn = true;

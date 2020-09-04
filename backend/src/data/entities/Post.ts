@@ -5,11 +5,15 @@ import { Chat } from './Chat';
 import { Comment } from './Comment';
 import { PostReaction } from './PostReaction';
 import { DraftComment } from './DraftComment';
+import { IntegrationType } from '../../common/enums/IntegrationType';
 
 @Entity()
 export class Post extends AbstractEntity {
   @Column()
   text: string;
+
+  @Column({ type: 'enum', enum: IntegrationType })
+  integration: IntegrationType;
 
   @OneToMany(() => Comment, comment => comment.post)
   comments: Comment[];

@@ -109,8 +109,8 @@ const Thread: FunctionComponent<IProps> = ({
 
   return (
     <div className={styles.threadContainer} style={{ width }}>
-      <LoaderWrapper loading={isLoading}>
-        <header>
+      <LoaderWrapper loading={isLoading} height="100%">
+        <header className={styles.threadHeader}>
           <div className={styles.threadHeaderBlock}>
             {post.chat && post.chat.name
               ? (
@@ -126,30 +126,27 @@ const Thread: FunctionComponent<IProps> = ({
           {!hideCloseBtn && <FontAwesomeIcon onClick={onHide} icon={faTimesCircle} className={styles.closeBtn} />}
         </header>
         <div className={styles.threadBlock}>
-
           <div className={styles.threadPost}>
             <Post post={post} type={PostType.Post} />
           </div>
-          <div className={styles.threadComments}>
-            {comments.map((comment, index) => (
-              index < maxComment
-                ? (
-                  <div key={comment.id} className={styles.postContainer}>
-                    {commentIdForLine === comment.id ? newCommentLineElement : ''}
-                    <Post
-                      // eslint-disable-next-line no-nested-ternary
-                      isNew={unreadCommentIds ? unreadCommentIds.includes(comment.id) ? isNew : !isNew : !isNew}
-                      post={comment}
-                      type={PostType.Comment}
-                      mainPostId={post.id}
-                    />
-                  </div>
-                )
-                : null
-            ))}
-          </div>
-          {comments.length > maxComment
-            ? (
+          {comments.map((comment, index) => (
+            index < maxComment
+              ? (
+                <div key={comment.id} className={styles.postContainer}>
+                  {commentIdForLine === comment.id ? newCommentLineElement : ''}
+                  <Post
+                    // eslint-disable-next-line no-nested-ternary
+                    isNew={unreadCommentIds ? unreadCommentIds.includes(comment.id) ? isNew : !isNew : !isNew}
+                    post={comment}
+                    type={PostType.Comment}
+                    mainPostId={post.id}
+                  />
+                </div>
+              )
+              : null
+          ))}
+          {comments.length > maxComment ? (
+            <div className={styles.showMoreContainer}>
               <button
                 type="button"
                 onClick={() => setShowAll(!showAll)}
@@ -157,12 +154,15 @@ const Thread: FunctionComponent<IProps> = ({
               >
                 {`Show ${comments.length - maxComment} more replies`}
               </button>
-            ) : ('')}
+            </div>
+          ) : (
+            ''
+          )}
           <div className={styles.textEditor}>
             <TextEditor
               key={draftCommentText}
               placeholder="write a comment!"
-              height={110}
+              height={100}
               draftPayload={{ postId: post.id }}
               draftInput={{
                 id: draftCommentId,

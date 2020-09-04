@@ -9,7 +9,7 @@ import { PostReaction } from './PostReaction';
 import { Reminder } from './Reminder';
 import { DraftPost } from './DraftPost';
 import { DraftComment } from './DraftComment';
-
+import { IncomingSoundOptions as soundOptionsType } from '../../common/enums/IncomingSoundOptions';
 @Entity()
 export class User extends AbstractEntity {
   @Column({ length: 100 })
@@ -35,6 +35,12 @@ export class User extends AbstractEntity {
 
   @Column({ nullable: true, length: 100 })
   status: string;
+
+  @Column({ type: 'enum', enum: soundOptionsType, default: soundOptionsType.AllowCustom })
+  incomingSoundOptions: soundOptionsType;
+
+  @Column({ default: 'https://bsa-chatito-storage.s3.amazonaws.com/audios/Tuturu.mp3' })
+  audio: string
 
   @OneToMany(() => Post, post => post.createdByUser)
   posts: Post[];

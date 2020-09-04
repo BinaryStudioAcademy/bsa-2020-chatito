@@ -11,21 +11,18 @@ import { IUser } from '../models/user/IUser';
 import { getImageUrl } from '../utils/imageHelper';
 
 export const fromUserToUserClient = (user: IUserWithWorkspaces | IUser): IUserClient => {
-  const { id, fullName, displayName, email, imageUrl, title, status, githubUsername } = user;
-  return {
+  const {
     id,
     fullName,
-    email,
     displayName,
-    imageUrl: getImageUrl(imageUrl),
+    email,
+    imageUrl,
     title,
     status,
-    githubUsername
-  };
-};
-
-export const fromUserToUserWithWorkspaces = (user: User): IUserWithWorkspaces => {
-  const { id, fullName, displayName, email, imageUrl, title, status, githubUsername, workspaces = [] } = user;
+    githubUsername,
+    audio,
+    incomingSoundOptions
+  } = user;
   return {
     id,
     fullName,
@@ -35,6 +32,35 @@ export const fromUserToUserWithWorkspaces = (user: User): IUserWithWorkspaces =>
     title,
     status,
     githubUsername,
+    audio,
+    incomingSoundOptions
+  };
+};
+
+export const fromUserToUserWithWorkspaces = (user: User): IUserWithWorkspaces => {
+  const { id,
+    fullName,
+    displayName,
+    email,
+    imageUrl,
+    title,
+    status,
+    githubUsername,
+    workspaces = [],
+    audio,
+    incomingSoundOptions
+  } = user;
+  return {
+    id,
+    fullName,
+    email,
+    displayName,
+    imageUrl: getImageUrl(imageUrl),
+    title,
+    status,
+    audio,
+    githubUsername,
+    incomingSoundOptions,
     workspaces: workspaces.map(workspace => fromCreatedWorkspaceToClient(workspace))
   };
 };

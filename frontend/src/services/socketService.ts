@@ -41,6 +41,9 @@ import {
   upsertDraftPageCommentRoutine,
   deleteDraftCommentFromDraftsRoutine
 } from 'containers/Thread/routines';
+import { playByUrl } from 'common/helpers/audioHelper';
+import { defaultNotificationAudio } from 'common/configs/defaults';
+import { IncomingSoundOptions } from 'common/enums/IncomingSoundOptions';
 
 const { server } = env.urls;
 
@@ -48,11 +51,23 @@ export const connectSockets = () => {
   // eslint-disable-next-line
   const chatSocket = io(`${server}/chat`, { query: `auth_token=${getAccessToken()}` });
 
-  chatSocket.on(ClientSockets.AddPost, (post: IPost) => {
+  chatSocket.on(ClientSockets.AddPost, (post: IPost, audio: string) => {
+    const addedPost = { ...post };
     const state = store.getState();
-    if (post.chatId === state.chat.chat?.id) {
-      store.dispatch(addPostWithSocketRoutine(post));
+    if (addedPost.chatId === state.chat.chat?.id) {
+      store.dispatch(addPostWithSocketRoutine(addedPost));
     } else {
+      switch (state.user.user?.incomingSoundOptions) {
+        case IncomingSoundOptions.AllowCustom:
+          playByUrl(audio);
+          break;
+        case IncomingSoundOptions.UseDefault:
+          playByUrl(defaultNotificationAudio);
+          break;
+        case IncomingSoundOptions.MuteAll:
+        default:
+          break;
+      }
       store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
     }
   });
@@ -79,6 +94,7 @@ export const connectSockets = () => {
   chatSocket.on(ClientSockets.AddChat, (chat: IChat) => {
     store.dispatch(addChatWithSocketRoutine(chat));
     store.dispatch(push(Routes.Chat.replace(':whash', chat.workspace.hash).replace(':chash', chat.hash)));
+    // play sound ?
   });
 
   chatSocket.on(ClientSockets.AddReply, (comment: IServerComment) => {

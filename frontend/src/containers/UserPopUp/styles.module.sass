@@ -1,0 +1,30 @@
+$colorText: var(--title-text)
+$coloractive: #CECCC0
+
+.panelPopUp
+  top: 20px !important
+  left: -10px !important
+  z-index: 101
+  box-shadow: 0 0 0 1px rgba(29, 28, 29, 0.1),0 0px 12px 0 rgba(0,0,0,.05)
+  border-radius: 6px
+  border: none
+  padding: 12px 0
+
+.panelSelect
+  font-weight: 500
+  background: none
+  font-size: 14px
+  display: flex
+  flex-direction: row
+  align-items: center
+  border: 0
+  padding: 5px 24px
+  align-content: left
+  outline: none
+  width: 100%
+  color: $colorText
+  &:hover
+    background-color: var(--workspace-background-color)
+    color: var(--text-color-for-dark-bg)
+  &:visited
+    color: $colorText

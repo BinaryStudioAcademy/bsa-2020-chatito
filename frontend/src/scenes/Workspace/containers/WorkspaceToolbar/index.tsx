@@ -12,7 +12,7 @@ import { Routes } from 'common/enums/Routes';
 import { push } from 'connected-react-router';
 import { Routine } from 'redux-saga-routines';
 import { setCurrentChatRoutine } from 'scenes/Chat/routines';
-import { ListGroup } from 'react-bootstrap';
+import { ListGroup, OverlayTrigger, Popover } from 'react-bootstrap';
 
 interface IProps {
   workspaces: IWorkspace[];
@@ -43,6 +43,14 @@ const WorkspaceToolbar: FunctionComponent<IProps> = ({
     }
   };
 
+  const addWorkspacePopover = (
+    <Popover id="addWorkspacePopover" className={styles.popOverWindow}>
+      <span>
+        Add workspaces
+      </span>
+    </Popover>
+  );
+
   return (
     <div className={styles.workspaceToolbarContainer}>
       <ListGroup variant="flush">
@@ -58,12 +66,20 @@ const WorkspaceToolbar: FunctionComponent<IProps> = ({
           : null}
 
       </ListGroup>
-      <button type="button" className={styles.plusIconContainer} onClick={onAddWorkspaceClick}>
-        <FontAwesomeIcon
-          className={styles.plusIcon}
-          icon={faPlus}
-        />
-      </button>
+      <OverlayTrigger
+        trigger="hover"
+        delay={{ show: 300, hide: 0 }}
+        rootClose
+        placement="right"
+        overlay={addWorkspacePopover}
+      >
+        <button type="button" className={styles.plusIconContainer} onClick={onAddWorkspaceClick}>
+          <FontAwesomeIcon
+            className={styles.plusIcon}
+            icon={faPlus}
+          />
+        </button>
+      </OverlayTrigger>
     </div>
   );
 };

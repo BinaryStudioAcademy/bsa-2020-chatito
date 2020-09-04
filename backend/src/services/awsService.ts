@@ -21,7 +21,7 @@ export const signS3 = (userId: string, folder: string, fileType: string): Promis
       const returnData = {
         signedRequest: data,
         fileName,
-        link: `${AWSUrl}/avatars/${fileName}`
+        link: `${AWSUrl}/${folder}/${fileName}`
       };
 
       resolve(returnData);

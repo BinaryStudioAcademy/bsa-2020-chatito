@@ -22,7 +22,7 @@ const ProfilePreview: FunctionComponent<IProps> = ({ tempUser, openProfile, curr
   );
   const imageUrl = tempUser.id === currentUser?.id ? currentUser?.imageUrl : tempUser.imageUrl;
   return (
-    <OverlayTrigger trigger="click" rootClose placement="right" overlay={popOver}>
+    <OverlayTrigger trigger="click" rootClose placement="auto" overlay={popOver}>
       <button
         type="button"
         className={styles.link}
