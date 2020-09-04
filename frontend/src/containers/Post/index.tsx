@@ -149,10 +149,12 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
   const baseChatUrl = url.substring(0, url.indexOf(chatHash) + chatHash?.length);
   const resUrl = `${baseChatUrl}/${post.id}`;
 
-  const copyToClipBoard = async (evt: MouseEvent<any>) => {
+  const copyToClipBoard = async (evt: any) => {
     evt.preventDefault();
     await navigator.clipboard.writeText(resUrl);
-    setCopiedPost(post.id);
+    if (setCopiedPost) {
+      setCopiedPost(post.id);
+    }
     document.body.click();
   };
 
