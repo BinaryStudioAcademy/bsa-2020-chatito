@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { IAppState } from 'common/models/store';
 import { showModalRoutine } from 'routines/modal';
 import { addReminderRoutine } from 'scenes/Chat/routines';
+import DateTimePicker from 'react-datetime-picker';
 
 interface IProps {
   toggleModal: IBindingCallback1<any>;
@@ -51,10 +52,11 @@ export const getCurrentDateData = () => {
 const CustomReminderModal = ({ toggleModal, isShown, addReminder, chatId }: IProps) => {
   const { fullDate: currentFullDate, time: currentTime, currentDate } = getCurrentDateData();
 
+  const [date, setReminderDate] = useState<Date>(new Date());
   const [day, setReminderDay] = useState<string>(currentFullDate);
   const [time, setReminderTime] = useState<string>(currentTime);
   const [note, setNote] = useState<string>('');
-
+  console.log(day, time);
   const isInitial = (day === currentFullDate && time === currentTime);
   const validateFormData = () => {
     const reminderDate = new Date(`${day} ${time}`);
@@ -77,43 +79,35 @@ const CustomReminderModal = ({ toggleModal, isShown, addReminder, chatId }: IPro
     }
   };
 
+  const onDateChange = (newDate: Date = new Date()) => {
+    setReminderDate(newDate);
+    const { fullDate, time: fullTime } = fromDateToReminderData(newDate);
+    setReminderDay(fullDate);
+    setReminderTime(fullTime);
+  };
+
   const title = 'Create a reminder';
 
   const formHeader = (
     <h2 className={styles.header}>{title}</h2>
   );
 
-  const dayInputFormGroup = (
+  const dateInputFormGroup = (
     <Form.Group>
-      <Form.Label htmlFor="day" className={styles.inputLabel}>
+      <Form.Label htmlFor="date" className={styles.inputLabel}>
         When
       </Form.Label>
-      <InputGroup className="mb-3">
-        <Form.Control
-          id="day"
-          type="date"
-          placeholder="Today"
-          onChange={event => setReminderDay(event.target.value)}
-          required
-        />
-      </InputGroup>
-    </Form.Group>
-  );
-
-  const timeInputFormGroup = (
-    <Form.Group>
-      <Form.Label htmlFor="day" className={styles.inputLabel}>
-        Time
-      </Form.Label>
-      <InputGroup className="mb-3">
-        <Form.Control
-          id="time"
-          type="time"
-          placeholder="Now"
-          onChange={event => setReminderTime(event.target.value)}
-          required
-        />
-      </InputGroup>
+      <DateTimePicker
+        id="date"
+        name="date"
+        onChange={onDateChange}
+        value={date}
+        disableClock
+        required
+        locale="en-GB"
+        className={styles.dateTimePicker}
+        clearIcon={null}
+      />
     </Form.Group>
   );
 
@@ -136,8 +130,7 @@ const CustomReminderModal = ({ toggleModal, isShown, addReminder, chatId }: IPro
   const formBody = (
     <div className={styles.formBody}>
       <Form>
-        {dayInputFormGroup}
-        {timeInputFormGroup}
+        {dateInputFormGroup}
         {noteInputFormGroup}
       </Form>
     </div>

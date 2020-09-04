@@ -16,9 +16,32 @@
 
 .inputLabel
   font-weight: 600
+  margin-bottom: 5px
 
   span
     font-weight: 400
 
-.btnCreate
+.btnCreate,
+.btnCreate:hover
   margin: 0 4px 0 7px
+  background-color: var(--primary)
+  outline: var(--primary)
+  border: 1px solid var(--primary)
+
+.btnCreate:hover
+  opacity: .95
+
+.btnCreate:disabled
+  background-color: var(--primary)
+  outline: var(--primary)
+  border: 1px solid var(--primary)
+  opacity: .7
+
+.dateTimePicker
+  display: flex !important
+  *
+    outline: none !important
+
+.dateTimePicker button:enabled:hover svg,
+.dateTimePicker button:enabled:focus svg
+  stroke: var(--primary) !important
