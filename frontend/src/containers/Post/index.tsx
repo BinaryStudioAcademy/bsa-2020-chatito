@@ -23,7 +23,7 @@ import {
   markAsUnreadPostWithOptionRoutine,
   readCommentRoutine,
   markAsUnreadCommentWithOptionRoutine } from 'scenes/Workspace/routines';
-import ReminderItem from 'components/ReminderItem/ReminderItem';
+import ReminderItem from 'containers/ReminderItem/ReminderItem';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 import { IPostsToRead } from 'common/models/chat/IPostsToRead';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

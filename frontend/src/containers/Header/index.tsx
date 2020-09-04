@@ -2,7 +2,7 @@ import styles from './styles.module.sass';
 import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import UserAvatar from 'components/UserLogo';
-import UserPopUp from 'components/UserPopUp';
+import UserPopUp from 'containers/UserPopUp';
 import SearchInput from 'components/SearchInput';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,19 +10,18 @@ import { IUser } from 'common/models/user/IUser';
 import { IAppState } from 'common/models/store';
 import EditProfile from 'containers/EditProfileModal';
 import Preferences from 'containers/PreferencesModal';
-import { showModalRoutine } from 'routines/modal';
-import { ModalTypes } from 'common/enums/ModalTypes';
-import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ReactComponent as Logo } from 'img/logo-icon.svg';
 import { Link } from 'react-router-dom';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { showUserProfileRoutine } from 'scenes/Workspace/routines';
 
 interface IProps {
   user?: IUser;
-  showModal: ({ modalType, show }: IModalRoutine) => void;
   activeWorkspace: string;
+  showUserProfile: IBindingCallback1<IUser>;
 }
 
-const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showModal }) => {
+const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showUserProfile }) => {
   const toggleButtonClick = () => {
     // @todo decide which button to trigger
   };
@@ -38,10 +37,6 @@ const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showModal })
       <FontAwesomeIcon icon={faCaretDown} />
     </div>
   );
-
-  const showEditModal = () => {
-    showModal({ modalType: ModalTypes.EditProfile, show: true });
-  };
 
   if (!user) {
     return null;
@@ -72,7 +67,8 @@ const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showModal })
             trigger={getPopUpTrigger}
             id="mainHeaderPopUp"
             placement="bottom"
-            onEditProfileClick={showEditModal}
+            viewProfileClick={showUserProfile}
+            user={user}
           />
         </div>
         <EditProfile />
@@ -88,7 +84,7 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  showModal: showModalRoutine
+  showUserProfile: showUserProfileRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

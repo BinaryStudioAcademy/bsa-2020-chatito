@@ -13,17 +13,20 @@ import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { showModalRoutine } from 'routines/modal';
 import { ModalTypes } from 'common/enums/ModalTypes';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
+import { IUser } from 'common/models/user/IUser';
 
 interface IProps {
   trigger: () => React.ReactElement;
   id: string;
   placement: blockPosition;
-  onEditProfileClick: () => void;
+  viewProfileClick: IBindingCallback1<IUser>;
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
+  user: IUser;
 }
 
-const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditProfileClick, showModal, router }) => {
+const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement,
+  viewProfileClick, showModal, router, user }) => {
   const onSingOut = () => {
     removeToken(getRefreshToken());
     localStorage.clear();
@@ -42,6 +45,10 @@ const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditPr
     router(Routes.AddWorkspace);
   };
 
+  const onViewProfileClick = () => {
+    viewProfileClick(user);
+  };
+
   const buttonClick = (callback: IBindingAction) => {
     callback();
     document.body.click();
@@ -51,7 +58,7 @@ const UserPopUp: FunctionComponent<IProps> = ({ trigger, id, placement, onEditPr
       <button type="button" className={styles.panelSelect} onClick={() => buttonClick(showPreferences)}>
         Preferences
       </button>
-      <button type="button" className={styles.panelSelect} onClick={() => buttonClick(onEditProfileClick)}>
+      <button type="button" className={styles.panelSelect} onClick={() => buttonClick(onViewProfileClick)}>
         View Profile
       </button>
       <button type="button" className={styles.panelSelect} onClick={() => buttonClick(showInvitePopup)}>
