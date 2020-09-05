@@ -140,19 +140,27 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
         <div className={styles.toolbar}>
           {user.id === currentUser.id && (
             <button type="button" className="button-unstyled" onClick={onSetStatus}>
-              <FontAwesomeIcon icon={faSmileWink} />
+              <div className={styles.circleIconsContainer}>
+                <FontAwesomeIcon icon={faSmileWink} />
+              </div>
+              <span className={styles.buttonsText}>Set status</span>
             </button>
           )}
           {user.id === currentUser.id && (
-          <button type="button" className="button-unstyled" onClick={onEdit}>
-            <FontAwesomeIcon icon={faEdit} />
-          </button>
+            <button type="button" className="button-unstyled" onClick={onEdit}>
+              <div className={styles.circleIconsContainer}>
+                <FontAwesomeIcon icon={faEdit} />
+              </div>
+              <span className={styles.buttonsText}>Edit profile</span>
+            </button>
           )}
           <button type="button" className="button-unstyled">
-            <FontAwesomeIcon icon={faEllipsisH} />
+            <div className={styles.circleIconsContainer}>
+              <FontAwesomeIcon icon={faEllipsisH} />
+            </div>
+            <span className={styles.buttonsText}>More</span>
           </button>
         </div>
-
         <button
           className={`${styles.aboutBtn} button-unstyled`}
           type="button"
