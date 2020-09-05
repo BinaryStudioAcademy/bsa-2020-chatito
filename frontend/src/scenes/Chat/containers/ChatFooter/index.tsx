@@ -9,7 +9,7 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IUpsertDraftPost } from 'common/models/draft/IUpsertDraftPost';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { IDeleteDraftPost } from 'common/models/draft/IDeleteDraftPost';
-import { Button, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import { IUser } from 'common/models/user/IUser';
 
 interface IProps {
@@ -63,10 +63,10 @@ const ChatFooter: React.FC<IProps> = ({
             />
           )
           : (
-            <Button className={styles.joinBtn} onClick={onJoin} disabled={btnLoading}>
+            <button className={styles.joinBtn} onClick={onJoin} disabled={btnLoading} type="button">
               <span>Join channel</span>
               {btnLoading && <Spinner animation="border" role="status" size="sm" />}
-            </Button>
+            </button>
           )}
       </div>
     </LoaderWrapper>

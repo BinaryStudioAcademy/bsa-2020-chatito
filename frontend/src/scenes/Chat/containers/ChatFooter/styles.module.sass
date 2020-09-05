@@ -8,9 +8,15 @@
   font-size: 15px
   font-weight: 600
   margin: 20px 0 5px
+  padding: 6px 12px
+  border-radius: .25rem
+  line-height: 1.5
+  color: var(--browser-channel-secondary-button)
 
 .joinBtn:hover,
-.joinBtn:active,
-.joinBtn:focus
-  background-color: var(--browser-channel-primary-button-hover) !important
-  box-shadow: none !important
+.joinBtn:active
+  background-color: var(--browser-channel-primary-button-hover)
+
+.joinBtn:disabled
+  background-color: var(--browser-channel-primary-button-disabled)
+  cursor: default

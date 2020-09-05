@@ -32,6 +32,9 @@
   font-size: 15px
   font-weight: 600
   width: 75px
+  padding: 6px 12px
+  border-radius: .25rem
+  line-height: 1.5
 
 .channelItem:hover .channelBtn
   visibility: visible
@@ -42,12 +45,15 @@
 .joinBtn
   background-color: var(--browser-channel-primary-button)
   border: none
+  color: var(--browser-channel-secondary-button)
 
 .joinBtn:hover,
-.channelItem .channelBtn.joinBtn:active,
-.joinBtn:focus
+.joinBtn:active
   background-color: var(--browser-channel-primary-button-hover)
-  box-shadow: none !important
+
+.joinBtn:disabled
+  background-color: var(--browser-channel-primary-button-disabled)
+  cursor: default
 
 .leaveBtn
   background-color: var(--browser-channel-secondary-button)
@@ -55,12 +61,10 @@
   color: var(--main-text)
 
 .leaveBtn:hover,
-.channelItem .channelBtn.leaveBtn:active,
-.leaveBtn:focus
+.leaveBtn:active
   background-color: var(--browser-channel-secondary-button-hover)
   border: 1px solid var(--browser-channel-border)
   color: var(--main-text)
-  box-shadow: none !important
 
 .chatInfo
   display: flex

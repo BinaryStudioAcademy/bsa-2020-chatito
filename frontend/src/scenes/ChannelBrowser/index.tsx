@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.sass';
-import { InputGroup, FormControl, Button } from 'react-bootstrap';
+import { InputGroup, FormControl } from 'react-bootstrap';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import ChannelItem from './containers/ChannelItem';
@@ -78,7 +78,9 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
     <div className={styles.ChannelBrowser}>
       <header className={styles.header}>
         <h1>Channel browser</h1>
-        <Button className={styles.createBtn} onClick={onCreateChannel}>Create Channel</Button>
+        <button className={styles.createBtn} onClick={onCreateChannel} type="button">
+          Create Channel
+        </button>
       </header>
       <div className={styles.main}>
         <InputGroup className={styles.search} size="sm">
@@ -106,7 +108,9 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
               />
             ))}
             <div className={styles.center}>
-              <Button className={styles.createBtn} onClick={onCreateChannel}>Create Channel</Button>
+              <button className={styles.createBtn} onClick={onCreateChannel} type="button">
+                Create Channel
+              </button>
             </div>
           </LoaderWrapper>
         </div>
