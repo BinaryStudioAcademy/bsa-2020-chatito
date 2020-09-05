@@ -43,11 +43,25 @@ export const deleteUser = async (id: string): Promise<unknown> => {
 };
 
 export const editProfile = async (userId: string, data: Partial<IUserClient>) => {
+  if (data.title.length > 100) {
+    throw new CustomError(
+      400,
+      'Enter less than 100 symbols.',
+      ErrorCode.TooLongUserLifePosition
+    );
+  }
   const editUser = await getCustomRepository(UserRepository).editUser(userId, data);
   return fromUserToUserClient(editUser);
 };
 
 export const editStatus = async ({ id, status }: IEditStatus) => {
+  if (status.length > 103) {
+    throw new CustomError(
+      400,
+      'Enter less than 100 symbols.',
+      ErrorCode.TooLongUserStatus
+    );
+  }
   const newStatus = await getCustomRepository(UserRepository).editStatus(id, status);
   return [newStatus];
 };

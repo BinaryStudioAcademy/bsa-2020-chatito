@@ -42,6 +42,7 @@
   display: flex
   flex-direction: column
   align-items: flex-start
+  max-width: 207px
 
 .avatar
   object-fit: cover
@@ -106,9 +107,13 @@
   &_reset
     @include buttonReset
 
+.statusContainer
+  max-width: 200px
+
 .userStatus
   font-size: 14px
   margin: 2px 0
+  min-width: 200px
 
 .line
   height: 2px

@@ -125,8 +125,10 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
           <i className={styles.online} />
           <span className={styles.fullName}>{user.fullName}</span>
         </div>
-        {user.title && <div className={styles.title}>{user.title}</div>}
-        {user.status && <div className={styles.status}>{user.status}</div>}
+        <div className={styles.titleAndStatusContainer}>
+          {user.title && <div className={styles.title}>{user.title}</div>}
+          {user.status && <div className={styles.status}>{user.status}</div>}
+        </div>
 
         <InputGroup className={styles.inputWrp}>
           <FormControl ref={inputRef} placeholder="Write a message" value={message} onChange={onChange} />

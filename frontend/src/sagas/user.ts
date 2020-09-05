@@ -184,6 +184,7 @@ function* editStatusRequest({ payload }: Routine<any>) {
     const response = yield call(editStatus, { id, status });
     yield put(editStatusRoutine.success(response));
   } catch (error) {
+    yield call(toastrError, error.message);
     yield put(editStatusRoutine.failure(error.message));
   }
 }

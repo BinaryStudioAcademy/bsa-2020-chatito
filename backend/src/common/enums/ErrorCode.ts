@@ -7,5 +7,7 @@ export enum ErrorCode {
   WorkspaceAlreadyExists,
   DraftPostExists,
   DraftCommentExists,
-  UserHaveCreatedWorkspace
+  UserHaveCreatedWorkspace,
+  TooLongUserStatus,
+  TooLongUserLifePosition
 }
