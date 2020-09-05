@@ -28,13 +28,13 @@ export const resetPassword = async (password: string, token: string) => {
   await api.put('/api/auth/resetpass', { password, token });
 };
 
-export const getUnreadPosts = async (id: string): Promise<IUserUnreadPosts> => {
-  const response: IUserUnreadPosts = await api.get(`/api/users/${id}/unread-posts`);
+export const getUnreadPosts = async (wpId: string, id: string): Promise<IUserUnreadPosts> => {
+  const response: IUserUnreadPosts = await api.get(`/api/workspaces/${wpId}/users/${id}/unread-posts`);
   return response;
 };
 
-export const getUnreadComments = async (id: string): Promise<IUserUnreadPostComments> => {
-  const response: IUserUnreadPostComments = await api.get(`/api/users/${id}/unread-comments`);
+export const getUnreadComments = async (wpId: string, userId: string): Promise<IUserUnreadPostComments> => {
+  const response: IUserUnreadPostComments = await api.get(`/api/workspaces/${wpId}/users/${userId}/unread-comments`);
   return response;
 };
 

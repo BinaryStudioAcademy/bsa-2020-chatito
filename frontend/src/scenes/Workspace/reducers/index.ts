@@ -336,8 +336,11 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state, loading: true
       };
     case fetchUnreadUserPostsRoutine.SUCCESS: {
-      const unreadPosts: IPost[] = [...payload.unreadPosts];
-      const unreadChats = [...state.unreadChats];
+      let unreadPosts: IPost[] = [];
+      if (payload.unreadPosts) {
+        unreadPosts = [...payload.unreadPosts];
+      }
+      const unreadChats: IUnreadChat[] = [];
       if (unreadPosts.length) {
         unreadPosts.forEach(unreadPost => {
           let chatExists = false;
@@ -371,8 +374,11 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state, loading: true
       };
     case fetchUnreadUserCommentsRoutine.SUCCESS: {
-      const unreadComments: IServerComment[] = [...payload.unreadComments];
-      const unreadPostComments = [...state.unreadPostComments];
+      let unreadComments: IServerComment[] = [];
+      if (payload.unreadComments) {
+        unreadComments = [...payload.unreadComments];
+      }
+      const unreadPostComments: IUnreadPostComments[] = [];
       if (unreadComments.length) {
         unreadComments.forEach(unreadComment => {
           let postExists = false;

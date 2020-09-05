@@ -101,7 +101,7 @@ function* watchFetchWorkspaceUsers() {
 
 function* fetchUnreadUserPosts({ payload }: Routine<any>) {
   try {
-    const unreadUserPosts = yield call(getUnreadPosts, payload);
+    const unreadUserPosts = yield call(getUnreadPosts, payload.wpId, payload.userId);
     yield put(fetchUnreadUserPostsRoutine.success(unreadUserPosts));
   } catch (error) {
     yield call(toastrError, error.message);
@@ -115,7 +115,7 @@ function* watchfetchUnreadUserPosts() {
 
 function* fetchUnreadUserComments({ payload }: Routine<any>) {
   try {
-    const unreadUserComments = yield call(getUnreadComments, payload);
+    const unreadUserComments = yield call(getUnreadComments, payload.wpId, payload.userId);
     yield put(fetchUnreadUserCommentsRoutine.success(unreadUserComments));
   } catch (error) {
     yield call(toastrError, error.message);

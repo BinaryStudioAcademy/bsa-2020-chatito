@@ -88,8 +88,11 @@ export const markAsReadPosts = async (userId: string, postIds: string[]) => {
   return response;
 };
 
-export const getUnreadPostsById = async (userId: string) => {
-  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadPostsById(userId);
+export const getUnreadPostsById = async (wpId: string, userId: string) => {
+  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadPostsById(userId, wpId);
+  if (!unreadUserPostIds) {
+    return { id: userId, unreadPosts: [] };
+  }
   return unreadUserPostIds;
 };
 
@@ -107,8 +110,11 @@ export const markAsReadComments = async (userId: string, postIds: string[]) => {
   return response;
 };
 
-export const getUnreadCommentsById = async (userId: string) => {
-  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadCommentsById(userId);
+export const getUnreadCommentsById = async (wpId: string, userId: string) => {
+  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadCommentsById(userId, wpId);
+  if (!unreadUserPostIds) {
+    return { id: userId, unreadPosts: [] };
+  }
   return unreadUserPostIds;
 };
 
