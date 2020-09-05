@@ -33,8 +33,10 @@ import { addChatWithSocketRoutine } from 'scenes/Chat/routines';
 import { ChatType } from 'common/enums/ChatType';
 import {
   upsertDraftCommentWithSocketRoutine,
-  deleteDraftCommentWithSocketRoutine
+  deleteDraftCommentWithSocketRoutine,
+  updateActiveInputRoutine
 } from 'containers/Thread/routines';
+import { InputType } from 'common/enums/InputType';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
@@ -51,6 +53,7 @@ export interface IWorkspaceState {
   someField: string;
   unreadChats: IUnreadChat[];
   unreadPostComments: IUnreadPostComments[];
+  activeInput: InputType.Post | InputType.Comment | null;
 }
 
 const initialState: IWorkspaceState = {
@@ -67,7 +70,8 @@ const initialState: IWorkspaceState = {
   threadLoading: false,
   someField: 'string',
   unreadChats: [],
-  unreadPostComments: []
+  unreadPostComments: [],
+  activeInput: null
 };
 
 const markAsUnreadPosts = (unreadChats: IUnreadChat[], chatId: string, unreadPost: IPost) => {
@@ -199,6 +203,10 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         channels: updatedChannels,
         directMessages: updatedDirectMessages
       };
+    case updateActiveInputRoutine.TRIGGER:
+      const { activeInput } = payload;
+      return { ...state, activeInput };
+
     case showUserProfileRoutine.TRIGGER:
       return {
         ...state,
