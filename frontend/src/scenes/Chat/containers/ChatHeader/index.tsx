@@ -69,7 +69,7 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUser }) => {
   };
 
   const chatName = chat.type === ChatType.DirectMessage
-    ? createDirectChannelName(chat.users, currentUser.id) : chat.name;
+    ? createDirectChannelName(chat.users, currentUser)[0] : chat.name;
 
   const addPeoplePopover = (
     <Popover id="addPeoplePopover" className={styles.popOverWindow}>
@@ -105,7 +105,7 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUser }) => {
         {chat.type === ChatType.Channel && (
           <>
             <OverlayTrigger
-              trigger="hover"
+              trigger={['hover', 'hover']}
               delay={{ show: 300, hide: 0 }}
               rootClose
               placement="bottom"
@@ -123,7 +123,7 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUser }) => {
               </div>
             </OverlayTrigger>
             <OverlayTrigger
-              trigger="hover"
+              trigger={['hover', 'hover']}
               delay={{ show: 300, hide: 0 }}
               rootClose
               placement="bottom"
