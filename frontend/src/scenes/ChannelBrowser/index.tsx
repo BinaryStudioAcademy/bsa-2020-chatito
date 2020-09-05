@@ -83,7 +83,7 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
         </button>
       </header>
       <div className={styles.main}>
-        <InputGroup className={styles.search} size="sm">
+        <InputGroup className={styles.search}>
           <FormControl placeholder="Search by channel name" value={searchValue} onChange={onChange} />
         </InputGroup>
         <div className={styles.controlsWrp}>

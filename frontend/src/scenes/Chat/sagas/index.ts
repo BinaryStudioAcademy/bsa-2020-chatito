@@ -231,10 +231,10 @@ function* watchJoinChannel() {
 
 function* fetchPublicChannelRequest({ payload }: Routine<any>) {
   try {
-    const publicChannel = yield call(fetchPublicChannelByHash, payload);
+    const publicChannel = yield call(fetchPublicChannelByHash, payload.chash);
     yield put(fetchPublicChannelRoutine.success(publicChannel));
   } catch (error) {
-    yield put(fetchPublicChannelRoutine.failure());
+    yield put(push(Routes.Workspace.replace(':whash', payload.whash)));
   }
 }
 

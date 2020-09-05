@@ -10,6 +10,8 @@ import { setCurrentChatRoutine, fetchPublicChannelRoutine } from './routines';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { IUser } from 'common/models/user/IUser';
 import { ChatType } from 'common/enums/ChatType';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { IFetchPublicChannel } from 'common/models/chat/IFetchPublicChannel';
 
 interface IProps {
   isLoading: boolean;
@@ -24,7 +26,7 @@ interface IProps {
   chats: IChat[];
   currentUser: IUser | undefined;
   selectChat: (chat: IChat | null) => void;
-  fetchPublicChannel: (chash: string) => void;
+  fetchPublicChannel: IBindingCallback1<IFetchPublicChannel>;
 }
 const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats,
   currentUser, selectChat, fetchPublicChannel }) => {
@@ -35,7 +37,7 @@ const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats,
       if (currChat) {
         selectChat(currChat);
       } else {
-        fetchPublicChannel(chash);
+        fetchPublicChannel({ chash, whash: match.params.whash });
       }
     } else {
       selectChat(null);
