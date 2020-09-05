@@ -90,3 +90,8 @@ export const getPublicChannel = async (hash: string) => {
   const channel = await getCustomRepository(ChatRepository).getPublicChannelByHash(hash);
   return fromChatToClientChat(channel);
 };
+
+export const getDirectChatByUsers = async (userId1: string, userId2: string, wpId: string) => {
+  const chat = await getCustomRepository(ChatRepository).getCommonDirectChat(userId1, userId2, wpId);
+  return chat;
+};

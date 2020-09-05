@@ -24,7 +24,7 @@ export default function WorkspaceItem({
 
   return (
     <OverlayTrigger
-      trigger="hover"
+      trigger={['hover', 'hover']}
       delay={{ show: 300, hide: 0 }}
       rootClose
       placement="right"

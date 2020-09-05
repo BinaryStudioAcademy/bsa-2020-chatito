@@ -39,11 +39,9 @@ interface IProps {
 const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUser, directMessages, workspaceName,
   workspaceHash, addPost, createChatAndAddPost, router, openProfile, showModal }) => {
   const [user, setUsers] = useState<IUser>(tempUser);
-  // const [loading, setLoading] = useState(true);
   useEffect(() => {
     getUserById(tempUser.id).then(fetchedUser => {
       setUsers(fetchedUser);
-      // setLoading(false);
     });
   }, []);
 

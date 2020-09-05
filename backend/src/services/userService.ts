@@ -129,3 +129,9 @@ export const getGithubUser = async () => {
   const user = await getCustomRepository(UserRepository).getByEmail('github@github.com');
   return user || createGithubUser();
 };
+
+export const getUserByEmail = async (email: string) => {
+  const user = await getCustomRepository(UserRepository).getByEmail(email);
+  return user || createGithubUser();
+};
+

@@ -130,7 +130,7 @@ const Workspace: React.FC<IProps> = ({
           <div className={styles.workspaceViewContainer}>
 
             <div className={styles.leftPanelWrapper}>
-              <ChatToolbar currentUserId={currentUserId} />
+              <ChatToolbar />
             </div>
             <div className={styles.chatWrapper}>
               <Switch>

@@ -60,3 +60,8 @@ export const getBrowserChannels = async (workspaceId: string, userId: string) =>
   });
   return filteredChannels;
 };
+
+export const getWorkspaceByName = async (name: string) => {
+  const wp = await getCustomRepository(WorkspaceRepository).findByName(name);
+  return wp;
+};

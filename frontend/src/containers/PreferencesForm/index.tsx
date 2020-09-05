@@ -37,7 +37,9 @@ const PreferencesForm: FunctionComponent<IProps> = ({
   const [recordingErr, setRecordingErr] = useState('');
   const [isAudioLoading, setAudioLoading] = useState(false);
   const [isUserAudioDefault, setUserAudioDefault] = useState(defaultNotificationAudio === userAudio);
-  const [incomingSoundOptions, setIncomingSoundOptions] = useState<soundOptTypes>(user.incomingSoundOptions || soundOptTypes.AllowCustom); // eslint-disable-line
+  const [incomingSoundOptions, setIncomingSoundOptions] = useState<soundOptTypes>(
+    user.incomingSoundOptions || soundOptTypes.AllowCustom
+  );
 
   const saveAudio = async () => {
     try {

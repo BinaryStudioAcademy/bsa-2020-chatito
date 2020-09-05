@@ -12,7 +12,7 @@ export class Post extends AbstractEntity {
   @Column()
   text: string;
 
-  @Column({ type: 'enum', enum: IntegrationType })
+  @Column({ type: 'enum', enum: IntegrationType, default: IntegrationType.None })
   integration: IntegrationType;
 
   @OneToMany(() => Comment, comment => comment.post)
