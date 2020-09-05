@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.sass';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import ChannelItem from './containers/ChannelItem';
@@ -44,7 +42,9 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
     fetchBrowserChannels(currentWorkspaceId);
   }, []);
 
-  const getPrivateChannels = (channelList: IBrowserChannel[]) => channelList.filter(channel => channel.isPrivate);
+  const getPrivateChannels = (channelList: IBrowserChannel[]) => (
+    channelList.filter(channel => channel.isPrivate)
+  );
 
   const getNotOwnChannels = (channelList: IBrowserChannel[]) => (
     channelList.filter(channel => !channel.users.find(user => user.id === currentUserId))
@@ -81,10 +81,7 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
         <Button className={styles.createBtn} onClick={onCreateChannel}>Create Channel</Button>
       </header>
       <div className={styles.main}>
-        <InputGroup className={styles.search}>
-          <InputGroup.Prepend className={styles.searchPrepend}>
-            <FontAwesomeIcon icon={faSearch} />
-          </InputGroup.Prepend>
+        <InputGroup className={styles.search} size="sm">
           <FormControl placeholder="Search by channel name" value={searchValue} onChange={onChange} />
         </InputGroup>
         <div className={styles.controlsWrp}>

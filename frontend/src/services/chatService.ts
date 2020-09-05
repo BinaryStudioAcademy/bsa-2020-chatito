@@ -16,6 +16,10 @@ export async function fetchWorkspaceChats(workspaceId: string) {
   return response;
 }
 
+export const fetchPublicChannelByHash = (hash: string) => (
+  api.get(`/api/chats/public/${hash}`)
+);
+
 export async function fetchChatPosts({ chatId, from, count }: IFetchMorePosts) {
   const response = await api.get(`/api/chats/${chatId}/posts`, { from, count });
   return response;

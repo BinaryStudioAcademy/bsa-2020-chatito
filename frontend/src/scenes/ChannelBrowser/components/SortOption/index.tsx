@@ -49,7 +49,7 @@ export const SortOption: React.FC<IProps> = ({ setSortOption, sortOption }) => {
     <OverlayTrigger trigger="click" placement="bottom" overlay={popover} rootClose>
       <button type="button" className={`${styles.sortBtn} button-unstyled`}>
         <FontAwesomeIcon icon={faSort} size="lg" />
-        <span>{sortOptions[sortOption]}</span>
+        <span>{`Sort: ${sortOptions[sortOption]}`}</span>
       </button>
     </OverlayTrigger>
   );

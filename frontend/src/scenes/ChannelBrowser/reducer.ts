@@ -1,5 +1,5 @@
 import { Routine } from 'redux-saga-routines';
-import { fetchBrowserChannelsRoutine, joinChannelRoutine, leaveChannelRoutine } from './routines';
+import { fetchBrowserChannelsRoutine, joinChannelFromBrowserRoutine, leaveChannelFromBrowserRoutine } from './routines';
 import { IBrowserChannel } from 'common/models/chat/IBrowserChannel';
 
 export interface IChannelBrowserState {
@@ -32,12 +32,12 @@ const reducer = (state: IChannelBrowserState = initialState, { type, payload }: 
         ...state,
         loading: false
       };
-    case joinChannelRoutine.TRIGGER:
+    case joinChannelFromBrowserRoutine.TRIGGER:
       return {
         ...state,
         btnLoading: true
       };
-    case joinChannelRoutine.SUCCESS: {
+    case joinChannelFromBrowserRoutine.SUCCESS: {
       const { chatId, userId } = payload;
       return {
         ...state,
@@ -50,17 +50,17 @@ const reducer = (state: IChannelBrowserState = initialState, { type, payload }: 
         btnLoading: false
       };
     }
-    case joinChannelRoutine.FAILURE:
+    case joinChannelFromBrowserRoutine.FAILURE:
       return {
         ...state,
         btnLoading: false
       };
-    case leaveChannelRoutine.TRIGGER:
+    case leaveChannelFromBrowserRoutine.TRIGGER:
       return {
         ...state,
         btnLoading: true
       };
-    case leaveChannelRoutine.SUCCESS: {
+    case leaveChannelFromBrowserRoutine.SUCCESS: {
       const { chatId, userId } = payload;
       return {
         ...state,
@@ -73,7 +73,7 @@ const reducer = (state: IChannelBrowserState = initialState, { type, payload }: 
         btnLoading: false
       };
     }
-    case leaveChannelRoutine.FAILURE:
+    case leaveChannelFromBrowserRoutine.FAILURE:
       return {
         ...state,
         btnLoading: false

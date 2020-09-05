@@ -9,8 +9,9 @@ import { IBrowserChannel } from 'common/models/chat/IBrowserChannel';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
-import { joinChannelRoutine, leaveChannelRoutine } from 'scenes/ChannelBrowser/routines';
+import { joinChannelFromBrowserRoutine, leaveChannelFromBrowserRoutine } from 'scenes/ChannelBrowser/routines';
 import { IJoinOrLeaveChannel } from 'common/models/chat/IJoinOrLeaveChannel';
+import { Location } from 'history';
 
 interface IProps {
   whash: string;
@@ -27,9 +28,10 @@ const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel, loading,
   const isUserChatMember = users.find(user => user.id === currentUserId);
   const membersCount = users.length;
 
-  const getChatRoute = () => (
-    Routes.Chat.replace(':whash', whash).replace(':chash', chash)
-  );
+  const getChatRoute = (location: Location) => {
+    if (isPrivate && !isUserChatMember) return location;
+    return Routes.Chat.replace(':whash', whash).replace(':chash', chash);
+  };
 
   const onJoin = () => {
     joinChannel({ chatId: id, userId: currentUserId });
@@ -41,7 +43,7 @@ const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel, loading,
 
   return (
     <div className={styles.channelItem}>
-      <Link to={getChatRoute()}>
+      <Link to={getChatRoute}>
         <div className={styles.channel}>
           <h4 className={styles.channelName}>
             <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} size="xs" />
@@ -80,8 +82,8 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  leaveChannel: leaveChannelRoutine,
-  joinChannel: joinChannelRoutine
+  leaveChannel: leaveChannelFromBrowserRoutine,
+  joinChannel: joinChannelFromBrowserRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChannelItem);

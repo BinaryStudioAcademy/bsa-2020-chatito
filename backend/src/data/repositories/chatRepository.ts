@@ -16,6 +16,10 @@ class ChatRepository extends Repository<Chat> {
     return this.findOne({ where: { id }, relations: ['posts'] });
   }
 
+  getPublicChannelByHash(hash: string) {
+    return this.findOne({ where: { hash, isPrivate: false, type: ChatType.Channel }, relations: ['users'] });
+  }
+
   async getNameAndTypeAndIdById(id: string) {
     const chatInfoToSend = await this.createQueryBuilder('chat')
       .select([
