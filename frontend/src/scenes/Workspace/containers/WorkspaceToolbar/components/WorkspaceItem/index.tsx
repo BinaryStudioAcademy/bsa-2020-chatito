@@ -2,11 +2,12 @@ import React from 'react';
 import styles from './styles.module.sass';
 import { ListGroup, OverlayTrigger, Popover } from 'react-bootstrap';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
+import { IBindingAction } from 'common/models/callback/IBindingActions';
 
 interface IProps {
   workspace: IWorkspace;
   isSelected: boolean;
-  onItemClick: () => void;
+  onItemClick: IBindingAction;
 }
 
 export default function WorkspaceItem({
