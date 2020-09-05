@@ -14,6 +14,11 @@ import { PostType } from 'common/enums/PostType';
 import { IFetchNavPost } from 'common/models/post/IFetchNavPost';
 import CustomReminderModal from 'containers/CustomReminderModal';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
+import {
+  getDate,
+  getMonth,
+  getYear,
+  whenWasSent } from 'common/helpers/dateHelper';
 
 interface IProps {
   chatId: string | undefined;
@@ -110,6 +115,29 @@ const ChatBody: React.FC<IProps> = ({
     </div>
   );
 
+  const dateLine = (text: string) => (
+    <div className={styles.dateLineBlock}>
+      <div className={styles.dateLine} />
+      <div className={styles.dateText}>{text}</div>
+      <div className={styles.dateLine} />
+    </div>
+  );
+
+  const pasteDateLine = (index: number) => {
+    let text: string | boolean = '';
+    if (index === 0 || (getDate(index - 1, messages) && ((
+      getDate(index, messages) - getDate(index - 1, messages) > 0
+    ) || (
+      getMonth(index, messages) - getMonth(index - 1, messages) > 0
+    ) || (
+      getYear(index, messages) - getYear(index - 1, messages) > 0
+    )))) {
+      text = whenWasSent(index, messages);
+      return dateLine(text);
+    }
+    return '';
+  };
+
   return (
     <LoaderWrapper
       loading={!chatId.length}
@@ -123,19 +151,22 @@ const ChatBody: React.FC<IProps> = ({
           hasMore={hasMorePosts && !loading}
           useWindow={false}
         >
-          {messages.map(m => (
-            <div key={m.id} className={styles.postContainer}>
-              {postIdForLine === m.id ? newPostLineElement : ''}
-              <Post
-                // eslint-disable-next-line no-nested-ternary
-                isNew={unreadChatPostIds ? unreadChatPostIds.includes(m.id) ? isNew : !isNew : !isNew}
-                post={m}
-                postRef={m.id === postId ? postRef : null}
-                openThread={handleOpenThread}
-                type={PostType.Post}
-                setCopiedPost={setCopiedPost}
-                copiedPost={copiedPost}
-              />
+          {messages.map((m, index) => (
+            <div key={m.id}>
+              {pasteDateLine(index)}
+              <div className={styles.postContainer}>
+                {postIdForLine === m.id ? newPostLineElement : ''}
+                <Post
+                  // eslint-disable-next-line no-nested-ternary
+                  isNew={unreadChatPostIds ? unreadChatPostIds.includes(m.id) ? isNew : !isNew : !isNew}
+                  post={m}
+                  postRef={m.id === postId ? postRef : null}
+                  openThread={handleOpenThread}
+                  type={PostType.Post}
+                  setCopiedPost={setCopiedPost}
+                  copiedPost={copiedPost}
+                />
+              </div>
             </div>
           ))}
           <CustomReminderModal />
