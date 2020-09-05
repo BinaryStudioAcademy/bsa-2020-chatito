@@ -106,6 +106,14 @@ const Thread: FunctionComponent<IProps> = ({
         .replace(':chash', post.chat.hash || currChatHash));
     }
   };
+  // const threadUnreadMarker = () => {
+  //   unreadPostComments.forEach(unreadPost => {
+  //     if (unreadPost.id === post.id && unreadPost.unreadComments.length) {
+  //       return <div>--New</div>;
+  //     }
+  //     return '1111';
+  //   });
+  // };
 
   return (
     <div className={styles.threadContainer} style={{ width }}>
@@ -118,8 +126,18 @@ const Thread: FunctionComponent<IProps> = ({
                   {post.chat.name}
                 </button>
               )
-              : <p className={styles.threadChatName}>Thread</p>}
-
+              : (
+                <p className={styles.threadChatName}>
+                  Thread
+                  {unreadPostComments.map(unreadPost => (
+                    unreadPost.id === post.id && unreadPost.unreadComments.length ? (
+                      <span className={styles.new}>--New</span>
+                    ) : (
+                      ''
+                    )
+                  ))}
+                </p>
+              )}
             <span>{`Participants ${participants.length}`}</span>
           </div>
 
