@@ -30,10 +30,10 @@ export class User extends AbstractEntity {
   @Column({ nullable: true })
   imageUrl: string;
 
-  @Column({ nullable: true, length: 300 })
+  @Column({ nullable: true, length: 100 })
   title: string;
 
-  @Column({ nullable: true, length: 100 })
+  @Column({ nullable: true, length: 103 })
   status: string;
 
   @Column({ type: 'enum', enum: soundOptionsType, default: soundOptionsType.AllowCustom })
