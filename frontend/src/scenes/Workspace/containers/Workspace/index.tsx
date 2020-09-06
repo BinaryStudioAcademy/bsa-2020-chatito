@@ -31,6 +31,8 @@ import LoaderWrapper from 'components/LoaderWrapper';
 import { IFetchWorkspaceChat } from 'common/models/chat/IFetchWorkspaceChat';
 import ChannelBrowser from 'scenes/ChannelBrowser';
 import ChangeStatusModal from 'containers/ChangeStatusModal';
+import { IFetchWorkspaceUnreadComments } from 'common/models/post/IFetchWorkspaceUnreadComments';
+import { IFetchWorkspaceUnreadPosts } from 'common/models/post/IFetchWorkspaceUnreadPosts';
 
 interface IProps {
   currentUserId?: string;
@@ -47,11 +49,12 @@ interface IProps {
   toggleRightMenu: IBindingCallback1<RightMenuTypes>;
   toggleActiveThread: IBindingCallback1<IPost>;
   isLoader: boolean;
+  workspaceId: string;
   userProfile: IUser;
   selectedHash: string;
   fetchWorkspaceChats: IBindingCallback1<IFetchWorkspaceChat>;
-  fetchUnreadUserPosts: IBindingCallback1<string>;
-  fetchUnreadUserComments: IBindingCallback1<string>;
+  fetchUnreadUserPosts: IBindingCallback1<IFetchWorkspaceUnreadPosts>;
+  fetchUnreadUserComments: IBindingCallback1<IFetchWorkspaceUnreadComments>;
 }
 
 const Workspace: React.FC<IProps> = ({
@@ -62,6 +65,7 @@ const Workspace: React.FC<IProps> = ({
   showRightSideMenu,
   toggleRightMenu,
   isLoader,
+  workspaceId,
   userProfile,
   selectedHash,
   fetchWorkspaceChats,
@@ -85,14 +89,16 @@ const Workspace: React.FC<IProps> = ({
 
   useEffect(() => {
     if (workspaceChatsStatus) {
-      fetchUnreadUserPosts(currentUserId);
+      fetchUnreadUserPosts({ wpId: workspaceId, userId: currentUserId });
       setFetchUnreadCommentsStatus(true);
+      setWorkspaceChatsStatus(false);
     }
   }, [workspaceChatsStatus]);
 
   useEffect(() => {
     if (fetchUnreadCommentsStatus) {
-      fetchUnreadUserComments(currentUserId);
+      fetchUnreadUserComments({ wpId: workspaceId, userId: currentUserId });
+      setFetchUnreadCommentsStatus(false);
     }
   }, [fetchUnreadCommentsStatus]);
 
@@ -170,7 +176,8 @@ const mapStateToProps = (state: IAppState) => {
     activeThreadPostId,
     isLoader: !workspace.id,
     selectedHash: workspace.hash,
-    userProfile: state.workspace.userProfile
+    userProfile: state.workspace.userProfile,
+    workspaceId: workspace.id
   };
 };
 
