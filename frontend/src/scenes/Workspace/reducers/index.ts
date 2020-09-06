@@ -117,7 +117,8 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
     case selectWorkspaceRoutine.TRIGGER:
       return {
         ...state,
-        workspace: payload
+        workspace: payload,
+        showRightSideMenu: RightMenuTypes.None
       };
     case fetchWorkspaceChatsRoutine.TRIGGER:
       return {
