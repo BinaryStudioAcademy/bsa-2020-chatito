@@ -88,20 +88,41 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     return styles.channelSelect;
   };
   const unreadThreadsMarker = () => {
-    let unreadThreadsStatus = false;
+    // let unreadThreadsStatus = false;
+    // if (unreadPostComments.length) {
+    //   unreadPostComments.forEach(unreadPost => {
+    //     if (unreadPost.unreadComments.length) {
+    //       unreadThreadsStatus = true;
+    //     }
+    //   });
+    //   if (unreadThreadsStatus) {
+    //     return (
+    //       <div className={styles.unreadContainer}>
+    //         <div className={styles.unreadCircle} />
+    //       </div>
+    //     );
+    //   }
+    // }
+    let unreadThreadsAmount = unreadPostComments.length;
     if (unreadPostComments.length) {
-      unreadPostComments.forEach(unreadPost => {
-        if (unreadPost.unreadComments.length) {
-          unreadThreadsStatus = true;
+      unreadPostComments.forEach(unreadPostComment => {
+        if (!unreadPostComment.unreadComments.length) {
+          unreadThreadsAmount -= 1;
         }
       });
-      if (unreadThreadsStatus) {
-        return (
-          <div className={styles.unreadContainer}>
-            <div className={styles.unreadCircle} />
+    }
+    if (unreadThreadsAmount) {
+      return (
+        <div className={styles.unreadContainer}>
+          <div className={styles.unreadCircle}>
+            {unreadThreadsAmount < 10 ? (
+              <span className={styles.unreadAmount}>{unreadThreadsAmount}</span>
+            ) : (
+              <span className={`${styles.unreadAmountNineMore} ${styles.unreadAmount}`}>9+</span>
+            )}
           </div>
-        );
-      }
+        </div>
+      );
     }
     return '';
   };
@@ -111,11 +132,19 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   // eslint-disable-next-line
   const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => { }, isActive = () => false) => (
     <button type="button" className={isActive() ? styles.channelSelectActive : styles.channelSelect} onClick={onClick}>
-      <div className={styles.iconWrapper}>
-        <FontAwesomeIcon icon={iconFa} color="black" />
+      <div className={styles.chatBlockContainer}>
+        <div className={styles.iconWrapper}>
+          <FontAwesomeIcon icon={iconFa} color="black" />
+        </div>
+        <div className={styles.channelNameWrapper}>
+          <div className={styles.channelNameWrapper}>
+            <div className={styles.buttonTextContainer}>
+              <span className={styles.buttonText}>{text}</span>
+            </div>
+          </div>
+        </div>
+        {text === 'Threads' ? unreadThreadsMarker() : ''}
       </div>
-      <span className={styles.buttonText}>{text}</span>
-      {text === 'Threads' ? unreadThreadsMarker() : ''}
     </button>
   );
 
