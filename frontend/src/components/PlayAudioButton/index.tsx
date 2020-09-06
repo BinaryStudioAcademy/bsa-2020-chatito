@@ -17,7 +17,7 @@ const AudioPlayer: React.FC<IProps> = ({ audioUrl }) => {
 
   return (
     <button type="button" className={styles.playButton} onClick={playSound}>
-      <FontAwesomeIcon icon={faPlay} color="black" />
+      <FontAwesomeIcon icon={faPlay} />
     </button>
   );
 };

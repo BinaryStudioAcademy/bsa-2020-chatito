@@ -85,98 +85,101 @@ const PreferencesForm: FunctionComponent<IProps> = ({
   };
   return (
     <LoaderWrapper loading={isAudioLoading || isUserLoading} height="100%">
-      <header className={styles.modalHeader}>
-        Preferences
-      </header>
+      <header className={styles.modalHeader}>Preferences</header>
       <div className={styles.modalBody}>
 
         <div className={styles.modalNav}>
-          <span>Sounds</span>
+          <span className={styles.modalNavTitle}>Sounds</span>
         </div>
 
         <div className={styles.mainWrapper}>
-          <h3 className={styles.subHeader}>What you hear when users write you:</h3>
+          <div className={styles.blockContainer}>
+            <h3 className={styles.subHeader}>What you hear when users write you:</h3>
 
-          <Form.Group controlId="formBasicCheckbox" className={styles.radioFormGroup}>
-            <Form.Check
-              type="radio"
-              id="preferencesAudioRadioDefault"
-              checked={isUserAudioDefault}
-              onChange={() => setUserAudioDefault(true)}
-              name="default"
-              label="Default sound"
-            />
+            <Form.Group controlId="formBasicCheckbox" className={styles.radioFormGroup}>
+              <Form.Check
+                className={styles.checkItemContainer}
+                type="radio"
+                id="preferencesAudioRadioDefault"
+                checked={isUserAudioDefault}
+                onChange={() => setUserAudioDefault(true)}
+                name="default"
+                label="Default sound"
+              />
 
-            <Form.Check
-              type="radio"
-              id="preferencesAudioRadioCustom"
-              checked={!isUserAudioDefault}
-              onChange={() => setUserAudioDefault(false)}
-              name="custom"
-              label="Custom sound"
-            />
-          </Form.Group>
+              <Form.Check
+                className={styles.checkItemContainer}
+                type="radio"
+                id="preferencesAudioRadioCustom"
+                checked={!isUserAudioDefault}
+                onChange={() => setUserAudioDefault(false)}
+                name="custom"
+                label="Custom sound"
+              />
+            </Form.Group>
 
-          <div className={`${styles.audioNotificationsWrapper}`}>
-            <PlayAudioButton audioUrl={isUserAudioDefault ? defaultNotificationAudio : userAudio} />
-            {!isUserAudioDefault
-              && (
-                <div className={styles.recorderWrapper}>
-                  <AudioRecorder onRecord={onRecord} maxDuration={3} onError={onRecordingError} />
-                </div>
-              )}
           </div>
+          <div className={styles.audioNotificationsWrapper}>
+            <PlayAudioButton audioUrl={isUserAudioDefault ? defaultNotificationAudio : userAudio} />
+            {!isUserAudioDefault && (
+              <div className={styles.recorderWrapper}>
+                <AudioRecorder onRecord={onRecord} maxDuration={3} onError={onRecordingError} />
+              </div>
+            )}
+            {recordingErr && !isUserAudioDefault && (<div className={styles.recordingErr}>{recordingErr}</div>)}
+          </div>
+          <div className={styles.blockContainer}>
+            <h3 className={styles.subHeader}>What you hear when users write you:</h3>
 
-          {recordingErr && !isUserAudioDefault && (<div className={styles.recordingErr}>{recordingErr}</div>)}
+            <Form.Group controlId="formIncomingSounds" className={styles.radioFormGroup}>
+              <Form.Check
+                className={styles.checkItemContainer}
+                type="radio"
+                id="incomingOptAllo"
+                checked={incomingSoundOptions === soundOptTypes.AllowCustom}
+                onChange={() => setIncomingSoundOptions(soundOptTypes.AllowCustom)}
+                name="allow"
+                label="Allow custom"
+              />
 
-          <h3 className={styles.subHeader}>What you hear when users write you:</h3>
-
-          <Form.Group controlId="formIncomingSounds" className={styles.radioFormGroup}>
-            <Form.Check
-              type="radio"
-              id="incomingOptAllo"
-              checked={incomingSoundOptions === soundOptTypes.AllowCustom}
-              onChange={() => setIncomingSoundOptions(soundOptTypes.AllowCustom)}
-              name="allow"
-              label="Allow custom"
-            />
-
-            <Form.Check
-              type="radio"
-              id="incomingOptDef"
-              checked={incomingSoundOptions === soundOptTypes.UseDefault}
-              onChange={() => setIncomingSoundOptions(soundOptTypes.UseDefault)}
-              name="useCustom"
-              label="Use default"
-            />
-            <Form.Check
-              type="radio"
-              id="incomingOptMute"
-              checked={incomingSoundOptions === soundOptTypes.MuteAll}
-              onChange={() => setIncomingSoundOptions(soundOptTypes.MuteAll)}
-              name="mute"
-              label="Mute All"
-            />
-          </Form.Group>
+              <Form.Check
+                className={styles.checkItemContainer}
+                type="radio"
+                id="incomingOptDef"
+                checked={incomingSoundOptions === soundOptTypes.UseDefault}
+                onChange={() => setIncomingSoundOptions(soundOptTypes.UseDefault)}
+                name="useCustom"
+                label="Use default"
+              />
+              <Form.Check
+                className={styles.checkItemContainer}
+                type="radio"
+                id="incomingOptMute"
+                checked={incomingSoundOptions === soundOptTypes.MuteAll}
+                onChange={() => setIncomingSoundOptions(soundOptTypes.MuteAll)}
+                name="mute"
+                label="Mute All"
+              />
+            </Form.Group>
+          </div>
         </div>
       </div>
 
-      <div className={styles.formFooter}>
+      <div className="buttonsContainer">
         <Button
-          className={styles.primaryBtnCancel}
-          type="button"
+          className="setStatusButton cancel"
+          variant="outline-secondary"
           onClick={handleClose}
         >
           Cancel
         </Button>
-
         <Button
-          className={styles.primaryBtn}
-          type="button"
+          className="setStatusButton save"
+          variant="secondary"
           disabled={!!recordingErr}
           onClick={handleSubmit}
         >
-          Save Changes
+          Save
         </Button>
       </div>
     </LoaderWrapper>
