@@ -91,7 +91,7 @@ const PreferencesForm: FunctionComponent<IProps> = ({
       <div className={styles.modalBody}>
 
         <div className={styles.modalNav}>
-          <ul>Sounds</ul>
+          <span>Sounds</span>
         </div>
 
         <div className={styles.mainWrapper}>
@@ -161,8 +161,12 @@ const PreferencesForm: FunctionComponent<IProps> = ({
         </div>
       </div>
 
-      <div className={`${styles.formFooter} w-100`}>
-        <Button className={styles.primaryBtnCancel} variant="secondary" onClick={handleClose}>
+      <div className={styles.formFooter}>
+        <Button
+          className={styles.primaryBtnCancel}
+          type="button"
+          onClick={handleClose}
+        >
           Cancel
         </Button>
 

@@ -48,17 +48,21 @@
     height: 40px
     background-color: var(--icon-active)
     border-color: var(--icon-active)
-    &:hover, &:active,
-      background-color: var(--link-text-color)
-      border-color: var(--link-text-color)
+    &:hover, &:active, &:focus
+      background-color: var(--save-button-bg-hover)
+      border-color: var(--save-button-bg-hover)
       cursor: pointer
+      outline: none !important
+      box-shadow: none !important
 
   .primaryBtnCancel:global(.btn-primary)
     width: 120px
     height: 40px
-    // background-color: var(--close-button)
-    // border-color: var(--close-button)
-    &:hover, &:active,
-      // background-color: var(--close-button)
-      // border-color: var(--close-button)
+    background-color: var(--cancel-btn-bg)
+    border-color: var(--cancel-btn-bg)
+    &:hover, &:active, &:focus
+      background-color: var(--cancel-btn-bg-hover)
+      border-color: var(--cancel-btn-bg-hover)
       cursor: pointer
+      outline: none !important
+      box-shadow: none !important
