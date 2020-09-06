@@ -29,6 +29,7 @@ import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { Route, Switch } from 'react-router-dom';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { IFetchWorkspaceChat } from 'common/models/chat/IFetchWorkspaceChat';
+import ChannelBrowser from 'scenes/ChannelBrowser';
 import ChangeStatusModal from 'containers/ChangeStatusModal';
 
 interface IProps {
@@ -135,6 +136,7 @@ const Workspace: React.FC<IProps> = ({
               <Switch>
                 <Route path={Routes.Drafts} component={DraftsContainer} />
                 <Route path={Routes.Threads} component={ThreadsContainer} />
+                <Route path={Routes.ChannelBrowser} component={ChannelBrowser} />
                 <Route path={Routes.Post} component={ChatScene} />
                 <Route path={Routes.Chat} component={ChatScene} />
                 <Route component={NoChatMessage} />

@@ -20,7 +20,9 @@ import {
   upsertDraftPostWithSocketRoutine,
   deleteDraftPostWithSocketRoutine,
   fetchNavigationPostRoutine,
-  addPostRoutine
+  addPostRoutine,
+  joinChannelRoutine,
+  fetchPublicChannelRoutine
 } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
@@ -38,6 +40,7 @@ export interface IChatState {
   hasMorePosts: boolean;
   fetchFrom: number;
   fetchCount: number;
+  btnLoading: boolean;
 }
 
 const initialState: IChatState = {
@@ -47,7 +50,8 @@ const initialState: IChatState = {
   error: '',
   hasMorePosts: true,
   fetchFrom: 0,
-  fetchCount: 10
+  fetchCount: 10,
+  btnLoading: false
 };
 
 const reducer = (state: IChatState = initialState, { type, payload }: Routine<any>): IChatState => {
@@ -256,7 +260,7 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         hasMorePosts: Boolean(payload.length),
         fetchFrom: payload.length
       };
-    case addReminderSuccessPostRoutine.SUCCESS:
+    case addReminderSuccessPostRoutine.SUCCESS: {
       const { day, time, note, chatId } = payload;
       const chatitoBotMock = {
         id: '0',
@@ -280,6 +284,7 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
       return {
         ...state, posts
       };
+    }
     case createChatAndAddPostRoutine.TRIGGER:
       return {
         ...state, loading: true
@@ -297,6 +302,28 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ],
         loading: false
       };
+    case joinChannelRoutine.TRIGGER:
+      return {
+        ...state, btnLoading: true
+      };
+    case joinChannelRoutine.SUCCESS: {
+      return {
+        ...state,
+        chat: { ...state.chat as IChat, users: [...state.chat?.users as IUser[], payload] },
+        btnLoading: false
+      };
+    }
+    case joinChannelRoutine.FAILURE:
+      return {
+        ...state, btnLoading: false
+      };
+    case fetchPublicChannelRoutine.SUCCESS: {
+      return {
+        ...state,
+        chat: payload,
+        loading: true
+      };
+    }
     default:
       return state;
   }

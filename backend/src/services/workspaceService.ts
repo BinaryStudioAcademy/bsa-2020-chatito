@@ -50,6 +50,17 @@ export const getWorkspaceUserChats = async (workspaceId: string, userId: string)
   return { channels, directMessages, githubRepositories };
 };
 
+export const getBrowserChannels = async (workspaceId: string, userId: string) => {
+  const channels = await getCustomRepository(ChatRepository).getBrowserChannelsByWorkspaceId(workspaceId);
+  const filteredChannels = channels.filter(channel => {
+    if (channel.isPrivate) {
+      return !!channel.users.find(user => user.id === userId);
+    }
+    return true;
+  });
+  return filteredChannels;
+};
+
 export const getWorkspaceByName = async (name: string) => {
   const wp = await getCustomRepository(WorkspaceRepository).findByName(name);
   return wp;

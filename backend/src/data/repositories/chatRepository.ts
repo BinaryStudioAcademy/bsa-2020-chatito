@@ -16,6 +16,10 @@ class ChatRepository extends Repository<Chat> {
     return this.findOne({ where: { id }, relations: ['posts'] });
   }
 
+  getPublicChannelByHash(hash: string) {
+    return this.findOne({ where: { hash, isPrivate: false, type: ChatType.Channel }, relations: ['users'] });
+  }
+
   async getNameAndTypeAndIdById(id: string) {
     const chatInfoToSend = await this.createQueryBuilder('chat')
       .select([
@@ -75,6 +79,24 @@ class ChatRepository extends Repository<Chat> {
       .getMany();
 
     return chats;
+  }
+
+  async getBrowserChannelsByWorkspaceId(workspaceId: string) {
+    const channels = await this.createQueryBuilder('chat')
+      .select([
+        'chat.id',
+        'chat.name',
+        'chat.hash',
+        'chat.isPrivate',
+        'chat.createdAt',
+        'user.id'
+      ])
+      .leftJoin('chat.users', 'user')
+      .leftJoin('chat.workspace', 'workspace')
+      .where('workspace.id = :workspaceId', { workspaceId })
+      .andWhere('chat.type = :type', { type: ChatType.Channel })
+      .getMany();
+    return channels;
   }
 
   async getAllByUser(userId: string): Promise<any> {

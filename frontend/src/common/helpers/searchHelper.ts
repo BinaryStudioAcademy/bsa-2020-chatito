@@ -1,4 +1,5 @@
 import { IUser } from 'common/models/user/IUser';
+import { IBrowserChannel } from 'common/models/chat/IBrowserChannel';
 
 const searchUsersByEmail = (email: string, users: IUser[]) => (
   users.filter(user => user.email.startsWith(email))
@@ -26,3 +27,7 @@ export const searchUsers = (str: string, users: IUser[]) => {
   }
   return searchUsersByName(text, users);
 };
+
+export const searchChannels = (channels: IBrowserChannel[], value: string) => (
+  channels.filter(channel => channel.name.includes(value))
+);

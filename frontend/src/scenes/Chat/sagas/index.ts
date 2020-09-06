@@ -13,7 +13,9 @@ import {
   createChatAndAddPostRoutine,
   upsertDraftPostRoutine,
   deleteDraftPostRoutine,
-  fetchNavigationPostRoutine
+  fetchNavigationPostRoutine,
+  joinChannelRoutine,
+  fetchPublicChannelRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import {
@@ -23,7 +25,8 @@ import {
   fetchChatUsers,
   removeUserFromChat,
   addUsersToChat,
-  fetchNavigationPost
+  fetchNavigationPost,
+  fetchPublicChannelByHash
 } from 'services/chatService';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
@@ -212,6 +215,33 @@ function* watchCreateChatAndAddPost() {
   yield takeEvery(createChatAndAddPostRoutine.TRIGGER, createChatAndAddPost);
 }
 
+function* joinChannel({ payload }: Routine<any>) {
+  try {
+    yield call(addUsersToChat, { chatId: payload.chatId, userIds: [payload.user.id] });
+    yield put(joinChannelRoutine.success(payload.user));
+  } catch (error) {
+    yield put(joinChannelRoutine.failure());
+    yield call(toastrError, 'Joining channel failed. Please try again later.');
+  }
+}
+
+function* watchJoinChannel() {
+  yield takeEvery(joinChannelRoutine.TRIGGER, joinChannel);
+}
+
+function* fetchPublicChannelRequest({ payload }: Routine<any>) {
+  try {
+    const publicChannel = yield call(fetchPublicChannelByHash, payload.chash);
+    yield put(fetchPublicChannelRoutine.success(publicChannel));
+  } catch (error) {
+    yield put(push(Routes.Workspace.replace(':whash', payload.whash)));
+  }
+}
+
+function* watchFetchPublicChannel() {
+  yield takeEvery(fetchPublicChannelRoutine.TRIGGER, fetchPublicChannelRequest);
+}
+
 export default function* chatSaga() {
   yield all([
     watchPostsRequest(),
@@ -226,6 +256,8 @@ export default function* chatSaga() {
     watchRemoveUserFromChat(),
     watchFetchNavigationPost(),
     watchCreateReminderRequest(),
-    watchCreateChatAndAddPost()
+    watchCreateChatAndAddPost(),
+    watchJoinChannel(),
+    watchFetchPublicChannel()
   ]);
 }

@@ -1,0 +1,77 @@
+.channelItem
+  position: relative
+
+.channelItem:hover
+  background-color: var(--chat-background-secondary)
+
+.channel
+  padding: 16px 92px 16px 12px
+  border-bottom: 1px solid var(--browser-channel-border)
+  position: relative
+  cursor: pointer
+
+.channelName
+  font-size: 15px
+  font-weight: 600
+  margin-bottom: 8px
+  color: var(--main-text)
+
+.channelName svg
+  margin-right: 3px
+
+.chatInfo
+  font-size: 13px
+  color: var(--secondary-text)
+
+.channelBtn
+  visibility: hidden
+  position: absolute
+  top: 50%
+  right: 12px
+  transform: translateY(-50%)
+  font-size: 15px
+  font-weight: 600
+  width: 75px
+  padding: 6px 12px
+  border-radius: .25rem
+  line-height: 1.5
+
+.channelItem:hover .channelBtn
+  visibility: visible
+
+.channelBtn div
+  margin-left: 5px
+
+.joinBtn
+  background-color: var(--browser-channel-primary-button)
+  border: none
+  color: var(--browser-channel-secondary-button)
+
+.joinBtn:hover,
+.joinBtn:active
+  background-color: var(--browser-channel-primary-button-hover)
+
+.joinBtn:disabled
+  background-color: var(--browser-channel-primary-button-disabled)
+  cursor: default
+
+.leaveBtn
+  background-color: var(--browser-channel-secondary-button)
+  border: 1px solid var(--browser-channel-border)
+  color: var(--main-text)
+
+.leaveBtn:hover,
+.leaveBtn:active
+  background-color: var(--browser-channel-secondary-button-hover)
+  border: 1px solid var(--browser-channel-border)
+  color: var(--main-text)
+
+.chatInfo
+  display: flex
+
+.joined
+  margin-right: 10px
+  color: var(--browser-channel-joined)
+
+.joined .checkIcon
+  margin-right: 4px
