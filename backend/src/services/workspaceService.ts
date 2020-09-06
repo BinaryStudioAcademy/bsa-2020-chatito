@@ -35,6 +35,9 @@ export const getWorkspaceUsers = async (id: string): Promise<IUser[]> => {
 
 export const getThreads = async (workspaceId: string, userId: string) => {
   const posts = await getCustomRepository(PostRepository).getPostsByUserId(workspaceId, userId);
+  posts.forEach(post => {
+    post.comments.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  });
   const clientThreads = fromThreadsToThreadsClient(posts);
   return clientThreads;
 };
