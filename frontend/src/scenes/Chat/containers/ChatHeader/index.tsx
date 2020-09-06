@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './styles.module.sass';
 
 import {
@@ -24,6 +24,7 @@ import ChatMembers from 'containers/ChatMembers';
 import { ChatType } from 'common/enums/ChatType';
 import { createDirectChannelName } from 'common/helpers/nameHelper';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { showUserProfileRoutine } from 'scenes/Workspace/routines';
 
 const privateChannelIcon = (
   <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
@@ -37,9 +38,24 @@ interface IProps {
   chat?: IChat;
   showModal: IBindingCallback1<IModalRoutine>;
   currentUser: IUser;
+  showUserProfile: IBindingCallback1<IUser>;
+  directUsers: IUser[] | undefined;
 }
 
-const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUser }) => {
+const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUser, showUserProfile, directUsers }) => {
+  const [userToShow, setUserToShow] = useState<IUser>(currentUser);
+  useEffect(() => {
+    if (directUsers && directUsers.length && directUsers.length === 2) {
+      directUsers.forEach(user => {
+        if (user.id !== currentUser.id) {
+          setUserToShow(user);
+        }
+      });
+    }
+    if (directUsers && directUsers.length === 1) {
+      setUserToShow(directUsers[0]);
+    }
+  }, [directUsers]);
   const maxAvatarsDisplayed = 5;
   const userAvatars = (users: IUser[]) => {
     const usersToDisplay = users.slice(0, maxAvatarsDisplayed);
@@ -95,7 +111,17 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUser }) => {
       <div className={styles.headerInfo}>
         <div className={styles.titleBlock}>
           {chat.isPrivate ? privateChannelIcon : publicChannelIcon}
-          <div className={styles.title}>{chatName}</div>
+          {chat.type === ChatType.DirectMessage && directUsers && directUsers.length < 3 ? (
+            <button
+              onClick={() => showUserProfile(userToShow)}
+              className="button-unstyled"
+              type="button"
+            >
+              <div className={styles.title}>{userToShow.fullName}</div>
+            </button>
+          ) : (
+            <div className={styles.title}>{chatName}</div>
+          )}
           <FontAwesomeIcon icon={faStar} className={styles.icon} />
         </div>
 
@@ -147,11 +173,13 @@ const mapStateToProps = (state: IAppState) => {
   const { chat } = state.chat;
   return {
     chat,
-    currentUser: state.user.user as IUser
+    currentUser: state.user.user as IUser,
+    directUsers: state.chat.chat?.users
   };
 };
 
 const mapDispatchToProps = {
+  showUserProfile: showUserProfileRoutine,
   showModal: showModalRoutine
 };
 
