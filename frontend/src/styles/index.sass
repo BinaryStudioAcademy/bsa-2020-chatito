@@ -31,6 +31,44 @@ body
   vertical-align: initial
   cursor: pointer
 
+// Emoji popup
+
+.tox .tox-button
+  background-color: var(--modal-button-background) !important
+  border-color: var(--modal-button-background) !important
+
+  &:hover
+    background-color: var(--modal-button-background-hover) !important
+
+.tox .tox-button--naked
+  background-color: transparent !important
+  border-color: transparent !important
+
+  &:hover
+    background-color: var(--modal-emoji-hover) !important
+
+.tox .tox-textfield
+  &:focus
+    border-color: var(--modal-input-border) !important
+
+.tox .tox-collection__item
+  &:hover
+    background-color: var(--modal-emoji-hover) !important
+
+.tox .tox-collection__item--active
+  background-color: var(--modal-emoji-hover) !important
+
+.tox .tox-dialog__body-nav-item
+  &:focus
+    background-color: var(--modal-emoji-hover) !important
+
+.tox .tox-dialog__body-nav-item--active
+  border-bottom-color: var(--modal-active-text) !important
+  color: var(--modal-active-text) !important
+
+.tox .tox-dialog__header, .tox-dialog__body,  .tox-dialog__footer
+  background-color: var(--modal-window-background) !important
+
 // Text editor styles
 
 .tox .tox-toolbar__group:last-child
