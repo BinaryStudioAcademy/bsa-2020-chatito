@@ -48,6 +48,7 @@ interface IProps {
   selectedWorkspace: IWorkspace;
   currentUser: IUser | undefined;
   unreadPostComments: IUnreadPostComments[];
+  isShownCreateRepositoryChat: boolean;
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
 }
@@ -60,6 +61,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   unreadChats,
   currentUser,
   unreadPostComments,
+  isShownCreateRepositoryChat,
   showModal,
   router,
   selectedWorkspace
@@ -451,7 +453,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       <InvitePopup />
       <CreateChannelModal />
       <CreateDirectModal />
-      <CreateRepositoryChatModal />
+      { isShownCreateRepositoryChat ? <CreateRepositoryChatModal /> : ''}
     </div>
   );
 };
@@ -465,7 +467,8 @@ const mapStateToProps = (state: IAppState) => ({
   selectedChat: state.chat.chat as IChat,
   unreadChats: state.workspace.unreadChats,
   unreadPostComments: state.workspace.unreadPostComments,
-  currentUser: state.user.user
+  currentUser: state.user.user,
+  isShownCreateRepositoryChat: state.modal.createRepositoryChat
 });
 
 const mapDispatchToProps = {

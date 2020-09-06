@@ -1,3 +1,5 @@
+import { toastr } from 'react-redux-toastr';
+
 export interface IGithubResponse {
   name: string;
 }
@@ -7,7 +9,8 @@ export const getUserPublicGithubRepositories = async (githubUsername: string) =>
 
   const response = await fetch(githubUrl);
 
-  if (response.status === 404) {
+  if (response.status !== 200) {
+    toastr.error('Error', 'Something went wrong with GitHub API.');
     return [];
   }
 
