@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './styles.module.sass';
 import { connect } from 'react-redux';
 import TextEditor from 'components/TextEditor';
@@ -11,6 +11,7 @@ import LoaderWrapper from 'components/LoaderWrapper';
 import { IDeleteDraftPost } from 'common/models/draft/IDeleteDraftPost';
 import { Spinner } from 'react-bootstrap';
 import { IUser } from 'common/models/user/IUser';
+import { InputType } from 'common/enums/InputType';
 
 interface IProps {
   chatId?: string;
@@ -19,6 +20,7 @@ interface IProps {
   isUserChatMember: boolean;
   currentUser: IUser;
   btnLoading: boolean;
+  activeInput: InputType.Post | InputType.Comment | null;
   addPost: ({ chatId, text }: ICreatePost) => void;
   upsertDraftPost: IBindingCallback1<IUpsertDraftPost>;
   deleteDraftPost: IBindingCallback1<IDeleteDraftPost>;
@@ -29,14 +31,39 @@ const ChatFooter: React.FC<IProps> = ({
   addPost,
   upsertDraftPost,
   deleteDraftPost,
+  joinChannel,
   chatId,
   draftPostId,
   draftPostText,
   isUserChatMember,
   currentUser,
-  joinChannel,
-  btnLoading
+  btnLoading,
+  activeInput
 }) => {
+  const [editorKey, setEditorKey] = useState<any>(null);
+  const [inputText, setInputText] = useState<any>(draftPostText);
+
+  useEffect(() => {
+    if (activeInput !== InputType.Post) {
+      setEditorKey(draftPostText);
+    }
+  }, [draftPostText]);
+
+  useEffect(() => {
+    if (chatId) {
+      if (!inputText) {
+        deleteDraftPost({ chatId });
+      } else {
+        const payload = {
+          id: draftPostId,
+          chatId,
+          text: inputText
+        };
+        upsertDraftPost(payload);
+      }
+    }
+  }, [inputText]);
+
   const onSubmit = (text: string) => {
     if (chatId) addPost({ chatId, text });
     return chatId;
@@ -52,14 +79,13 @@ const ChatFooter: React.FC<IProps> = ({
         {isUserChatMember
           ? (
             <TextEditor
-              key={draftPostText}
+              key={editorKey}
+              inputType={InputType.Post}
               placeholder=""
-              draftPayload={{ chatId }}
               height="100px"
               draftInput={{ id: draftPostId, text: draftPostText }}
               onSend={onSubmit}
-              upsertDraft={upsertDraftPost}
-              deleteDraft={deleteDraftPost}
+              onInputChange={setInputText}
             />
           )
           : (
@@ -81,7 +107,8 @@ const mapStateToProps = (state: IAppState) => {
     draftPostText: chat?.draftPosts?.length ? chat.draftPosts[0].text : undefined,
     isUserChatMember: !!chat?.users.find(user => user.id === state.user.user?.id),
     currentUser: state.user.user as IUser,
-    btnLoading: state.chat.btnLoading
+    btnLoading: state.chat.btnLoading,
+    activeInput: state.workspace.activeInput
   };
 };
 

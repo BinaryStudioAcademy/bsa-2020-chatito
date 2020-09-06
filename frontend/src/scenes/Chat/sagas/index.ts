@@ -80,12 +80,15 @@ function* watchDeleteDraftPostRequest() {
 function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
   try {
     const addedPost = yield call(addPost, payload);
+
     if (addedPost.integration === IntegrationType.Whale) {
       if (addedPost.type === MessageType.WhaleSignUpUser) {
         yield put(addPostRoutine.success(addedPost));
       } else if (addedPost.type === MessageType.CommonPost) {
         yield put(deleteDraftPostRoutine.trigger({ chatId: payload.chatId }));
       }
+    } else {
+      yield put(deleteDraftPostRoutine.trigger({ chatId: payload.chatId }));
     }
   } catch (error) {
     yield call(toastrError, error.message);
