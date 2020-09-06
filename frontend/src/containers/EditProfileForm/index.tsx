@@ -192,7 +192,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             <Button className={styles.primaryBtnCancel} variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button className={styles.primaryBtn} type="button" variant="success" onClick={handleSubmit}>
+            <Button className={styles.primaryBtn} type="button" onClick={handleSubmit}>
               Save Changes
             </Button>
           </div>

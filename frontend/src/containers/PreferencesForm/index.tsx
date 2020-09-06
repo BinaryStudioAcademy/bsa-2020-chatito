@@ -170,7 +170,6 @@ const PreferencesForm: FunctionComponent<IProps> = ({
           className={styles.primaryBtn}
           type="button"
           disabled={!!recordingErr}
-          variant="success"
           onClick={handleSubmit}
         >
           Save Changes
