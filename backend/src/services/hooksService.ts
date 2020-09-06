@@ -38,7 +38,7 @@ export const sendScheduliaMessage = async (payload: any, io: any) => {
       type: ChatType.DirectMessage,
       isPrivate: true,
       users: [user1, user2],
-      name: `<p>Schedulia meeting!</p>${payload.data.message}`,
+      name: 'Schedulia meeting',
       createdByUserId: user1.id
     };
     const newChat = await addChat(user1.id, chatBody);
@@ -51,7 +51,7 @@ export const sendScheduliaMessage = async (payload: any, io: any) => {
     createdByUserId: user1.id,
     createdByUser: user1,
     integration: IntegrationType.Schedulia,
-    text: 'Let me remind you about meeting!\n'
+    text: `<p>Schedulia meeting!</p>${payload.data.message}`
   };
   await addPostByBotIntoDirect(user1.id, newPost);
 };
