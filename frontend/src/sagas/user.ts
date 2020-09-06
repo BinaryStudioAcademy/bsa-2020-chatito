@@ -138,6 +138,9 @@ function* addNewUserRequest({ payload }: any): Routine<any> {
 
     yield call(connectSockets);
   } catch (error) {
+    if (error.message.includes('duplicate key value')) {
+      error.message = 'User with this email already exists.';
+    }
     yield call(toastrError, error.message);
     yield put(addNewUserRoutine.failure(error.message));
   }
