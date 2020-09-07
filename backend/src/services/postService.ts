@@ -42,8 +42,8 @@ export const addPost = async (id: string, post: ICreatePost) => {
     } catch (err) {
       if (err.response.status === 401) {
         whalePost.text = `
-        ${err.response.data.text}
-        <a href=${err.response.data.url} rel="noopener noreferrer" target="_blank">Sign up</a>
+          ${err.response.data.text}
+          <a href=${err.response.data.url} rel="noopener noreferrer" target="_blank">Sign up</a>
         `;
         const createdPost: IPost = {
           id: '1a111a1a-1111-1111-1a1a-1a11a1a1a111',

@@ -56,7 +56,6 @@ const CustomReminderModal = ({ toggleModal, isShown, addReminder, chatId }: IPro
   const [day, setReminderDay] = useState<string>(currentFullDate);
   const [time, setReminderTime] = useState<string>(currentTime);
   const [note, setNote] = useState<string>('');
-  console.log(day, time);
   const isInitial = (day === currentFullDate && time === currentTime);
   const validateFormData = () => {
     const reminderDate = new Date(`${day} ${time}`);
@@ -74,6 +73,14 @@ const CustomReminderModal = ({ toggleModal, isShown, addReminder, chatId }: IPro
         chatId,
         day,
         time,
+        note
+      });
+    } else {
+      const { day: _day, time: _time } = fromDateToReminderData(new Date());
+      addReminder({
+        chatId,
+        day: _day,
+        time: _time,
         note
       });
     }
