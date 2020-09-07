@@ -13,5 +13,8 @@ export const env = {
   },
   facebookAuth: {
     appId: getOsEnv('REACT_APP_FACEBOOK_LOGIN_APP_ID')
+  },
+  storage: {
+    s3: getOsEnv('REACT_APP_S3_STORAGE')
   }
 };

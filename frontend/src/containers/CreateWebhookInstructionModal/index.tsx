@@ -5,26 +5,23 @@ import { showModalRoutine } from 'routines/modal';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IModalRoutine } from 'common/models/modal/IShowModalRoutine';
 import { ModalTypes } from 'common/enums/ModalTypes';
-import ModalWindow from 'components/ModalWindow';
 import { InputGroup, FormControl, Button, Image } from 'react-bootstrap';
 import styles from './styles.module.sass';
 import { env } from 'env';
 
 interface IProps {
-  isShown: boolean;
   githubUsername?: string;
   selectedRepository: string;
   showModal: IBindingCallback1<IModalRoutine>;
 }
 
 const CreateWebhooksInstructionModal: FunctionComponent<IProps> = ({
-  isShown,
   githubUsername,
   selectedRepository,
   showModal
 }) => {
   const handleCloseModal = () => {
-    showModal({ modalType: ModalTypes.CreateWebhookInstructions, show: false });
+    showModal({ modalType: ModalTypes.CreateRepositoryChat, show: false });
   };
 
   const getAddWebhookUrl = () => `https://github.com/${githubUsername}/${selectedRepository}/settings/hooks/new`;
@@ -48,7 +45,7 @@ const CreateWebhooksInstructionModal: FunctionComponent<IProps> = ({
   );
 
   return (
-    <ModalWindow isShown={isShown} onHide={handleCloseModal}>
+    <div>
       {modalHeader}
       <div className={styles.infoText}>
         Copy and follow the link below or go to the Webhooks setting of the selected repository.
@@ -59,7 +56,11 @@ const CreateWebhooksInstructionModal: FunctionComponent<IProps> = ({
         />
       </InputGroup>
 
-      <Image src="/assets/webhook.jpg" fluid className={styles.infoImage} />
+      <Image
+        src={`${env.storage.s3}/assets/webhookInstruction.jpg`}
+        fluid
+        className={styles.infoImage}
+      />
 
       <div className={styles.infoText}>Copy the following link and paste it in the Payload URL section.</div>
       <InputGroup className="mb-3">
@@ -82,12 +83,11 @@ const CreateWebhooksInstructionModal: FunctionComponent<IProps> = ({
       </div>
 
       {modalFooter}
-    </ModalWindow>
+    </div>
   );
 };
 
 const mapStateToProps = (state: IAppState) => ({
-  isShown: state.modal.createWebhookInstructions,
   githubUsername: state.user.user?.githubUsername
 });
 

@@ -6,7 +6,6 @@ import { fromGithubPayloadToPost } from '../common/mappers/hooks';
 import { getWorkspaceByName } from './workspaceService';
 import { IntegrationType } from '../common/enums/IntegrationType';
 import { ChatType } from '../common/enums/ChatType';
-import { ClientSockets } from '../common/enums/ClientSockets';
 import ChatRepository from '../data/repositories/chatRepository';
 
 export const addGithubNotification = async (githubPayload: any) => {
@@ -41,9 +40,8 @@ export const sendScheduliaMessage = async (payload: any, io: any) => {
       name: 'Schedulia meeting',
       createdByUserId: user1.id
     };
-    const newChat = await addChat(user1.id, chatBody);
+    const newChat = await addChat(user1.id, chatBody, io);
     chat = await getCustomRepository(ChatRepository).getNameAndTypeAndIdById(newChat.id);
-    io.of('/chat').emit(ClientSockets.JoinChat, chat.id);
   }
   const newPost = {
     chat,

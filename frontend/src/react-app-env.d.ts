@@ -4,4 +4,6 @@ declare module '*.mp3' {
   export default src;
 }
 
+declare module 'react-datetime-picker'
+
 declare module 'mic-recorder-to-mp3'

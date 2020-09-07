@@ -118,6 +118,17 @@ small
 .arrow
   display: none !important
 
+.react-calendar__tile--active,
+.react-calendar__tile--active:hover
+  background: var(--primary) !important
+
+.react-datetime-picker__wrapper
+  height: 38px
+  border-radius: 3px !important
+  outline: none
+  border: 1px solid var(--input-border) !important
+  background-color: var(--white-bg)
+
 .form-check-input
   margin-top: 0
   margin-bottom: 1px
@@ -149,12 +160,15 @@ small
 .save
   border: none
   background-color: var(--icon-active)
-  &:hover, &:active, &:focus
+  &:hover, &:active
     background-color: var(--save-button-bg-hover) !important
-
+  &:focus
+    background-color: var(--icon-active)
 .danger
   color: var(--white-bg)
   border: none
   background-color: var(--danger-button-bg)
-  &:hover, &:active, &:focus
+  &:hover, &:active
     background-color: var(--danger-button-bg-hover) !important
+  &:focus
+    background-color: var(--danger-button-bg)

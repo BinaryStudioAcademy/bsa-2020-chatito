@@ -16,11 +16,11 @@ export const whenWasSent = (index: number, messages: IPost[]) => {
   const recievedDay = getDay(index, messages);
   const recievedMonth = getMonth(index, messages);
   const recievedYear = getYear(index, messages);
-  if (Math.abs(todayDay - recievedDay) === 1 && todayMounth === recievedMonth && todayYear === recievedYear) {
-    return 'Yesterday';
+  if (todayDay - recievedDay === 1 && todayMounth === recievedMonth && todayYear === recievedYear) {
+    return 'yesterday';
   }
   if (todayDay === recievedDay && todayMounth === recievedMonth && todayYear === recievedYear) {
-    return 'Today';
+    return 'today';
   }
   return getDateToPaste(index, messages);
 };
