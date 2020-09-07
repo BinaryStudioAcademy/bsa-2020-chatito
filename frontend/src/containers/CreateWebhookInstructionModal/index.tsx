@@ -59,7 +59,11 @@ const CreateWebhooksInstructionModal: FunctionComponent<IProps> = ({
         />
       </InputGroup>
 
-      <Image src="/assets/webhookInstruction.jpg" fluid className={styles.infoImage} />
+      <Image
+        src={`${env.storage.s3}/assets/webhookInstruction.jpg`}
+        fluid
+        className={styles.infoImage}
+      />
 
       <div className={styles.infoText}>Copy the following link and paste it in the Payload URL section.</div>
       <InputGroup className="mb-3">
