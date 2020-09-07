@@ -66,17 +66,19 @@
       font-weight: 600
       line-height: 23px
       color: var(--title-text)
+  .titleAndStatusContainer
+    padding: 0 16px
+    text-align: center
+    .title
+      font-size: 16px
+      line-height: 21px
+      margin-bottom: 7px
 
-  .title
-    font-size: 16px
-    line-height: 21px
-    margin-bottom: 7px
-
-  .status
-    font-size: 14px
-    line-height: 18px
-    margin-bottom: 7px
-    color: var(--secondary-text)
+    .status
+      font-size: 14px
+      line-height: 18px
+      margin-bottom: 7px
+      color: var(--secondary-text)
 
   .inputWrp
     padding: 15px 15px 22px
@@ -92,25 +94,42 @@
       &:hover
         color: var(--icon)
 
+  .toolbarOneItem
+    justify-content: center !important
+    
   .toolbar
     display: flex
     margin-bottom: 35px
+    width: 240px
+    justify-content: space-between
 
     button
       display: flex
-      justify-content: center
       align-items: center
-      color: var(--icon)
-      width: 38px
-      height: 38px
-      border: 1px solid var(--sidemenu-button-border)
-      border-radius: 50%
-
-      &:not(:last-child)
-        margin-right: 15px
-
+      justify-content: center
+      flex-direction: column
+      width: 75px
+      &:nth-child(2)
+        margin-left: 5px
       &:hover
         color: var(--icon-hover)
+
+      &:hover .circleIconsContainer
+        color: var(--icon-hover)
+
+      .circleIconsContainer
+        display: flex
+        justify-content: center
+        align-items: center
+        color: var(--icon)
+        width: 38px
+        height: 38px
+        border: 1px solid var(--sidemenu-button-border)
+        border-radius: 50%
+
+      .buttonsText
+        margin-top: 10px
+        font-size: 13px
 
   .aboutBtn
     display: flex
@@ -128,7 +147,13 @@
     padding: 0 15px
     margin-bottom: 20px
 
+    .email
+      color: var(--join-whale-btn)
+
     .label
       color: var(--secondary-text)
       font-size: 12px
       margin-bottom: 7px
+
+    a
+      color: var(--main-text)

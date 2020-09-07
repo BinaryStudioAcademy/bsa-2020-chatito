@@ -43,11 +43,25 @@ export const deleteUser = async (id: string): Promise<unknown> => {
 };
 
 export const editProfile = async (userId: string, data: Partial<IUserClient>) => {
+  if (data.title.length > 100) {
+    throw new CustomError(
+      400,
+      'Enter less than 100 symbols.',
+      ErrorCode.TooLongUserLifePosition
+    );
+  }
   const editUser = await getCustomRepository(UserRepository).editUser(userId, data);
   return fromUserToUserClient(editUser);
 };
 
 export const editStatus = async ({ id, status }: IEditStatus) => {
+  if (status.length > 103) {
+    throw new CustomError(
+      400,
+      'Enter less than 100 symbols.',
+      ErrorCode.TooLongUserStatus
+    );
+  }
   const newStatus = await getCustomRepository(UserRepository).editStatus(id, status);
   return [newStatus];
 };
@@ -88,8 +102,11 @@ export const markAsReadPosts = async (userId: string, postIds: string[]) => {
   return response;
 };
 
-export const getUnreadPostsById = async (userId: string) => {
-  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadPostsById(userId);
+export const getUnreadPostsById = async (wpId: string, userId: string) => {
+  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadPostsById(userId, wpId);
+  if (!unreadUserPostIds) {
+    return { id: userId, unreadPosts: [] };
+  }
   return unreadUserPostIds;
 };
 
@@ -107,8 +124,11 @@ export const markAsReadComments = async (userId: string, postIds: string[]) => {
   return response;
 };
 
-export const getUnreadCommentsById = async (userId: string) => {
-  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadCommentsById(userId);
+export const getUnreadCommentsById = async (wpId: string, userId: string) => {
+  const unreadUserPostIds = await getCustomRepository(UserRepository).getUnreadCommentsById(userId, wpId);
+  if (!unreadUserPostIds) {
+    return { id: userId, unreadPosts: [] };
+  }
   return unreadUserPostIds;
 };
 
@@ -129,3 +149,9 @@ export const getGithubUser = async () => {
   const user = await getCustomRepository(UserRepository).getByEmail('github@github.com');
   return user || createGithubUser();
 };
+
+export const getUserByEmail = async (email: string) => {
+  const user = await getCustomRepository(UserRepository).getByEmail(email);
+  return user || createGithubUser();
+};
+

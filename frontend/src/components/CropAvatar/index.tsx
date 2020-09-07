@@ -112,7 +112,7 @@ export const CropAvatar: React.FC<IProps> = ({ src, avatarLoading, clearAvatarDa
             disabled={!image || croppedAvatarLoading}
           >
             <span>Save</span>
-            {croppedAvatarLoading && <Spinner animation="border" role="status" size="sm" />}
+            {croppedAvatarLoading && <Spinner animation="border" role="status" size="sm" className={styles.spinner} />}
           </Button>
         )}
       </div>

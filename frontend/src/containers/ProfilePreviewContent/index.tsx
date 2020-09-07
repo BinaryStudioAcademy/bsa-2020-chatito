@@ -39,11 +39,9 @@ interface IProps {
 const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUser, directMessages, workspaceName,
   workspaceHash, addPost, createChatAndAddPost, router, openProfile, showModal }) => {
   const [user, setUsers] = useState<IUser>(tempUser);
-  // const [loading, setLoading] = useState(true);
   useEffect(() => {
     getUserById(tempUser.id).then(fetchedUser => {
       setUsers(fetchedUser);
-      // setLoading(false);
     });
   }, []);
 
@@ -92,7 +90,9 @@ const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUse
   return (
     <div className={styles.profilePreviewContainer}>
       <div className={styles.contentBody}>
-        <div className={styles.infoContainer}>
+        <div
+          className={styles.infoContainer}
+        >
           {user.status === 'online' ? (
             <p className={`${styles.fullname} ${styles.online}`}>{user.fullName}</p>
           ) : (
@@ -100,9 +100,17 @@ const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUse
           )}
           {user.title && <p className={styles.title}>{user.title}</p>}
           {user.id === currentUser.id ? (
-            <span className={styles.userStatus}>{currentUser.status}</span>
+            <div
+              className={styles.statusContainer}
+            >
+              <span className={styles.userStatus}>{currentUser.status}</span>
+            </div>
           ) : (
-            <span className={styles.userStatus}>{user.status}</span>
+            <div
+              className={styles.statusContainer}
+            >
+              <span className={styles.userStatus}>{user.status}</span>
+            </div>
           )}
           <div className={styles.buttonsBlock}>
             <button

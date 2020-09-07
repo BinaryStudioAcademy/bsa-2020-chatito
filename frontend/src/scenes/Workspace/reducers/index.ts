@@ -33,8 +33,10 @@ import { addChatWithSocketRoutine } from 'scenes/Chat/routines';
 import { ChatType } from 'common/enums/ChatType';
 import {
   upsertDraftCommentWithSocketRoutine,
-  deleteDraftCommentWithSocketRoutine
+  deleteDraftCommentWithSocketRoutine,
+  updateActiveInputRoutine
 } from 'containers/Thread/routines';
+import { InputType } from 'common/enums/InputType';
 
 export interface IWorkspaceState {
   workspace: IWorkspace;
@@ -51,6 +53,7 @@ export interface IWorkspaceState {
   someField: string;
   unreadChats: IUnreadChat[];
   unreadPostComments: IUnreadPostComments[];
+  activeInput: InputType.Post | InputType.Comment | null;
 }
 
 const initialState: IWorkspaceState = {
@@ -67,7 +70,8 @@ const initialState: IWorkspaceState = {
   threadLoading: false,
   someField: 'string',
   unreadChats: [],
-  unreadPostComments: []
+  unreadPostComments: [],
+  activeInput: null
 };
 
 const markAsUnreadPosts = (unreadChats: IUnreadChat[], chatId: string, unreadPost: IPost) => {
@@ -117,7 +121,8 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
     case selectWorkspaceRoutine.TRIGGER:
       return {
         ...state,
-        workspace: payload
+        workspace: payload,
+        showRightSideMenu: RightMenuTypes.None
       };
     case fetchWorkspaceChatsRoutine.TRIGGER:
       return {
@@ -198,6 +203,10 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         channels: updatedChannels,
         directMessages: updatedDirectMessages
       };
+    case updateActiveInputRoutine.TRIGGER:
+      const { activeInput } = payload;
+      return { ...state, activeInput };
+
     case showUserProfileRoutine.TRIGGER:
       return {
         ...state,
@@ -336,8 +345,11 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state, loading: true
       };
     case fetchUnreadUserPostsRoutine.SUCCESS: {
-      const unreadPosts: IPost[] = [...payload.unreadPosts];
-      const unreadChats = [...state.unreadChats];
+      let unreadPosts: IPost[] = [];
+      if (payload.unreadPosts) {
+        unreadPosts = [...payload.unreadPosts];
+      }
+      const unreadChats: IUnreadChat[] = [];
       if (unreadPosts.length) {
         unreadPosts.forEach(unreadPost => {
           let chatExists = false;
@@ -371,8 +383,11 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state, loading: true
       };
     case fetchUnreadUserCommentsRoutine.SUCCESS: {
-      const unreadComments: IServerComment[] = [...payload.unreadComments];
-      const unreadPostComments = [...state.unreadPostComments];
+      let unreadComments: IServerComment[] = [];
+      if (payload.unreadComments) {
+        unreadComments = [...payload.unreadComments];
+      }
+      const unreadPostComments: IUnreadPostComments[] = [];
       if (unreadComments.length) {
         unreadComments.forEach(unreadComment => {
           let postExists = false;

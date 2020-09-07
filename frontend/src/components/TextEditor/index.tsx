@@ -1,55 +1,40 @@
 import React, { FunctionComponent } from 'react';
+import { connect } from 'react-redux';
 import { Editor } from '@tinymce/tinymce-react';
 import debounce from 'debounce';
 import { env } from 'env';
 import styles from './styles.module.sass';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IDraftPost } from 'common/models/draft/IDraftPost';
-import { IUpsertDraftPost } from 'common/models/draft/IUpsertDraftPost';
-import { IUpsertDraftComment } from 'common/models/draft/IUpsertDraftComment';
 import { IDraftComment } from 'common/models/draft/IDraftComment';
-import { IDeleteDraftPost } from 'common/models/draft/IDeleteDraftPost';
-import { IDeleteDraftComment } from 'common/models/draft/IDeleteDraftComment';
+import { updateActiveInputRoutine } from 'containers/Thread/routines';
+import { InputType } from 'common/enums/InputType';
+import { IActiveInput } from 'common/models/draft/IActiveInput';
 
 interface IProps {
   placeholder: string;
   height: number | string | 'auto';
-  draftPayload: IDeleteDraftPost | IDeleteDraftComment | any; // TODO: remove any, fix types
   draftInput: IDraftPost | IDraftComment;
+  inputType: InputType.Post | InputType.Comment | null;
   onSend: (text: string) => void;
-  upsertDraft: IBindingCallback1<IUpsertDraftPost | IUpsertDraftComment | any>;
-  deleteDraft: IBindingCallback1<IDeleteDraftPost | IDeleteDraftComment | any>;
+  onInputChange: (text: string) => void;
+  updateActiveInput: IBindingCallback1<IActiveInput>;
 }
 
 const TextEditor: FunctionComponent<IProps> = ({
   placeholder,
   height,
-  draftPayload,
   draftInput,
+  inputType,
   onSend,
-  upsertDraft,
-  deleteDraft
+  onInputChange,
+  updateActiveInput
 }) => {
   const onSendMessage = (editor: any) => {
     const content = editor.getContent();
     if (content) {
       onSend(editor.getContent());
       editor.setContent('');
-    }
-  };
-
-  const onInputChange = (editor: any) => {
-    const inputText = editor.getContent();
-
-    if (!inputText) {
-      deleteDraft(draftPayload);
-    } else {
-      const payload = {
-        ...draftPayload,
-        id: draftInput.id ? draftInput.id : undefined,
-        text: inputText
-      };
-      upsertDraft(payload);
     }
   };
 
@@ -68,7 +53,7 @@ const TextEditor: FunctionComponent<IProps> = ({
             'paste wordcount emoticons'
           ],
           toolbar:
-            'undo redo | bold italic | bullist numlist | emoticons | myCustomToolbarButton',
+            'bold italic | bullist numlist | emoticons | myCustomToolbarButton',
           skin: 'naked',
           toolbar_location: 'bottom', // eslint-disable-line @typescript-eslint/camelcase
 
@@ -82,18 +67,22 @@ const TextEditor: FunctionComponent<IProps> = ({
             editor.on('init', () => {
               if (draftInput.text) {
                 editor.setContent(draftInput.text);
-                // set cursor active and move to the end of content
-                editor.focus();
-                editor.selection.select(editor.getBody(), true);
-                editor.selection.collapse(false);
               }
+            });
+
+            editor.on('focus', () => {
+              updateActiveInput({ activeInput: inputType });
+            });
+
+            editor.on('blur', () => {
+              updateActiveInput({ activeInput: null });
             });
 
             editor.on('keyup', debounce((event: KeyboardEvent) => {
               if (event.keyCode !== 13) {
-                onInputChange(editor);
+                onInputChange(editor.getContent());
               }
-            }, 2000));
+            }, 500));
 
             editor.on('keydown', (event: KeyboardEvent) => {
               if (event.keyCode === 13) {
@@ -109,4 +98,8 @@ const TextEditor: FunctionComponent<IProps> = ({
   );
 };
 
-export default TextEditor;
+const mapDispatchToProps = {
+  updateActiveInput: updateActiveInputRoutine
+};
+
+export default connect(null, mapDispatchToProps)(TextEditor);

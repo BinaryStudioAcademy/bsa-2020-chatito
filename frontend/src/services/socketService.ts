@@ -48,7 +48,6 @@ import { IncomingSoundOptions } from 'common/enums/IncomingSoundOptions';
 const { server } = env.urls;
 
 export const connectSockets = () => {
-  // eslint-disable-next-line
   const chatSocket = io(`${server}/chat`, { query: `auth_token=${getAccessToken()}` });
 
   chatSocket.on(ClientSockets.AddPost, (post: IPost, audio: string) => {
@@ -59,7 +58,7 @@ export const connectSockets = () => {
     } else {
       switch (state.user.user?.incomingSoundOptions) {
         case IncomingSoundOptions.AllowCustom:
-          playByUrl(audio);
+          playByUrl(audio || defaultNotificationAudio);
           break;
         case IncomingSoundOptions.UseDefault:
           playByUrl(defaultNotificationAudio);
@@ -141,14 +140,17 @@ export const connectSockets = () => {
     chatId: string
   ) => {
     store.dispatch(newUserNotificationWithSocketRoutine({ users, chatType, chatId }));
+    const state = store.getState();
+    const currentUserId = state.user.user?.id;
     if (users.length === 1) {
-      toastrSuccess(`User ${users[0].displayName} was invited to channel "${chatName}"`);
+      if (currentUserId === users[0].id) return;
+      toastrSuccess(`User ${users[0].displayName} joined to channel "${chatName}"`);
     } else {
       let usersString = '';
       users.forEach((user, index) => {
         usersString += `${user.displayName}${index === users.length - 1 ? '' : ', '}`;
       });
-      toastrSuccess(`Users ${usersString} were invited to channel "${chatName}"`);
+      toastrSuccess(`Users ${usersString} joined to channel "${chatName}"`);
     }
   });
 
@@ -158,9 +160,9 @@ export const connectSockets = () => {
 
     if (state.user.user?.id === userId) {
       store.dispatch(usertDraftsPagePostRoutine(draftPost));
+      store.dispatch(updateChatDraftPostRoutine({ ...draftPost, chatId }));
       if (chatId === state.chat.chat?.id) {
         store.dispatch(upsertDraftPostWithSocketRoutine(draftPost));
-        store.dispatch(updateChatDraftPostRoutine({ ...draftPost, chatId }));
       }
     }
   });
@@ -170,9 +172,9 @@ export const connectSockets = () => {
 
     if (state.user.user?.id === userId) {
       store.dispatch(deleteDraftPostFromDraftsRoutine(post));
+      store.dispatch(updateChatDraftPostRoutine({ chatId }));
       if (chatId === state.chat.chat?.id) {
         store.dispatch(deleteDraftPostWithSocketRoutine());
-        store.dispatch(updateChatDraftPostRoutine({ chatId }));
       }
     }
   });

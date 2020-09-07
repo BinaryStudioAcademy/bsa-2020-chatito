@@ -14,6 +14,7 @@ import {
   faCaretRight,
   faPlus,
   faPencilAlt,
+  faBookmark,
   faCodeBranch
 } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
@@ -35,6 +36,8 @@ import { createDirectChannelName } from 'common/helpers/nameHelper';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
 import CreateRepositoryChatModal from 'containers/CreateRepositoryChatModal';
+import { Popover, OverlayTrigger } from 'react-bootstrap';
+import { IUser } from 'common/models/user/IUser';
 
 interface IProps {
   channels: IChat[];
@@ -43,8 +46,9 @@ interface IProps {
   selectedChat: IChat;
   unreadChats: IUnreadChat[];
   selectedWorkspace: IWorkspace;
-  currentUserId: string;
+  currentUser: IUser | undefined;
   unreadPostComments: IUnreadPostComments[];
+  isShownCreateRepositoryChat: boolean;
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
 }
@@ -55,8 +59,9 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   githubRepositories,
   selectedChat,
   unreadChats,
-  currentUserId,
+  currentUser,
   unreadPostComments,
+  isShownCreateRepositoryChat,
   showModal,
   router,
   selectedWorkspace
@@ -75,7 +80,6 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       router(Routes.AddWorkspace);
     }
   };
-
   const getClassNameDiv = (state: boolean) => (state ? styles.listBoxHidden : styles.listBox);
 
   const getClassNameImg = (state: boolean) => (state ? styles.chanelsImgRotate : styles.chanelsImg);
@@ -87,20 +91,41 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     return styles.channelSelect;
   };
   const unreadThreadsMarker = () => {
-    let unreadThreadsStatus = false;
+    // let unreadThreadsStatus = false;
+    // if (unreadPostComments.length) {
+    //   unreadPostComments.forEach(unreadPost => {
+    //     if (unreadPost.unreadComments.length) {
+    //       unreadThreadsStatus = true;
+    //     }
+    //   });
+    //   if (unreadThreadsStatus) {
+    //     return (
+    //       <div className={styles.unreadContainer}>
+    //         <div className={styles.unreadCircle} />
+    //       </div>
+    //     );
+    //   }
+    // }
+    let unreadThreadsAmount = unreadPostComments.length;
     if (unreadPostComments.length) {
-      unreadPostComments.forEach(unreadPost => {
-        if (unreadPost.unreadComments.length) {
-          unreadThreadsStatus = true;
+      unreadPostComments.forEach(unreadPostComment => {
+        if (!unreadPostComment.unreadComments.length) {
+          unreadThreadsAmount -= 1;
         }
       });
-      if (unreadThreadsStatus) {
-        return (
-          <div className={styles.unreadContainer}>
-            <div className={styles.unreadCircle} />
+    }
+    if (unreadThreadsAmount) {
+      return (
+        <div className={styles.unreadContainer}>
+          <div className={styles.unreadCircle}>
+            {unreadThreadsAmount < 10 ? (
+              <span className={styles.unreadAmount}>{unreadThreadsAmount}</span>
+            ) : (
+              <span className={`${styles.unreadAmountNineMore} ${styles.unreadAmount}`}>9+</span>
+            )}
           </div>
-        );
-      }
+        </div>
+      );
     }
     return '';
   };
@@ -110,11 +135,19 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   // eslint-disable-next-line
   const channelSelector = (text: string, iconFa: IconDefinition, onClick = () => { }, isActive = () => false) => (
     <button type="button" className={isActive() ? styles.channelSelectActive : styles.channelSelect} onClick={onClick}>
-      <div className={styles.iconWrapper}>
-        <FontAwesomeIcon icon={iconFa} color="black" />
+      <div className={styles.chatBlockContainer}>
+        <div className={styles.iconWrapper}>
+          <FontAwesomeIcon icon={iconFa} color="black" />
+        </div>
+        <div className={styles.channelNameWrapper}>
+          <div className={styles.channelNameWrapper}>
+            <div className={styles.buttonTextContainer}>
+              <span className={styles.buttonText}>{text}</span>
+            </div>
+          </div>
+        </div>
+        {text === 'Threads' ? unreadThreadsMarker() : ''}
       </div>
-      <span className={styles.buttonText}>{text}</span>
-      {text === 'Threads' ? unreadThreadsMarker() : ''}
     </button>
   );
 
@@ -123,7 +156,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       if (unreadChat.id === chatId && unreadChat.unreadPosts.length) {
         return (
           <div className={styles.unreadContainer} key={unreadChat.id}>
-            <div className={styles.unreadCircle}>
+            <div className={styles.unreadCircle} key={unreadChat.id}>
               {unreadChat.unreadPosts.length < 10 ? (
                 <span className={styles.unreadAmount}>{unreadChat.unreadPosts.length}</span>
               ) : (
@@ -137,34 +170,78 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     })
   );
 
+  const PopoverItem = (data: string) => (
+    <Popover id="workspaceItemPopover" className={styles.popOverWindow}>
+      <span>
+        {data}
+      </span>
+    </Popover>
+  );
+
   const userChannel = (channel: IChat) => {
     const { name, isPrivate, id, draftPosts } = channel;
     const draftPostText = draftPosts?.length ? draftPosts[0].text : undefined;
 
     return (
       <button type="button" key={id} className={getChannelSelect(channel)} onClick={() => doSelectChannel(channel)}>
-        <div className={styles.iconWrapper}>
-          <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} size="xs" />
-        </div>
         <div className={styles.chatBlock}>
-          <span className={styles.buttonText}>{name}</span>
-
-          {
-            draftPostText && !(selectedChat && selectedChat.id === channel.id)
-              ? <FontAwesomeIcon icon={faPencilAlt} size="xs" />
-              : null
-          }
+          <div className={styles.chatBlockContainer}>
+            <div className={styles.iconWrapper}>
+              <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} size="xs" />
+            </div>
+            <OverlayTrigger
+              trigger={['hover', 'hover']}
+              delay={{ show: 300, hide: 0 }}
+              rootClose
+              placement="top-start"
+              overlay={PopoverItem(name)}
+            >
+              <div className={styles.channelNameWrapper}>
+                <p className={styles.buttonText}>{name}</p>
+              </div>
+            </OverlayTrigger>
+            <div className={styles.markers}>
+              {
+                draftPostText && !(selectedChat && selectedChat.id === channel.id) ? (
+                  <div className={styles.markerContainer}>
+                    <FontAwesomeIcon icon={faPencilAlt} color="#2D2D2D" />
+                  </div>
+                ) : (
+                  ''
+                )
+              }
+              {unreadChatsMarker(id)}
+            </div>
+          </div>
         </div>
-        {unreadChatsMarker(id)}
       </button>
     );
   };
 
   const directChannel = (directMessage: IChat) => {
     const { users, id, draftPosts } = directMessage;
-    const channelName = createDirectChannelName(users, currentUserId);
+    const channelNameData = createDirectChannelName(users, currentUser);
     const draftPostText = draftPosts?.length ? draftPosts[0].text : undefined;
-
+    let channelName = '';
+    let emoji: string | undefined = '';
+    let youMarker = '';
+    switch (channelNameData.length) {
+      case 1:
+        channelName = `${channelNameData[0]}`;
+        break;
+      case 2:
+        channelName = `${channelNameData[0]}`;
+        emoji = `${channelNameData[1]?.slice(0, 3).trim()}`;
+        break;
+      case 3:
+        channelName = `${channelNameData[0]}`;
+        emoji = channelNameData[1]?.slice(0, 3).trim();
+        youMarker = '(you)';
+        break;
+      default:
+        channelName = `${channelNameData}`;
+    }
+    const status = channelNameData[1] ? channelNameData[1] : '';
     return (
       <button
         type="button"
@@ -177,15 +254,51 @@ const ChatToolbar: FunctionComponent<IProps> = ({
             <div className={styles.iconWrapper}>
               <div className={styles.onlineSign} />
             </div>
-            <span className={styles.buttonText}>{channelName}</span>
+            <div className={styles.channelNameWrapper}>
+              <OverlayTrigger
+                trigger={['hover', 'hover']}
+                delay={{ show: 300, hide: 0 }}
+                rootClose
+                placement="top-start"
+                overlay={PopoverItem(channelName)}
+              >
+                <div className={styles.buttonTextContainer}>
+                  <p className={styles.buttonText}>{channelName}</p>
+                </div>
+              </OverlayTrigger>
+              {youMarker && (
+                <div className={`${styles.markerContainer} ${styles.youMarker}`}>
+                  <div className={styles.youMarkerContainer}>
+                    <span className={styles.youMarker}>{youMarker}</span>
+                  </div>
+                </div>
+              )}
+              {emoji && (
+                <div className={styles.markerContainer}>
+                  <OverlayTrigger
+                    trigger={['hover', 'hover']}
+                    delay={{ show: 300, hide: 0 }}
+                    rootClose
+                    placement="top"
+                    overlay={PopoverItem(status)}
+                  >
+                    <span className={styles.emoji}>{emoji}</span>
+                  </OverlayTrigger>
+                </div>
+              )}
+            </div>
+            <div className={styles.markers}>
+              {
+                draftPostText && !(selectedChat && selectedChat.id === directMessage.id) ? (
+                  <div className={styles.markerContainer}>
+                    <FontAwesomeIcon icon={faPencilAlt} color="#2D2D2D" />
+                  </div>
+                ) : ''
+              }
+              {unreadChatsMarker(id)}
+            </div>
           </div>
-          {
-            draftPostText && !(selectedChat && selectedChat.id === directMessage.id)
-              ? <FontAwesomeIcon icon={faPencilAlt} color="black" />
-              : null
-          }
         </div>
-        {unreadChatsMarker(id)}
       </button>
     );
   };
@@ -280,10 +393,13 @@ const ChatToolbar: FunctionComponent<IProps> = ({
         () => goToRoute(Routes.Threads),
         () => isActiveChanneSelector(Routes.Threads))}
       {channelSelector('Mentions & reactions', faAt)}
+      {channelSelector('Channel browser', faSearch,
+        () => goToRoute(Routes.ChannelBrowser),
+        () => isActiveChanneSelector(Routes.ChannelBrowser))}
       {channelSelector('Drafts', faListAlt,
         () => goToRoute(Routes.Drafts),
         () => isActiveChanneSelector(Routes.Drafts))}
-      {channelSelector('Saved Items', faSearch)}
+      {channelSelector('Saved Items', faBookmark)}
       {channelSelector('File Browser', faDatabase)}
 
       <div className={styles.buttonChannel}>
@@ -337,7 +453,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       <InvitePopup />
       <CreateChannelModal />
       <CreateDirectModal />
-      <CreateRepositoryChatModal />
+      { isShownCreateRepositoryChat ? <CreateRepositoryChatModal /> : ''}
     </div>
   );
 };
@@ -350,7 +466,9 @@ const mapStateToProps = (state: IAppState) => ({
   isLoading: state.workspace.loading,
   selectedChat: state.chat.chat as IChat,
   unreadChats: state.workspace.unreadChats,
-  unreadPostComments: state.workspace.unreadPostComments
+  unreadPostComments: state.workspace.unreadPostComments,
+  currentUser: state.user.user,
+  isShownCreateRepositoryChat: state.modal.createRepositoryChat
 });
 
 const mapDispatchToProps = {

@@ -6,10 +6,12 @@ import ChatFooter from './containers/ChatFooter';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import { IChat } from 'common/models/chat/IChat';
-import { setCurrentChatRoutine } from './routines';
+import { setCurrentChatRoutine, fetchPublicChannelRoutine } from './routines';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { IUser } from 'common/models/user/IUser';
 import { ChatType } from 'common/enums/ChatType';
+import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { IFetchPublicChannel } from 'common/models/chat/IFetchPublicChannel';
 
 interface IProps {
   isLoading: boolean;
@@ -24,13 +26,19 @@ interface IProps {
   chats: IChat[];
   currentUser: IUser | undefined;
   selectChat: (chat: IChat | null) => void;
+  fetchPublicChannel: IBindingCallback1<IFetchPublicChannel>;
 }
-const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats, currentUser, selectChat }) => {
+const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats,
+  currentUser, selectChat, fetchPublicChannel }) => {
   useEffect(() => {
     const { chash } = match.params;
     if (chash) {
       const currChat = chats.find(chatItem => chatItem.hash === chash);
-      if (currChat) selectChat(currChat);
+      if (currChat) {
+        selectChat(currChat);
+      } else {
+        fetchPublicChannel({ chash, whash: match.params.whash });
+      }
     } else {
       selectChat(null);
     }
@@ -58,7 +66,8 @@ const mapStateToProps = (state: IAppState) => {
 };
 
 const mapDispatchToProps = {
-  selectChat: setCurrentChatRoutine
+  selectChat: setCurrentChatRoutine,
+  fetchPublicChannel: fetchPublicChannelRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatContainer);

@@ -35,6 +35,9 @@ export const getWorkspaceUsers = async (id: string): Promise<IUser[]> => {
 
 export const getThreads = async (workspaceId: string, userId: string) => {
   const posts = await getCustomRepository(PostRepository).getPostsByUserId(workspaceId, userId);
+  posts.forEach(post => {
+    post.comments.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  });
   const clientThreads = fromThreadsToThreadsClient(posts);
   return clientThreads;
 };
@@ -48,4 +51,20 @@ export const getWorkspaceUserChats = async (workspaceId: string, userId: string)
   const githubRepositories = clientChats.filter(chat => chat.type === ChatType.GithubRepository);
 
   return { channels, directMessages, githubRepositories };
+};
+
+export const getBrowserChannels = async (workspaceId: string, userId: string) => {
+  const channels = await getCustomRepository(ChatRepository).getBrowserChannelsByWorkspaceId(workspaceId);
+  const filteredChannels = channels.filter(channel => {
+    if (channel.isPrivate) {
+      return !!channel.users.find(user => user.id === userId);
+    }
+    return true;
+  });
+  return filteredChannels;
+};
+
+export const getWorkspaceByName = async (name: string) => {
+  const wp = await getCustomRepository(WorkspaceRepository).findByName(name);
+  return wp;
 };

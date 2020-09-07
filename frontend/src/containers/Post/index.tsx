@@ -229,7 +229,7 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
   );
 
   const ButtonOptions = () => (
-    <OverlayTrigger trigger="click" rootClose placement="left" overlay={popoverOptions}>
+    <OverlayTrigger trigger="click" rootClose placement="left-start" overlay={popoverOptions}>
       <Card.Link
         bsPrefix={styles.optionsBlock}
       >

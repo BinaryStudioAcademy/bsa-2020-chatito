@@ -19,6 +19,7 @@ import { IDeleteDraftComment } from 'common/models/draft/IDeleteDraftComment';
 import { IAppState } from 'common/models/store';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
+import { InputType } from 'common/enums/InputType';
 
 interface IProps {
   showOnlyTwoComments?: boolean;
@@ -37,6 +38,7 @@ interface IProps {
   deleteDraftComment: IBindingCallback1<IDeleteDraftComment>;
   isLoading: boolean;
   unreadPostComments: IUnreadPostComments[];
+  activeInput: InputType.Post | InputType.Comment | null;
 }
 
 const Thread: FunctionComponent<IProps> = ({
@@ -54,13 +56,17 @@ const Thread: FunctionComponent<IProps> = ({
   upsertDraftComment,
   deleteDraftComment,
   isLoading,
-  unreadPostComments
+  unreadPostComments,
+  activeInput
 }) => {
   const isNew = true;
   const { whash } = useParams();
   const [showAll, setShowAll] = useState(false);
   const [commentIdForLine, setCommentIdForLine] = useState('');
   const [unreadCommentIds, setUnreadCommentIds] = useState<string[]>();
+  const [editorKey, setEditorKey] = useState<any>(null);
+  const [inputText, setInputText] = useState<any>(draftCommentText);
+
   const setNewCommentLine = () => {
     unreadPostComments.forEach(unreadPost => {
       if (unreadPost.id === post.id) {
@@ -84,6 +90,27 @@ const Thread: FunctionComponent<IProps> = ({
     }
   }, [post.id, unreadPostComments]);
 
+  useEffect(() => {
+    if (activeInput !== InputType.Comment) {
+      setEditorKey(draftCommentText);
+    }
+  }, [draftCommentText]);
+
+  useEffect(() => {
+    if (post.id) {
+      if (!inputText) {
+        deleteDraftComment({ postId: post.id });
+      } else {
+        const payload = {
+          id: draftCommentId,
+          postId: post.id,
+          text: inputText
+        };
+        upsertDraftComment(payload);
+      }
+    }
+  }, [inputText]);
+
   const newCommentLineElement = (
     <div className={styles.newPostBlock}>
       <div className={styles.line} />
@@ -106,6 +133,15 @@ const Thread: FunctionComponent<IProps> = ({
         .replace(':chash', post.chat.hash || currChatHash));
     }
   };
+  const threadUnreadMarker = (
+    unreadPostComments.map(unreadPost => (
+      unreadPost.id === post.id && unreadPost.unreadComments.length ? (
+        <span className={styles.new}>--New</span>
+      ) : (
+        ''
+      )
+    ))
+  );
 
   return (
     <div className={styles.threadContainer} style={{ width }}>
@@ -116,10 +152,15 @@ const Thread: FunctionComponent<IProps> = ({
               ? (
                 <button type="button" className={styles.threadChatNameButton} onClick={redirectToChat}>
                   {post.chat.name}
+                  {threadUnreadMarker}
                 </button>
               )
-              : <p className={styles.threadChatName}>Thread</p>}
-
+              : (
+                <p className={styles.threadChatName}>
+                  Thread
+                  {threadUnreadMarker}
+                </p>
+              )}
             <span>{`Participants ${participants.length}`}</span>
           </div>
 
@@ -160,17 +201,13 @@ const Thread: FunctionComponent<IProps> = ({
           )}
           <div className={styles.textEditor}>
             <TextEditor
-              key={draftCommentText}
+              key={editorKey}
+              inputType={InputType.Comment}
               placeholder="write a comment!"
               height={100}
-              draftPayload={{ postId: post.id }}
-              draftInput={{
-                id: draftCommentId,
-                text: draftCommentText
-              }}
-              upsertDraft={upsertDraftComment}
-              deleteDraft={deleteDraftComment}
+              draftInput={{ id: draftCommentId, text: draftCommentText }}
               onSend={sendCommentHandler}
+              onInputChange={setInputText}
             />
           </div>
         </div>
@@ -187,7 +224,8 @@ const mapStateToProps = (state: IAppState) => {
     draftCommentId: draftComments?.length ? draftComments[0].id : undefined,
     draftCommentText: draftComments?.length ? draftComments[0].text : undefined,
     isLoading: state.workspace.threadLoading,
-    unreadPostComments: state.workspace.unreadPostComments
+    unreadPostComments: state.workspace.unreadPostComments,
+    activeInput: state.workspace.activeInput
   };
 };
 

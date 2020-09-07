@@ -138,6 +138,9 @@ function* addNewUserRequest({ payload }: any): Routine<any> {
 
     yield call(connectSockets);
   } catch (error) {
+    if (error.message.includes('duplicate key value')) {
+      error.message = 'User with this email already exists.';
+    }
     yield call(toastrError, error.message);
     yield put(addNewUserRoutine.failure(error.message));
   }
@@ -184,6 +187,7 @@ function* editStatusRequest({ payload }: Routine<any>) {
     const response = yield call(editStatus, { id, status });
     yield put(editStatusRoutine.success(response));
   } catch (error) {
+    yield call(toastrError, error.message);
     yield put(editStatusRoutine.failure(error.message));
   }
 }

@@ -125,8 +125,10 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
           <i className={styles.online} />
           <span className={styles.fullName}>{user.fullName}</span>
         </div>
-        {user.title && <div className={styles.title}>{user.title}</div>}
-        {user.status && <div className={styles.status}>{user.status}</div>}
+        <div className={styles.titleAndStatusContainer}>
+          {user.title && <div className={styles.title}>{user.title}</div>}
+          {user.status && <div className={styles.status}>{user.status}</div>}
+        </div>
 
         <InputGroup className={styles.inputWrp}>
           <FormControl ref={inputRef} placeholder="Write a message" value={message} onChange={onChange} />
@@ -137,22 +139,30 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
           </InputGroup.Append>
         </InputGroup>
 
-        <div className={styles.toolbar}>
+        <div className={`${styles.toolbar} ${user.id !== currentUser.id ? styles.toolbarOneItem : ''}`}>
           {user.id === currentUser.id && (
             <button type="button" className="button-unstyled" onClick={onSetStatus}>
-              <FontAwesomeIcon icon={faSmileWink} />
+              <div className={styles.circleIconsContainer}>
+                <FontAwesomeIcon icon={faSmileWink} />
+              </div>
+              <span className={styles.buttonsText}>Set status</span>
             </button>
           )}
           {user.id === currentUser.id && (
-          <button type="button" className="button-unstyled" onClick={onEdit}>
-            <FontAwesomeIcon icon={faEdit} />
-          </button>
+            <button type="button" className="button-unstyled" onClick={onEdit}>
+              <div className={styles.circleIconsContainer}>
+                <FontAwesomeIcon icon={faEdit} />
+              </div>
+              <span className={styles.buttonsText}>Edit profile</span>
+            </button>
           )}
           <button type="button" className="button-unstyled">
-            <FontAwesomeIcon icon={faEllipsisH} />
+            <div className={styles.circleIconsContainer}>
+              <FontAwesomeIcon icon={faEllipsisH} />
+            </div>
+            <span className={styles.buttonsText}>More</span>
           </button>
         </div>
-
         <button
           className={`${styles.aboutBtn} button-unstyled`}
           type="button"

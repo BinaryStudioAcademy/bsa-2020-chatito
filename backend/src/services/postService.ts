@@ -73,6 +73,21 @@ export const addPost = async (id: string, post: ICreatePost) => {
   return createdPost;
 };
 
+export const addPostByBotIntoDirect = async (id: string, post: ICreatePost) => {
+  const user = await getCustomRepository(UserRepository).getById(id);
+  const chat = await getCustomRepository(ChatRepository).getById(post.chatId);
+  const newPost: ICreatePost = { ...post, createdByUser: user, chat };
+  const createdPost: IPost = await getCustomRepository(PostRepository).addPost(newPost);
+  const clientPost = await fromPostToPostClient(createdPost);
+  emitToChatRoom(clientPost.chatId, ClientSockets.AddPost, clientPost, user.audio);
+  const users = await getCustomRepository(ChatRepository).getAllChatUsers(chat.id);
+  users.forEach(async chatUser => {
+    await getCustomRepository(UserRepository).markAsUnreadPost(chatUser.id, createdPost.id);
+  });
+  emitToChatRoom(createdPost.chatId, ClientSockets.NotifyAndMarkAsUnread, createdPost, { id: 0 }, chat);
+  return createdPost;
+};
+
 export const editPost = async ({ id, text }: IEditPost) => {
   const editedPost: IPost = await getCustomRepository(PostRepository).editPost(id, text);
   const clientPost = await fromPostToPostClient(editedPost);

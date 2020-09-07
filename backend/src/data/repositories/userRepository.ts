@@ -28,13 +28,15 @@ class UserRepository extends Repository<User> {
     return postId;
   }
 
-  async getUnreadPostsById(id: string): Promise<IUserUnreadPosts> {
+  async getUnreadPostsById(id: string, wpId: string): Promise<IUserUnreadPosts> {
     const postIds = await this.createQueryBuilder('user')
       .select([
         'user.id'
       ])
       .leftJoinAndSelect('user.unreadPosts', 'unreadposts')
+      .leftJoin('unreadposts.chat', 'unreadChat')
       .where('user.id = :id', { id })
+      .andWhere('"unreadChat"."workspaceId" = :wpId', { wpId })
       .getOne();
     return postIds;
   }
@@ -49,13 +51,16 @@ class UserRepository extends Repository<User> {
     return postId;
   }
 
-  async getUnreadCommentsById(id: string): Promise<IUserUnreadPosts> {
+  async getUnreadCommentsById(id: string, wpId: string): Promise<IUserUnreadPosts> {
     const postIds = await this.createQueryBuilder('user')
       .select([
         'user.id'
       ])
       .leftJoinAndSelect('user.unreadComments', 'unreadcomments')
+      .leftJoin('unreadcomments.post', 'unreadPost')
+      .leftJoin('unreadPost.chat', 'unreadpostchat')
       .where('user.id = :id', { id })
+      .andWhere('unreadpostchat."workspaceId" = :wpId', { wpId })
       .getOne();
     return postIds;
   }

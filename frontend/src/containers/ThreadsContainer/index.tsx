@@ -60,6 +60,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
                   key={post.id}
                   width="100%"
                   post={{
+                    chat: { name: post.chat.name ? post.chat.name : 'Thread' },
                     createdByUser: post.createdByUser,
                     text: post.text,
                     createdAt: new Date(post.createdAt),

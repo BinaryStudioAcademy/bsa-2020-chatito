@@ -16,6 +16,7 @@ import { fromPostToPostClient } from '../common/mappers/post';
 import { IUser } from '../common/models/user/IUser';
 import { IGetChatPosts } from '../common/models/chat/IGetChatPosts';
 import { getGithubUser } from './userService';
+import { fromChatToClientChat } from '../common/mappers/chat';
 
 export const getAllChatPosts = async (filterData: IGetChatPosts) => {
   const { postId, ...filter } = filterData;
@@ -82,5 +83,15 @@ export const getChatById = async (chatId: string) => {
 
 export const getGithubRepositoryChat = async (repositoryName: string, repositoryOwner: string) => {
   const chat = await getCustomRepository(ChatRepository).getGithubRepositoryChat(repositoryName, repositoryOwner);
+  return chat;
+};
+
+export const getPublicChannel = async (hash: string) => {
+  const channel = await getCustomRepository(ChatRepository).getPublicChannelByHash(hash);
+  return fromChatToClientChat(channel);
+};
+
+export const getDirectChatByUsers = async (userId1: string, userId2: string, wpId: string) => {
+  const chat = await getCustomRepository(ChatRepository).getCommonDirectChat(userId1, userId2, wpId);
   return chat;
 };

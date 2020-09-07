@@ -9,7 +9,8 @@ import {
   getAllChatUsers,
   removeUserFromChat,
   addUsersToChat,
-  getChatById } from '../../services/chatService';
+  getChatById,
+  getPublicChannel } from '../../services/chatService';
 import { addReminder } from '../../services/reminderService';
 import { ClientSockets } from '../../common/enums/ClientSockets';
 import { IUserClient } from '../../common/models/user/IUserClient';
@@ -22,6 +23,7 @@ router
     userId: req.user.id,
     ...req.query
   })))
+  .get('/public/:hash', run((req: Request) => getPublicChannel(req.params.hash)))
   .get('/', run((req: Request) => getAllUserChats(req.user.id)))
   .get('/:id/users', run((req: Request) => getAllChatUsers(req.params.id)))
   .delete('/:id/users/:userId', run((req: Request) => removeUserFromChat(req.params.id, req.params.userId)))

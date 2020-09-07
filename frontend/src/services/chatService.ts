@@ -4,6 +4,7 @@ import { ICreatePost } from 'common/models/post/ICreatePost';
 import { IAddUsersToChat } from 'common/models/chat/IAddUsersToChat';
 import { IFetchMorePosts } from 'common/models/post/IFetchMorePosts';
 import { IFetchNavPost } from 'common/models/post/IFetchNavPost';
+import { IBrowserChannel } from 'common/models/chat/IBrowserChannel';
 
 export async function createChat(payload: ICreateChat) {
   const response = await api.post('/api/chats', payload);
@@ -14,6 +15,10 @@ export async function fetchWorkspaceChats(workspaceId: string) {
   const response = await api.get(`/api/workspaces/${workspaceId}/chats`);
   return response;
 }
+
+export const fetchPublicChannelByHash = (hash: string) => (
+  api.get(`/api/chats/public/${hash}`)
+);
 
 export async function fetchChatPosts({ chatId, from, count }: IFetchMorePosts) {
   const response = await api.get(`/api/chats/${chatId}/posts`, { from, count });
@@ -40,6 +45,10 @@ export async function addPost({ chatId, text }: ICreatePost) {
   return response;
 }
 
-export const addUsersToChat = async (payload: IAddUsersToChat) => {
-  await api.post('/api/chats/invite-users', payload);
-};
+export const addUsersToChat = (payload: IAddUsersToChat) => (
+  api.post('/api/chats/invite-users', payload)
+);
+
+export const fetchBrowserChannels = (workspaceId: string): Promise<IBrowserChannel[]> => (
+  api.get(`/api/workspaces/${workspaceId}/browser-channels`)
+);

@@ -16,6 +16,10 @@ class ChatRepository extends Repository<Chat> {
     return this.findOne({ where: { id }, relations: ['posts'] });
   }
 
+  getPublicChannelByHash(hash: string) {
+    return this.findOne({ where: { hash, isPrivate: false, type: ChatType.Channel }, relations: ['users'] });
+  }
+
   async getNameAndTypeAndIdById(id: string) {
     const chatInfoToSend = await this.createQueryBuilder('chat')
       .select([
@@ -75,6 +79,24 @@ class ChatRepository extends Repository<Chat> {
       .getMany();
 
     return chats;
+  }
+
+  async getBrowserChannelsByWorkspaceId(workspaceId: string) {
+    const channels = await this.createQueryBuilder('chat')
+      .select([
+        'chat.id',
+        'chat.name',
+        'chat.hash',
+        'chat.isPrivate',
+        'chat.createdAt',
+        'user.id'
+      ])
+      .leftJoin('chat.users', 'user')
+      .leftJoin('chat.workspace', 'workspace')
+      .where('workspace.id = :workspaceId', { workspaceId })
+      .andWhere('chat.type = :type', { type: ChatType.Channel })
+      .getMany();
+    return channels;
   }
 
   async getAllByUser(userId: string): Promise<any> {
@@ -152,6 +174,24 @@ class ChatRepository extends Repository<Chat> {
       .getOne();
 
     return chat;
+  }
+
+  async getCommonDirectChat(id1: string, id2: string, wpId: string): Promise<Chat> {
+    const chat = await this.createQueryBuilder('chat')
+      .leftJoin(
+        'chat.workspace',
+        'wp'
+      )
+      .leftJoinAndSelect(
+        'chat.users',
+        'user'
+      )
+      .where('chat.type = :chatType', { chatType: ChatType.DirectMessage })
+      .andWhere('wp.id = :wpId', { wpId })
+      .andWhere('user.id IN (:...idArr)', { idArr: [id1, id2] })
+      .getMany();
+
+    return chat.find(c => c.users.length === 2);
   }
 }
 

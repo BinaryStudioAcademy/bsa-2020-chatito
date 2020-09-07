@@ -182,6 +182,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
               placeholder="Life position"
               value={title}
               onChange={handleChange}
+              maxLength={100}
             />
             <div className={styles.description}>
               Write here your life principles, your motto, or some fun facts about yourself.
@@ -192,7 +193,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             <Button className={styles.primaryBtnCancel} variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button className={styles.primaryBtn} type="button" variant="success" onClick={handleSubmit}>
+            <Button className={styles.primaryBtn} type="button" onClick={handleSubmit}>
               Save Changes
             </Button>
           </div>
