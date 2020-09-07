@@ -20,7 +20,7 @@ router
     userId: req.user.id,
     ...req.query
   })))
-  .get('/public/:hash', run((req: Request) => getPublicChannel(req.params.hash)))
+  .get('/public/:hash', run((req: Request) => getPublicChannel(req.params.hash, req.user.id)))
   .get('/', run((req: Request) => getAllUserChats(req.user.id)))
   .get('/:id/users', run((req: Request) => getAllChatUsers(req.params.id)))
   .post('/:id/mute', run((req: Request) => setChatMute(req.params.id, req.user.id, req.body.muteValue)))

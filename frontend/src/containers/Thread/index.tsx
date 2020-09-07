@@ -98,15 +98,15 @@ const Thread: FunctionComponent<IProps> = ({
 
   useEffect(() => {
     if (post.id) {
-      if (!inputText) {
-        deleteDraftComment({ postId: post.id });
-      } else {
+      if (inputText) {
         const payload = {
           id: draftCommentId,
           postId: post.id,
           text: inputText
         };
         upsertDraftComment(payload);
+      } else if (inputText === '' && draftCommentId) {
+        deleteDraftComment({ postId: post.id });
       }
     }
   }, [inputText]);
@@ -122,6 +122,7 @@ const Thread: FunctionComponent<IProps> = ({
   const sendCommentHandler = (text: string) => {
     const { id: postId } = post;
     sendComment({ postId, text });
+    setInputText('');
   };
 
   const maxComment = showOnlyTwoComments && !showAll ? 2 : 10000;

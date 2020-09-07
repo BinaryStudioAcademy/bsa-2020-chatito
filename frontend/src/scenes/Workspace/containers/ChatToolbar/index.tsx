@@ -50,6 +50,7 @@ interface IProps {
   currentUser: IUser | undefined;
   unreadPostComments: IUnreadPostComments[];
   isShownCreateRepositoryChat: boolean;
+  selectChat: (chat: IChat | null) => void;
   showModal: IBindingCallback1<IModalRoutine>;
   router: (route: string) => void;
 }
@@ -65,6 +66,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   isShownCreateRepositoryChat,
   showModal,
   router,
+  selectChat,
   selectedWorkspace
 }: IProps) => {
   const [chatPanel, setChatPanel] = useState<boolean>(false);
@@ -380,7 +382,10 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     showModal({ modalType: ModalTypes.InvitePopup, show: true });
   };
 
-  const goToRoute = (route: Routes) => router(route.replace(':whash', selectedWorkspace.hash));
+  const goToRoute = (route: Routes) => {
+    selectChat(null);
+    router(route.replace(':whash', selectedWorkspace.hash));
+  };
 
   return (
     <div className={styles.leftToolbar}>
