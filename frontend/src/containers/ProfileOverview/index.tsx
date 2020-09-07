@@ -139,7 +139,7 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
           </InputGroup.Append>
         </InputGroup>
 
-        <div className={styles.toolbar}>
+        <div className={`${styles.toolbar} ${user.id !== currentUser.id ? styles.toolbarOneItem : ''}`}>
           {user.id === currentUser.id && (
             <button type="button" className="button-unstyled" onClick={onSetStatus}>
               <div className={styles.circleIconsContainer}>

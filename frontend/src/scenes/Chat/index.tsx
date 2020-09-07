@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import { IChat } from 'common/models/chat/IChat';
 import { setCurrentChatRoutine, fetchPublicChannelRoutine } from './routines';
 import LoaderWrapper from 'components/LoaderWrapper';
-import { IUser } from 'common/models/user/IUser';
 import { ChatType } from 'common/enums/ChatType';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { IFetchPublicChannel } from 'common/models/chat/IFetchPublicChannel';
@@ -24,12 +23,11 @@ interface IProps {
   };
   chat?: IChat;
   chats: IChat[];
-  currentUser: IUser | undefined;
   selectChat: (chat: IChat | null) => void;
   fetchPublicChannel: IBindingCallback1<IFetchPublicChannel>;
 }
 const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats,
-  currentUser, selectChat, fetchPublicChannel }) => {
+  selectChat, fetchPublicChannel }) => {
   useEffect(() => {
     const { chash } = match.params;
     if (chash) {
@@ -42,8 +40,7 @@ const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats,
     } else {
       selectChat(null);
     }
-  }, [isLoading, match.params.chash, currentUser]);
-
+  }, [isLoading, match.params.chash]);
   return (
     <LoaderWrapper loading={isLoading}>
       <div className={styles.chatContainer}>
@@ -60,7 +57,6 @@ const mapStateToProps = (state: IAppState) => {
   return {
     chat: state.chat.chat,
     isLoading: state.workspace.loading,
-    currentUser: state.user.user,
     chats: [...channels, ...directMessages, ...githubRepositories] as IChat[]
   };
 };

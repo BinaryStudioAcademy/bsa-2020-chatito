@@ -38,9 +38,12 @@ export const upsertDraftPost = async (id: string, draftPost: IUpsertDraftPost) =
 };
 
 export const deleteDraftPost = async (id: string, { chatId }: IDeleteDraftPost) => {
-  const postId = await getCustomRepository(DraftPostRepository).deleteDraftPost(id, chatId);
-  emitToChatRoom(chatId, ClientSockets.DeleteDraftPost, id, chatId, postId);
-  return { result: true };
+  const post = await getCustomRepository(DraftPostRepository).deleteDraftPost(id, chatId);
+  if (post.id) {
+    emitToChatRoom(chatId, ClientSockets.DeleteDraftPost, id, chatId, post);
+    return { result: true };
+  }
+  return { result: false };
 };
 
 export const upsertDraftComment = async (id: string, draftComment: IUpsertDraftComment) => {

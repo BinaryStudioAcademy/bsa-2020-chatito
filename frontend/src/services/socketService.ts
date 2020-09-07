@@ -164,9 +164,9 @@ export const connectSockets = () => {
 
     if (state.user.user?.id === userId) {
       store.dispatch(usertDraftsPagePostRoutine(draftPost));
+      store.dispatch(updateChatDraftPostRoutine({ ...draftPost, chatId }));
       if (chatId === state.chat.chat?.id) {
         store.dispatch(upsertDraftPostWithSocketRoutine(draftPost));
-        store.dispatch(updateChatDraftPostRoutine({ ...draftPost, chatId }));
       }
     }
   });
@@ -176,9 +176,9 @@ export const connectSockets = () => {
 
     if (state.user.user?.id === userId) {
       store.dispatch(deleteDraftPostFromDraftsRoutine(post));
+      store.dispatch(updateChatDraftPostRoutine({ chatId }));
       if (chatId === state.chat.chat?.id) {
         store.dispatch(deleteDraftPostWithSocketRoutine());
-        store.dispatch(updateChatDraftPostRoutine({ chatId }));
       }
     }
   });

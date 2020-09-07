@@ -3,16 +3,23 @@
   flex-direction: row
 
 .radioFormGroup
+  display: flex
+  flex-direction: column
+  margin-bottom: 0
 
 .mainWrapper
   display: flex
   flex-direction: column
-  padding: 20px
+  margin: 23px 16px 16px
   padding-top: 0
 
 .modalNav
-  margin: 0 10px
-  padding: 0 5px
+  margin: 0 16px
+
+.modalNavTitle
+  font-size: 18px
+  font-weight: 600
+  color: var(--icon-active)
 
 .modalHeader
   font-size: 1.5em
@@ -24,18 +31,21 @@
   font-weight: 600
   margin-bottom: 7px
 
+.blockContainer
+  margin-bottom: 7px
+
 .recordingErr
-  color: red
+  color: var(--presence-offline)
+  position: absolute
+  left: 0
+  bottom: 2px
+  font-weight: 500
 
 .audioNotificationsWrapper
   display: flex
   align-items: center
-  margin-bottom: 10px
-
-  .recorderWrapper
-    margin-left: 20px
-    button
-      height: 35px
+  padding-bottom: 26px
+  position: relative
 
 .formFooter
   margin-top: 30px
@@ -43,22 +53,9 @@
   justify-content: space-around
   align-items: center
 
-  .primaryBtn:global(.btn-primary)
-    width: 135px
-    height: 40px
-    background-color: var(--icon-active)
-    border-color: var(--icon-active)
-    &:hover, &:active,
-      background-color: var(--link-text-color)
-      border-color: var(--link-text-color)
-      cursor: pointer
+.radioFormGroup
 
-  .primaryBtnCancel:global(.btn-primary)
-    width: 120px
-    height: 40px
-    // background-color: var(--close-button)
-    // border-color: var(--close-button)
-    &:hover, &:active,
-      // background-color: var(--close-button)
-      // border-color: var(--close-button)
-      cursor: pointer
+  .checkItemContainer
+    display: flex
+    align-items: center
+    height: 22px

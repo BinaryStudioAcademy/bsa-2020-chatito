@@ -7,3 +7,4 @@ export const upsertDraftPageCommentRoutine = createRoutine('UPSERT_DRAFT_PAGE_CO
 export const deleteDraftCommentRoutine = createRoutine('DELETE_DRAFT_COMMENT');
 export const deleteDraftCommentFromDraftsRoutine = createRoutine('DELETE_COMMENT_FROM_DRAFTS');
 export const deleteDraftCommentWithSocketRoutine = createRoutine('DELETE_DRAFT_COMMENT_WITH_SOCKET');
+export const updateActiveInputRoutine = createRoutine('UPDATE_ACTIVE_INPUT');
