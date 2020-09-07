@@ -340,7 +340,7 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
                 <div
                   className={`${styles.text} ${isNew ? styles.unread : ''}`}
                   // eslint-disable-next-line react/no-danger
-                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text) }}
+                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text, { ADD_ATTR: ['target'] }) }}
                 />
               )
           }

@@ -44,6 +44,7 @@ const CreateRepositoryChatModal: FunctionComponent<IProps> = ({
   router
 }) => {
   const [selectedRepository, setSelectedRepository] = useState('');
+  const [showInstruction, setShowInstruction] = useState(false);
   const [repositories, setRepositories] = useState<string[]>([]);
   const [githubUsernameInput, setGithubUsernameInput] = useState(githubUsername || '');
 
@@ -75,8 +76,7 @@ const CreateRepositoryChatModal: FunctionComponent<IProps> = ({
       });
     }
 
-    handleCloseModal();
-    showModal({ modalType: ModalTypes.CreateWebhookInstructions, show: true });
+    setShowInstruction(true);
   };
 
   const handleUpdateGithubUsername = () => {
@@ -138,19 +138,26 @@ const CreateRepositoryChatModal: FunctionComponent<IProps> = ({
     </div>
   );
 
+  const addRepositoryForm = (
+    <>
+      {modalHeader}
+      <div className="modalBody">
+        <Form.Group>
+          {githubUsernameForm}
+          {selectRepositoryForm}
+        </Form.Group>
+      </div>
+      {modalFooter}
+    </>
+  );
+
   return (
     <>
       <ModalWindow isShown={isShown} onHide={handleCloseModal}>
-        {modalHeader}
-        <div className="modalBody">
-          <Form.Group>
-            {githubUsernameForm}
-            {selectRepositoryForm}
-          </Form.Group>
-        </div>
-        {modalFooter}
+        {!showInstruction
+          ? addRepositoryForm
+          : <CreateWebhookInstructionModal selectedRepository={selectedRepository} />}
       </ModalWindow>
-      <CreateWebhookInstructionModal selectedRepository={selectedRepository} />
     </>
   );
 };

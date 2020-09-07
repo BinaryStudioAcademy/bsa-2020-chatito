@@ -12,7 +12,8 @@ import {
   usertDraftsPagePostRoutine,
   deleteDraftPostWithSocketRoutine,
   updatePostDraftCommentRoutine,
-  deleteDraftPostFromDraftsRoutine
+  deleteDraftPostFromDraftsRoutine,
+  setChatMuteSocketRoutine
 } from 'scenes/Chat/routines';
 import {
   incUnreadCountRoutine,
@@ -20,19 +21,17 @@ import {
   newUserNotificationWithSocketRoutine,
   updateChatDraftPostRoutine,
   markAsUnreadPostWithSocketRoutine,
-  markAsUnreadCommentWithSocketRoutine
+  markAsUnreadCommentWithSocketRoutine,
+  deleteFromChatWithSocketRoutine
 } from 'scenes/Workspace/routines';
 import { IChat } from 'common/models/chat/IChat';
 import { ClientSockets } from 'common/enums/ClientSockets';
 import { ServerSockets } from 'common/enums/ServerSockets';
-import { Routes } from 'common/enums/Routes';
-import { push } from 'connected-react-router';
 import { addCommentWithSocketRoutine } from 'containers/ThreadsContainer/routines';
 import { IServerComment } from 'common/models/post/IServerComment';
 import { IPostReactionSocket } from 'common/models/postReaction/IPostReactionSocket';
 import { addPostReactionWithSocketRoutine, deletePostReactionWithSocketRoutine } from 'containers/Post/routines';
 import { IUser } from 'common/models/user/IUser';
-import { ChatType } from 'common/enums/ChatType';
 import { IDraftPost } from 'common/models/draft/IDraftPost';
 import { IDraftComment } from 'common/models/draft/IDraftComment';
 import {
@@ -44,6 +43,7 @@ import {
 import { playByUrl } from 'common/helpers/audioHelper';
 import { defaultNotificationAudio } from 'common/configs/defaults';
 import { IncomingSoundOptions } from 'common/enums/IncomingSoundOptions';
+import { ChatType } from 'common/enums/ChatType';
 
 const { server } = env.urls;
 
@@ -55,19 +55,27 @@ export const connectSockets = () => {
     const state = store.getState();
     if (addedPost.chatId === state.chat.chat?.id) {
       store.dispatch(addPostWithSocketRoutine(addedPost));
-    } else {
-      switch (state.user.user?.incomingSoundOptions) {
-        case IncomingSoundOptions.AllowCustom:
-          playByUrl(audio || defaultNotificationAudio);
-          break;
-        case IncomingSoundOptions.UseDefault:
-          playByUrl(defaultNotificationAudio);
-          break;
-        case IncomingSoundOptions.MuteAll:
-        default:
-          break;
-      }
-      store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
+      return;
+    }
+    store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
+
+    // Check if chat is muted
+    const { channels, directMessages } = state.workspace;
+    const targetChat = [...channels, ...directMessages].find(c => c.id === addedPost.chatId);
+    if (targetChat && targetChat.isMuted) {
+      return;
+    }
+
+    switch (state.user.user?.incomingSoundOptions) {
+      case IncomingSoundOptions.AllowCustom:
+        playByUrl(audio || defaultNotificationAudio);
+        break;
+      case IncomingSoundOptions.UseDefault:
+        playByUrl(defaultNotificationAudio);
+        break;
+      case IncomingSoundOptions.MuteAll:
+      default:
+        break;
     }
   });
 
@@ -86,14 +94,22 @@ export const connectSockets = () => {
     }
   });
 
-  chatSocket.on(ClientSockets.JoinChat, (chatId: string) => {
-    chatSocket.emit(ServerSockets.JoinChatRoom, chatId);
+  chatSocket.on(ClientSockets.JoinChat, (chat: IChat, userIds: string[]) => {
+    const state = store.getState();
+    const currentUserId = state.user.user?.id as string;
+    if (userIds.includes(currentUserId)) {
+      chatSocket.emit(ServerSockets.JoinChatRoom, chat.id);
+      store.dispatch(addChatWithSocketRoutine(chat));
+    }
   });
 
-  chatSocket.on(ClientSockets.AddChat, (chat: IChat) => {
-    store.dispatch(addChatWithSocketRoutine(chat));
-    store.dispatch(push(Routes.Chat.replace(':whash', chat.workspace.hash).replace(':chash', chat.hash)));
-    // play sound ?
+  chatSocket.on(ClientSockets.LeaveChat, (chatId: string, userId: string) => {
+    const state = store.getState();
+    const currentUserId = state.user.user?.id as string;
+    if (userId === currentUserId) {
+      chatSocket.emit(ServerSockets.LeaveChatRoom, chatId);
+      store.dispatch(deleteFromChatWithSocketRoutine(chatId));
+    }
   });
 
   chatSocket.on(ClientSockets.AddReply, (comment: IServerComment) => {
@@ -140,10 +156,7 @@ export const connectSockets = () => {
     chatId: string
   ) => {
     store.dispatch(newUserNotificationWithSocketRoutine({ users, chatType, chatId }));
-    const state = store.getState();
-    const currentUserId = state.user.user?.id;
     if (users.length === 1) {
-      if (currentUserId === users[0].id) return;
       toastrSuccess(`User ${users[0].displayName} joined to channel "${chatName}"`);
     } else {
       let usersString = '';
@@ -210,6 +223,13 @@ export const connectSockets = () => {
       if (chatId === state.chat.chat?.id) {
         store.dispatch(updatePostDraftCommentRoutine({ postId }));
       }
+    }
+  });
+
+  chatSocket.on(ClientSockets.SetChatMuted, (chatId: string, userId: string, isMuted: boolean) => {
+    const state = store.getState();
+    if (state.user.user?.id === userId) {
+      store.dispatch(setChatMuteSocketRoutine({ chatId, isMuted }));
     }
   });
 };

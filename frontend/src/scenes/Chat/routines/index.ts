@@ -23,3 +23,5 @@ export const addReminderSuccessPostRoutine = createRoutine('ADD_REMINDER_SUCCESS
 export const createChatAndAddPostRoutine = createRoutine('CREATE_CHAT_AND_ADD_POST');
 export const joinChannelRoutine = createRoutine('JOIN_CHANNEL_ROUTINE');
 export const fetchPublicChannelRoutine = createRoutine('FETCH_PUBLIC_CHANNEL');
+export const toggleChatMuteRoutine = createRoutine('TOGGLE_CHAT_MUTE');
+export const setChatMuteSocketRoutine = createRoutine('SET_CHAT_MUTE_SOCKET');

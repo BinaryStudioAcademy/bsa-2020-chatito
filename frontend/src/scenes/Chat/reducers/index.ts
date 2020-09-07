@@ -22,7 +22,8 @@ import {
   fetchNavigationPostRoutine,
   addPostRoutine,
   joinChannelRoutine,
-  fetchPublicChannelRoutine
+  fetchPublicChannelRoutine,
+  setChatMuteSocketRoutine
 } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
@@ -322,6 +323,19 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         ...state,
         chat: payload,
         loading: true
+      };
+    }
+    case setChatMuteSocketRoutine.TRIGGER: {
+      const { chatId, isMuted } = payload;
+
+      if (state.chat && state.chat.id === chatId) {
+        return {
+          ...state,
+          chat: { ...state.chat, isMuted }
+        };
+      }
+      return {
+        ...state
       };
     }
     default:

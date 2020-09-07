@@ -33,7 +33,7 @@ class ChatRepository extends Repository<Chat> {
   }
 
   getByIdWithUsers(id: string): Promise<Chat> {
-    return this.findOne({ where: { id }, relations: ['posts', 'users', 'workspace'] });
+    return this.findOne({ where: { id }, relations: ['users'] });
   }
 
   async getAllByWorkspaceIdAndUserId(workspaceId: string, userId: string) {
@@ -86,6 +86,7 @@ class ChatRepository extends Repository<Chat> {
       .select([
         'chat.id',
         'chat.name',
+        'chat.description',
         'chat.hash',
         'chat.isPrivate',
         'chat.createdAt',

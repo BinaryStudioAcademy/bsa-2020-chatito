@@ -15,10 +15,48 @@
   padding: .75rem
 
 .inputLabel
+  font-size: 18px
   font-weight: 600
+  margin: 0 0 6px 2px
 
   span
     font-weight: 400
 
-.btnCreate
+.btnCreate:active
+  box-shadow: 0 0 0 0.2rem rgba(255, 38, 38, 0.502)
+
+.btnCreate:focus
+  background-color: var(--primary)
+  border-color: var(--primary)
+  box-shadow: 0 0 0 0.2rem rgba(255, 38, 38, 0.502)
+
+.btnCreate:hover
+  opacity: .95
+
+.btnCreate,
+.btnCreate:hover,
+.btnCreate:active
   margin: 0 4px 0 7px
+  background-color: var(--primary) !important
+  outline: var(--primary)
+  border: 1px solid var(--primary) !important
+
+.btnCreate:disabled
+  background-color: var(--primary)
+  outline: var(--primary)
+  border: 1px solid var(--primary)
+  opacity: .7
+
+.dateTimePicker
+  height: 36px
+  font-family: var(--secondary-font-family), sans-serif
+  display: flex !important
+  *
+    outline: none !important
+
+.dateTimePicker button:enabled:hover svg,
+.dateTimePicker button:enabled:focus svg
+  stroke: var(--primary) !important
+
+.bodyContainer
+  margin-bottom: 30px

@@ -15,6 +15,9 @@ export class Chat extends AbstractEntity {
   @Column({ type: 'enum', enum: ChatType })
   type: ChatType;
 
+  @Column({ length: 200, nullable: true })
+  description: string;
+
   @Column({ unique: true, length: 7 })
   hash: string;
 
@@ -46,4 +49,7 @@ export class Chat extends AbstractEntity {
 
   @ManyToMany(() => User, user => user.chats)
   users: User[];
+
+  @ManyToMany(() => User, user => user.mutedChats)
+  mutedByUsers: User[];
 }

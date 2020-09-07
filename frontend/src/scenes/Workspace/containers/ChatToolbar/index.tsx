@@ -15,7 +15,8 @@ import {
   faPlus,
   faPencilAlt,
   faBookmark,
-  faCodeBranch
+  faCodeBranch,
+  faVolumeMute
 } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
@@ -195,6 +196,11 @@ const ChatToolbar: FunctionComponent<IProps> = ({
                   ''
                 )
               }
+              {channel.isMuted && (
+                <div className={styles.markerContainer}>
+                  <FontAwesomeIcon className={styles.muteIcon} icon={faVolumeMute} color="#2D2D2D" />
+                </div>
+              )}
               {unreadChatsMarker(id)}
             </div>
           </div>
@@ -280,6 +286,11 @@ const ChatToolbar: FunctionComponent<IProps> = ({
                   </div>
                 ) : ''
               }
+              {directMessage.isMuted && (
+                <div className={styles.markerContainer}>
+                  <FontAwesomeIcon className={styles.muteIcon} icon={faVolumeMute} color="#2D2D2D" />
+                </div>
+              )}
               {unreadChatsMarker(id)}
             </div>
           </div>
@@ -438,7 +449,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
       <InvitePopup />
       <CreateChannelModal />
       <CreateDirectModal />
-      { isShownCreateRepositoryChat ? <CreateRepositoryChatModal /> : ''}
+      {isShownCreateRepositoryChat ? <CreateRepositoryChatModal /> : ''}
     </div>
   );
 };

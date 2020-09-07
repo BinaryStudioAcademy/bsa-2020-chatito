@@ -2,7 +2,7 @@ export enum ClientSockets {
   AddPost = 'addPost',
   EditPost = 'editPost',
   JoinChat = 'joinChat',
-  AddChat = 'addChat',
+  LeaveChat = 'leaveChat',
   AddReply = 'addReply',
   AddReaction = 'addReaction',
   DeleteReaction = 'deleteReaction',
@@ -12,5 +12,6 @@ export enum ClientSockets {
   UpsertDraftComment = 'upsertDraftComment',
   DeleteDraftComment = 'deleteDraftComment',
   NotifyAndMarkAsUnread = 'notifyAndMarkAsUnread',
+  SetChatMuted = 'setChatMuted',
   MarkAsUnreadComment = 'markAsUnreadComment'
 }

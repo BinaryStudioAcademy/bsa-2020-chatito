@@ -175,7 +175,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             </div>
           </Form.Group>
 
-          <Form.Group controlId="formEditTitle" className={styles.inputBlock}>
+          <Form.Group controlId="formEditLifePosition" className={styles.inputBlock}>
             <span className={styles.inputHeader}>Life position</span>
             <Form.Control
               className={styles.inputGroup}

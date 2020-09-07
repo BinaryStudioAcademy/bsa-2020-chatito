@@ -118,6 +118,17 @@ small
 .arrow
   display: none !important
 
+.react-calendar__tile--active,
+.react-calendar__tile--active:hover
+  background: var(--primary) !important
+
+.react-datetime-picker__wrapper
+  height: 38px
+  border-radius: 3px !important
+  outline: none
+  border: 1px solid var(--input-border) !important
+  background-color: var(--white-bg)
+
 .form-check-input
   margin-top: 0
   margin-bottom: 1px
@@ -148,9 +159,11 @@ small
   min-width: 67px
   font-weight: 600
   margin-left: 14px
+  cursor: pointer !important
   &:hover, &:active, &:focus
     box-shadow: none !important
     outline: none !important
+    cursor: pointer !important
 
 .save
   border: none
@@ -175,5 +188,11 @@ small
 .inputField
   height: 36px
 
-.go2646822163, .dropdown-container, .go2642161244, .dropdown-heading
+.go2646822163, .dropdown-container, .go2642161244, .dropdown-heading, .react-datetime-picker__wrapper
   height: 36px !important
+
+.react-datetime-picker__wrapper
+  padding: 0 8px
+
+.react-datetime-picker__inputGroup
+  cursor: pointer

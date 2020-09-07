@@ -7,7 +7,7 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
 import ModalWindow from 'components/ModalWindow';
 import { IChat } from 'common/models/chat/IChat';
-import { fetchChatUsersRoutine, removeUserFromChatRoutine } from 'scenes/Chat/routines';
+import { removeUserFromChatRoutine } from 'scenes/Chat/routines';
 import { IUser } from 'common/models/user/IUser';
 import ChatMember from 'components/ChatMember';
 import styles from './styles.module.sass';
@@ -18,7 +18,6 @@ interface IProps {
   isShown: boolean;
   chat: IChat;
   currentUser: IUser;
-  getUserList: CallableFunction;
   removeUser: CallableFunction;
   toggleModal: IBindingCallback1<IModalRoutine>;
 }
@@ -26,7 +25,6 @@ interface IProps {
 const ChatMembers: FunctionComponent<any> = ({
   isShown,
   toggleModal,
-  getUserList,
   removeUser,
   chat,
   currentUser
@@ -38,10 +36,10 @@ const ChatMembers: FunctionComponent<any> = ({
 
   const removeUserFromChat = async (userId: string) => {
     await removeUser({ chatId: chat.id, userId });
-    await getUserList(chat.id);
   };
 
   const onInvite = () => {
+    toggleModal({ modalType: ModalTypes.ChatMembers, show: false });
     toggleModal({ modalType: ModalTypes.InviteChat, show: true });
   };
   const isSuitable = (user: IUser) => user.displayName.includes(searchStr) || user.email.includes(searchStr);
@@ -100,7 +98,6 @@ const mapStateToProps = (state: IAppState) => {
 };
 
 const mapDispatchToProps = {
-  getUserList: fetchChatUsersRoutine,
   removeUser: removeUserFromChatRoutine,
   toggleModal: showModalRoutine
 };

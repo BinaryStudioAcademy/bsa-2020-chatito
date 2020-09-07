@@ -24,7 +24,7 @@ const DraftCard: React.FC<IProps> = ({ draft, whash, router }) => {
   return (
     <div className={styles.card}>
       <button type="button" className={styles.cardHeader} onClick={onGoToChat}>{draft.chat.name}</button>
-      <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draft.text) }} />
+      <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(draft.text, { ADD_ATTR: ['target'] }) }} />
       <div className={styles.buttons}>
         <FontAwesomeIcon className={styles.button} icon={faPlay} />
         <FontAwesomeIcon className={styles.button} icon={faTrashAlt} />
