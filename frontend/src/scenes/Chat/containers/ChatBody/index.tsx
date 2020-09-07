@@ -119,7 +119,6 @@ const ChatBody: React.FC<IProps> = ({
     <div className={styles.dateLineBlock}>
       <div className={styles.dateLine} />
       <div className={styles.dateText}>{text}</div>
-      <div className={styles.dateLine} />
     </div>
   );
 
