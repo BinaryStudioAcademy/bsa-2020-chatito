@@ -38,7 +38,6 @@ const ChatMembers: FunctionComponent<any> = ({
 
   const removeUserFromChat = async (userId: string) => {
     await removeUser({ chatId: chat.id, userId });
-    await getUserList(chat.id);
   };
 
   const onInvite = () => {
@@ -92,6 +91,7 @@ const mapStateToProps = (state: IAppState) => {
     modal: { chatMembers },
     user: { user: currentUser }
   } = state;
+  console.log(state);
   return {
     isShown: chatMembers,
     chat,
