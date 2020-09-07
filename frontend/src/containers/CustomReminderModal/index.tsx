@@ -105,7 +105,6 @@ const CustomReminderModal = ({ toggleModal, isShown, addReminder, chatId }: IPro
         When
       </Form.Label>
       <DateTimePicker
-        id="date"
         name="date"
         onChange={onDateChange}
         value={date}
