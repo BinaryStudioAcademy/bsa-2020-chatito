@@ -21,12 +21,18 @@
   span
     font-weight: 400
 
+.btnCreate:focus
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(255, 38, 38, 0.502) !important;
+
 .btnCreate,
-.btnCreate:hover
+.btnCreate:hover,
+.btnCreate:active
   margin: 0 4px 0 7px
-  background-color: var(--primary)
+  background-color: var(--primary) !important
   outline: var(--primary)
-  border: 1px solid var(--primary)
+  border: 1px solid var(--primary) !important
 
 .btnCreate:hover
   opacity: .95
