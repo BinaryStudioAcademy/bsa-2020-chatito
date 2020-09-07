@@ -117,6 +117,7 @@ function* createChatRequest({ payload }: Routine<any>) {
     const chat = yield call(createChat, payload);
     yield put(createChatRoutine.success(chat));
     yield put(showModalRoutine({ modalType: payload.type, show: false }));
+    yield put(push(Routes.Chat.replace(':whash', chat.workspace.hash).replace(':chash', chat.hash)));
   } catch (error) {
     yield call(toastrError, error.message);
     yield put(createChatRoutine.failure());

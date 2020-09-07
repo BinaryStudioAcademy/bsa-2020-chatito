@@ -278,7 +278,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
     }
     case newUserNotificationWithSocketRoutine.TRIGGER: {
       const chatTypeKey = payload.chatType === ChatType.Channel ? 'channels' : 'directMessages';
-      const workspaceChatsCopy = state[chatTypeKey];
+      const workspaceChatsCopy = [...state[chatTypeKey]];
       workspaceChatsCopy.forEach(chat => {
         if (chat.id === payload.chatId) {
           chat.users.push(...payload.users);
