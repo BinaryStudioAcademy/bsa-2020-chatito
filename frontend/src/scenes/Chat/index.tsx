@@ -34,7 +34,7 @@ const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats,
       const currChat = chats.find(chatItem => chatItem.hash === chash);
       if (currChat) {
         selectChat(currChat);
-      } else {
+      } else if (chats.length) {
         fetchPublicChannel({ chash, whash: match.params.whash });
       }
     } else {
