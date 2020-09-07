@@ -26,6 +26,7 @@ jobs:
         REACT_APP_GOOGLE_AUTH_CLIENT_SECRET: tOLTH__MfxzR4Kw4RtqN6RwX
         REACT_APP_FACEBOOK_LOGIN_APP_ID: 609625143090274
         REACT_APP_AWS_URL: https://bsa-chatito-storage.s3.amazonaws.com
+        REACT_APP_S3_STORAGE: https://bsa-chatito-storage.s3.amazonaws.com
       run: |
         cd frontend
         npm run build

@@ -91,21 +91,6 @@ const ChatToolbar: FunctionComponent<IProps> = ({
     return styles.channelSelect;
   };
   const unreadThreadsMarker = () => {
-    // let unreadThreadsStatus = false;
-    // if (unreadPostComments.length) {
-    //   unreadPostComments.forEach(unreadPost => {
-    //     if (unreadPost.unreadComments.length) {
-    //       unreadThreadsStatus = true;
-    //     }
-    //   });
-    //   if (unreadThreadsStatus) {
-    //     return (
-    //       <div className={styles.unreadContainer}>
-    //         <div className={styles.unreadCircle} />
-    //       </div>
-    //     );
-    //   }
-    // }
     let unreadThreadsAmount = unreadPostComments.length;
     if (unreadPostComments.length) {
       unreadPostComments.forEach(unreadPostComment => {
