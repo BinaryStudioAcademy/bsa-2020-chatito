@@ -39,6 +39,7 @@ const ChatMembers: FunctionComponent<any> = ({
   };
 
   const onInvite = () => {
+    toggleModal({ modalType: ModalTypes.ChatMembers, show: false });
     toggleModal({ modalType: ModalTypes.InviteChat, show: true });
   };
   const isSuitable = (user: IUser) => user.displayName.includes(searchStr) || user.email.includes(searchStr);
