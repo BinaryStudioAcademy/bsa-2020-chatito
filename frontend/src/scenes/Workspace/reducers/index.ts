@@ -23,7 +23,9 @@ import {
   fetchUnreadUserCommentsRoutine,
   readCommentRoutine,
   markAsUnreadCommentWithOptionRoutine,
-  removeUserFromChatInWorkspaceRoutine } from '../routines';
+  removeUserFromChatInWorkspaceRoutine,
+  deleteFromChatWithSocketRoutine
+} from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
@@ -238,6 +240,7 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
     }
     case addChatWithSocketRoutine.TRIGGER: {
       const newChat = payload;
+      console.log(newChat);
       if (newChat.type === ChatType.Channel) {
         const channels = [...state.channels];
         channels.push(newChat);
@@ -255,6 +258,11 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
       }
       return state;
     }
+    case deleteFromChatWithSocketRoutine.TRIGGER:
+      return {
+        ...state,
+        channels: state.channels.filter(channel => channel.id !== payload)
+      };
     case fetchWorkspaceUsersRoutine.TRIGGER:
       return {
         ...state, loading: true

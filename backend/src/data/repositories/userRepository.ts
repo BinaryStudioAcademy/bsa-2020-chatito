@@ -24,8 +24,6 @@ class UserRepository extends Repository<User> {
   }
 
   async markAsReadPosts(id: string, postId: string): Promise<string> {
-    // eslint-disable-next-line no-console
-    console.log(id, postId);
     await this.createQueryBuilder().relation(User, 'unreadPosts').of(id).remove(postId);
     return postId;
   }

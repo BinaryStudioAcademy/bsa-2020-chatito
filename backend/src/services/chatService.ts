@@ -67,13 +67,13 @@ export const addChat = async (userId: string, body: IChatData, io: SocketIO.Serv
   };
   const chat = await getCustomRepository(ChatRepository).addChat(newChat);
   const userIds = chat.users.map(user => user.id);
-  io.of('/chat').emit(ClientSockets.JoinChat, chat.id, userIds);
+  io.of('/chat').emit(ClientSockets.JoinChat, chat, userIds);
   return chat;
 };
 
 export const getChatById = async (chatId: string) => {
-  const chat = await getCustomRepository(ChatRepository).getNameAndTypeAndIdById(chatId);
-  return chat;
+  const chat = await getCustomRepository(ChatRepository).getByIdWithUsers(chatId);
+  return fromChatToClientChat(chat);
 };
 
 export const addUsersToChat = async (chatId: string, userIds: string[], io: SocketIO.Server) => {
@@ -92,13 +92,14 @@ export const addUsersToChat = async (chatId: string, userIds: string[], io: Sock
     chat.type,
     chat.id
   );
-  io.of('/chat').emit(ClientSockets.JoinChat, chat.id, userIds);
+  io.of('/chat').emit(ClientSockets.JoinChat, chat, userIds);
   return {};
 };
 
-export const removeUserFromChat = async (chatId: string, userId: string): Promise<unknown> => {
+export const removeUserFromChat = async (chatId: string, userId: string, io: SocketIO.Server): Promise<unknown> => {
   await getCustomRepository(ChatRepository).removeUser(chatId, userId);
-  return {}; // In search for a better solution
+  io.of('/chat').emit(ClientSockets.LeaveChat, chatId, userId);
+  return {};
 };
 
 export const getGithubRepositoryChat = async (repositoryName: string, repositoryOwner: string) => {

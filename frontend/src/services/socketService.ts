@@ -20,7 +20,8 @@ import {
   newUserNotificationWithSocketRoutine,
   updateChatDraftPostRoutine,
   markAsUnreadPostWithSocketRoutine,
-  markAsUnreadCommentWithSocketRoutine
+  markAsUnreadCommentWithSocketRoutine,
+  deleteFromChatWithSocketRoutine
 } from 'scenes/Workspace/routines';
 import { IChat } from 'common/models/chat/IChat';
 import { ClientSockets } from 'common/enums/ClientSockets';
@@ -84,16 +85,22 @@ export const connectSockets = () => {
     }
   });
 
-  chatSocket.on(ClientSockets.JoinChat, (chatId: string, userIds: string[]) => {
+  chatSocket.on(ClientSockets.JoinChat, (chat: IChat, userIds: string[]) => {
     const state = store.getState();
     const currentUserId = state.user.user?.id as string;
     if (userIds.includes(currentUserId)) {
-      chatSocket.emit(ServerSockets.JoinChatRoom, chatId);
+      chatSocket.emit(ServerSockets.JoinChatRoom, chat.id);
+      store.dispatch(addChatWithSocketRoutine(chat));
     }
   });
 
-  chatSocket.on(ClientSockets.AddChat, (chat: IChat) => {
-    store.dispatch(addChatWithSocketRoutine(chat));
+  chatSocket.on(ClientSockets.LeaveChat, (chatId: string, userId: string) => {
+    const state = store.getState();
+    const currentUserId = state.user.user?.id as string;
+    if (userId === currentUserId) {
+      chatSocket.emit(ServerSockets.LeaveChatRoom, chatId);
+      store.dispatch(deleteFromChatWithSocketRoutine(chatId));
+    }
   });
 
   chatSocket.on(ClientSockets.AddReply, (comment: IServerComment) => {
@@ -140,10 +147,7 @@ export const connectSockets = () => {
     chatId: string
   ) => {
     store.dispatch(newUserNotificationWithSocketRoutine({ users, chatType, chatId }));
-    const state = store.getState();
-    const currentUserId = state.user.user?.id;
     if (users.length === 1) {
-      if (currentUserId === users[0].id) return;
       toastrSuccess(`User ${users[0].displayName} joined to channel "${chatName}"`);
     } else {
       let usersString = '';

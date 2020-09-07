@@ -1,3 +1,4 @@
 export enum ServerSockets {
-  JoinChatRoom = 'joinChatRoom'
+  JoinChatRoom = 'joinChatRoom',
+  LeaveChatRoom = 'leaveChatRoom'
 }

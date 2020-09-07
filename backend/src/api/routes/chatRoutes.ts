@@ -22,7 +22,7 @@ router
   .get('/public/:hash', run((req: Request) => getPublicChannel(req.params.hash)))
   .get('/', run((req: Request) => getAllUserChats(req.user.id)))
   .get('/:id/users', run((req: Request) => getAllChatUsers(req.params.id)))
-  .delete('/:id/users/:userId', run((req: Request) => removeUserFromChat(req.params.id, req.params.userId)))
+  .delete('/:id/users/:userId', run((req: Request) => removeUserFromChat(req.params.id, req.params.userId, req.io)))
   .post('/', run((req: Request) => addChat(req.user.id, req.body, req.io)))
   .post('/:id/reminders', run((req: Request) => addReminder({
     chatId: req.params.id,
