@@ -240,7 +240,6 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
     }
     case addChatWithSocketRoutine.TRIGGER: {
       const newChat = payload;
-      console.log(newChat);
       if (newChat.type === ChatType.Channel) {
         const channels = [...state.channels];
         channels.push(newChat);
