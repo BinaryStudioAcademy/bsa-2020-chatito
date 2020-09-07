@@ -7,7 +7,7 @@ import { ModalTypes } from 'common/enums/ModalTypes';
 import { showModalRoutine } from 'routines/modal';
 import ModalWindow from 'components/ModalWindow';
 import { IChat } from 'common/models/chat/IChat';
-import { fetchChatUsersRoutine, removeUserFromChatRoutine } from 'scenes/Chat/routines';
+import { removeUserFromChatRoutine } from 'scenes/Chat/routines';
 import { IUser } from 'common/models/user/IUser';
 import ChatMember from 'components/ChatMember';
 import styles from './styles.module.sass';
