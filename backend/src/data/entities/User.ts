@@ -84,4 +84,8 @@ export class User extends AbstractEntity {
   @ManyToMany(() => Comment, comment => comment.unreadByUsers)
   @JoinTable()
   unreadComments: Comment[];
+
+  @ManyToMany(() => Chat, comment => comment.mutedByUsers)
+  @JoinTable()
+  mutedChats: Comment[];
 }
