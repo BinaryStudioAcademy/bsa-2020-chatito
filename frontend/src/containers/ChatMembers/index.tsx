@@ -38,7 +38,6 @@ const ChatMembers: FunctionComponent<any> = ({
 
   const removeUserFromChat = async (userId: string) => {
     await removeUser({ chatId: chat.id, userId });
-    await getUserList(chat.id);
   };
 
   const onInvite = () => {
