@@ -86,6 +86,7 @@ class ChatRepository extends Repository<Chat> {
       .select([
         'chat.id',
         'chat.name',
+        'chat.description',
         'chat.hash',
         'chat.isPrivate',
         'chat.createdAt',

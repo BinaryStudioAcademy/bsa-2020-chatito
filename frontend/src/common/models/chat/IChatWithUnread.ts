@@ -5,6 +5,7 @@ export interface IChatWithUnread {
   id: string;
   name: string;
   type: ChatType;
+  description?: string;
   isPrivate: boolean;
   workspaceName: string;
   createdByUserId: string;

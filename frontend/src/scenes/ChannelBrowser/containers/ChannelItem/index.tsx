@@ -24,7 +24,7 @@ interface IProps {
 
 const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel, loading,
   leaveChannel, joinChannel }) => {
-  const { users, isPrivate, name, hash: chash, id } = channel;
+  const { users, isPrivate, name, hash: chash, id, description } = channel;
   const isUserChatMember = users.find(user => user.id === currentUserId);
   const membersCount = users.length;
 
@@ -61,6 +61,7 @@ const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel, loading,
                 ? `${membersCount} members`
                 : `${membersCount} member`}
             </div>
+            <div>{description || ''}</div>
           </div>
         </div>
       </Link>

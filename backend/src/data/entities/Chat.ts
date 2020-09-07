@@ -15,6 +15,9 @@ export class Chat extends AbstractEntity {
   @Column({ type: 'enum', enum: ChatType })
   type: ChatType;
 
+  @Column({ length: 200, nullable: true })
+  description: string;
+
   @Column({ unique: true, length: 7 })
   hash: string;
 
