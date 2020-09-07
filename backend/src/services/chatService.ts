@@ -17,6 +17,8 @@ import { IUser } from '../common/models/user/IUser';
 import { IGetChatPosts } from '../common/models/chat/IGetChatPosts';
 import { getGithubUser } from './userService';
 import { fromChatToClientChat } from '../common/mappers/chat';
+import { emitToChatRoom } from '../common/utils/socketHelper';
+import { ClientSockets } from '../common/enums/ClientSockets';
 
 export const getAllChatPosts = async (filterData: IGetChatPosts) => {
   const { postId, ...filter } = filterData;
@@ -88,10 +90,22 @@ export const getGithubRepositoryChat = async (repositoryName: string, repository
 
 export const getPublicChannel = async (hash: string) => {
   const channel = await getCustomRepository(ChatRepository).getPublicChannelByHash(hash);
-  return fromChatToClientChat(channel);
+  return fromChatToClientChat(channel, false);
 };
 
 export const getDirectChatByUsers = async (userId1: string, userId2: string, wpId: string) => {
   const chat = await getCustomRepository(ChatRepository).getCommonDirectChat(userId1, userId2, wpId);
   return chat;
+};
+
+export const muteChat = async (chatId: string, userId: string) => {
+  await getCustomRepository(UserRepository).muteChat(userId, chatId);
+  emitToChatRoom(chatId, ClientSockets.SetChatMuted, chatId, userId, true);
+  return { chatId };
+};
+
+export const unMuteChat = async (chatId: string, userId: string) => {
+  await getCustomRepository(UserRepository).unmuteChat(userId, chatId);
+  emitToChatRoom(chatId, ClientSockets.SetChatMuted, chatId, userId, false);
+  return { chatId };
 };

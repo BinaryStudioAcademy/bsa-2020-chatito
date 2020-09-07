@@ -12,7 +12,8 @@ import {
   usertDraftsPagePostRoutine,
   deleteDraftPostWithSocketRoutine,
   updatePostDraftCommentRoutine,
-  deleteDraftPostFromDraftsRoutine
+  deleteDraftPostFromDraftsRoutine,
+  setChatMuteSocketRoutine
 } from 'scenes/Chat/routines';
 import {
   incUnreadCountRoutine,
@@ -55,19 +56,27 @@ export const connectSockets = () => {
     const state = store.getState();
     if (addedPost.chatId === state.chat.chat?.id) {
       store.dispatch(addPostWithSocketRoutine(addedPost));
-    } else {
-      switch (state.user.user?.incomingSoundOptions) {
-        case IncomingSoundOptions.AllowCustom:
-          playByUrl(audio || defaultNotificationAudio);
-          break;
-        case IncomingSoundOptions.UseDefault:
-          playByUrl(defaultNotificationAudio);
-          break;
-        case IncomingSoundOptions.MuteAll:
-        default:
-          break;
-      }
-      store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
+      return;
+    }
+    store.dispatch(incUnreadCountRoutine({ chatId: post.chatId }));
+
+    // Check if chat is muted
+    const { channels, directMessages } = state.workspace;
+    const targetChat = [...channels, ...directMessages].find(c => c.id === addedPost.chatId);
+    if (targetChat && targetChat.isMuted) {
+      return;
+    }
+
+    switch (state.user.user?.incomingSoundOptions) {
+      case IncomingSoundOptions.AllowCustom:
+        playByUrl(audio || defaultNotificationAudio);
+        break;
+      case IncomingSoundOptions.UseDefault:
+        playByUrl(defaultNotificationAudio);
+        break;
+      case IncomingSoundOptions.MuteAll:
+      default:
+        break;
     }
   });
 
@@ -210,6 +219,13 @@ export const connectSockets = () => {
       if (chatId === state.chat.chat?.id) {
         store.dispatch(updatePostDraftCommentRoutine({ postId }));
       }
+    }
+  });
+
+  chatSocket.on(ClientSockets.SetChatMuted, (chatId: string, userId: string, isMuted: boolean) => {
+    const state = store.getState();
+    if (state.user.user?.id === userId) {
+      store.dispatch(setChatMuteSocketRoutine({ chatId, isMuted }));
     }
   });
 };

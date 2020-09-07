@@ -52,3 +52,13 @@ export const addUsersToChat = (payload: IAddUsersToChat) => (
 export const fetchBrowserChannels = (workspaceId: string): Promise<IBrowserChannel[]> => (
   api.get(`/api/workspaces/${workspaceId}/browser-channels`)
 );
+
+export async function setMuted(chatId: string) {
+  const response = await api.post(`/api/chats/${chatId}/mute`);
+  return response;
+}
+
+export async function setUnMuted(chatId: string) {
+  const response = await api.post(`/api/chats/${chatId}/unmute`);
+  return response;
+}

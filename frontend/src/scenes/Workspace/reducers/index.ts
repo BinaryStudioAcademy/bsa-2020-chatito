@@ -23,13 +23,14 @@ import {
   fetchUnreadUserCommentsRoutine,
   readCommentRoutine,
   markAsUnreadCommentWithOptionRoutine,
-  removeUserFromChatInWorkspaceRoutine } from '../routines';
+  removeUserFromChatInWorkspaceRoutine
+} from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { IUser } from 'common/models/user/IUser';
-import { addChatWithSocketRoutine } from 'scenes/Chat/routines';
+import { addChatWithSocketRoutine, setChatMuteSocketRoutine } from 'scenes/Chat/routines';
 import { ChatType } from 'common/enums/ChatType';
 import {
   upsertDraftCommentWithSocketRoutine,
@@ -467,6 +468,21 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         ...state,
         loading: false
       };
+    case setChatMuteSocketRoutine.TRIGGER: {
+      const { chatId, isMuted } = payload;
+      const { channels, directMessages } = state;
+      const chats = [...channels, ...directMessages];
+      const targetChat = chats.find(chat => chat.id === chatId);
+
+      if (targetChat) {
+        targetChat.isMuted = isMuted;
+      }
+      return {
+        ...state,
+        channels: chats.filter(c => c.type === ChatType.Channel),
+        directMessages: chats.filter(c => c.type === ChatType.DirectMessage)
+      };
+    }
     default:
       return state;
   }

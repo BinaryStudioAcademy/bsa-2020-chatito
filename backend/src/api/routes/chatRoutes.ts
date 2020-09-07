@@ -10,7 +10,10 @@ import {
   removeUserFromChat,
   addUsersToChat,
   getChatById,
-  getPublicChannel } from '../../services/chatService';
+  getPublicChannel,
+  muteChat,
+  unMuteChat
+} from '../../services/chatService';
 import { addReminder } from '../../services/reminderService';
 import { ClientSockets } from '../../common/enums/ClientSockets';
 import { IUserClient } from '../../common/models/user/IUserClient';
@@ -39,6 +42,8 @@ router
       body: req.body
     }
   )))
+  .post('/:id/mute', run((req: Request) => muteChat(req.params.id, req.user.id)))
+  .post('/:id/unmute', run((req: Request) => unMuteChat(req.params.id, req.user.id)))
   .post('/invite-users', run(async (req: Request) => {
     const users = await addUsersToChat(req.body.chatId, req.body.userIds);
     const usersToEmit: IUserClient[] = [];
