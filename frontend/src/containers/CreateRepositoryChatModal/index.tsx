@@ -81,7 +81,8 @@ const CreateRepositoryChatModal: FunctionComponent<IProps> = ({
 
   const handleUpdateGithubUsername = () => {
     if (user) {
-      const editUserProps = { ...user, githubUsername: githubUsernameInput };
+      const { imageUrl, ...updateUser } = user; // eslint-disable-line @typescript-eslint/no-unused-vars
+      const editUserProps = { ...updateUser, githubUsername: githubUsernameInput };
       editProfile(editUserProps);
     }
   };

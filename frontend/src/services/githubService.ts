@@ -9,6 +9,11 @@ export const getUserPublicGithubRepositories = async (githubUsername: string) =>
 
   const response = await fetch(githubUrl);
 
+  if (response.status === 404) {
+    toastr.error('Error', 'No GitHub user with such username.');
+    return [];
+  }
+
   if (response.status !== 200) {
     toastr.error('Error', 'Something went wrong with GitHub API.');
     return [];
