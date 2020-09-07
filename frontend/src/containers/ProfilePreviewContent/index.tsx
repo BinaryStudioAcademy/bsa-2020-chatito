@@ -93,11 +93,7 @@ const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUse
         <div
           className={styles.infoContainer}
         >
-          {user.status === 'online' ? (
-            <p className={`${styles.fullname} ${styles.online}`}>{user.fullName}</p>
-          ) : (
-            <p className={`${styles.fullname} ${styles.offline}`}>{user.fullName}</p>
-          )}
+          <p className={`${styles.fullname} ${styles.online}`}>{user.fullName}</p>
           {user.title && <p className={styles.title}>{user.title}</p>}
           {user.id === currentUser.id ? (
             <div
