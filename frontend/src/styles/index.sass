@@ -125,21 +125,27 @@ small
 // modals
 
 .modalHeader
-  font-size: 22px
+  font-size: 21px
   font-weight: 700
   width: 100%
-  margin-bottom: 16px
+  margin-bottom: 25px
+
+.modalBody
+  padding: 0 8px
 
 .buttonsContainer
+  padding: 0 8px 6px
   width: 100%
   display: flex
   justify-content: flex-end
 
-.setStatusButton
+.appButton
   padding: 0
   font-size: 14px
-  height: 32px
+  height: 34px
   width: 67px
+  min-height: 34px
+  min-width: 67px
   font-weight: 600
   margin-left: 14px
   &:hover, &:active, &:focus
@@ -149,7 +155,7 @@ small
 .save
   border: none
   background-color: var(--icon-active)
-  &:hover, &:active
+  &:hover, &:active, &:disabled
     background-color: var(--save-button-bg-hover) !important
   &:focus
     background-color: var(--icon-active)
@@ -157,7 +163,17 @@ small
   color: var(--white-bg)
   border: none
   background-color: var(--danger-button-bg)
-  &:hover, &:active
+  &:hover, &:active, &:disabled
     background-color: var(--danger-button-bg-hover) !important
   &:focus
     background-color: var(--danger-button-bg)
+
+.deleteAccount
+  width: 125px
+  margin-left: 0
+
+.inputField
+  height: 36px
+
+.go2646822163, .dropdown-container, .go2642161244, .dropdown-heading
+  height: 36px !important

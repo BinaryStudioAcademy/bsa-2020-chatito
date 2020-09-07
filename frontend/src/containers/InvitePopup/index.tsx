@@ -43,21 +43,22 @@ const InvitePopup = ({ isShown, workspace, sendInviteLink, showModal }: IProps) 
   };
 
   const modalHeader = (
-    <h4>
+    <header className="modalHeader">
       <span>Invite to </span>
       {workspace.name}
-    </h4>
+    </header>
   );
 
   const modalBody = (
-    <InputField label="To:" name="email" type="email" placeholder="Enter email" />
+    <div className="modalBody">
+      <InputField label="To:" name="email" type="email" placeholder="Enter email" />
+    </div>
   );
 
   const modalFooter = (
-    <div className={styles.modalFooter}>
+    <div className="buttonsContainer">
       <div className={styles.inviteLinkBlock} />
-
-      <Button type="submit" variant="secondary" className={styles.inviteButton}>
+      <Button type="submit" variant="secondary" className="appButton save">
         Send
       </Button>
     </div>
@@ -71,7 +72,7 @@ const InvitePopup = ({ isShown, workspace, sendInviteLink, showModal }: IProps) 
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        <Form className={styles.modalBody}>
+        <Form>
           {modalBody}
           {modalFooter}
         </Form>

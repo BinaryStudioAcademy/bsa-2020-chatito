@@ -16,9 +16,6 @@
   &:focus
     outline: none
 
-.mainContainer
-  padding: 5px 10px 10px
-
 .body
   display: flex
 
@@ -26,12 +23,15 @@
   font-size: 18px
   margin-bottom: 10px
 
-.inputBlock
-  margin-top: 20px
+.inputBlock:not-first-child
+  margin-top: 16px
+
+.inputBlock:nth-child(5)
+  margin-bottom: 30px
 
 .inputGroup
   margin: 7px 0 5px
-  background-color: var(--auth-form-background) !important
+  height: 36px
   &:focus
     border-color: var(--auth-scene-btn-background) !important
     box-shadow: 0 0 0 0.05rem var(--auth-scene-btn-background) !important
@@ -55,36 +55,17 @@
   border: 8px solid var(--not-found-background)
 
 .imageEditBlock
-  margin: 20px 0 0 25px
+  margin-left: 25px
   display: flex
   flex-direction: column
   justify-content: space-between
+  margin-bottom: 6px
 
-.formFooter
+.buttonsContainer
   margin-top: 30px
   display: flex
-  justify-content: space-between
-  align-items: center
-
-  .primaryBtn:global(.btn-primary)
-    width: 135px
-    height: 40px
-    background-color: var(--icon-active)
-    border-color: var(--icon-active)
-    &:hover, &:active,
-      background-color: var(--link-text-color)
-      border-color: var(--link-text-color)
-      cursor: pointer
-
-  .primaryBtnCancel:global(.btn-primary)
-    width: 120px
-    height: 40px
-    // background-color: var(--close-button)
-    // border-color: var(--close-button)
-    &:hover, &:active,
-      // background-color: var(--close-button)
-      // border-color: var(--close-button)
-      cursor: pointer
+  justify-content: flex-end
+  margin-bottom: 6px
 
 .imageFooter
   margin-top: 15px
@@ -103,12 +84,10 @@
     cursor: pointer
 
 .options
-  height: 75px
   width: 150px
   display: flex
   flex-direction: column
   align-items: center
-  justify-content: flex-end
   .showMore
     margin-bottom: 10px
   .primaryBtnDelete:global(.btn-primary)

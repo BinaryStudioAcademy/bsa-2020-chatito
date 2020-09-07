@@ -75,11 +75,11 @@ const CreateDirect = ({ workspace, directMessages, currentUserId,
   const title = 'Create a Direct';
 
   const formHeader = (
-    <h4 className={styles.header}>{title}</h4>
+    <header className="modalHeader">{title}</header>
   );
 
   const addMembers = (
-    <Form.Group>
+    <Form.Group className="inputField">
       <MultiSelect
         className={styles.multiSelect}
         options={options}
@@ -92,23 +92,23 @@ const CreateDirect = ({ workspace, directMessages, currentUserId,
   );
 
   const formBody = (
-    <div className={styles.formBody}>
+    <div className="modalBody">
       <p className={styles.formDescription}>
         Directs are where you can communicate with other people.
       </p>
-      <Form>
+      <Form className={styles.inputContainer}>
         {addMembers}
       </Form>
     </div>
   );
 
   const formFooter = (
-    <div className={styles.footer}>
+    <div className="buttonsContainer">
       <Button
         disabled={isSelectEmpty()}
         variant="secondary"
         onClick={handleSubmit}
-        className={styles.createButton}
+        className="appButton save"
       >
         Create
       </Button>
@@ -118,7 +118,7 @@ const CreateDirect = ({ workspace, directMessages, currentUserId,
   return (
     <>
       {formHeader}
-      <LoaderWrapper loading={!allUsers.length} height="50px">
+      <LoaderWrapper loading={!allUsers.length} height="90px">
         {formBody}
       </LoaderWrapper>
       {formFooter}
