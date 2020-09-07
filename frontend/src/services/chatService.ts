@@ -53,12 +53,7 @@ export const fetchBrowserChannels = (workspaceId: string): Promise<IBrowserChann
   api.get(`/api/workspaces/${workspaceId}/browser-channels`)
 );
 
-export async function setMuted(chatId: string) {
-  const response = await api.post(`/api/chats/${chatId}/mute`);
-  return response;
-}
-
-export async function setUnMuted(chatId: string) {
-  const response = await api.post(`/api/chats/${chatId}/unmute`);
+export async function setMuted(chatId: string, muteValue: boolean) {
+  const response = await api.post(`/api/chats/${chatId}/mute`, { muteValue });
   return response;
 }

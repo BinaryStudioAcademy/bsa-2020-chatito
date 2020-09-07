@@ -28,8 +28,7 @@ import {
   addUsersToChat,
   fetchNavigationPost,
   fetchPublicChannelByHash,
-  setMuted,
-  setUnMuted
+  setMuted
 } from 'services/chatService';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
@@ -251,11 +250,7 @@ function* watchFetchPublicChannel() {
 
 function* fetchChatMute({ payload }: Routine<any>) {
   try {
-    if (payload.isMuted) {
-      yield call(setUnMuted, payload.id);
-    } else {
-      yield call(setMuted, payload.id);
-    }
+    yield call(setMuted, payload.id, !payload.isMuted);
   } catch (error) {
     yield call(toastrError, error);
   }

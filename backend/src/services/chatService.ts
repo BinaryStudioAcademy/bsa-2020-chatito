@@ -117,14 +117,12 @@ export const getDirectChatByUsers = async (userId1: string, userId2: string, wpI
   return chat;
 };
 
-export const muteChat = async (chatId: string, userId: string) => {
-  await getCustomRepository(UserRepository).muteChat(userId, chatId);
-  emitToChatRoom(chatId, ClientSockets.SetChatMuted, chatId, userId, true);
-  return { chatId };
-};
-
-export const unMuteChat = async (chatId: string, userId: string) => {
-  await getCustomRepository(UserRepository).unmuteChat(userId, chatId);
-  emitToChatRoom(chatId, ClientSockets.SetChatMuted, chatId, userId, false);
+export const setChatMute = async (chatId: string, userId: string, muteValue: boolean) => {
+  if (muteValue) {
+    await getCustomRepository(UserRepository).muteChat(userId, chatId);
+  } else {
+    await getCustomRepository(UserRepository).unmuteChat(userId, chatId);
+  }
+  emitToChatRoom(chatId, ClientSockets.SetChatMuted, chatId, userId, muteValue);
   return { chatId };
 };

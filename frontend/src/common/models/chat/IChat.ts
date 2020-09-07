@@ -8,6 +8,7 @@ export interface IChat {
   id: string;
   name: string;
   type: ChatType;
+  description?: string;
   isPrivate: boolean;
   workspace: IWorkspace;
   workspaceId: string;
