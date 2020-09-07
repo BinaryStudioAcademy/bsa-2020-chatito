@@ -18,7 +18,6 @@ interface IProps {
   isShown: boolean;
   chat: IChat;
   currentUser: IUser;
-  getUserList: CallableFunction;
   removeUser: CallableFunction;
   toggleModal: IBindingCallback1<IModalRoutine>;
 }
@@ -26,7 +25,6 @@ interface IProps {
 const ChatMembers: FunctionComponent<any> = ({
   isShown,
   toggleModal,
-  getUserList,
   removeUser,
   chat,
   currentUser
@@ -99,7 +97,6 @@ const mapStateToProps = (state: IAppState) => {
 };
 
 const mapDispatchToProps = {
-  getUserList: fetchChatUsersRoutine,
   removeUser: removeUserFromChatRoutine,
   toggleModal: showModalRoutine
 };
