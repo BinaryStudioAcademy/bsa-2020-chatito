@@ -49,4 +49,7 @@ export class Chat extends AbstractEntity {
 
   @ManyToMany(() => User, user => user.chats)
   users: User[];
+
+  @ManyToMany(() => User, user => user.mutedChats)
+  mutedByUsers: User[];
 }

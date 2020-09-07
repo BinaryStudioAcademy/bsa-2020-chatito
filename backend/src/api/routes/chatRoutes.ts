@@ -6,8 +6,9 @@ import {
   getAllUserChats,
   getAllChatUsers,
   removeUserFromChat,
+  addUsersToChat,
   getPublicChannel,
-  addUsersToChat
+  setChatMute
 } from '../../services/chatService';
 import { addReminder } from '../../services/reminderService';
 
@@ -22,6 +23,7 @@ router
   .get('/public/:hash', run((req: Request) => getPublicChannel(req.params.hash)))
   .get('/', run((req: Request) => getAllUserChats(req.user.id)))
   .get('/:id/users', run((req: Request) => getAllChatUsers(req.params.id)))
+  .post('/:id/mute', run((req: Request) => setChatMute(req.params.id, req.user.id, req.body.muteValue)))
   .delete('/:id/users/:userId', run((req: Request) => removeUserFromChat(req.params.id, req.params.userId, req.io)))
   .post('/', run((req: Request) => addChat(req.user.id, req.body, req.io)))
   .post('/:id/reminders', run((req: Request) => addReminder({

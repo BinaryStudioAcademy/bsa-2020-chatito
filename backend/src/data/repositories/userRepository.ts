@@ -65,6 +65,25 @@ class UserRepository extends Repository<User> {
     return postIds;
   }
 
+  async muteChat(id: string, chatId: string): Promise<string> {
+    await this.createQueryBuilder().relation(User, 'mutedChats').of(id).add(chatId);
+    return chatId;
+  }
+
+  async unmuteChat(id: string, chatId: string): Promise<string> {
+    await this.createQueryBuilder().relation(User, 'mutedChats').of(id).remove(chatId);
+    return chatId;
+  }
+
+  async getMutedChats(userId: string): Promise<Chat[]> {
+    const userWithMuted = await this.createQueryBuilder('user')
+      .leftJoinAndSelect('user.mutedChats', 'mutedChats')
+      .where('user.id = :userId', { userId })
+      .getOne();
+
+    return userWithMuted.mutedChats;
+  }
+
   getAll(): Promise<User[]> {
     return this.find();
   }

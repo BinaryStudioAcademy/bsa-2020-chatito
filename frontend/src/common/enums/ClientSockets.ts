@@ -12,5 +12,6 @@ export enum ClientSockets {
   UpsertDraftComment = 'upsertDraftComment',
   DeleteDraftComment = 'deleteDraftComment',
   NotifyAndMarkAsUnread = 'notifyAndMarkAsUnread',
+  SetChatMuted = 'setChatMuted',
   MarkAsUnreadComment = 'markAsUnreadComment'
 }

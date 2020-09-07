@@ -5,8 +5,11 @@ import {
   faHashtag,
   faLock,
   faUserPlus,
-  faInfoCircle
+  faInfoCircle,
+  faVolumeMute,
+  faVolumeUp
 } from '@fortawesome/free-solid-svg-icons';
+import { toggleChatMuteRoutine } from '../../routines';
 import { faStar } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'react-bootstrap/Image';
@@ -40,9 +43,10 @@ interface IProps {
   currentUser: IUser;
   showUserProfile: IBindingCallback1<IUser>;
   directUsers: IUser[] | undefined;
+  setMute: (chat: IChat) => {};
 }
 
-const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUser, showUserProfile, directUsers }) => {
+const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser, showUserProfile, directUsers }) => {
   const [userToShow, setUserToShow] = useState<IUser>(currentUser);
   useEffect(() => {
     if (directUsers && directUsers.length && directUsers.length === 2) {
@@ -104,6 +108,13 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUser, showUserPr
       </span>
     </Popover>
   );
+  const setChatMute = () => {
+    setMute(chat);
+  };
+
+  const chatMuteIcons = () => (chat.isMuted
+    ? <FontAwesomeIcon className={styles.icon} icon={faVolumeMute} onClick={setChatMute} />
+    : <FontAwesomeIcon className={styles.icon} icon={faVolumeUp} onClick={setChatMute} />);
 
   return (
     <div className={styles.chatContainer} key={chat.id}>
@@ -123,6 +134,7 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, currentUser, showUserPr
             <div className={styles.title}>{chatName}</div>
           )}
           <FontAwesomeIcon icon={faStar} className={styles.icon} />
+          {chatMuteIcons()}
         </div>
 
       </div>
@@ -180,7 +192,8 @@ const mapStateToProps = (state: IAppState) => {
 
 const mapDispatchToProps = {
   showUserProfile: showUserProfileRoutine,
-  showModal: showModalRoutine
+  showModal: showModalRoutine,
+  setMute: toggleChatMuteRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatHeader);

@@ -15,7 +15,8 @@ import {
   deleteDraftPostRoutine,
   fetchNavigationPostRoutine,
   joinChannelRoutine,
-  fetchPublicChannelRoutine
+  fetchPublicChannelRoutine,
+  toggleChatMuteRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import {
@@ -26,7 +27,8 @@ import {
   removeUserFromChat,
   addUsersToChat,
   fetchNavigationPost,
-  fetchPublicChannelByHash
+  fetchPublicChannelByHash,
+  setMuted
 } from 'services/chatService';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
@@ -246,6 +248,18 @@ function* watchFetchPublicChannel() {
   yield takeEvery(fetchPublicChannelRoutine.TRIGGER, fetchPublicChannelRequest);
 }
 
+function* fetchChatMute({ payload }: Routine<any>) {
+  try {
+    yield call(setMuted, payload.id, !payload.isMuted);
+  } catch (error) {
+    yield call(toastrError, error);
+  }
+}
+
+function* watchMuteChat() {
+  yield takeEvery(toggleChatMuteRoutine.TRIGGER, fetchChatMute);
+}
+
 export default function* chatSaga() {
   yield all([
     watchPostsRequest(),
@@ -262,6 +276,7 @@ export default function* chatSaga() {
     watchCreateReminderRequest(),
     watchCreateChatAndAddPost(),
     watchJoinChannel(),
-    watchFetchPublicChannel()
+    watchFetchPublicChannel(),
+    watchMuteChat()
   ]);
 }

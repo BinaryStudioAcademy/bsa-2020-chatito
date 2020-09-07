@@ -109,10 +109,20 @@ export const getGithubRepositoryChat = async (repositoryName: string, repository
 
 export const getPublicChannel = async (hash: string) => {
   const channel = await getCustomRepository(ChatRepository).getPublicChannelByHash(hash);
-  return fromChatToClientChat(channel);
+  return fromChatToClientChat(channel, false);
 };
 
 export const getDirectChatByUsers = async (userId1: string, userId2: string, wpId: string) => {
   const chat = await getCustomRepository(ChatRepository).getCommonDirectChat(userId1, userId2, wpId);
   return chat;
+};
+
+export const setChatMute = async (chatId: string, userId: string, muteValue: boolean) => {
+  if (muteValue) {
+    await getCustomRepository(UserRepository).muteChat(userId, chatId);
+  } else {
+    await getCustomRepository(UserRepository).unmuteChat(userId, chatId);
+  }
+  emitToChatRoom(chatId, ClientSockets.SetChatMuted, chatId, userId, muteValue);
+  return { chatId };
 };
