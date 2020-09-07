@@ -28,5 +28,8 @@ export const env = {
     bucket: getOsEnv('AWS_BUCKET'),
     url: getOsEnv('AWS_URL'),
     region: getOsEnv('AWS_REGION')
+  },
+  cors: {
+    scheduliaWhitelist: getOsEnv('CORS_WHITELIST_SCHEDULIA').split(' ')
   }
 };
