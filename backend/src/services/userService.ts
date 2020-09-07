@@ -43,7 +43,7 @@ export const deleteUser = async (id: string): Promise<unknown> => {
 };
 
 export const editProfile = async (userId: string, data: Partial<IUserClient>) => {
-  if (data.title.length > 100) {
+  if (data.title && data.title.length > 100) {
     throw new CustomError(
       400,
       'Enter less than 100 symbols.',

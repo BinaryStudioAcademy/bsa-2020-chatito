@@ -15,8 +15,11 @@ import { ChatType } from '../common/enums/ChatType';
 import { fromPostToPostClient } from '../common/mappers/post';
 import { IUser } from '../common/models/user/IUser';
 import { IGetChatPosts } from '../common/models/chat/IGetChatPosts';
-import { getGithubUser } from './userService';
 import { fromChatToClientChat } from '../common/mappers/chat';
+import { getGithubUser, getUserByIdWithoutRelations } from './userService';
+import { IUserClient } from '../common/models/user/IUserClient';
+import { emitToChatRoom } from '../common/utils/socketHelper';
+import { ClientSockets } from '../common/enums/ClientSockets';
 
 export const getAllChatPosts = async (filterData: IGetChatPosts) => {
   const { postId, ...filter } = filterData;
@@ -48,7 +51,7 @@ export const getAllUserChats = async (userId: string) => {
   return { directs, channels, githubRepositories };
 };
 
-export const addChat = async (userId: string, body: IChatData) => {
+export const addChat = async (userId: string, body: IChatData, io: SocketIO.Server) => {
   const { workspaceName, users = [], ...chatFields } = body;
   const userCreator: User = await getCustomRepository(UserRepository).getById(userId);
   const workspace: Workspace = await getCustomRepository(WorkspaceRepository).findByName(workspaceName);
@@ -62,23 +65,41 @@ export const addChat = async (userId: string, body: IChatData) => {
     users: [userCreator, ...users, ...githubUser],
     hash: cryptoRandomString({ length: 7, type: 'url-safe' }).toUpperCase()
   };
-  const chat: IChat = await getCustomRepository(ChatRepository).addChat(newChat);
+  const chat = await getCustomRepository(ChatRepository).addChat(newChat);
+  const userIds = chat.users.map(user => user.id);
+  io.of('/chat').emit(ClientSockets.JoinChat, chat, userIds);
   return chat;
-};
-
-export const addUsersToChat = async (chatId: string, userIds: string[]) => {
-  await getCustomRepository(ChatRepository).addUsersToChat(chatId, userIds);
-  return {};
-};
-
-export const removeUserFromChat = async (chatId: string, userId: string): Promise<unknown> => {
-  await getCustomRepository(ChatRepository).removeUser(chatId, userId);
-  return {}; // In search for a better solution
 };
 
 export const getChatById = async (chatId: string) => {
-  const chat: IChat = await getCustomRepository(ChatRepository).getNameAndTypeAndIdById(chatId);
-  return chat;
+  const chat = await getCustomRepository(ChatRepository).getByIdWithUsers(chatId);
+  return fromChatToClientChat(chat);
+};
+
+export const addUsersToChat = async (chatId: string, userIds: string[], io: SocketIO.Server) => {
+  await getCustomRepository(ChatRepository).addUsersToChat(chatId, userIds);
+  const usersToEmit: IUserClient[] = [];
+  for (let i = 0; i < userIds.length; i += 1) {
+    const user = await getUserByIdWithoutRelations(userIds[i]);
+    usersToEmit.push(user);
+  }
+  const chat = await getChatById(chatId);
+  emitToChatRoom(
+    chatId,
+    ClientSockets.NewUserNotification,
+    usersToEmit,
+    chat.name,
+    chat.type,
+    chat.id
+  );
+  io.of('/chat').emit(ClientSockets.JoinChat, chat, userIds);
+  return {};
+};
+
+export const removeUserFromChat = async (chatId: string, userId: string, io: SocketIO.Server): Promise<unknown> => {
+  await getCustomRepository(ChatRepository).removeUser(chatId, userId);
+  io.of('/chat').emit(ClientSockets.LeaveChat, chatId, userId);
+  return {};
 };
 
 export const getGithubRepositoryChat = async (repositoryName: string, repositoryOwner: string) => {
