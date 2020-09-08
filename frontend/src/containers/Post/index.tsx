@@ -60,13 +60,13 @@ interface IProps {
   chatUsers?: IUser[];
   setCopiedPost?: IBindingCallback1<string>;
   copiedPost?: string;
+  isUserChatMember?: boolean;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, openThread,
   unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, unreadChats,
-
   readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef, chatUsers,
-  setCopiedPost, copiedPost }) => {
+  setCopiedPost, copiedPost, isUserChatMember }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
   useEffect(() => {
@@ -347,18 +347,22 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
           <div className={styles.emojiStats}>
             {type === PostType.Post && renderEmojis()}
           </div>
-          <div className={styles.footer}>
-            {openThread && (
-              <Card.Link
-                bsPrefix={styles.openThreadBtn}
-                onClick={() => openThread(post)}
-              >
-                Reply
-              </Card.Link>
-            )}
-            {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
-          </div>
-          <ButtonOptions />
+          {isUserChatMember && (
+            <>
+              <div className={styles.footer}>
+                {openThread && (
+                  <Card.Link
+                    bsPrefix={styles.openThreadBtn}
+                    onClick={() => openThread(post)}
+                  >
+                    Reply
+                  </Card.Link>
+                )}
+                {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
+              </div>
+              <ButtonOptions />
+            </>
+          )}
         </Media.Body>
       </Media>
     </div>

@@ -33,6 +33,7 @@ interface IProps {
   unreadChats: IUnreadChat[];
   postId?: string;
   fetchNavigationPost: IBindingCallback1<IFetchNavPost>;
+  isUserChatMember: boolean;
 }
 
 const ChatBody: React.FC<IProps> = ({
@@ -47,7 +48,8 @@ const ChatBody: React.FC<IProps> = ({
   count,
   unreadChats,
   postId,
-  fetchNavigationPost
+  fetchNavigationPost,
+  isUserChatMember
 }) => {
   const isNew = true;
   const [postIdForLine, setPostIdForLine] = useState('');
@@ -164,6 +166,7 @@ const ChatBody: React.FC<IProps> = ({
                   type={PostType.Post}
                   setCopiedPost={setCopiedPost}
                   copiedPost={copiedPost}
+                  isUserChatMember={isUserChatMember}
                 />
               </div>
             </div>
