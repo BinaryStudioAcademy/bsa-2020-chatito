@@ -141,16 +141,18 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser, s
           ) : (
             <div className={styles.title}>{chatName}</div>
           )}
-
-          <OverlayTrigger
-            trigger={['hover', 'hover']}
-            delay={{ show: 300, hide: 0 }}
-            rootClose
-            placement="bottom-start"
-            overlay={PopoverItem(chat.description || 'No description for this chat')}
-          >
-            <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
-          </OverlayTrigger>
+          { chat.type === ChatType.Channel
+            && (
+            <OverlayTrigger
+              trigger={['hover', 'hover']}
+              delay={{ show: 300, hide: 0 }}
+              rootClose
+              placement="bottom-start"
+              overlay={PopoverItem(chat.description || 'No description for this chat')}
+            >
+              <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
+            </OverlayTrigger>
+            )}
 
           <FontAwesomeIcon icon={faStar} className={styles.icon} />
 
