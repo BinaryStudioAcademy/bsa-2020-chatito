@@ -107,8 +107,8 @@ export const getGithubRepositoryChat = async (repositoryName: string, repository
   return chat;
 };
 
-export const getPublicChannel = async (hash: string) => {
-  const channel = await getCustomRepository(ChatRepository).getPublicChannelByHash(hash);
+export const getPublicChannel = async (hash: string, userId: string) => {
+  const channel = await getCustomRepository(ChatRepository).getPublicChannelByHash(hash, userId);
   return fromChatToClientChat(channel, false);
 };
 

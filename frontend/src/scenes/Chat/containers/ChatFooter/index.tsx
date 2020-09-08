@@ -51,21 +51,22 @@ const ChatFooter: React.FC<IProps> = ({
 
   useEffect(() => {
     if (chatId) {
-      if (!inputText) {
-        deleteDraftPost({ chatId });
-      } else {
+      if (inputText) {
         const payload = {
           id: draftPostId,
           chatId,
           text: inputText
         };
         upsertDraftPost(payload);
+      } else if (inputText === '' && draftPostId) {
+        deleteDraftPost({ chatId });
       }
     }
   }, [inputText]);
 
   const onSubmit = (text: string) => {
     if (chatId) addPost({ chatId, text });
+    setInputText('');
     return chatId;
   };
 
