@@ -19,6 +19,7 @@ import {
   getMonth,
   getYear,
   whenWasSent } from 'common/helpers/dateHelper';
+import { usePrevious } from 'common/hooks/usePrevious';
 
 interface IProps {
   chatId: string | undefined;
@@ -33,6 +34,7 @@ interface IProps {
   unreadChats: IUnreadChat[];
   postId?: string;
   fetchNavigationPost: IBindingCallback1<IFetchNavPost>;
+  currentUserId: string;
   isUserChatMember: boolean;
 }
 
@@ -49,6 +51,7 @@ const ChatBody: React.FC<IProps> = ({
   unreadChats,
   postId,
   fetchNavigationPost,
+  currentUserId,
   isUserChatMember
 }) => {
   const isNew = true;
@@ -59,6 +62,9 @@ const ChatBody: React.FC<IProps> = ({
   const getMorePosts = () => {
     loadMorePosts({ chatId, from, count });
   };
+  const prevMessagesLength = usePrevious(messages.length);
+  const currMessagesLength = messages.length;
+
   const setNewPostLine = () => {
     unreadChats.forEach(unreadChat => {
       if (unreadChat.id === chatId) {
@@ -76,11 +82,18 @@ const ChatBody: React.FC<IProps> = ({
       }
     });
   };
+
   const scrollToRef = (ref: RefObject<HTMLElement>) => {
     if (ref.current) {
       ref.current.scrollIntoView({
         block: 'start'
       });
+    }
+  };
+
+  const scrollToBottom = () => {
+    if (chatBody.current !== null) {
+      chatBody.current.scrollTop = chatBody.current.scrollHeight;
     }
   };
 
@@ -94,17 +107,30 @@ const ChatBody: React.FC<IProps> = ({
         setNewPostLine();
       }
     }
-    if (chatBody.current !== null && !loading) {
-      chatBody.current.scrollTop = chatBody.current.scrollHeight;
+    if (!loading) {
+      scrollToBottom();
     }
-
     if (postRef.current && postId) {
       scrollToRef(postRef);
     }
   }, [loading, chatId]);
+
   useEffect(() => {
     setNewPostLine();
   }, [unreadChats]);
+
+  const isNewMessage = () => prevMessagesLength as number < currMessagesLength;
+
+  const isNewMessageCreatedByCurrentUser = () => (
+    messages[currMessagesLength - 1].createdByUser.id === currentUserId
+  );
+
+  useEffect(() => {
+    if (isNewMessage() && isNewMessageCreatedByCurrentUser()) {
+      scrollToBottom();
+    }
+  }, [prevMessagesLength, currMessagesLength]);
+
   const handleOpenThread = (post: IPost) => {
     if (activeThreadPostId === post.id) return;
     openThread(post);
@@ -186,7 +212,8 @@ const mapStateToProps = (state: IAppState) => ({
   loading: state.chat.loading,
   from: state.chat.fetchFrom,
   count: state.chat.fetchCount,
-  unreadChats: state.workspace.unreadChats
+  unreadChats: state.workspace.unreadChats,
+  currentUserId: state.user.user?.id as string
 });
 
 const mapDispatchToProps = {
