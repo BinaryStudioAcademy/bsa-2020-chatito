@@ -145,7 +145,6 @@ const ChangeStatusForm: FunctionComponent<IProps> = ({ id, editStatus, handleClo
         <Button
           className="appButton save"
           variant="secondary"
-          disabled={!crossStatus}
           onClick={() => {
             editStatus({ id, status: `${chosenEmoji} ${status}` });
             handleClose();
