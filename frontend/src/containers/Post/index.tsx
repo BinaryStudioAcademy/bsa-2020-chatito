@@ -61,13 +61,13 @@ interface IProps {
   chatUsers?: IUser[];
   setCopiedPost?: IBindingCallback1<string>;
   copiedPost?: string;
+  isUserChatMember?: boolean;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, openThread,
   unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, unreadChats,
-
   readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef, chatUsers,
-  setCopiedPost, copiedPost }) => {
+  setCopiedPost, copiedPost, isUserChatMember }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
   useEffect(() => {
@@ -343,7 +343,6 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
               {isPostCopied ? 'Copied!' : 'Click here to copy message link'}
             </span>
           </a>
-          {/* eslint-disable-next-line */}
           {
             isJoinBtn
               ? (
@@ -364,8 +363,8 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
             {type === PostType.Post && renderEmojis()}
           </div>
 
-          {post.integration === IntegrationType.None ? postFooter : ''}
-          {post.integration === IntegrationType.None ? <ButtonOptions /> : ''}
+          {post.integration === IntegrationType.None && isUserChatMember && postFooter}
+          {post.integration === IntegrationType.None && isUserChatMember && <ButtonOptions />}
         </Media.Body>
       </Media>
     </div>

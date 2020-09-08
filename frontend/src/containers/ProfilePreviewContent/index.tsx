@@ -68,8 +68,8 @@ const ProfilePreviewContent: FunctionComponent<IProps> = ({ tempUser, currentUse
       ));
 
     if (chat) {
-      addPost({ chatId: chat.id, text: message });
       router(Routes.Chat.replace(':whash', workspaceHash).replace(':chash', chat.hash));
+      addPost({ chatId: chat.id, text: message });
     } else {
       const newChat: ICreateChat = {
         name: `${currentUser.displayName}, ${user.displayName}`,

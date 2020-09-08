@@ -12,6 +12,7 @@ import { IDeleteDraftPost } from 'common/models/draft/IDeleteDraftPost';
 import { Spinner } from 'react-bootstrap';
 import { IUser } from 'common/models/user/IUser';
 import { InputType } from 'common/enums/InputType';
+import { IJoinChannel } from 'common/models/chat/IJoinChannel';
 
 interface IProps {
   chatId?: string;
@@ -24,7 +25,7 @@ interface IProps {
   addPost: ({ chatId, text }: ICreatePost) => void;
   upsertDraftPost: IBindingCallback1<IUpsertDraftPost>;
   deleteDraftPost: IBindingCallback1<IDeleteDraftPost>;
-  joinChannel: IBindingCallback1<any>;
+  joinChannel: IBindingCallback1<IJoinChannel>;
 }
 
 const ChatFooter: React.FC<IProps> = ({
@@ -71,7 +72,7 @@ const ChatFooter: React.FC<IProps> = ({
   };
 
   const onJoin = () => {
-    joinChannel({ chatId, user: currentUser });
+    joinChannel({ chatId: chatId as string, user: currentUser });
   };
 
   return (
@@ -106,7 +107,6 @@ const mapStateToProps = (state: IAppState) => {
     chatId: chat ? chat.id : undefined,
     draftPostId: chat?.draftPosts?.length ? chat.draftPosts[0].id : undefined,
     draftPostText: chat?.draftPosts?.length ? chat.draftPosts[0].text : undefined,
-    isUserChatMember: !!chat?.users.find(user => user.id === state.user.user?.id),
     currentUser: state.user.user as IUser,
     btnLoading: state.chat.btnLoading,
     activeInput: state.workspace.activeInput
