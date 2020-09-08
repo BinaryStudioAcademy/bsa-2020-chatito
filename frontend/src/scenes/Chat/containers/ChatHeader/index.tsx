@@ -112,6 +112,14 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser, s
     setMute(chat);
   };
 
+  const PopoverItem = (data: string) => (
+    <Popover id="workspaceItemPopover" className={styles.popOverWindow}>
+      <span>
+        {data}
+      </span>
+    </Popover>
+  );
+
   const chatMuteIcons = () => (chat.isMuted
     ? <FontAwesomeIcon className={styles.icon} icon={faVolumeMute} onClick={setChatMute} />
     : <FontAwesomeIcon className={styles.icon} icon={faVolumeUp} onClick={setChatMute} />);
@@ -133,7 +141,19 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser, s
           ) : (
             <div className={styles.title}>{chatName}</div>
           )}
+
+          <OverlayTrigger
+            trigger={['hover', 'hover']}
+            delay={{ show: 300, hide: 0 }}
+            rootClose
+            placement="bottom-start"
+            overlay={PopoverItem(chat.description || 'No description for this chat')}
+          >
+            <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
+          </OverlayTrigger>
+
           <FontAwesomeIcon icon={faStar} className={styles.icon} />
+
           {chatMuteIcons()}
         </div>
 
@@ -175,7 +195,6 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser, s
             <ChatMembers />
           </>
         )}
-        <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
       </div>
     </div>
   );
