@@ -13,7 +13,7 @@ export const addGithubNotification = async (githubPayload: any) => {
 
   if (post) {
     const githubUser = await getGithubUser();
-    const notificationPost = await addPost(githubUser.id, post);
+    const notificationPost = await addPost(githubUser.id, { ...post, integration: IntegrationType.GitHub });
     return notificationPost;
   }
 

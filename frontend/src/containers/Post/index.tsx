@@ -22,7 +22,8 @@ import {
   readPostRoutine,
   markAsUnreadPostWithOptionRoutine,
   readCommentRoutine,
-  markAsUnreadCommentWithOptionRoutine } from 'scenes/Workspace/routines';
+  markAsUnreadCommentWithOptionRoutine
+} from 'scenes/Workspace/routines';
 import ReminderItem from 'containers/ReminderItem/ReminderItem';
 import { IUnreadChat } from 'common/models/chat/IUnreadChats';
 import { IPostsToRead } from 'common/models/chat/IPostsToRead';
@@ -299,6 +300,21 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
       });
     }
   };
+
+  const postFooter = (
+    <div className={styles.footer}>
+      {openThread && (
+        <Card.Link
+          bsPrefix={styles.openThreadBtn}
+          onClick={() => openThread(post)}
+        >
+          Reply
+        </Card.Link>
+      )}
+      {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
+    </div>
+  );
+
   const isJoinBtn = post.integration === IntegrationType.Whale && post.type !== MessageType.WhaleSignUpUser;
   const isPostCopied = copiedPost === post.id;
   return (
@@ -327,7 +343,6 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
               {isPostCopied ? 'Copied!' : 'Click here to copy message link'}
             </span>
           </a>
-          {/* eslint-disable-next-line */}
           {
             isJoinBtn
               ? (
@@ -347,22 +362,9 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
           <div className={styles.emojiStats}>
             {type === PostType.Post && renderEmojis()}
           </div>
-          {isUserChatMember && (
-            <>
-              <div className={styles.footer}>
-                {openThread && (
-                  <Card.Link
-                    bsPrefix={styles.openThreadBtn}
-                    onClick={() => openThread(post)}
-                  >
-                    Reply
-                  </Card.Link>
-                )}
-                {type === PostType.Post && <EmojiPopUp trigger={trigger} onEmojiClick={onEmojiClick} />}
-              </div>
-              <ButtonOptions />
-            </>
-          )}
+
+          {post.integration === IntegrationType.None && isUserChatMember && postFooter}
+          {post.integration === IntegrationType.None && isUserChatMember && <ButtonOptions />}
         </Media.Body>
       </Media>
     </div>
