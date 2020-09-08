@@ -198,9 +198,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             </Button>
           </div>
         </Form>
-        <div
-          className={`d-flex flex-column align-items-center ${styles.imageEditBlock}`}
-        >
+        <div className={`align-items-center ${styles.imageEditBlock}`}>
           <div>
             <Image
               className={styles.image}
@@ -222,7 +220,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
                   className={styles.uploadAvatar}
                 />
               </div>
-              {!user.imageUrl ? (
+              {user.imageUrl ? (
                 <button
                   type="button"
                   className={[styles.link, styles.removePhoto].join(' ')}
