@@ -41,7 +41,7 @@ const CreateChannel = ({ createChannel }: IProps) => {
   );
 
   const formHeader = (
-    <h4 className={styles.header}>{title}</h4>
+    <header className="modalHeader">{title}</header>
   );
 
   const nameInputFromGroup = (
@@ -51,7 +51,7 @@ const CreateChannel = ({ createChannel }: IProps) => {
       </Form.Label>
       <InputGroup className="mb-3">
         <InputGroup.Prepend>
-          <InputGroup.Text className={styles.label} id="basic-addon1">
+          <InputGroup.Text className={`${styles.label} inputField`} id="basic-addon1">
             #
           </InputGroup.Text>
         </InputGroup.Prepend>
@@ -62,6 +62,7 @@ const CreateChannel = ({ createChannel }: IProps) => {
           onChange={event => setChannelName(event.target.value)}
           required
           maxLength={nameMaxCharacters}
+          className="inputField"
         />
       </InputGroup>
     </Form.Group>
@@ -76,8 +77,9 @@ const CreateChannel = ({ createChannel }: IProps) => {
       <Form.Control
         type="text"
         onChange={e => setChannelDescription(e.target.value)}
+        className="inputField"
       />
-      <Form.Text className="text-muted">What this channel about?</Form.Text>
+      <Form.Text className={`${styles.description} text-muted`}>What this channel about?</Form.Text>
     </Form.Group>
   );
 
@@ -85,7 +87,7 @@ const CreateChannel = ({ createChannel }: IProps) => {
     <Form.Group>
       <Form.Label className={styles.makePrivateLabel}>
         <div className={styles.makePrivateDescription}>
-          <h5>Make private</h5>
+          <p className={`${styles.inputLabel} ${styles.makePrivate}`}>Make private</p>
           {privateChannel ? createPrivateDescription : createPublicDescription}
         </div>
         <Form.Check
@@ -100,7 +102,7 @@ const CreateChannel = ({ createChannel }: IProps) => {
   );
 
   const formBody = (
-    <div className={styles.formBody}>
+    <div className="modalBody">
       <p className={styles.formDescription}>
         Channels are where your team communicates. They&apos;re best when
         organized around a topic - #marketing, for example.
@@ -114,12 +116,12 @@ const CreateChannel = ({ createChannel }: IProps) => {
   );
 
   const formFooter = (
-    <div className={styles.footer}>
+    <div className="buttonsContainer">
       <Button
         disabled={isNameEmpty()}
         variant="secondary"
         onClick={handleSubmit}
-        className={styles.createButton}
+        className="appButton save"
       >
         Create
       </Button>

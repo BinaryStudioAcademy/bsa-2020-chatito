@@ -52,17 +52,11 @@
 
 .inputBlock
   width: 100%
-  padding: 0 20px 20px
+  padding: 0 28px 16px
   box-sizing: border-box
 
 .modalHeader
-  font-size: 22px
-  font-weight: 900
-  min-height: 70px
-  width: 100%
-  margin-left: 20px
-  display: flex
-  align-items: center
+  padding: 16px 16px 0
 
 .modalBody
   padding: 0
@@ -70,14 +64,14 @@
 .suggestedStatusesContainer
   display: flex
   flex-direction: column
-  margin-bottom: 20px
+  margin-bottom: 16px
 
 .statusButton
   @include buttonReset
   display: flex
   height: 28px
   align-items: center
-  padding: 0 25px
+  padding: 0 33px
   &:hover
     background-color: var(--workspace-background-color)
   &:hover .statusText
@@ -90,13 +84,12 @@
   font-weight: 700
 
 .buttonsContainer
-  padding: 0 20px
+  padding: 0 24px 22px
   width: 100%
   display: flex
   justify-content: flex-end
-  margin-bottom: 20px
 
-.setStatusButton
+.appButton
   height: 36px
   width: 76px
   font-weight: 800

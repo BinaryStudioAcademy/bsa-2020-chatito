@@ -81,17 +81,23 @@ const CreateRepositoryChatModal: FunctionComponent<IProps> = ({
 
   const handleUpdateGithubUsername = () => {
     if (user) {
-      const editUserProps = { ...user, githubUsername: githubUsernameInput };
+      const { imageUrl, ...updateUser } = user; // eslint-disable-line @typescript-eslint/no-unused-vars
+      const editUserProps = { ...updateUser, githubUsername: githubUsernameInput };
       editProfile(editUserProps);
     }
   };
 
   const modalHeader = (
-    <h4 className={styles.header}>Add GitHub repository</h4>
+    <header className="modalHeader">Add GitHub repository</header>
   );
 
   const selectRepositoryForm = (
-    <Form.Control as="select" placeholder="Select" onChange={e => setSelectedRepository(e.target.value)}>
+    <Form.Control
+      as="select"
+      placeholder="Select"
+      onChange={e => setSelectedRepository(e.target.value)}
+      className={styles.selectForm}
+    >
       <option>{}</option>
       {repositories.map(repo => (<option key={repo}>{repo}</option>))}
     </Form.Control>
@@ -112,7 +118,7 @@ const CreateRepositoryChatModal: FunctionComponent<IProps> = ({
           disabled={!githubUsernameInput}
           variant="secondary"
           onClick={handleUpdateGithubUsername}
-          className={styles.addButton}
+          className="appButton save"
         >
           Update
         </Button>
@@ -121,14 +127,14 @@ const CreateRepositoryChatModal: FunctionComponent<IProps> = ({
   );
 
   const modalFooter = (
-    <div className={styles.footer}>
+    <div className="buttonsContainer">
       <Button
         disabled={!selectedRepository}
         variant="secondary"
         onClick={handleSubmit}
-        className={styles.addButton}
+        className="appButton save"
       >
-        Add repository
+        Add
       </Button>
     </div>
   );
@@ -136,10 +142,12 @@ const CreateRepositoryChatModal: FunctionComponent<IProps> = ({
   const addRepositoryForm = (
     <>
       {modalHeader}
-      <Form.Group>
-        {githubUsernameForm}
-        {selectRepositoryForm}
-      </Form.Group>
+      <div className="modalBody">
+        <Form.Group>
+          {githubUsernameForm}
+          {selectRepositoryForm}
+        </Form.Group>
+      </div>
       {modalFooter}
     </>
   );

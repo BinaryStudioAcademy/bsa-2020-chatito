@@ -16,8 +16,42 @@ class ChatRepository extends Repository<Chat> {
     return this.findOne({ where: { id }, relations: ['posts'] });
   }
 
-  getPublicChannelByHash(hash: string) {
-    return this.findOne({ where: { hash, isPrivate: false, type: ChatType.Channel }, relations: ['users'] });
+  async getPublicChannelByHash(hash: string, userId: string) {
+    const chat = await this.createQueryBuilder('chat')
+      .select([
+        'chat.id',
+        'chat.name',
+        'chat.type',
+        'chat.hash',
+        'chat.description',
+        'chat.createdByUser.id',
+        'chat.isPrivate',
+        'user.id',
+        'user.imageUrl',
+        'user.createdAt',
+        'user.fullName',
+        'user.status',
+        'user.title',
+        'user.email',
+        'user.displayName',
+        'draft_post.id',
+        'draft_post.text'
+      ])
+      .leftJoin(
+        'chat.draftPosts',
+        'draft_post',
+        'draft_post."chatId" = chat.id AND draft_post."createdByUserId" = :userId',
+        { userId }
+      )
+      .leftJoin(
+        'chat.users',
+        'user'
+      )
+      .where('chat.hash = :hash', { hash })
+      .andWhere('chat."isPrivate" = false')
+      .andWhere('chat.type = :type', { type: ChatType.Channel })
+      .getOne();
+    return chat;
   }
 
   async getNameAndTypeAndIdById(id: string) {

@@ -8,7 +8,6 @@ import { upsertDraftComment, deleteDraftComment } from 'services/draftService';
 function* addCommentRequest({ payload }: Routine<any>) {
   try {
     yield call(addComment, payload);
-    yield put(deleteDraftCommentRoutine.trigger({ postId: payload.postId }));
 
     yield put(addCommentRoutine.success());
   } catch (error) {

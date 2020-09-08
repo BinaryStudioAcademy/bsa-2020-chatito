@@ -85,7 +85,7 @@ const PreferencesForm: FunctionComponent<IProps> = ({
   };
   return (
     <LoaderWrapper loading={isAudioLoading || isUserLoading} height="100%">
-      <header className={styles.modalHeader}>Preferences</header>
+      <header className="modalHeader">Preferences</header>
       <div className={styles.modalBody}>
 
         <div className={styles.modalNav}>
@@ -167,14 +167,14 @@ const PreferencesForm: FunctionComponent<IProps> = ({
 
       <div className="buttonsContainer">
         <Button
-          className="setStatusButton cancel"
+          className="appButton cancel"
           variant="outline-secondary"
           onClick={handleClose}
         >
           Cancel
         </Button>
         <Button
-          className="setStatusButton save"
+          className="appButton save"
           variant="secondary"
           disabled={!!recordingErr}
           onClick={handleSubmit}

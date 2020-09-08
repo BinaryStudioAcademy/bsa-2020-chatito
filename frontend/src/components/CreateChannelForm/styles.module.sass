@@ -1,32 +1,30 @@
 .header
   padding: 0 1rem
 
-.formBody
-  padding: 0 1rem
 
-  .formDescription
-    font-size: 14px
-    margin: 15px 0
-
-.footer
-  display: flex
-  flex-wrap: wrap
-  align-items: center
-  justify-content: flex-end
-  padding: .75rem
+.formDescription
+  font-size: 14px
+  margin-bottom: 16px
+  line-height: 1.25
 
 .inputLabel
+  font-size: 18px
   font-weight: 600
+  margin: 0 0 6px 2px
 
   span
     font-weight: 400
+
+.description
+  margin-left: 2px
 
 .makePrivateLabel
   display: flex
   justify-content: space-between
   align-items: center
   font-size: 14px
-  line-height: 1.2
+  line-height: 1.25
+  margin-left: 2px
 
 .makePrivateDescription
   width: 75%
@@ -58,8 +56,10 @@ $switchWidth: 2.75rem
   &::after
     transform: translateX(1.25rem)
 
+.makePrivate
+  margin-left: 0
+
 .channelDescription
-  margin-top: 7px
   font-size: 14px
 
 .createButton
