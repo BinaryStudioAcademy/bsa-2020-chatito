@@ -20,7 +20,14 @@ interface IProps {
 }
 
 const DraftCard: React.FC<IProps> = ({ draft, whash, router }) => {
-  const onGoToChat = () => router(Routes.Chat.replace(':whash', whash).replace(':chash', draft.chat.hash));
+  const onGoToChat = () => {
+    if (draft.postId) {
+      router(Routes.Post.replace(':whash', whash).replace(':chash', draft.chat.hash).replace(':postId', draft.postId));
+    } else {
+      router(Routes.Chat.replace(':whash', whash).replace(':chash', draft.chat.hash));
+    }
+  };
+
   return (
     <div className={styles.card}>
       <button type="button" className={styles.cardHeader} onClick={onGoToChat}>{draft.chat.name}</button>
