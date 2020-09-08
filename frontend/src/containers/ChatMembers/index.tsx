@@ -20,6 +20,7 @@ interface IProps {
   currentUser: IUser;
   removeUser: CallableFunction;
   toggleModal: IBindingCallback1<IModalRoutine>;
+  isUserChatMember: boolean;
 }
 
 const ChatMembers: FunctionComponent<any> = ({
@@ -27,7 +28,8 @@ const ChatMembers: FunctionComponent<any> = ({
   toggleModal,
   removeUser,
   chat,
-  currentUser
+  currentUser,
+  isUserChatMember
 }: IProps) => {
   const [searchStr, setSearchStr] = useState('');
   const handleCloseModal = () => {
@@ -70,14 +72,16 @@ const ChatMembers: FunctionComponent<any> = ({
           })
         }
         <div className={styles.buttonWrapper}>
-          <Button
-            type="button"
-            variant="secondary"
-            className={styles.addButton}
-            onClick={onInvite}
-          >
-            Add user
-          </Button>
+          {isUserChatMember && (
+            <Button
+              type="button"
+              variant="secondary"
+              className={styles.addButton}
+              onClick={onInvite}
+            >
+              Add user
+            </Button>
+          )}
         </div>
       </div>
     </ModalWindow>

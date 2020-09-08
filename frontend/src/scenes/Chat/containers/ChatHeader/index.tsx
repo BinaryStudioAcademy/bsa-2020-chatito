@@ -44,9 +44,11 @@ interface IProps {
   showUserProfile: IBindingCallback1<IUser>;
   directUsers: IUser[] | undefined;
   setMute: (chat: IChat) => {};
+  isUserChatMember: boolean;
 }
 
-const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser, showUserProfile, directUsers }) => {
+const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser,
+  showUserProfile, directUsers, isUserChatMember }) => {
   const [userToShow, setUserToShow] = useState<IUser>(currentUser);
   useEffect(() => {
     if (directUsers && directUsers.length && directUsers.length === 2) {
@@ -152,9 +154,9 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser, s
             <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
           </OverlayTrigger>
 
-          <FontAwesomeIcon icon={faStar} className={styles.icon} />
+          {isUserChatMember && <FontAwesomeIcon icon={faStar} className={styles.icon} />}
 
-          {chatMuteIcons()}
+          {isUserChatMember && chatMuteIcons()}
         </div>
 
       </div>
@@ -180,19 +182,24 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser, s
                 <div className={styles.memberCounter}>{chat.users.length || 0}</div>
               </div>
             </OverlayTrigger>
-            <OverlayTrigger
-              trigger={['hover', 'hover']}
-              delay={{ show: 300, hide: 0 }}
-              rootClose
-              placement="bottom"
-              overlay={addPeoplePopover}
-            >
-              <button type="button" className="button-unstyled" onClick={onInviteUser}>
-                <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
-              </button>
-            </OverlayTrigger>
-            <InviteChatModal chatName={chat.name} chatId={chat.id} toggleModal={showModal} chatUsers={chat.users} />
-            <ChatMembers />
+            {isUserChatMember && (
+              <>
+                <OverlayTrigger
+                  trigger={['hover', 'hover']}
+                  delay={{ show: 300, hide: 0 }}
+                  rootClose
+                  placement="bottom"
+                  overlay={addPeoplePopover}
+                >
+                  <button type="button" className="button-unstyled" onClick={onInviteUser}>
+                    <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
+                  </button>
+                </OverlayTrigger>
+                <InviteChatModal chatName={chat.name} chatId={chat.id} toggleModal={showModal} chatUsers={chat.users} />
+              </>
+            )}
+            <ChatMembers isUserChatMember={isUserChatMember} />
+
           </>
         )}
       </div>
