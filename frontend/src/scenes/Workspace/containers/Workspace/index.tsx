@@ -33,6 +33,7 @@ import ChannelBrowser from 'scenes/ChannelBrowser';
 import ChangeStatusModal from 'containers/ChangeStatusModal';
 import { IFetchWorkspaceUnreadComments } from 'common/models/post/IFetchWorkspaceUnreadComments';
 import { IFetchWorkspaceUnreadPosts } from 'common/models/post/IFetchWorkspaceUnreadPosts';
+import { renderScrollDownButtonRoutine, clickToScrollRoutine } from 'scenes/Chat/routines';
 
 interface IProps {
   currentUserId?: string;
@@ -49,12 +50,15 @@ interface IProps {
   toggleRightMenu: IBindingCallback1<RightMenuTypes>;
   toggleActiveThread: IBindingCallback1<IPost>;
   isLoader: boolean;
+  scrollDownButton: boolean;
   workspaceId: string;
   userProfile: IUser;
   selectedHash: string;
   fetchWorkspaceChats: IBindingCallback1<IFetchWorkspaceChat>;
   fetchUnreadUserPosts: IBindingCallback1<IFetchWorkspaceUnreadPosts>;
   fetchUnreadUserComments: IBindingCallback1<IFetchWorkspaceUnreadComments>;
+  renderScrollDownButton: IBindingCallback1<boolean>;
+  clickToScrol: IBindingCallback1<boolean>;
 }
 
 const Workspace: React.FC<IProps> = ({
@@ -65,12 +69,15 @@ const Workspace: React.FC<IProps> = ({
   showRightSideMenu,
   toggleRightMenu,
   isLoader,
+  scrollDownButton,
   workspaceId,
   userProfile,
   selectedHash,
   fetchWorkspaceChats,
   fetchUnreadUserPosts,
-  fetchUnreadUserComments
+  fetchUnreadUserComments,
+  renderScrollDownButton,
+  clickToScrol
 }) => {
   if (!currentUserId) return <></>;
   const [workspaceChatsStatus, setWorkspaceChatsStatus] = useState(false);
@@ -147,6 +154,22 @@ const Workspace: React.FC<IProps> = ({
                 <Route path={Routes.Chat} component={ChatScene} />
                 <Route component={NoChatMessage} />
               </Switch>
+              {scrollDownButton ? (
+                <div className={styles.goToNewPostContainer}>
+                  <button
+                    type="button"
+                    className={`${styles.goToNewPost} button-unstyled`}
+                    onClick={() => {
+                      clickToScrol(true);
+                      renderScrollDownButton(false);
+                    }}
+                  >
+                    <span className={styles.goDownButtonText}>Go down</span>
+                  </button>
+                </div>
+              ) : (
+                ''
+              )}
             </div>
 
             {showRightSideMenu
@@ -177,7 +200,8 @@ const mapStateToProps = (state: IAppState) => {
     isLoader: !workspace.id,
     selectedHash: workspace.hash,
     userProfile: state.workspace.userProfile,
-    workspaceId: workspace.id
+    workspaceId: workspace.id,
+    scrollDownButton: state.chat.scrollDownButton
   };
 };
 
@@ -188,7 +212,9 @@ const mapDispatchToProps = {
   toggleRightMenu: showRightSideMenuRoutine,
   fetchWorkspaceChats: fetchWorkspaceChatsRoutine,
   fetchUnreadUserPosts: fetchUnreadUserPostsRoutine,
-  fetchUnreadUserComments: fetchUnreadUserCommentsRoutine
+  fetchUnreadUserComments: fetchUnreadUserCommentsRoutine,
+  renderScrollDownButton: renderScrollDownButtonRoutine,
+  clickToScrol: clickToScrollRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Workspace);
