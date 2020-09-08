@@ -56,7 +56,6 @@ const CustomReminderModal = ({ toggleModal, isShown, addReminder, chatId }: IPro
   const [day, setReminderDay] = useState<string>(currentFullDate);
   const [time, setReminderTime] = useState<string>(currentTime);
   const [note, setNote] = useState<string>('');
-  const isInitial = (day === currentFullDate && time === currentTime);
   const validateFormData = () => {
     const reminderDate = new Date(`${day} ${time}`);
     if (currentDate > reminderDate) {
@@ -96,7 +95,7 @@ const CustomReminderModal = ({ toggleModal, isShown, addReminder, chatId }: IPro
   const title = 'Create a reminder';
 
   const formHeader = (
-    <h2 className={styles.header}>{title}</h2>
+    <header className="modalHeader">{title}</header>
   );
 
   const dateInputFormGroup = (
@@ -121,20 +120,21 @@ const CustomReminderModal = ({ toggleModal, isShown, addReminder, chatId }: IPro
     <Form.Group>
       <Form.Label htmlFor="day" className={styles.inputLabel}>
         Add a note
-        <span>(optional)</span>
+        <span> (optional)</span>
       </Form.Label>
-      <InputGroup className="mb-3">
+      <InputGroup className="inputField">
         <Form.Control
           id="note"
           placeholder="Remind me to.."
           onChange={event => setNote(event.target.value)}
+          className="inputField"
         />
       </InputGroup>
     </Form.Group>
   );
 
   const formBody = (
-    <div className={styles.formBody}>
+    <div className={`${styles.bodyContainer} modalBody`}>
       <Form>
         {dateInputFormGroup}
         {noteInputFormGroup}
@@ -143,20 +143,21 @@ const CustomReminderModal = ({ toggleModal, isShown, addReminder, chatId }: IPro
   );
 
   const formFooter = (
-    <div className={styles.footer}>
+    <div className="buttonsContainer">
       <Button
-        variant="secondary"
+        variant="outline-secondary"
+        className="appButton cancel"
         onClick={handleSubmit}
       >
         Cancel
       </Button>
       <Button
-        variant="primary"
+        variant="secondary"
         onClick={handleSubmit}
-        className={styles.btnCreate}
+        className="appButton save"
         disabled={!isValidDate}
       >
-        {isInitial ? 'Remind now' : 'Create'}
+        Create
       </Button>
     </div>
   );

@@ -67,20 +67,20 @@ const AudioRecorder: React.FC<IProps> = ({ onRecord, maxDuration, onError, showP
     <>
       <Button
         variant="secondary"
-        className={`setStatusButton save ${isRecording ? styles.buttonDisabled : ''}`}
+        className={`appButton save ${isRecording ? styles.buttonDisabled : ''}`}
         onClick={start}
         disabled={isRecording}
       >
         Record
       </Button>
       {isRecording && (
-        <Button type="button" variant="outline-secondary" className="setStatusButton danger" onClick={stop}>
+        <Button type="button" variant="outline-secondary" className="appButton danger" onClick={stop}>
           Stop
         </Button>
       )}
       {blobUrl && !isRecording && (
         <>
-          <Button type="button" variant="secondary" className="setStatusButton cancel" onClick={cancel}>
+          <Button type="button" variant="secondary" className="appButton cancel" onClick={cancel}>
             Cancel
           </Button>
           {/* eslint-disable-next-line */}

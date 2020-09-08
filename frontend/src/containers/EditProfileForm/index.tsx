@@ -124,8 +124,8 @@ const EditProfileForm: FunctionComponent<IProps> = ({
 
   return (
     <div className={styles.mainContainer}>
-      <header className={styles.modalHeader}>Edit your profile</header>
-      <div className={styles.body}>
+      <header className="modalHeader">Edit your profile</header>
+      <div className={`${styles.body} modalBody`}>
         <Form>
           <Form.Group controlId="formEditFullName" className={styles.inputBlock}>
             <span className={styles.inputHeader}>Full name</span>
@@ -165,6 +165,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
           <Form.Group controlId="formEditTitle" className={styles.inputBlock}>
             <span className={styles.inputHeader}>Email</span>
             <Form.Control
+              className={styles.inputGroup}
               type="text"
               placeholder={user.email}
               readOnly
@@ -182,19 +183,18 @@ const EditProfileForm: FunctionComponent<IProps> = ({
               placeholder="Life position"
               value={title}
               onChange={handleChange}
-              maxLength={100}
             />
             <div className={styles.description}>
               Write here your life principles, your motto, or some fun facts about yourself.
             </div>
           </Form.Group>
 
-          <div className={`${styles.formFooter} w-100`}>
-            <Button className={styles.primaryBtnCancel} variant="secondary" onClick={handleClose}>
+          <div className={styles.buttonsContainer}>
+            <Button className="appButton cancel" variant="outline-secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button className={styles.primaryBtn} type="button" onClick={handleSubmit}>
-              Save Changes
+            <Button className="appButton save" variant="secondary" type="button" onClick={handleSubmit}>
+              Save
             </Button>
           </div>
         </Form>
@@ -222,7 +222,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
                   className={styles.uploadAvatar}
                 />
               </div>
-              {user.imageUrl ? (
+              {!user.imageUrl ? (
                 <button
                   type="button"
                   className={[styles.link, styles.removePhoto].join(' ')}
@@ -231,19 +231,19 @@ const EditProfileForm: FunctionComponent<IProps> = ({
                   Remove photo
                 </button>
               ) : null}
+              <button
+                type="submit"
+                className={`${styles.link} ${styles.showMore}`}
+                onClick={() => setshowMoreOptions(!showMoreOptions)}
+              >
+                {!showMoreOptions ? 'Show more options' : 'Hide options'}
+              </button>
             </div>
           </div>
           <div className={styles.options}>
-            <button
-              type="submit"
-              className={`${styles.link} ${styles.showMore}`}
-              onClick={() => setshowMoreOptions(!showMoreOptions)}
-            >
-              {!showMoreOptions ? 'Show more options' : 'Hide options'}
-            </button>
             {showMoreOptions ? (
               <Button
-                className={styles.primaryBtnDelete}
+                className="appButton danger deleteAccount"
                 variant="primary"
                 onClick={handleDeleteAccount}
               >

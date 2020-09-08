@@ -76,7 +76,7 @@ const ChangeStatusForm: FunctionComponent<IProps> = ({ id, editStatus, handleClo
   );
   return (
     <div className={styles.childrenContainer}>
-      <header className={styles.modalHeader}>Set a status</header>
+      <header className={`${styles.modalHeader} modalHeader`}>Set a status</header>
       <InputGroup className={styles.inputBlock}>
         <InputGroup.Prepend className={styles.emojiContainer}>
           <InputGroup.Text className={styles.emoji}>
@@ -134,7 +134,7 @@ const ChangeStatusForm: FunctionComponent<IProps> = ({ id, editStatus, handleClo
       )}
       <div className={styles.buttonsContainer}>
         <Button
-          className={`${styles.setStatusButton} ${styles.cancel}`}
+          className="appButton cancel"
           variant="outline-secondary"
           onClick={() => {
             handleClose();
@@ -143,7 +143,7 @@ const ChangeStatusForm: FunctionComponent<IProps> = ({ id, editStatus, handleClo
           Cancel
         </Button>
         <Button
-          className={`${styles.setStatusButton} ${styles.save}`}
+          className="appButton save"
           variant="secondary"
           disabled={!crossStatus}
           onClick={() => {
