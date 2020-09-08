@@ -97,7 +97,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
         setGithubUsername(value);
         break;
       }
-      case 'formEditTitle': {
+      case 'formEditLifePosition': {
         setTitle(value);
         break;
       }
@@ -162,7 +162,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             />
           </Form.Group>
 
-          <Form.Group controlId="formEditTitle" className={styles.inputBlock}>
+          <Form.Group controlId="formEditEmail" className={styles.inputBlock}>
             <span className={styles.inputHeader}>Email</span>
             <Form.Control
               className={styles.inputGroup}
