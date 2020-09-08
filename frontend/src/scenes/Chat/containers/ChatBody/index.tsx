@@ -74,10 +74,11 @@ const ChatBody: React.FC<IProps> = ({
       }
     });
   };
-  const scrollToRef = (ref: RefObject<HTMLElement>) => {
+  const scrollToRef = (ref: RefObject<HTMLElement>, behavior: 'auto' | 'smooth' | undefined) => {
     if (ref.current) {
       ref.current.scrollIntoView({
-        block: 'start'
+        block: 'start',
+        behavior
       });
     }
   };
@@ -97,7 +98,7 @@ const ChatBody: React.FC<IProps> = ({
     }
 
     if (postRef.current && postId) {
-      scrollToRef(postRef);
+      scrollToRef(postRef, 'auto');
     }
   }, [loading, chatId]);
   useEffect(() => {
@@ -151,7 +152,7 @@ const ChatBody: React.FC<IProps> = ({
           useWindow={false}
         >
           {messages.map((m, index) => (
-            <div key={m.id}>
+            <div key={m.id} ref={m.id === postIdForLine ? postRef : undefined}>
               {pasteDateLine(index)}
               <div className={styles.postContainer}>
                 {postIdForLine === m.id ? newPostLineElement : ''}
@@ -168,6 +169,19 @@ const ChatBody: React.FC<IProps> = ({
               </div>
             </div>
           ))}
+          {unreadChatPostIds?.length ? (
+            <div className={styles.goToNewPostContainer}>
+              <button
+                type="button"
+                className={`${styles.goToNewPost} button-unstyled`}
+                onClick={() => scrollToRef(postRef, 'smooth')}
+              >
+                Go to unread
+              </button>
+            </div>
+          ) : (
+            ''
+          )}
           <CustomReminderModal />
         </InfiniteScroll>
       </div>
