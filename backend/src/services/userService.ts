@@ -87,6 +87,15 @@ export const addWorkspaceToUser = async (userId: string, workspaceId: string) =>
   }
 };
 
+export const addToWorkspace = async (userId: string, workspaceId: string) => {
+  try {
+    const user = await getCustomRepository(UserRepository).addWorkspace(userId, workspaceId);
+    return fromUserToUserWithWorkspaces(user);
+  } catch (error) {
+    throw new CustomError(409, 'User already exists in workspace. ', ErrorCode.UserExistsInWorkspace);
+  }
+};
+
 export const markAsUnreadPost = async (userId: string, postId: string) => {
   await getCustomRepository(UserRepository).markAsUnreadPost(userId, postId);
   const post = await getCustomRepository(PostRepository).getById(postId);
