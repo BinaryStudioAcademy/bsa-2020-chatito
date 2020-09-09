@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.sass';
-import { InputGroup, FormControl } from 'react-bootstrap';
+import { InputGroup, FormControl, Button } from 'react-bootstrap';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
 import ChannelItem from './containers/ChannelItem';
@@ -77,18 +77,15 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
   return (
     <div className={styles.ChannelBrowser}>
       <header className={styles.header}>
-        <h1>Channel browser</h1>
-        <button className={styles.createBtn} onClick={onCreateChannel} type="button">
-          Create Channel
-        </button>
-      </header>
-      <div className={styles.main}>
+        <span className={styles.headerName}>Channel browser</span>
         <InputGroup className={styles.search}>
           <FormControl placeholder="Search by channel name" value={searchValue} onChange={onChange} />
         </InputGroup>
+      </header>
+      <div className={styles.main}>
         <div className={styles.controlsWrp}>
           <div>{channelList.length > 1 ? `${channelList.length} channels` : `${channelList.length} channel`}</div>
-          <div>
+          <div className={styles.buttonsWrapper}>
             <SortOption setSortOption={sortOptionHandler} sortOption={sortOption} />
             <FilterOption
               filterOption={filterOption}
@@ -107,12 +104,16 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
                 channel={channel}
               />
             ))}
-            <div className={styles.center}>
-              <button className={styles.createBtn} onClick={onCreateChannel} type="button">
-                Create Channel
-              </button>
-            </div>
           </LoaderWrapper>
+        </div>
+        <div className={styles.center}>
+          <Button
+            variant="secondary"
+            onClick={onCreateChannel}
+            className="appButton save createChannel"
+          >
+            Create Channel
+          </Button>
         </div>
       </div>
     </div>

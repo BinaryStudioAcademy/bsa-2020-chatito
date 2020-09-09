@@ -4,7 +4,7 @@ import { Routes } from 'common/enums/Routes';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faLock, faHashtag } from '@fortawesome/free-solid-svg-icons';
-import { Spinner } from 'react-bootstrap';
+import { Spinner, Button } from 'react-bootstrap';
 import { IBrowserChannel } from 'common/models/chat/IBrowserChannel';
 import { IAppState } from 'common/models/store';
 import { connect } from 'react-redux';
@@ -65,15 +65,16 @@ const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel, loading,
           </div>
         </div>
       </Link>
-      <button
-        className={[isUserChatMember ? styles.leaveBtn : styles.joinBtn, styles.channelBtn].join(' ')}
+      <Button
+        variant={isUserChatMember ? 'outline-secondary' : 'secondary'}
+        className={isUserChatMember ? 'appButton cancel' : 'appButton save'}
         onClick={isUserChatMember ? onLeave : onJoin}
         disabled={loading}
         type="button"
       >
-        <span>{isUserChatMember ? 'Leave' : 'Join'}</span>
+        {isUserChatMember ? 'Leave' : 'Join'}
         {loading && !isUserChatMember && <Spinner animation="border" role="status" size="sm" />}
-      </button>
+      </Button>
     </div>
   );
 };

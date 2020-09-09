@@ -34,6 +34,7 @@ interface IProps {
   router: (route: string) => void;
   draftCommentId?: string;
   draftCommentText?: string;
+  classesForThreads?: boolean;
   upsertDraftComment: IBindingCallback1<IUpsertDraftComment>;
   deleteDraftComment: IBindingCallback1<IDeleteDraftComment>;
   isLoading: boolean;
@@ -53,6 +54,7 @@ const Thread: FunctionComponent<IProps> = ({
   router,
   draftCommentId,
   draftCommentText,
+  classesForThreads,
   upsertDraftComment,
   deleteDraftComment,
   isLoading,
@@ -145,15 +147,24 @@ const Thread: FunctionComponent<IProps> = ({
   );
 
   return (
-    <div className={styles.threadContainer} style={{ width }}>
+    <div
+      className={classesForThreads ? `${styles.threadsContainerforThreads}
+      ${styles.threadContainer}` : styles.threadContainer}
+      style={{ width }}
+    >
       <LoaderWrapper loading={isLoading} height="100%">
-        <header className={styles.threadHeader}>
+        <header
+          className={classesForThreads ? `${styles.threadHeaderForThreads}
+          ${styles.threadHeader}` : styles.threadHeader}
+        >
           <div className={styles.threadHeaderBlock}>
             {post.chat && post.chat.name
               ? (
                 <button type="button" className={styles.threadChatNameButton} onClick={redirectToChat}>
-                  {post.chat.name}
-                  {threadUnreadMarker}
+                  <p>
+                    {post.chat.name}
+                    {threadUnreadMarker}
+                  </p>
                 </button>
               )
               : (
@@ -168,9 +179,25 @@ const Thread: FunctionComponent<IProps> = ({
           {!hideCloseBtn && <FontAwesomeIcon onClick={onHide} icon={faTimesCircle} className={styles.closeBtn} />}
         </header>
         <div className={styles.threadBlock}>
-          <div className={styles.threadPost}>
+          <div
+            className={classesForThreads ? `${styles.threadPostForThreads}
+            ${styles.threadPost}` : styles.threadPost}
+          >
             <Post post={post} type={PostType.Post} />
           </div>
+          {comments.length > maxComment ? (
+            <div className={styles.showMoreContainer}>
+              <button
+                type="button"
+                onClick={() => setShowAll(!showAll)}
+                className={styles.link}
+              >
+                {`Show ${comments.length - maxComment} more replies`}
+              </button>
+            </div>
+          ) : (
+            ''
+          )}
           {comments.map((comment, index) => (
             index < maxComment
               ? (
@@ -187,19 +214,6 @@ const Thread: FunctionComponent<IProps> = ({
               )
               : null
           ))}
-          {comments.length > maxComment ? (
-            <div className={styles.showMoreContainer}>
-              <button
-                type="button"
-                onClick={() => setShowAll(!showAll)}
-                className={styles.link}
-              >
-                {`Show ${comments.length - maxComment} more replies`}
-              </button>
-            </div>
-          ) : (
-            ''
-          )}
           <div className={styles.textEditor}>
             <TextEditor
               key={editorKey}

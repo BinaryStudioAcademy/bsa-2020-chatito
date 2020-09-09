@@ -29,17 +29,22 @@ const Drafts: React.FC<IProps> = ({ posts, comments, fetchDrafts, workspaceId, w
   ));
 
   return (
-    <LoaderWrapper loading={loading}>
-      <div className={styles.body}>
-        {[...posts, ...comments].length
-          ? (
-            <div className={styles.wrapper}>
-              {createCards([...posts, ...comments])}
-            </div>
-          )
-          : <NoDraftsMessage />}
+    <>
+      <div className={styles.draftsHeaderBlock}>
+        <span>Drafts</span>
       </div>
-    </LoaderWrapper>
+      <LoaderWrapper loading={loading}>
+        <div className={styles.body}>
+          {[...posts, ...comments].length
+            ? (
+              <div className={styles.wrapper}>
+                {createCards([...posts, ...comments])}
+              </div>
+            )
+            : <NoDraftsMessage />}
+        </div>
+      </LoaderWrapper>
+    </>
   );
 };
 

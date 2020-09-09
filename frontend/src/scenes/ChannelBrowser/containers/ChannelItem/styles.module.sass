@@ -1,12 +1,24 @@
 .channelItem
+  min-height: 75px
+  display: flex
+  justify-content: space-between
+  align-items: center
   position: relative
+  margin: 10px 0
+  background-color: var(--chat-background-secondary)
+  border-radius: 6px
+  padding: 18px
+  position: relative
+  box-sizing: border-box
+  &:first-child
+    margin-top: 0
+  &:last-child
+    margin-bottom: 0
 
 .channelItem:hover
   background-color: var(--chat-background-secondary)
 
 .channel
-  padding: 16px 92px 16px 12px
-  border-bottom: 1px solid var(--browser-channel-border)
   position: relative
   cursor: pointer
 

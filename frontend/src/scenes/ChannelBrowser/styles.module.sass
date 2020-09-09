@@ -1,21 +1,23 @@
 .ChannelBrowser
   background-color: var(--chat-background-primary)
-  height: calc(100vh - 62px)
+  height: calc(100vh - 78px)
 
 .header
   display: flex
   justify-content: space-between
   align-items: center
-  padding: 13px 20px
+  padding: 13px 96px 13px 20px
   height: 63px
-  border-bottom: 1px solid var(--browser-channel-border)
-
-.header h1
+  border-bottom: 1px solid var(--workspace-toolbar-select-background)
+  font-weight: 800
   color: var(--title-text)
-  font-weight: 600
+
+.headerName
+  margin-right: 20px
+  white-space: nowrap
 
 .main
-  padding: 15px 20px
+  padding: 34px 94px 0 34px
   display: flex
   flex-direction: column
   flex: 1 1
@@ -23,26 +25,27 @@
   color: var(--main-text)
 
 .search
-  margin-bottom: 25px
-  margin-top: 5px
+  width: 50%
 
 .controlsWrp
   display: flex
   justify-content: space-between
   align-items: center
-  padding-bottom: 10px
-  border-bottom: 1px solid var(--browser-channel-border)
+  padding-bottom: 16px
   font-size: 15px
   font-weight: 500
+  margin-left: 3px
+  font-family: var(--secondary-font-family), sans-serif
+
+.buttonsWrapper
+  display: flex
+  padding-right: 3px
 
 .channelsWrp
   overflow-y: auto
   display: flex
   flex-direction: column
-  flex: 1 1
-
-.channelsWrp::-webkit-scrollbar
-  width: 8px
+  max-height: calc(100vh - 78px - 63px - 62px - 34px - 50px - 16px )
 
 .channelsWrp::-webkit-scrollbar-thumb
   background: var(--scrollbar)
@@ -52,7 +55,10 @@
   text-decoration: none
 
 .center
-  text-align: center
+  height: 78px
+  display: flex
+  align-items: center
+  justify-content: center
 
 .createBtn
   font-weight: 600
@@ -77,3 +83,9 @@
 .createBtn:active,
 .createBtn:focus
   box-shadow: 0 0 0 0.1rem var(--browser-channel-primary-button)
+
+@media screen and (max-width: 1440px)
+  .ChannelBrowser
+    height: calc(100vh - 62px)
+  .channelsWrp
+    max-height: calc(100vh - 62px - 63px - 62px - 34px - 50px - 16px)
