@@ -114,9 +114,7 @@ const ChatBody: React.FC<IProps> = ({
         setNewPostLine();
       }
     }
-    if (!loading) {
-      scrollDown('auto');
-    }
+    scrollDown('auto');
   }, [loading, chatId]);
 
   const isPostLoaded = (id: string) => {
