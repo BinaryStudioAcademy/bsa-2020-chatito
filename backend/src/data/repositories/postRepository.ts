@@ -11,7 +11,7 @@ class PostRepository extends Repository<Post> {
   }
 
   getById(id: string): Promise<Post> {
-    return this.findOne(id);
+    return this.findOne({ where: { id }, relations: ['createdByUser', 'chat'] });
   }
 
   async getAllChatPosts({

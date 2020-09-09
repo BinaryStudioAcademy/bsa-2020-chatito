@@ -8,3 +8,8 @@ export const addReaction = (payload: IPostReactionService) => (
 export const deleteReaction = (payload: IPostReactionService) => (
   api.delete('/api/post-reactions', payload)
 );
+
+export const getById = async (postId: string) => {
+  const response = await api.get(`/api/posts/${postId}`);
+  return response;
+};
