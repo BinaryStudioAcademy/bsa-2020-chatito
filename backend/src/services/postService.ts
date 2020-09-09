@@ -18,6 +18,7 @@ import { ChatCommands } from '../common/enums/ChatCommands';
 import CustomError from '../common/models/CustomError';
 import { ClientPostType } from '../common/enums/ClientPostType';
 import { IntegrationType } from '../common/enums/IntegrationType';
+import { Comment } from '../data/entities/Comment';
 
 export const addPost = async (id: string, post: ICreatePost) => {
   const user = await getCustomRepository(UserRepository).getById(id);
@@ -88,11 +89,19 @@ export const addPostByBotIntoDirect = async (id: string, post: ICreatePost) => {
   return createdPost;
 };
 
-export const editPost = async ({ id, text }: IEditPost) => {
+export const editPost = async (id: string, { text }: IEditPost) => {
   const editedPost: IPost = await getCustomRepository(PostRepository).editPost(id, text);
   const clientPost = await fromPostToPostClient(editedPost);
   emitToChatRoom(clientPost.chatId, ClientSockets.EditPost, clientPost);
+
   return clientPost;
+};
+
+export const deletePost = async (id: string): Promise<unknown> => {
+  const deletedPost: IPost = await getCustomRepository(PostRepository).deletePost(id);
+  emitToChatRoom(deletedPost.chatId, ClientSockets.DeletePost, deletedPost);
+
+  return {};
 };
 
 export const addComment = async (userId: string, postId: string, { text }: { text: string }) => {
@@ -121,6 +130,22 @@ export const addComment = async (userId: string, postId: string, { text }: { tex
   });
   emitToChatRoom(chatId, ClientSockets.MarkAsUnreadComment, postId, newClientComment, threadParticipantsId);
   return newClientComment;
+};
+
+export const editComment = async (id: string, { text }: IEditPost) => {
+  const editedComment: Comment = await getCustomRepository(CommentRepository).editComment(id, text);
+  const clientComment = fromPostCommentsToPostCommentsClient([editedComment])[0];
+  emitToChatRoom(clientComment.chatId, ClientSockets.EditComment, clientComment);
+
+  return clientComment;
+};
+
+export const deleteComment = async (id: string): Promise<unknown> => {
+  const deletedComment = await getCustomRepository(CommentRepository).deleteComment(id);
+  const clientComment = fromPostCommentsToPostCommentsClient([deletedComment])[0];
+  emitToChatRoom(clientComment.chatId, ClientSockets.DeleteComment, clientComment);
+
+  return {};
 };
 
 export const getPostComments = async (postId: string) => {

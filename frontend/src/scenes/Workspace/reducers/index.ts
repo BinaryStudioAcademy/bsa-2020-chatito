@@ -24,14 +24,21 @@ import {
   readCommentRoutine,
   markAsUnreadCommentWithOptionRoutine,
   removeUserFromChatInWorkspaceRoutine,
-  deleteFromChatWithSocketRoutine
+  deleteFromChatWithSocketRoutine,
+  editCommentWithSocketRoutine,
+  deleteCommentWithSocketRoutine
 } from '../routines';
 import { IWorkspace } from 'common/models/workspace/IWorkspace';
 import { IChat } from 'common/models/chat/IChat';
 import { IActiveThread } from 'common/models/thread/IActiveThread';
 import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 import { IUser } from 'common/models/user/IUser';
-import { addChatWithSocketRoutine, setChatMuteSocketRoutine } from 'scenes/Chat/routines';
+import {
+  addChatWithSocketRoutine,
+  setChatMuteSocketRoutine,
+  editPostWithSocketRoutine,
+  deletePostWithSocketRoutine
+} from 'scenes/Chat/routines';
 import { ChatType } from 'common/enums/ChatType';
 import {
   upsertDraftCommentWithSocketRoutine,
@@ -489,6 +496,48 @@ const workspace = (state: IWorkspaceState = initialState, { type, payload }: Rou
         directMessages: chats.filter(c => c.type === ChatType.DirectMessage)
       };
     }
+    case editCommentWithSocketRoutine.TRIGGER:
+      const editedComment = payload;
+      const { activeThread } = state;
+      const comments = [...(activeThread ? activeThread.comments : [])]
+        .map(comment => (comment.id === editedComment.id ? editedComment : comment));
+      if (activeThread) {
+        activeThread.comments = comments;
+      }
+      return {
+        ...state, activeThread
+      };
+    case deleteCommentWithSocketRoutine.TRIGGER:
+      const activeThreadDel = state.activeThread;
+      const newComments = [...(activeThreadDel ? activeThreadDel.comments : [])]
+        .filter(comment => (comment.id !== payload));
+      if (activeThreadDel) {
+        activeThreadDel.comments = newComments;
+      }
+      return {
+        ...state, activeThread: activeThreadDel
+      };
+    case editPostWithSocketRoutine.TRIGGER:
+      const editedPost = payload;
+      const activeThreadEdit = state.activeThread;
+      const post = activeThreadEdit ? activeThreadEdit.post : null;
+      if (editedPost.id !== post?.id) {
+        return {
+          ...state
+        };
+      }
+      if (activeThreadEdit) {
+        activeThreadEdit.post = editedPost;
+      }
+      return {
+        ...state, activeThread: activeThreadEdit
+      };
+    case deletePostWithSocketRoutine.TRIGGER:
+      const activeThreadDelPost = state.activeThread?.post.id === payload ? null : state.activeThread;
+
+      return {
+        ...state, activeThread: activeThreadDelPost
+      };
     default:
       return state;
   }

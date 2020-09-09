@@ -16,7 +16,11 @@ import {
   fetchNavigationPostRoutine,
   joinChannelRoutine,
   fetchPublicChannelRoutine,
-  toggleChatMuteRoutine
+  toggleChatMuteRoutine,
+  editPostRoutine,
+  deletePostRoutine,
+  editCommentRoutine,
+  deleteCommentRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import {
@@ -28,7 +32,11 @@ import {
   addUsersToChat,
   fetchNavigationPost,
   fetchPublicChannelByHash,
-  setMuted
+  setMuted,
+  editPost,
+  deletePost,
+  deleteComment,
+  editComment
 } from 'services/chatService';
 import { IPost } from 'common/models/post/IPost';
 import { toastrError } from 'services/toastrService';
@@ -95,6 +103,54 @@ function* fetchAddPostRequest({ payload }: Routine<any>): Routine<any> {
 
 function* watchAddPostRequest() {
   yield takeEvery(addPostRoutine.TRIGGER, fetchAddPostRequest);
+}
+
+function* fetchEditPostRequest({ payload }: Routine<any>): Routine<any> {
+  try {
+    yield call(editPost, payload);
+  } catch (error) {
+    yield call(toastrError, error.message);
+  }
+}
+
+function* watchEditPostRequest() {
+  yield takeEvery(editPostRoutine.TRIGGER, fetchEditPostRequest);
+}
+
+function* fetchDeletePostRequest({ payload }: Routine<any>): Routine<any> {
+  try {
+    yield call(deletePost, payload.id);
+  } catch (error) {
+    yield call(toastrError, error.message);
+  }
+}
+
+function* watchDeletePostRequest() {
+  yield takeEvery(deletePostRoutine.TRIGGER, fetchDeletePostRequest);
+}
+
+function* fetchEditCommentRequest({ payload }: Routine<any>): Routine<any> {
+  try {
+    yield call(editComment, payload);
+  } catch (error) {
+    yield call(toastrError, error.message);
+  }
+}
+
+function* watchEditCommentRequest() {
+  yield takeEvery(editCommentRoutine.TRIGGER, fetchEditCommentRequest);
+}
+
+function* fetchDeleteCommentRequest({ payload }: Routine<any>): Routine<any> {
+  try {
+    yield call(deleteComment, payload);
+  } catch (error) {
+    yield call(toastrError, error.message);
+  }
+}
+
+function* watchDeleteCommentRequest() {
+  yield takeEvery(deleteCommentRoutine.TRIGGER, fetchDeleteCommentRequest);
 }
 
 function* setCurrChat({ payload }: Routine<any>): Routine<any> {
@@ -273,6 +329,10 @@ export default function* chatSaga() {
     watchCreateChatAndAddPost(),
     watchJoinChannel(),
     watchFetchPublicChannel(),
-    watchMuteChat()
+    watchMuteChat(),
+    watchEditPostRequest(),
+    watchDeletePostRequest(),
+    watchEditCommentRequest(),
+    watchDeleteCommentRequest()
   ]);
 }

@@ -11,6 +11,7 @@ import {
   createChatRoutine,
   addPostWithSocketRoutine,
   editPostWithSocketRoutine,
+  deletePostWithSocketRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
   addReminderRoutine,
@@ -23,7 +24,8 @@ import {
   addPostRoutine,
   joinChannelRoutine,
   fetchPublicChannelRoutine,
-  setChatMuteSocketRoutine
+  setChatMuteSocketRoutine,
+  setEditingPostRoutine
 } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
@@ -42,6 +44,7 @@ export interface IChatState {
   fetchFrom: number;
   fetchCount: number;
   btnLoading: boolean;
+  editingPostId?: string;
 }
 
 const initialState: IChatState = {
@@ -147,6 +150,10 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
           return post;
         })
       };
+    case setEditingPostRoutine.TRIGGER:
+      return {
+        ...state, editingPostId: payload
+      };
     case deletePostReactionRoutine.SUCCESS:
       return {
         ...state,
@@ -199,6 +206,12 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     case editPostWithSocketRoutine.TRIGGER: {
       const editedPost = payload;
       const posts = [...state.posts].map(post => (post.id === editedPost.id ? editedPost : post));
+      return {
+        ...state, posts
+      };
+    }
+    case deletePostWithSocketRoutine.TRIGGER: {
+      const posts = [...state.posts].filter(post => (post.id !== payload));
       return {
         ...state, posts
       };

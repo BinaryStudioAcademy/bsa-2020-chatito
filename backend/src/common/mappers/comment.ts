@@ -4,14 +4,16 @@ import { getImageUrl } from '../utils/imageHelper';
 
 export const fromPostCommentsToPostCommentsClient = (comments: Comment[]) => {
   const updated = comments.map(comment => {
-    const { id, createdAt, updatedAt, text, postId, createdByUser } = comment;
+    const { id, createdAt, updatedAt, text, postId, createdByUser, post } = comment;
+
     return {
       id,
       createdAt,
       updatedAt,
       text,
       postId,
-      createdByUser: fromUserToUserClient(createdByUser)
+      createdByUser: fromUserToUserClient(createdByUser),
+      chatId: post.chatId
     };
   });
 

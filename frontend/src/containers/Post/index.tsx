@@ -38,6 +38,15 @@ import JoinButton from 'scenes/Chat/components/JoinBtn';
 import { MessageType } from 'common/enums/MessageType';
 import { IntegrationType } from 'common/enums/IntegrationType';
 import DOMPurify from 'dompurify';
+import {
+  editPostRoutine,
+  deletePostRoutine,
+  setEditingPostRoutine,
+  editCommentRoutine,
+  deleteCommentRoutine
+} from 'scenes/Chat/routines';
+import TextEditor from 'components/TextEditor';
+import { InputType } from 'common/enums/InputType';
 
 interface IProps {
   post: IPost;
@@ -60,13 +69,22 @@ interface IProps {
   chatUsers?: IUser[];
   setCopiedPost?: IBindingCallback1<string>;
   copiedPost?: string;
+  editPost: IBindingCallback1<any>;
+  deletePost: IBindingCallback1<any>;
+  editComment: IBindingCallback1<any>;
+  deleteComment: IBindingCallback1<any>;
+  editingPost: string;
+  setEditingPost: IBindingCallback1<string>;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, openThread,
   unreadPostComments, showUserProfile, addPostReaction, deletePostReaction, showModal, unreadChats,
 
   readPost, markAsUnreadPost, readComment, mainPostId, markAsUnreadComment, postRef, chatUsers,
-  setCopiedPost, copiedPost }) => {
+
+  setCopiedPost, copiedPost, editPost, deletePost, editingPost, setEditingPost, editComment,
+
+  deleteComment }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
   useEffect(() => {
@@ -158,6 +176,27 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
     document.body.click();
   };
 
+  const onEditMessageClick = () => {
+    setEditingPost(post.id);
+  };
+
+  const onEditHandler = (editedText: string) => {
+    if (type === PostType.Post) {
+      editPost({ text: editedText, id: post.id });
+    } else {
+      editComment({ text: editedText, id: post.id });
+    }
+    setEditingPost('');
+  };
+
+  const onDeleteMessageClick = () => {
+    if (type === PostType.Post) {
+      deletePost({ id: post.id });
+    } else {
+      deleteComment({ id: post.id, postId: post.id });
+    }
+  };
+
   const popoverRemindOptions = (
     <Popover id="popover-basic" className={styles.popOverOptions}>
       <ReminderItem
@@ -208,23 +247,58 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
       >
         <span>Mark as unread</span>
       </button>
-      <button
-        type="button"
-        className={styles.optionsSelect}
-        onClick={copyToClipBoard}
-      >
-        <span>Copy link</span>
-      </button>
-      <OverlayTrigger
-        // delay={{ show: 0, hide: Infinity }}
-        trigger="click"
-        placement="left"
-        overlay={popoverRemindOptions}
-      >
-        <button type="button" className={styles.optionsSelect}>
-          <span>Remind about that</span>
-        </button>
-      </OverlayTrigger>
+      {
+      userId === post.createdByUser.id
+        ? (
+          <>
+            <button
+              type="button"
+              className={styles.optionsSelect}
+              onClick={onEditMessageClick}
+            >
+              <span>
+                Edit&nbsp;
+                {type === PostType.Post ? 'message' : 'comment'}
+              </span>
+            </button>
+            <button
+              type="button"
+              className={styles.optionsSelect}
+              onClick={onDeleteMessageClick}
+            >
+              <span>
+                Delete&nbsp;
+                {type === PostType.Post ? 'message' : 'comment'}
+              </span>
+            </button>
+          </>
+        )
+        : null
+      }
+      {
+        type === PostType.Post
+          ? (
+            <>
+              <button
+                type="button"
+                className={styles.optionsSelect}
+                onClick={copyToClipBoard}
+              >
+                <span>Copy link</span>
+              </button>
+              <OverlayTrigger
+                // delay={{ show: 0, hide: Infinity }}
+                trigger="click"
+                placement="left"
+                overlay={popoverRemindOptions}
+              >
+                <button type="button" className={styles.optionsSelect}>
+                  <span>Remind about that</span>
+                </button>
+              </OverlayTrigger>
+            </>
+          ) : null
+      }
     </Popover>
   );
 
@@ -301,6 +375,37 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
   };
   const isJoinBtn = post.integration === IntegrationType.Whale && post.type !== MessageType.WhaleSignUpUser;
   const isPostCopied = copiedPost === post.id;
+
+  let renderedPost;
+
+  if (isJoinBtn) {
+    renderedPost = (
+      <JoinButton
+        url={text}
+        creator={chatUsers?.find(user => user.id === post.createdByUser?.originalUserId)?.displayName}
+      />
+    );
+  } else if (editingPost === post.id) {
+    renderedPost = (
+      <TextEditor
+        key="123"
+        inputType={InputType.Post}
+        placeholder="Edit your post!"
+        height={100}
+        draftInput={{ id: '', text: post.text }}
+        onSend={onEditHandler}
+        onInputChange={() => 0}
+      />
+    );
+  } else {
+    renderedPost = (
+      <div
+        className={`${styles.text} ${isNew ? styles.unread : ''}`}
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text, { ADD_ATTR: ['target'] }) }}
+      />
+    );
+  }
   return (
     <div ref={postRef}>
       <Media className={styles.postWrapper} onMouseEnter={onHoverRead}>
@@ -328,22 +433,7 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
             </span>
           </a>
           {/* eslint-disable-next-line */}
-          {
-            isJoinBtn
-              ? (
-                <JoinButton
-                  url={text}
-                  creator={chatUsers?.find(user => user.id === post.createdByUser?.originalUserId)?.displayName}
-                />
-              )
-              : (
-                <div
-                  className={`${styles.text} ${isNew ? styles.unread : ''}`}
-                  // eslint-disable-next-line react/no-danger
-                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text, { ADD_ATTR: ['target'] }) }}
-                />
-              )
-          }
+          {renderedPost}
           <div className={styles.emojiStats}>
             {type === PostType.Post && renderEmojis()}
           </div>
@@ -369,7 +459,8 @@ const mapStateToProps = (state: IAppState) => ({
   userId: state.user.user?.id as string,
   unreadChats: state.workspace.unreadChats,
   unreadPostComments: state.workspace.unreadPostComments,
-  chatUsers: state.chat.chat?.users
+  chatUsers: state.chat.chat?.users,
+  editingPost: state.chat.editingPostId
 });
 
 const mapDispatchToProps = {
@@ -380,7 +471,12 @@ const mapDispatchToProps = {
   readPost: readPostRoutine,
   readComment: readCommentRoutine,
   markAsUnreadPost: markAsUnreadPostWithOptionRoutine,
-  markAsUnreadComment: markAsUnreadCommentWithOptionRoutine
+  markAsUnreadComment: markAsUnreadCommentWithOptionRoutine,
+  editPost: editPostRoutine,
+  deletePost: deletePostRoutine,
+  editComment: editCommentRoutine,
+  deleteComment: deleteCommentRoutine,
+  setEditingPost: setEditingPostRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

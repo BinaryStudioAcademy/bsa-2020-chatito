@@ -5,6 +5,9 @@ import { IAddUsersToChat } from 'common/models/chat/IAddUsersToChat';
 import { IFetchMorePosts } from 'common/models/post/IFetchMorePosts';
 import { IFetchNavPost } from 'common/models/post/IFetchNavPost';
 import { IBrowserChannel } from 'common/models/chat/IBrowserChannel';
+import { IEditPost } from 'common/models/post/IEditPost';
+import { IEditComment } from 'common/models/post/IEditComment';
+import { IDeleteComment } from 'common/models/post/IDeleteComment';
 
 export async function createChat(payload: ICreateChat) {
   const response = await api.post('/api/chats', payload);
@@ -42,6 +45,26 @@ export async function removeUserFromChat(chatId: string, userId: string) {
 
 export async function addPost({ chatId, text }: ICreatePost) {
   const response = await api.post('/api/posts', { text, chatId });
+  return response;
+}
+
+export async function editPost({ id, text }: IEditPost) {
+  const response = await api.put(`/api/posts/${id}`, { text });
+  return response;
+}
+
+export async function deletePost(id: string) {
+  const response = await api.delete(`/api/posts/${id}`);
+  return response;
+}
+
+export async function editComment({ chatId, id, text }: IEditComment) {
+  const response = await api.put(`/api/posts/${chatId}/comments/${id}`, { text });
+  return response;
+}
+
+export async function deleteComment({ chatId, id }: IDeleteComment) {
+  const response = await api.delete(`/api/posts/${chatId}/comments/${id}`);
   return response;
 }
 
