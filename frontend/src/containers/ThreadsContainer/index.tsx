@@ -33,9 +33,6 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
   if (threads) {
     fetchedThreads = [...threads];
   }
-  if (!activeWorkspaceId || loading) {
-    return <div className={styles.headerContainer}><LoaderWrapper loading={loading} /></div>;
-  }
   if (threads && !threads.length) {
     return (
       <header className={styles.headerContainer}>
@@ -48,37 +45,39 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
       <header className={styles.headerContainer}>
         <p className={styles.headerName}>Threads</p>
       </header>
-      <div className={styles.threadsContainer}>
-        {fetchedThreads.map(post => (
-          <div key={post.id}>
-            {post.comments.length ? (
-              <div
-                key={post.id}
-                className={styles.thread}
-              >
-                <Thread
-                  showOnlyTwoComments={showOnlyTwoComments}
+      <LoaderWrapper loading={loading}>
+        <div className={styles.threadsContainer}>
+          {fetchedThreads.map(post => (
+            <div key={post.id}>
+              {post.comments.length ? (
+                <div
                   key={post.id}
-                  width="100%"
-                  post={{
-                    chat: { name: post.chat.name ? post.chat.name : 'Thread' },
-                    createdByUser: post.createdByUser,
-                    text: post.text,
-                    createdAt: new Date(post.createdAt),
-                    id: post.id,
-                    chatId: post.chat.id,
-                    postReactions: post.postReactions,
-                    commentsInfo: noInfo
-                  }}
-                  comments={post.comments}
-                  hideCloseBtn={hideCloseBtn}
-                  classesForThreads={changeClassName}
-                />
-              </div>
-            ) : ''}
-          </div>
-        ))}
-      </div>
+                  className={styles.thread}
+                >
+                  <Thread
+                    showOnlyTwoComments={showOnlyTwoComments}
+                    key={post.id}
+                    width="100%"
+                    post={{
+                      chat: { name: post.chat.name ? post.chat.name : 'Thread' },
+                      createdByUser: post.createdByUser,
+                      text: post.text,
+                      createdAt: new Date(post.createdAt),
+                      id: post.id,
+                      chatId: post.chat.id,
+                      postReactions: post.postReactions,
+                      commentsInfo: noInfo
+                    }}
+                    comments={post.comments}
+                    hideCloseBtn={hideCloseBtn}
+                    classesForThreads={changeClassName}
+                  />
+                </div>
+              ) : ''}
+            </div>
+          ))}
+        </div>
+      </LoaderWrapper>
     </div>
   );
 };
