@@ -7,12 +7,12 @@ import {
   editProfile,
   editStatus,
   checkInvitedUserRegistered,
-  addWorkspaceToUser,
   markAsUnreadPost,
   markAsReadPosts,
   markAsUnreadComment,
   markAsReadComments,
-  getUserByIdWithoutRelations
+  getUserByIdWithoutRelations,
+  addToWorkspace
 } from '../../services/userService';
 
 const router = Router();
@@ -25,7 +25,7 @@ router
   .put('/', run((req: Request) => editProfile(req.user.id, req.body)))
   .put('/edit-status', run((req: Request) => editStatus({ id: req.body.id, status: req.body.status })))
   .post('/invite', run((req: Request) => checkInvitedUserRegistered(req.body)))
-  .post('/add-to-workspace', run((req: Request) => addWorkspaceToUser(req.user.id, req.body.workspaceId)))
+  .post('/add-to-workspace', run((req: Request) => addToWorkspace(req.user.id, req.body.workspaceId)))
   .post('/unread-post', run((req: Request) => markAsUnreadPost(req.user.id, req.body.postId)))
   .post('/read-posts', run((req: Request) => markAsReadPosts(req.user.id, req.body.postIds)))
   .post('/unread-comment', run((req: Request) => markAsUnreadComment(req.user.id, req.body.commentId)))
