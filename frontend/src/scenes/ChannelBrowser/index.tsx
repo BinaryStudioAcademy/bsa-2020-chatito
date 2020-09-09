@@ -85,7 +85,10 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
       <LoaderWrapper loading={loading}>
         <div className={styles.main}>
           <div className={styles.controlsWrp}>
-            <div>{channelList.length > 1 ? `${channelList.length} channels` : `${channelList.length} channel`}</div>
+            <div>
+              {channelList.length > 1 || !channelList.length ? (
+                `${channelList.length} channels`) : `${channelList.length} channel`}
+            </div>
             <div className={styles.buttonsWrapper}>
               <SortOption setSortOption={sortOptionHandler} sortOption={sortOption} />
               <FilterOption
