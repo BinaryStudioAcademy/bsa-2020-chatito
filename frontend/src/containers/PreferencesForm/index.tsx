@@ -96,8 +96,7 @@ const PreferencesForm: FunctionComponent<IProps> = ({
 
         <div className={styles.mainWrapper}>
           <div className={styles.blockContainer}>
-            <h3 className={styles.subHeader}>What other users hear when you right:</h3>
-
+            <h3 className={styles.subHeader}>What other users hear when your write them:</h3>
             <Form.Group controlId="formBasicCheckbox" className={styles.radioFormGroup}>
               <Form.Check
                 className={styles.checkItemContainer}

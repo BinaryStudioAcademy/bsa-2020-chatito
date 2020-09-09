@@ -113,8 +113,27 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser,
   );
 
   const chatMuteIcons = () => (chat.isMuted
-    ? <FontAwesomeIcon className={styles.icon} icon={faVolumeMute} onClick={setChatMute} />
-    : <FontAwesomeIcon className={styles.icon} icon={faVolumeUp} onClick={setChatMute} />);
+    ? (
+      <OverlayTrigger
+        trigger={['hover', 'hover']}
+        delay={{ show: 300, hide: 0 }}
+        rootClose
+        placement="bottom-start"
+        overlay={PopoverItem('Mute chat')}
+      >
+        <FontAwesomeIcon className={styles.icon} icon={faVolumeMute} onClick={setChatMute} />
+      </OverlayTrigger>
+    ) : (
+      <OverlayTrigger
+        trigger={['hover', 'hover']}
+        delay={{ show: 300, hide: 0 }}
+        rootClose
+        placement="bottom-start"
+        overlay={PopoverItem('Unmute chat')}
+      >
+        <FontAwesomeIcon className={styles.icon} icon={faVolumeUp} onClick={setChatMute} />
+      </OverlayTrigger>
+    ));
 
   return (
     <div className={styles.chatContainer} key={chat.id}>
@@ -132,21 +151,18 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser,
           ) : (
             <div className={styles.title}>{chatName}</div>
           )}
-          { chat.type === ChatType.Channel
+          {chat.type === ChatType.Channel
             && (
-            <OverlayTrigger
-              trigger={['hover', 'hover']}
-              delay={{ show: 300, hide: 0 }}
-              rootClose
-              placement="bottom-start"
-              overlay={PopoverItem(chat.description || 'No description for this chat')}
-            >
-              <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
-            </OverlayTrigger>
+              <OverlayTrigger
+                trigger={['hover', 'hover']}
+                delay={{ show: 300, hide: 0 }}
+                rootClose
+                placement="bottom-start"
+                overlay={PopoverItem(chat.description || 'No description for this chat')}
+              >
+                <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
+              </OverlayTrigger>
             )}
-
-          {isUserChatMember && <FontAwesomeIcon icon={faStar} className={styles.icon} />}
-
           {isUserChatMember && chatMuteIcons()}
         </div>
 
