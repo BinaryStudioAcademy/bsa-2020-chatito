@@ -57,7 +57,7 @@ const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel, loading,
               </div>
             )}
             <div className={styles.participants}>
-              {membersCount > 1
+              {membersCount > 1 || !membersCount
                 ? `${membersCount} members`
                 : `${membersCount} member`}
             </div>
