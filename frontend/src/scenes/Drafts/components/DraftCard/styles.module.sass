@@ -1,11 +1,12 @@
 .card
   margin: 10px 0
   background-color: var(--chat-background-secondary)
-  border-radius: 20px
-  padding: 30px
+  border-radius: 6px
+  padding: 18px
   position: relative
   box-sizing: border-box
-  border: 1px solid transparent
+  &:first-child
+    margin-top: 0
 
   .buttons
     position: absolute
@@ -32,7 +33,5 @@
     &:hover
       text-decoration: underline
 
-  &:hover
-    border: 1px solid var(--user-detector-border)
     .buttons
       display: block

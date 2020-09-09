@@ -24,6 +24,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
   let fetchedThreads: IFetchedThreads[] = [];
   const hideCloseBtn = true;
   const showOnlyTwoComments = true;
+  const changeClassName = true;
   useEffect(() => {
     if (activeWorkspaceId) {
       fetchThreads({ userId, activeWorkspaceId });
@@ -71,6 +72,7 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
                   }}
                   comments={post.comments}
                   hideCloseBtn={hideCloseBtn}
+                  classesForThreads={changeClassName}
                 />
               </div>
             ) : ''}

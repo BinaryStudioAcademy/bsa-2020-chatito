@@ -1,5 +1,9 @@
 .filterBtn
-  padding: 5px 10px
+  padding: 0px 10px
+  height: 34px
+  display: flex
+  align-items: center
+  border-radius: 6px
 
 .filterBtn:hover
   background-color: var(--chat-background-secondary)
@@ -26,10 +30,45 @@
 .select
   margin-bottom: 10px
 
-.checkbox input
+.formGroup
+  width: 100%
+.checkbox
   cursor: pointer
   -webkit-appearance: checkbox
-
+  display: flex
+  flex-direction: row-reverse
+  justify-content: space-between
+  width: 100%
 .checkbox input:focus,
-.checkbox input:active
+.checkbox
+  input:active
+    outline: none
+    margin: 0 !important
+
+.popOverOptions
+  box-shadow: 0 0 0 1px rgba(29, 28, 29, 0.1),0 0px 12px 0 rgba(0,0,0,.05)
+  border-radius: 6px
+  border: none
+  padding: 12px 0
+  font-weight: 500
+  font-size: 14px
+  width: 185px
+
+.optionsSelect
+  font-weight: 500
+  font-size: 14px
+  background: none
+  display: flex
+  flex-direction: row
+  align-items: center
+  border: 0
+  padding: 5px 24px
+  align-content: left
   outline: none
+  width: 100%
+  &:hover
+    background-color: var(--workspace-background-color)
+    color: var(--text-color-for-dark-bg)
+
+.option
+  margin-right: 4px

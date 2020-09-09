@@ -27,17 +27,17 @@ export const SortOption: React.FC<IProps> = ({ setSortOption, sortOption }) => {
   };
 
   const popover = (
-    <Popover id="sort-popup" className={styles.popup}>
+    <Popover id="sort-popup" className={styles.popOverOptions}>
       {
         Object.keys(sortOptions).map(key => (
           <button
             id={key}
             key={key}
-            className={`${styles.sortItem} button-unstyled`}
+            className={styles.optionsSelect}
             onClick={onClickHandler}
             type="button"
           >
-            <span>{sortOptions[key]}</span>
+            <span className={styles.option}>{sortOptions[key]}</span>
             {key === sortOption && <FontAwesomeIcon icon={faCheck} size="sm" />}
           </button>
         ))

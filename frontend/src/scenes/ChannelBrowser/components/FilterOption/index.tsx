@@ -1,9 +1,11 @@
 import React from 'react';
 import styles from './styles.module.sass';
-import { OverlayTrigger, Popover, Form } from 'react-bootstrap';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FilterType } from 'common/enums/FilterType';
+import { IFilterOptions } from 'common/models/filtering/IFilterOptions';
+import { IFilterFunctions } from 'common/models/filtering/IFilterFuncions';
 
 interface IProps {
   filterOption: string;
@@ -13,8 +15,7 @@ interface IProps {
 }
 
 export const FilterOption: React.FC<IProps> = ({ filterOption, setFilterOption, isChecked, setIsChecked }) => {
-  const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = event.target;
+  const onSelectChange = (value: string) => {
     setFilterOption(value as FilterType);
   };
 
@@ -22,27 +23,37 @@ export const FilterOption: React.FC<IProps> = ({ filterOption, setFilterOption, 
     setIsChecked();
   };
 
-  const onClickHandler = () => {
-    document.body.click();
+  const filterOptions: IFilterOptions = {
+    [FilterType.All]: 'All channel types',
+    [FilterType.Private]: 'Private channels',
+    [FilterType.HideMy]: 'Hide my channels'
+  };
+
+  const filterFunctions: IFilterFunctions = {
+    [FilterType.All]: () => onSelectChange(FilterType.All),
+    [FilterType.Private]: () => onSelectChange(FilterType.Private),
+    [FilterType.HideMy]: onCheckboxChange
   };
 
   const popover = (
-    <Popover id="filter-popup" className={styles.popup}>
-      <FontAwesomeIcon icon={faTimes} className={styles.closeBtn} onClick={onClickHandler} />
-      <div className={styles.label}>Channel type</div>
-      <Form.Control as="select" size="sm" className={styles.select} value={filterOption} onChange={onSelectChange}>
-        <option value={FilterType.All}>All channel types</option>
-        <option value={FilterType.Private}>Private channels</option>
-      </Form.Control>
-      <div className={styles.label}>More options</div>
-      <Form.Check
-        className={styles.checkbox}
-        type="checkbox"
-        label="Hide my channels"
-        checked={isChecked}
-        onChange={onCheckboxChange}
-      />
+    <Popover id="filter-popup" className={styles.popOverOptions}>
+      {
+        Object.keys(filterOptions).map(key => (
+          <button
+            id={key}
+            key={key}
+            className={styles.optionsSelect}
+            onClick={filterFunctions[key]}
+            type="button"
+          >
+            <span className={styles.option}>{filterOptions[key]}</span>
+            {key === filterOption && <FontAwesomeIcon icon={faCheck} size="sm" />}
+            {isChecked && key === FilterType.HideMy && <FontAwesomeIcon icon={faCheck} size="sm" />}
+          </button>
+        ))
+      }
     </Popover>
+
   );
 
   return (

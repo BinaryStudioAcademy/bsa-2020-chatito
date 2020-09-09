@@ -36,16 +36,20 @@ $colorBackground: var(--workspace-toolbar-select-background-second)
   height: 100%
   display: flex
   flex-direction: column
-  p
-    margin: 0
 
-  .threadHeader
-    height: 64px
-    min-height: 64px
-    display: flex
-    padding: 0 40px 0 25px
-    border-bottom: 1px solid var(--chat-background-secondary)
-      
+
+.threadsContainerforThreads
+  background-color: var(--workspace-toolbar-select-background)
+  border-radius: 6px
+
+.threadHeader
+  min-height: 64px
+  display: flex
+  padding: 0 40px 0 25px
+  border-bottom: 1px solid var(--chat-background-secondary)
+
+.threadHeaderForThreads
+  padding: 14px 18px 0 24px
 
 .threadHeaderBlock
   display: flex
@@ -60,6 +64,8 @@ $colorBackground: var(--workspace-toolbar-select-background-second)
   margin-bottom: 15px
 
 .threadChatNameButton
+  text-align: start
+  line-height: 1.2
   font-size: 16px
   font-weight: bold
   margin-bottom: 3px
@@ -78,6 +84,11 @@ $colorBackground: var(--workspace-toolbar-select-background-second)
   border-bottom: 2px solid var(--chat-background-secondary)
   margin-bottom: 20px
 
+.threadPostForThreads
+  border-bottom: 2px solid var(--white-bg)
+  border-top: 2px solid var(--white-bg)
+  margin-bottom: 20px
+
 .commentsMore
   margin: 5px
   align-self: center
@@ -89,6 +100,7 @@ $colorBackground: var(--workspace-toolbar-select-background-second)
   width: 100%
   display: flex
   justify-content: center
+
 .link
   @include buttonReset
   color: var(--show-more-replies-link)
