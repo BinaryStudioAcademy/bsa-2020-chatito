@@ -147,7 +147,7 @@ const ChatBody: React.FC<IProps> = ({
 
   useEffect(() => {
     if (newPostScroll) {
-      scrollDown('smooth');
+      scrollDown('auto');
     }
   }, [newPostScroll]);
 
