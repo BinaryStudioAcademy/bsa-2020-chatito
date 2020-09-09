@@ -26,11 +26,12 @@ interface IProps {
 interface IOption {
   value: any;
   label: string;
+  disabled?: boolean;
 }
 
 const CreateDirect = ({ workspace, directMessages, currentUserId,
   createDirect, router, closeModal }: IProps) => {
-  const [DirectUsers, setDirectUsers] = useState([]);
+  const [DirectUsers, setDirectUsers] = useState<IOption[]>([]);
   const [allUsers, setAllUsers] = useState<IUser[]>([]);
   useEffect(() => {
     getWorkspaceUsers(workspace.id).then(usersArr => setAllUsers(usersArr));
@@ -43,6 +44,7 @@ const CreateDirect = ({ workspace, directMessages, currentUserId,
   ));
 
   const options = mapUsersToOptions(allUsers);
+  const maxUsersNumber = 5;
 
   const isSelectEmpty = () => !DirectUsers.length;
 
@@ -72,6 +74,12 @@ const CreateDirect = ({ workspace, directMessages, currentUserId,
     closeModal();
   };
 
+  const handleDirectUsersChange = (users: IOption[]) => {
+    if (users.length <= maxUsersNumber) {
+      setDirectUsers(users);
+    }
+  };
+
   const title = 'Create a Direct';
 
   const formHeader = (
@@ -84,9 +92,10 @@ const CreateDirect = ({ workspace, directMessages, currentUserId,
         className={styles.multiSelect}
         options={options}
         value={DirectUsers}
-        onChange={setDirectUsers}
+        onChange={handleDirectUsersChange}
         labelledBy="Select"
         hasSelectAll={false}
+        focusSearchOnOpen
       />
     </Form.Group>
   );
@@ -99,6 +108,7 @@ const CreateDirect = ({ workspace, directMessages, currentUserId,
       <Form className={styles.inputContainer}>
         {addMembers}
       </Form>
+      <div className={styles.label}>Maximum 5 users can be members of direct message</div>
     </div>
   );
 
