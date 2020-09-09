@@ -5,9 +5,10 @@ import { connect } from 'react-redux';
 import { IPost } from 'common/models/post/IPost';
 import Post from 'containers/Post';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
-import { setActiveThreadRoutine } from 'scenes/Workspace/routines';
+import { setActiveThreadRoutine, readPostRoutine } from 'scenes/Workspace/routines';
 import InfiniteScroll from 'react-infinite-scroller';
-import { setPostsRoutine, fetchNavigationPostRoutine } from 'scenes/Chat/routines';
+import { setPostsRoutine, fetchNavigationPostRoutine,
+  renderScrollDownButtonRoutine, clickToScrollRoutine } from 'scenes/Chat/routines';
 import { IFetchMorePosts } from 'common/models/post/IFetchMorePosts';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { PostType } from 'common/enums/PostType';
@@ -19,6 +20,7 @@ import {
   getMonth,
   getYear,
   whenWasSent } from 'common/helpers/dateHelper';
+import { IPostsToRead } from 'common/models/chat/IPostsToRead';
 
 interface IProps {
   chatId: string | undefined;
@@ -33,6 +35,12 @@ interface IProps {
   unreadChats: IUnreadChat[];
   postId?: string;
   fetchNavigationPost: IBindingCallback1<IFetchNavPost>;
+  renderScrollDownButton: IBindingCallback1<boolean>;
+  readPost: IBindingCallback1<IPostsToRead>;
+  clickedToScroll: boolean;
+  clickToScroll: IBindingCallback1<boolean>;
+  isUserChatMember: boolean;
+  newPostScroll: boolean;
 }
 
 const ChatBody: React.FC<IProps> = ({
@@ -47,7 +55,13 @@ const ChatBody: React.FC<IProps> = ({
   count,
   unreadChats,
   postId,
-  fetchNavigationPost
+  fetchNavigationPost,
+  renderScrollDownButton,
+  readPost,
+  clickedToScroll,
+  clickToScroll,
+  isUserChatMember,
+  newPostScroll
 }) => {
   const isNew = true;
   const [postIdForLine, setPostIdForLine] = useState('');
@@ -57,6 +71,7 @@ const ChatBody: React.FC<IProps> = ({
   const getMorePosts = () => {
     loadMorePosts({ chatId, from, count });
   };
+
   const setNewPostLine = () => {
     unreadChats.forEach(unreadChat => {
       if (unreadChat.id === chatId) {
@@ -67,6 +82,7 @@ const ChatBody: React.FC<IProps> = ({
             unreadPostIds.push(unreadPost.id);
           });
           setUnreadChatPostIds(unreadPostIds);
+          renderScrollDownButton(true);
         } else {
           setPostIdForLine('');
           setUnreadChatPostIds([]);
@@ -74,11 +90,17 @@ const ChatBody: React.FC<IProps> = ({
       }
     });
   };
-  const scrollToRef = (ref: RefObject<HTMLElement>) => {
+  const scrollToRef = (ref: RefObject<HTMLElement>, behavior?: 'auto' | 'smooth') => {
     if (ref.current) {
       ref.current.scrollIntoView({
-        block: 'start'
+        block: 'start',
+        behavior
       });
+    }
+  };
+  const scrollDown = (behavior?: 'smooth' | 'auto') => {
+    if (chatBody.current !== null && !loading) {
+      chatBody.current.scrollTo({ left: 0, top: chatBody.current.scrollHeight, behavior });
     }
   };
 
@@ -92,17 +114,41 @@ const ChatBody: React.FC<IProps> = ({
         setNewPostLine();
       }
     }
-    if (chatBody.current !== null && !loading) {
-      chatBody.current.scrollTop = chatBody.current.scrollHeight;
-    }
+    scrollDown('auto');
+  }, [loading, chatId]);
 
-    if (postRef.current && postId) {
+  const isPostLoaded = (id: string) => {
+    const tempArr: string[] = [];
+    messages.forEach(post => {
+      tempArr.push(post.id);
+    });
+    if (id && !tempArr.includes(id) && !loading) {
+      getMorePosts();
+      setNewPostLine();
+    }
+    if (!id || tempArr.includes(id)) {
       scrollToRef(postRef);
     }
-  }, [loading, chatId]);
+  };
+
+  useEffect(() => {
+    if (!postId) {
+      isPostLoaded(postIdForLine);
+    } else if (postRef.current && postId) {
+      isPostLoaded(postId);
+    }
+  }, [messages.length]);
+
   useEffect(() => {
     setNewPostLine();
   }, [unreadChats]);
+
+  useEffect(() => {
+    if (newPostScroll) {
+      scrollDown('auto');
+    }
+  }, [newPostScroll]);
+
   const handleOpenThread = (post: IPost) => {
     if (activeThreadPostId === post.id) return;
     openThread(post);
@@ -136,6 +182,39 @@ const ChatBody: React.FC<IProps> = ({
     }
     return '';
   };
+  const postsToRead = (id: string) => {
+    const postIdToRead = id;
+    const unreadChatsCopy = [...unreadChats];
+    let postsToDelete: IPost[] = [];
+    const postIdsToDelete: string[] = [];
+    unreadChatsCopy.forEach((unreadChat, chatIndex) => {
+      const unreadPostCopy = unreadChat.unreadPosts;
+      unreadChat.unreadPosts.forEach((unreadPost, index) => {
+        if (unreadPost.id === postIdToRead) {
+          postsToDelete = [...unreadPostCopy.splice(0, index + 1)];
+        }
+      });
+      unreadChatsCopy[chatIndex].unreadPosts = [...unreadPostCopy];
+    });
+    postsToDelete.forEach(postToDelete => {
+      postIdsToDelete.push(postToDelete.id);
+    });
+    readPost({ postIdsToDelete, unreadChatsCopy });
+  };
+
+  useEffect(() => {
+    if (!clickedToScroll && postIdForLine) {
+      renderScrollDownButton(false);
+      unreadChats.forEach((unreadChat, index) => {
+        if (unreadChat.id === chatId) {
+          const postChat = unreadChats[index].unreadPosts;
+          postsToRead(postChat[postChat.length - 1].id);
+        }
+      });
+    }
+    scrollDown('smooth');
+    clickToScroll(false);
+  }, [clickedToScroll]);
 
   return (
     <LoaderWrapper
@@ -149,9 +228,10 @@ const ChatBody: React.FC<IProps> = ({
           initialLoad={false}
           hasMore={hasMorePosts && !loading}
           useWindow={false}
+          id="chatScrollContainer"
         >
           {messages.map((m, index) => (
-            <div key={m.id}>
+            <div key={m.id} ref={m.id === postIdForLine ? postRef : undefined}>
               {pasteDateLine(index)}
               <div className={styles.postContainer}>
                 {postIdForLine === m.id ? newPostLineElement : ''}
@@ -164,6 +244,7 @@ const ChatBody: React.FC<IProps> = ({
                   type={PostType.Post}
                   setCopiedPost={setCopiedPost}
                   copiedPost={copiedPost}
+                  isUserChatMember={isUserChatMember}
                 />
               </div>
             </div>
@@ -183,13 +264,18 @@ const mapStateToProps = (state: IAppState) => ({
   loading: state.chat.loading,
   from: state.chat.fetchFrom,
   count: state.chat.fetchCount,
-  unreadChats: state.workspace.unreadChats
+  unreadChats: state.workspace.unreadChats,
+  clickedToScroll: state.chat.clickedToScroll,
+  newPostScroll: state.chat.newPostScroll
 });
 
 const mapDispatchToProps = {
   openThread: setActiveThreadRoutine,
   loadMorePosts: setPostsRoutine,
-  fetchNavigationPost: fetchNavigationPostRoutine
+  fetchNavigationPost: fetchNavigationPostRoutine,
+  renderScrollDownButton: renderScrollDownButtonRoutine,
+  readPost: readPostRoutine,
+  clickToScroll: clickToScrollRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatBody);

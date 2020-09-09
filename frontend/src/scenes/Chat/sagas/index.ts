@@ -20,7 +20,9 @@ import {
   editPostRoutine,
   deletePostRoutine,
   editCommentRoutine,
-  deleteCommentRoutine
+  deleteCommentRoutine,
+  renderScrollDownButtonRoutine,
+  clickToScrollRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import {
@@ -312,6 +314,22 @@ function* watchMuteChat() {
   yield takeEvery(toggleChatMuteRoutine.TRIGGER, fetchChatMute);
 }
 
+function* renderScrollDownButton({ payload }: Routine<any>) {
+  yield put(renderScrollDownButtonRoutine.success(payload));
+}
+
+function* watchRenderScrollDownButton() {
+  yield takeEvery(renderScrollDownButtonRoutine.TRIGGER, renderScrollDownButton);
+}
+
+function* ClickToScrollRoutine({ payload }: Routine<any>) {
+  yield put(clickToScrollRoutine.success(payload));
+}
+
+function* watchClickToScrollRoutine() {
+  yield takeEvery(clickToScrollRoutine.TRIGGER, ClickToScrollRoutine);
+}
+
 export default function* chatSaga() {
   yield all([
     watchPostsRequest(),
@@ -333,6 +351,8 @@ export default function* chatSaga() {
     watchEditPostRequest(),
     watchDeletePostRequest(),
     watchEditCommentRequest(),
-    watchDeleteCommentRequest()
+    watchDeleteCommentRequest(),
+    watchRenderScrollDownButton(),
+    watchClickToScrollRoutine()
   ]);
 }

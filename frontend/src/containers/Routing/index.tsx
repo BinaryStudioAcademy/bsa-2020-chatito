@@ -35,6 +35,19 @@ const Routing: React.FC<IProps> = ({
     }
   });
 
+  const storageHandler = (event: StorageEvent) => {
+    if (event.key === null) {
+      window.location.href = Routes.SignIn;
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('storage', storageHandler);
+    return () => {
+      window.removeEventListener('storage', storageHandler);
+    };
+  }, []);
+
   return (
     <LoaderWrapper loading={isLoading || (hasToken && !isAuthorized)}>
       <Switch>

@@ -25,7 +25,10 @@ import {
   joinChannelRoutine,
   fetchPublicChannelRoutine,
   setChatMuteSocketRoutine,
-  setEditingPostRoutine
+  setEditingPostRoutine,
+  renderScrollDownButtonRoutine,
+  clickToScrollRoutine,
+  newPostByCurrentUserRoutine
 } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
@@ -45,6 +48,9 @@ export interface IChatState {
   fetchCount: number;
   btnLoading: boolean;
   editingPostId?: string;
+  scrollDownButton: boolean;
+  clickedToScroll: boolean;
+  newPostScroll: boolean;
 }
 
 const initialState: IChatState = {
@@ -55,7 +61,10 @@ const initialState: IChatState = {
   hasMorePosts: true,
   fetchFrom: 0,
   fetchCount: 10,
-  btnLoading: false
+  btnLoading: false,
+  scrollDownButton: false,
+  clickedToScroll: false,
+  newPostScroll: false
 };
 
 const reducer = (state: IChatState = initialState, { type, payload }: Routine<any>): IChatState => {
@@ -66,7 +75,8 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
         chat: undefined,
         posts: [],
         fetchFrom: 0,
-        fetchCount: 10
+        fetchCount: 10,
+        scrollDownButton: false
       };
     case setCurrentChatRoutine.SUCCESS:
       const chat = payload ? { ...payload } : null;
@@ -196,11 +206,11 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     }
     case addPostWithSocketRoutine.TRIGGER: {
       const posts = [...state.posts];
-      if (!posts.find(p => p.id === payload.id)) {
+      if (!state.loading && !posts.find(p => p.id === payload.id)) {
         posts.push(payload);
       }
       return {
-        ...state, posts
+        ...state, posts, newPostScroll: false
       };
     }
     case editPostWithSocketRoutine.TRIGGER: {
@@ -349,6 +359,27 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
       }
       return {
         ...state
+      };
+    }
+    case renderScrollDownButtonRoutine.TRIGGER: {
+      return state;
+    }
+    case renderScrollDownButtonRoutine.SUCCESS: {
+      return {
+        ...state, scrollDownButton: payload
+      };
+    }
+    case clickToScrollRoutine.TRIGGER: {
+      return state;
+    }
+    case clickToScrollRoutine.SUCCESS: {
+      return {
+        ...state, clickedToScroll: payload
+      };
+    }
+    case newPostByCurrentUserRoutine.TRIGGER: {
+      return {
+        ...state, newPostScroll: true
       };
     }
     default:

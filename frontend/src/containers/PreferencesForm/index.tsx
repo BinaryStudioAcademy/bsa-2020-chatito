@@ -11,10 +11,10 @@ import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import AudioRecorder from 'containers/AudioRecorder';
 import PlayAudioButton from 'components/PlayAudioButton';
 import { uploadOnAWS, signS3Audio } from 'services/awsService';
-import { toastr } from 'react-redux-toastr';
 import LoaderWrapper from 'components/LoaderWrapper';
 import { defaultNotificationAudio } from 'common/configs/defaults';
 import { IncomingSoundOptions as soundOptTypes } from 'common/enums/IncomingSoundOptions';
+import { toastrError } from 'services/toastrService';
 
 interface IProps {
   editProfile: IBindingCallback1<IUser>;
@@ -52,7 +52,8 @@ const PreferencesForm: FunctionComponent<IProps> = ({
       }
       setAudioLoading(false);
     } catch (erorr) {
-      toastr.error('Error', erorr.message);
+      toastrError('Saving custom sound failed. Please try again later.');
+      setAudioLoading(false);
     }
   };
 
@@ -71,6 +72,7 @@ const PreferencesForm: FunctionComponent<IProps> = ({
       setUserAudio(defaultNotificationAudio);
     }
     editProfile(editUserProps);
+    handleClose();
   };
 
   const onRecord = (blob: Blob | null, blobUrl: string | null) => {
@@ -94,8 +96,7 @@ const PreferencesForm: FunctionComponent<IProps> = ({
 
         <div className={styles.mainWrapper}>
           <div className={styles.blockContainer}>
-            <h3 className={styles.subHeader}>What you hear when users write you:</h3>
-
+            <h3 className={styles.subHeader}>What other users hear when your write them:</h3>
             <Form.Group controlId="formBasicCheckbox" className={styles.radioFormGroup}>
               <Form.Check
                 className={styles.checkItemContainer}
