@@ -1,6 +1,9 @@
 export enum ClientSockets {
   AddPost = 'addPost',
   EditPost = 'editPost',
+  DeletePost = 'deletePost',
+  EditComment = 'editComment',
+  DeleteComment = 'deleteComment',
   JoinChat = 'joinChat',
   LeaveChat = 'leaveChat',
   AddReply = 'addReply',

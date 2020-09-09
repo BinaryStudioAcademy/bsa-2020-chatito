@@ -11,6 +11,7 @@ import {
   createChatRoutine,
   addPostWithSocketRoutine,
   editPostWithSocketRoutine,
+  deletePostWithSocketRoutine,
   fetchChatUsersRoutine,
   removeUserFromChatRoutine,
   addReminderRoutine,
@@ -24,6 +25,7 @@ import {
   joinChannelRoutine,
   fetchPublicChannelRoutine,
   setChatMuteSocketRoutine,
+  setEditingPostRoutine,
   renderScrollDownButtonRoutine,
   clickToScrollRoutine,
   newPostByCurrentUserRoutine
@@ -45,6 +47,7 @@ export interface IChatState {
   fetchFrom: number;
   fetchCount: number;
   btnLoading: boolean;
+  editingPostId?: string;
   scrollDownButton: boolean;
   clickedToScroll: boolean;
   newPostScroll: boolean;
@@ -157,6 +160,10 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
           return post;
         })
       };
+    case setEditingPostRoutine.TRIGGER:
+      return {
+        ...state, editingPostId: payload
+      };
     case deletePostReactionRoutine.SUCCESS:
       return {
         ...state,
@@ -209,6 +216,12 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     case editPostWithSocketRoutine.TRIGGER: {
       const editedPost = payload;
       const posts = [...state.posts].map(post => (post.id === editedPost.id ? editedPost : post));
+      return {
+        ...state, posts
+      };
+    }
+    case deletePostWithSocketRoutine.TRIGGER: {
+      const posts = [...state.posts].filter(post => (post.id !== payload));
       return {
         ...state, posts
       };

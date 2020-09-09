@@ -129,8 +129,16 @@ class PostRepository extends Repository<Post> {
       { text, updatedAt: new Date() }
     );
 
-    const editedPost = await this.findOne(id);
+    const editedPost = await this.findOne({ where: { id }, relations: ['createdByUser', 'chat', 'comments'] });
+
     return editedPost;
+  }
+
+  async deletePost(id: string): Promise<Post> {
+    const deletedPost = await this.findOne(id);
+    await this.delete(id);
+
+    return deletedPost;
   }
 
   async getPostsByUserId(activeworkspaceid: string, id: string) {

@@ -14,6 +14,7 @@ import {
   updatePostDraftCommentRoutine,
   deleteDraftPostFromDraftsRoutine,
   setChatMuteSocketRoutine,
+  deletePostWithSocketRoutine,
   newPostByCurrentUserRoutine
 } from 'scenes/Chat/routines';
 import {
@@ -23,7 +24,10 @@ import {
   updateChatDraftPostRoutine,
   markAsUnreadPostWithSocketRoutine,
   markAsUnreadCommentWithSocketRoutine,
-  deleteFromChatWithSocketRoutine
+  deleteFromChatWithSocketRoutine,
+  editCommentWithSocketRoutine,
+  deleteCommentWithSocketRoutine,
+  showRightSideMenuRoutine
 } from 'scenes/Workspace/routines';
 import { IChat } from 'common/models/chat/IChat';
 import { ClientSockets } from 'common/enums/ClientSockets';
@@ -45,6 +49,8 @@ import { playByUrl } from 'common/helpers/audioHelper';
 import { defaultNotificationAudio } from 'common/configs/defaults';
 import { IncomingSoundOptions } from 'common/enums/IncomingSoundOptions';
 import { ChatType } from 'common/enums/ChatType';
+import { IComment } from 'common/models/post/IComment';
+import { RightMenuTypes } from 'common/enums/RightMenuTypes';
 
 const { server } = env.urls;
 
@@ -95,6 +101,28 @@ export const connectSockets = () => {
     const state = store.getState();
     if (post.chatId === state.chat.chat?.id) {
       store.dispatch(editPostWithSocketRoutine(post));
+    }
+  });
+
+  chatSocket.on(ClientSockets.DeletePost, (post: IPost) => {
+    const state = store.getState();
+    if (post.chatId === state.chat.chat?.id) {
+      store.dispatch(deletePostWithSocketRoutine(post.id));
+      store.dispatch(showRightSideMenuRoutine(RightMenuTypes.None));
+    }
+  });
+
+  chatSocket.on(ClientSockets.EditComment, (comment: IComment) => {
+    const state = store.getState();
+    if (comment.chatId === state.chat.chat?.id) {
+      store.dispatch(editCommentWithSocketRoutine(comment));
+    }
+  });
+
+  chatSocket.on(ClientSockets.DeleteComment, (comment: IComment) => {
+    const state = store.getState();
+    if (comment.chatId === state.chat.chat?.id) {
+      store.dispatch(deleteCommentWithSocketRoutine(comment.id));
     }
   });
 

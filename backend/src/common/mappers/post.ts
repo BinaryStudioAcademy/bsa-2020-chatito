@@ -40,7 +40,6 @@ export const fromPostToPostClient = async (post: IPost) => {
     ? postReactions.map(reaction => fromReactionToReactionClient(reaction))
     : [];
   const comments = await getCustomRepository(CommentRepository).getAllPostComments(id);
-
   let createdByUser = {
     ...post.createdByUser,
     imageUrl: getImageUrl(post.createdByUser.imageUrl)
