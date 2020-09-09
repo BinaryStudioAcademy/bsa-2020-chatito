@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
+import { faLock, faHashtag } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './styles.module.sass';
 
 interface IProps {
@@ -52,7 +54,7 @@ const CreateChannel = ({ createChannel }: IProps) => {
       <InputGroup className="mb-3">
         <InputGroup.Prepend>
           <InputGroup.Text className={`${styles.label} inputField`} id="basic-addon1">
-            #
+            <FontAwesomeIcon icon={privateChannel ? faLock : faHashtag} size="xs" />
           </InputGroup.Text>
         </InputGroup.Prepend>
         <Form.Control
