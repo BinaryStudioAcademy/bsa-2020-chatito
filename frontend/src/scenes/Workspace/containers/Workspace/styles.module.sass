@@ -19,6 +19,29 @@
       .chatWrapper
         flex: 1
         height: 100%
+        position: relative
+
+        .goToNewPostContainer
+          position: absolute
+          bottom: 115px
+          width: 100%
+          height: 50px
+          display: flex
+          justify-content: center
+          align-items: flex-end
+
+          .goToNewPost
+            padding: 8px 17px
+            border-radius: 100px
+            background-color: var(--icon-hover)
+            margin-bottom: 10px
+            font-size: 14px
+            color: var(--white-bg)
+            font-weight: 600
+            margin-right: 30px
+            &:hover
+              background-color: var(--danger-button-bg-hover)
+              cursor: pointer
 
       .rightPanelWrapper
         width: 400px
