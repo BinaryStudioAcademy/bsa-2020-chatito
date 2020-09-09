@@ -174,9 +174,6 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser,
                 <FontAwesomeIcon icon={faInfoCircle} className={styles.icon} />
               </OverlayTrigger>
             )}
-
-          {isUserChatMember && <FontAwesomeIcon icon={faStar} className={styles.icon} />}
-
           {isUserChatMember && chatMuteIcons()}
         </div>
 
