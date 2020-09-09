@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class Init1599662508533 implements MigrationInterface {
-    name = 'Init1599662508533'
+export class Init1599665925942 implements MigrationInterface {
+    name = 'Init1599665925942'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "workspace" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "name" character varying(150) NOT NULL, "imageUrl" character varying, "hash" character varying(7) NOT NULL, "createdByUserId" uuid, CONSTRAINT "UQ_406f56fc2a42ad5f541973cdbee" UNIQUE ("name"), CONSTRAINT "UQ_4c5a170807e6a12fdfd8c91f345" UNIQUE ("hash"), CONSTRAINT "PK_ca86b6f9b3be5fe26d307d09b49" PRIMARY KEY ("id"))`);
@@ -11,8 +11,11 @@ export class Init1599662508533 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "reminder" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "date" TIMESTAMP NOT NULL, "note" character varying NOT NULL, "createdByUserId" uuid, "chatId" uuid, CONSTRAINT "PK_9ec029d17cb8dece186b9221ede" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "draft_post" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "text" character varying NOT NULL, "createdByUserId" uuid NOT NULL, "chatId" uuid NOT NULL, CONSTRAINT "UQ_8b81ae3983c2fd3a80e23f321c1" UNIQUE ("createdByUserId", "chatId"), CONSTRAINT "PK_542b7b541f23bc0c63e8de38b73" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "draft_comment" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "text" character varying NOT NULL, "createdByUserId" uuid NOT NULL, "postId" uuid NOT NULL, CONSTRAINT "UQ_b25f34dcce73e1e5bdc62203789" UNIQUE ("createdByUserId", "postId"), CONSTRAINT "PK_0f0f0a50906028687677d5a7f49" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TYPE "user_incomingsoundoptions_enum" AS ENUM('AllowCustom', 'UseDefault', 'MuteAll')`);
         await queryRunner.query(`CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "fullName" character varying(100) NOT NULL, "displayName" character varying(100) NOT NULL, "githubUsername" character varying(100), "email" character varying NOT NULL, "password" character varying, "imageUrl" character varying, "title" character varying(100), "status" character varying(103), "incomingSoundOptions" "user_incomingsoundoptions_enum" NOT NULL DEFAULT 'AllowCustom', "audio" character varying NOT NULL DEFAULT 'https://bsa-chatito-storage.s3.amazonaws.com/audios/Tuturu.mp3', CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TYPE "post_integration_enum" AS ENUM('Whale', 'Schedulia', 'GitHub', 'None')`);
         await queryRunner.query(`CREATE TABLE "post" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "text" character varying NOT NULL, "integration" "post_integration_enum" NOT NULL DEFAULT 'None', "createdByUserId" uuid, "chatId" uuid, CONSTRAINT "PK_be5fda3aac270b134ff9c21cdee" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TYPE "chat_type_enum" AS ENUM('Channel', 'DirectMessage', 'GithubRepository')`);
         await queryRunner.query(`CREATE TABLE "chat" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "name" character varying(150) NOT NULL, "type" "chat_type_enum" NOT NULL, "description" character varying(200), "hash" character varying(7) NOT NULL, "isPrivate" boolean NOT NULL, "createdByUserId" uuid, "workspaceId" uuid, CONSTRAINT "UQ_49aa74145a400372135c0e7961c" UNIQUE ("hash"), CONSTRAINT "PK_9d0b2ba74336710fd31154738a5" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "user_workspaces_workspace" ("userId" uuid NOT NULL, "workspaceId" uuid NOT NULL, CONSTRAINT "PK_a25759bde9cc94e49a72a04316a" PRIMARY KEY ("userId", "workspaceId"))`);
         await queryRunner.query(`CREATE INDEX "IDX_2bca1ee291822fa1a508d06237" ON "user_workspaces_workspace" ("userId") `);
@@ -100,8 +103,11 @@ export class Init1599662508533 implements MigrationInterface {
         await queryRunner.query(`DROP INDEX "IDX_2bca1ee291822fa1a508d06237"`);
         await queryRunner.query(`DROP TABLE "user_workspaces_workspace"`);
         await queryRunner.query(`DROP TABLE "chat"`);
+        await queryRunner.query(`DROP TYPE "chat_type_enum"`);
         await queryRunner.query(`DROP TABLE "post"`);
+        await queryRunner.query(`DROP TYPE "post_integration_enum"`);
         await queryRunner.query(`DROP TABLE "user"`);
+        await queryRunner.query(`DROP TYPE "user_incomingsoundoptions_enum"`);
         await queryRunner.query(`DROP TABLE "draft_comment"`);
         await queryRunner.query(`DROP TABLE "draft_post"`);
         await queryRunner.query(`DROP TABLE "reminder"`);
