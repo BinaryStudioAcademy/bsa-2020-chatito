@@ -12,17 +12,22 @@ import { push } from 'connected-react-router';
 import { Routes } from 'common/enums/Routes';
 import { connect } from 'react-redux';
 import DOMPurify from 'dompurify';
+import { openThreadRoutine } from '../../routines';
 
 interface IProps {
   draft: IDraftClient;
   whash: string;
   router: (url: string) => {};
+  openThread: (id: string) => {};
 }
 
-const DraftCard: React.FC<IProps> = ({ draft, whash, router }) => {
+const DraftCard: React.FC<IProps> = ({ draft, whash, router, openThread }) => {
   const onGoToChat = () => {
     if (draft.postId) {
-      router(Routes.Post.replace(':whash', whash).replace(':chash', draft.chat.hash).replace(':postId', draft.postId));
+      // It isn't working well
+      // router(Routes.Post.replace(':whash', whash)
+      // .replace(':chash', draft.chat.hash).replace(':postId', draft.postId));
+      openThread(draft.postId);
     } else {
       router(Routes.Chat.replace(':whash', whash).replace(':chash', draft.chat.hash));
     }
@@ -42,7 +47,8 @@ const DraftCard: React.FC<IProps> = ({ draft, whash, router }) => {
 };
 
 const mapDispatchToProps = {
-  router: push
+  router: push,
+  openThread: openThreadRoutine
 };
 
 export default connect(null, mapDispatchToProps)(DraftCard);

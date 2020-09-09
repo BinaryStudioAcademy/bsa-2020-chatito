@@ -179,3 +179,9 @@ export const test = async (postId: string) => {
   const post = await getCustomRepository(CommentRepository).getAllPostComments(postId);
   return post;
 };
+
+export const getPost = async (postId: string) => {
+  const post = await getCustomRepository(PostRepository).getById(postId);
+  const mappedPost = await fromPostToPostClient(post);
+  return mappedPost;
+};
