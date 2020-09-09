@@ -189,7 +189,7 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     }
     case addPostWithSocketRoutine.TRIGGER: {
       const posts = [...state.posts];
-      if (!posts.find(p => p.id === payload.id)) {
+      if (!state.loading && !posts.find(p => p.id === payload.id)) {
         posts.push(payload);
       }
       return {

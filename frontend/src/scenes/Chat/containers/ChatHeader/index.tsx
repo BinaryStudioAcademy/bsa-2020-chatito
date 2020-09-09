@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styles from './styles.module.sass';
 
 import {
-  faHashtag,
-  faLock,
   faUserPlus,
   faInfoCircle,
   faVolumeMute,
@@ -28,14 +26,6 @@ import { ChatType } from 'common/enums/ChatType';
 import { createDirectChannelName } from 'common/helpers/nameHelper';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { showUserProfileRoutine } from 'scenes/Workspace/routines';
-
-const privateChannelIcon = (
-  <FontAwesomeIcon icon={faLock} className={styles.iconChatType} />
-);
-
-const publicChannelIcon = (
-  <FontAwesomeIcon icon={faHashtag} className={styles.iconChatType} />
-);
 
 interface IProps {
   chat?: IChat;
@@ -150,7 +140,6 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser,
 
       <div className={styles.headerInfo}>
         <div className={styles.titleBlock}>
-          {chat.isPrivate ? privateChannelIcon : publicChannelIcon}
           {chat.type === ChatType.DirectMessage && directUsers && directUsers.length < 3 ? (
             <button
               onClick={() => showUserProfile(userToShow)}
