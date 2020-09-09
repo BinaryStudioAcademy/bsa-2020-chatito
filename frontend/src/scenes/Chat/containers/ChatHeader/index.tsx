@@ -8,7 +8,6 @@ import {
   faVolumeUp
 } from '@fortawesome/free-solid-svg-icons';
 import { toggleChatMuteRoutine } from '../../routines';
-import { faStar } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'react-bootstrap/Image';
 import { IAppState } from 'common/models/store';
