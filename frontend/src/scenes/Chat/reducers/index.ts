@@ -25,7 +25,8 @@ import {
   fetchPublicChannelRoutine,
   setChatMuteSocketRoutine,
   renderScrollDownButtonRoutine,
-  clickToScrollRoutine
+  clickToScrollRoutine,
+  newPostByCurrentUserRoutine
 } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
@@ -46,6 +47,7 @@ export interface IChatState {
   btnLoading: boolean;
   scrollDownButton: boolean;
   clickedToScroll: boolean;
+  newPostScroll: boolean;
 }
 
 const initialState: IChatState = {
@@ -58,7 +60,8 @@ const initialState: IChatState = {
   fetchCount: 10,
   btnLoading: false,
   scrollDownButton: false,
-  clickedToScroll: false
+  clickedToScroll: false,
+  newPostScroll: false
 };
 
 const reducer = (state: IChatState = initialState, { type, payload }: Routine<any>): IChatState => {
@@ -196,11 +199,11 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     }
     case addPostWithSocketRoutine.TRIGGER: {
       const posts = [...state.posts];
-      if (!posts.find(p => p.id === payload.id)) {
+      if (!state.loading && !posts.find(p => p.id === payload.id)) {
         posts.push(payload);
       }
       return {
-        ...state, posts
+        ...state, posts, newPostScroll: false
       };
     }
     case editPostWithSocketRoutine.TRIGGER: {
@@ -359,6 +362,11 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
     case clickToScrollRoutine.SUCCESS: {
       return {
         ...state, clickedToScroll: payload
+      };
+    }
+    case newPostByCurrentUserRoutine.TRIGGER: {
+      return {
+        ...state, newPostScroll: true
       };
     }
     default:

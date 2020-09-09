@@ -13,7 +13,8 @@ import {
   deleteDraftPostWithSocketRoutine,
   updatePostDraftCommentRoutine,
   deleteDraftPostFromDraftsRoutine,
-  setChatMuteSocketRoutine
+  setChatMuteSocketRoutine,
+  newPostByCurrentUserRoutine
 } from 'scenes/Chat/routines';
 import {
   incUnreadCountRoutine,
@@ -84,6 +85,9 @@ export const connectSockets = () => {
     const currentUser = state.user.user;
     if (currentUser && user.id !== currentUser.id) {
       store.dispatch(markAsUnreadPostWithSocketRoutine({ chatId: chat.id, chatType: chat.type, unreadPost: post }));
+    }
+    if (currentUser && user.id === currentUser.id) {
+      store.dispatch(newPostByCurrentUserRoutine());
     }
   });
 

@@ -97,7 +97,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
         setGithubUsername(value);
         break;
       }
-      case 'formEditTitle': {
+      case 'formEditLifePosition': {
         setTitle(value);
         break;
       }
@@ -162,7 +162,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             />
           </Form.Group>
 
-          <Form.Group controlId="formEditTitle" className={styles.inputBlock}>
+          <Form.Group controlId="formEditEmail" className={styles.inputBlock}>
             <span className={styles.inputHeader}>Email</span>
             <Form.Control
               className={styles.inputGroup}
@@ -198,9 +198,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
             </Button>
           </div>
         </Form>
-        <div
-          className={`d-flex flex-column align-items-center ${styles.imageEditBlock}`}
-        >
+        <div className={`align-items-center ${styles.imageEditBlock}`}>
           <div>
             <Image
               className={styles.image}
@@ -222,7 +220,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
                   className={styles.uploadAvatar}
                 />
               </div>
-              {!user.imageUrl ? (
+              {user.imageUrl ? (
                 <button
                   type="button"
                   className={[styles.link, styles.removePhoto].join(' ')}

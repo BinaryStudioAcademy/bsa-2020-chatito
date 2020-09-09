@@ -39,6 +39,8 @@ interface IProps {
   readPost: IBindingCallback1<IPostsToRead>;
   clickedToScroll: boolean;
   clickToScroll: IBindingCallback1<boolean>;
+  isUserChatMember: boolean;
+  newPostScroll: boolean;
 }
 
 const ChatBody: React.FC<IProps> = ({
@@ -57,17 +59,19 @@ const ChatBody: React.FC<IProps> = ({
   renderScrollDownButton,
   readPost,
   clickedToScroll,
-  clickToScroll
+  clickToScroll,
+  isUserChatMember,
+  newPostScroll
 }) => {
   const isNew = true;
   const [postIdForLine, setPostIdForLine] = useState('');
   const chatBody = useRef<HTMLDivElement>(null);
   const [unreadChatPostIds, setUnreadChatPostIds] = useState<string[]>();
   const [copiedPost, setCopiedPost] = useState<string>('');
-  const [loadAbility, setLoadAbility] = useState<boolean>(true);
   const getMorePosts = () => {
     loadMorePosts({ chatId, from, count });
   };
+
   const setNewPostLine = () => {
     unreadChats.forEach(unreadChat => {
       if (unreadChat.id === chatId) {
@@ -94,6 +98,11 @@ const ChatBody: React.FC<IProps> = ({
       });
     }
   };
+  const scrollDown = (behavior?: 'smooth' | 'auto') => {
+    if (chatBody.current !== null && !loading) {
+      chatBody.current.scrollTo({ left: 0, top: chatBody.current.scrollHeight, behavior });
+    }
+  };
 
   const postRef = useRef(null);
   useEffect(() => {
@@ -105,29 +114,30 @@ const ChatBody: React.FC<IProps> = ({
         setNewPostLine();
       }
     }
-    if (chatBody.current !== null && !loading) {
-      chatBody.current.scrollTop = chatBody.current.scrollHeight;
-    }
-    if (postRef.current && postId) {
-      scrollToRef(postRef, 'auto');
+    if (!loading) {
+      scrollDown('auto');
     }
   }, [loading, chatId]);
 
+  const isPostLoaded = (id: string) => {
+    const tempArr: string[] = [];
+    messages.forEach(post => {
+      tempArr.push(post.id);
+    });
+    if (id && !tempArr.includes(id) && !loading) {
+      getMorePosts();
+      setNewPostLine();
+    }
+    if (!id || tempArr.includes(id)) {
+      scrollToRef(postRef);
+    }
+  };
+
   useEffect(() => {
     if (!postId) {
-      const tempArr: string[] = [];
-      messages.forEach(post => {
-        tempArr.push(post.id);
-      });
-      if (postIdForLine && !tempArr.includes(postIdForLine) && !loading) {
-        setLoadAbility(false);
-        getMorePosts();
-        setNewPostLine();
-      }
-      if (!postIdForLine || tempArr.includes(postIdForLine)) {
-        scrollToRef(postRef);
-        setLoadAbility(true);
-      }
+      isPostLoaded(postIdForLine);
+    } else if (postRef.current && postId) {
+      isPostLoaded(postId);
     }
   }, [messages.length]);
 
@@ -135,11 +145,11 @@ const ChatBody: React.FC<IProps> = ({
     setNewPostLine();
   }, [unreadChats]);
 
-  const scrollDown = () => {
-    if (chatBody.current !== null && !loading) {
-      chatBody.current.scrollTo({ left: 0, top: chatBody.current.scrollHeight, behavior: 'smooth' });
+  useEffect(() => {
+    if (newPostScroll) {
+      scrollDown('smooth');
     }
-  };
+  }, [newPostScroll]);
 
   const handleOpenThread = (post: IPost) => {
     if (activeThreadPostId === post.id) return;
@@ -204,7 +214,7 @@ const ChatBody: React.FC<IProps> = ({
         }
       });
     }
-    scrollDown();
+    scrollDown('smooth');
     clickToScroll(false);
   }, [clickedToScroll]);
 
@@ -215,7 +225,7 @@ const ChatBody: React.FC<IProps> = ({
     >
       <div className={styles.chatBody} key={chatId} ref={chatBody}>
         <InfiniteScroll
-          loadMore={() => loadAbility && getMorePosts()}
+          loadMore={getMorePosts}
           isReverse
           initialLoad={false}
           hasMore={hasMorePosts && !loading}
@@ -236,6 +246,7 @@ const ChatBody: React.FC<IProps> = ({
                   type={PostType.Post}
                   setCopiedPost={setCopiedPost}
                   copiedPost={copiedPost}
+                  isUserChatMember={isUserChatMember}
                 />
               </div>
             </div>
@@ -256,7 +267,8 @@ const mapStateToProps = (state: IAppState) => ({
   from: state.chat.fetchFrom,
   count: state.chat.fetchCount,
   unreadChats: state.workspace.unreadChats,
-  clickedToScroll: state.chat.clickedToScroll
+  clickedToScroll: state.chat.clickedToScroll,
+  newPostScroll: state.chat.newPostScroll
 });
 
 const mapDispatchToProps = {

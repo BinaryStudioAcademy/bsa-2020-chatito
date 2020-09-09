@@ -27,3 +27,4 @@ export const toggleChatMuteRoutine = createRoutine('TOGGLE_CHAT_MUTE');
 export const setChatMuteSocketRoutine = createRoutine('SET_CHAT_MUTE_SOCKET');
 export const renderScrollDownButtonRoutine = createRoutine('RENDER_SCROLL_DOWN_BUTTON');
 export const clickToScrollRoutine = createRoutine('CLICK_TO_SCROLL');
+export const newPostByCurrentUserRoutine = createRoutine('NEW_POST_BY_CURRENT_USER');

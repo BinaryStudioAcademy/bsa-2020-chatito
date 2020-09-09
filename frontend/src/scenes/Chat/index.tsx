@@ -23,11 +23,12 @@ interface IProps {
   };
   chat?: IChat;
   chats: IChat[];
+  isUserChatMember: boolean;
   selectChat: (chat: IChat | null) => void;
   fetchPublicChannel: IBindingCallback1<IFetchPublicChannel>;
 }
 const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats,
-  selectChat, fetchPublicChannel }) => {
+  selectChat, fetchPublicChannel, isUserChatMember }) => {
   useEffect(() => {
     const { chash } = match.params;
     if (chash) {
@@ -44,9 +45,9 @@ const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats,
   return (
     <LoaderWrapper loading={isLoading}>
       <div className={styles.chatContainer}>
-        <ChatHeader />
-        <ChatBody postId={match?.params?.postId} />
-        { chat?.type === ChatType.GithubRepository ? '' : <ChatFooter /> }
+        <ChatHeader isUserChatMember={isUserChatMember} />
+        <ChatBody postId={match?.params?.postId} isUserChatMember={isUserChatMember} />
+        { chat?.type === ChatType.GithubRepository ? '' : <ChatFooter isUserChatMember={isUserChatMember} /> }
       </div>
     </LoaderWrapper>
   );
@@ -57,7 +58,8 @@ const mapStateToProps = (state: IAppState) => {
   return {
     chat: state.chat.chat,
     isLoading: state.workspace.loading,
-    chats: [...channels, ...directMessages, ...githubRepositories] as IChat[]
+    chats: [...channels, ...directMessages, ...githubRepositories] as IChat[],
+    isUserChatMember: !!state.chat.chat?.users.find(user => user.id === state.user.user?.id)
   };
 };
 
