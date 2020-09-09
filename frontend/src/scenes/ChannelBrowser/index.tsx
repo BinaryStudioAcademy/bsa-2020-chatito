@@ -82,21 +82,21 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
           <FormControl placeholder="Search by channel name" value={searchValue} onChange={onChange} />
         </InputGroup>
       </header>
-      <div className={styles.main}>
-        <div className={styles.controlsWrp}>
-          <div>{channelList.length > 1 ? `${channelList.length} channels` : `${channelList.length} channel`}</div>
-          <div className={styles.buttonsWrapper}>
-            <SortOption setSortOption={sortOptionHandler} sortOption={sortOption} />
-            <FilterOption
-              filterOption={filterOption}
-              setFilterOption={filterOptionHandler}
-              isChecked={isChecked}
-              setIsChecked={checkboxHandler}
-            />
+      <LoaderWrapper loading={loading}>
+        <div className={styles.main}>
+          <div className={styles.controlsWrp}>
+            <div>{channelList.length > 1 ? `${channelList.length} channels` : `${channelList.length} channel`}</div>
+            <div className={styles.buttonsWrapper}>
+              <SortOption setSortOption={sortOptionHandler} sortOption={sortOption} />
+              <FilterOption
+                filterOption={filterOption}
+                setFilterOption={filterOptionHandler}
+                isChecked={isChecked}
+                setIsChecked={checkboxHandler}
+              />
+            </div>
           </div>
-        </div>
-        <div className={styles.channelsWrp}>
-          <LoaderWrapper loading={loading}>
+          <div className={styles.channelsWrp}>
             {channelList.map(channel => (
               <ChannelItem
                 key={channel.id}
@@ -104,18 +104,18 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
                 channel={channel}
               />
             ))}
-          </LoaderWrapper>
+          </div>
+          <div className={styles.center}>
+            <Button
+              variant="secondary"
+              onClick={onCreateChannel}
+              className="appButton save createChannel"
+            >
+              Create Channel
+            </Button>
+          </div>
         </div>
-        <div className={styles.center}>
-          <Button
-            variant="secondary"
-            onClick={onCreateChannel}
-            className="appButton save createChannel"
-          >
-            Create Channel
-          </Button>
-        </div>
-      </div>
+      </LoaderWrapper>
     </div>
   );
 };
