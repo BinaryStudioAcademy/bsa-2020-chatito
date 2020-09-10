@@ -11,12 +11,11 @@ import InviteChatForm from 'scenes/Chat/containers/InviteChatForm';
 interface IProps {
   isShown: boolean;
   postsLoading: boolean;
-  chatName: string;
   chatId: string;
   chatUsers: IUser[];
   toggleModal: IBindingCallback1<IModalRoutine>;
 }
-const InviteChatModal: React.FC<IProps> = ({ chatName, chatId, chatUsers,
+const InviteChatModal: React.FC<IProps> = ({ chatId, chatUsers,
   isShown, postsLoading, toggleModal }) => {
   const onHide = () => {
     toggleModal({ modalType: ModalTypes.InviteChat, show: !isShown });
@@ -25,7 +24,6 @@ const InviteChatModal: React.FC<IProps> = ({ chatName, chatId, chatUsers,
     <ModalWindow isShown={!postsLoading && isShown} onHide={onHide}>
       <InviteChatForm
         hideCallback={onHide}
-        chatName={chatName}
         chatId={chatId}
         chatUsers={chatUsers}
       />

@@ -16,20 +16,20 @@ const ChatMember = ({
   isCreator,
   currentUser
 }: IProps) => (
-  <div className="mb-1 w-100 d-flex align-items-center position-relative">
+  <div className="mb-2 w-100 d-flex align-items-center position-relative">
     <img className={styles.avatar} src={getUserImgLink(user.imageUrl as string)} alt={user.displayName} />
     <span>{user.id === currentUser.id ? `${user.displayName} (you)` : user.displayName}</span>
     {isCreator && user.id !== currentUser.id
       ? (
-        <span
-          className={styles.removeUser}
-          role="button"
+        <button
+          type="button"
+          className={`${styles.removeUser} button-unstyled`}
           onClick={() => removeUser(user.id)}
           onKeyDown={() => removeUser(user.id)}
           tabIndex={0}
         >
           X
-        </span>
+        </button>
       )
       : null}
   </div>

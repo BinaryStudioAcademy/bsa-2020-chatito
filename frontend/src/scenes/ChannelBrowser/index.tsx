@@ -17,6 +17,8 @@ import { SortType } from 'common/enums/SortType';
 import { getSortedChannels } from 'common/helpers/sortHelper';
 import { FilterOption } from './components/FilterOption';
 import { FilterType } from 'common/enums/FilterType';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 interface IProps {
   match: {
@@ -78,9 +80,17 @@ const ChannelBrowser: React.FC<IProps> = ({ match, currentWorkspaceId, channels 
     <div className={styles.ChannelBrowser}>
       <header className={styles.header}>
         <span className={styles.headerName}>Channel browser</span>
-        <InputGroup className={styles.search}>
-          <FormControl placeholder="Search by channel name" value={searchValue} onChange={onChange} />
-        </InputGroup>
+        <div className={styles.wrapper}>
+          <InputGroup>
+            <FormControl
+              placeholder="Search by channel name"
+              onChange={onChange}
+              value={searchValue}
+              className={styles.searchInput}
+            />
+          </InputGroup>
+          <FontAwesomeIcon icon={faSearch} className={styles.searchIcon} />
+        </div>
       </header>
       <LoaderWrapper loading={loading}>
         <div className={styles.main}>

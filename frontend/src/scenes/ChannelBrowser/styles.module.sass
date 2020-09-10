@@ -24,9 +24,6 @@
   height: calc(100vh - 104px)
   color: var(--main-text)
 
-.search
-  width: 50%
-
 .controlsWrp
   display: flex
   justify-content: space-between
@@ -91,3 +88,23 @@
     height: calc(100vh - 62px)
   .channelsWrp
     max-height: calc(100vh - 62px - 63px - 62px - 34px - 50px - 16px)
+
+.searchInput
+  width: 100%
+  border-radius: 50px
+  padding-left: 40px
+
+.wrapper
+  position: relative
+  width: 50%
+
+  .searchIcon
+    position: absolute
+    opacity: 0.25
+    left: 15px
+    top: 12px
+    cursor: pointer
+    z-index: 5
+
+    &:hover
+      opacity: 0.5
