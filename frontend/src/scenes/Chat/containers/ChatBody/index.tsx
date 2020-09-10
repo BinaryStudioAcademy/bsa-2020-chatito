@@ -75,14 +75,16 @@ const ChatBody: React.FC<IProps> = ({
   };
 
   const needToRenderButton = () => {
-    const lastPosts = messages.slice(messages.length - 5);
-    let needToRender = true;
-    lastPosts.forEach(post => {
-      if (post.id === postIdForLine && needToRender) {
-        needToRender = false;
-      }
+    const lastPosts = messages.slice(messages.length - 6);
+    const lastPostsIds: string[] = [];
+    lastPosts.forEach(lastPost => {
+      lastPostsIds.push(lastPost.id);
     });
-    return needToRender;
+    if (lastPostsIds.includes(postIdForLine) && postIdForLine) {
+      renderScrollDownButton(false);
+    } else {
+      renderScrollDownButton(true);
+    }
   };
   const setNewPostLine = () => {
     unreadChats.forEach(unreadChat => {
@@ -102,10 +104,10 @@ const ChatBody: React.FC<IProps> = ({
     });
   };
   useEffect(() => {
-    if (needToRenderButton() && postIdForLine) {
-      renderScrollDownButton(true);
+    if (messages.length > 6 && postIdForLine) {
+      needToRenderButton();
     }
-  }, [postIdForLine]);
+  }, [postIdForLine, messages.length]);
   const scrollToRef = (ref: RefObject<HTMLElement>, behavior?: 'auto' | 'smooth') => {
     if (ref.current) {
       ref.current.scrollIntoView({
