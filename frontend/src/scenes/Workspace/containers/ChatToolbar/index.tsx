@@ -142,7 +142,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   );
 
   const channelSelectorLink = (text: string, href: string, iconFa: IconDefinition) => (
-    <a href={href} type="button" className={styles.channelSelect}>
+    <a href={href} type="button" target="_blank" rel="noopener noreferrer" className={styles.channelSelect}>
       <div className={styles.chatBlockContainer}>
         <div className={styles.iconWrapper}>
           <FontAwesomeIcon icon={iconFa} color="black" />

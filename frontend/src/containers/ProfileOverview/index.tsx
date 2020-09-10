@@ -165,7 +165,12 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
             </button>
           )}
           <button type="button" className="button-unstyled">
-            <a href={`${env.urls.scheduliaUrl}/${user.email}`} className={styles.circleIconsContainer}>
+            <a
+              href={`${env.urls.scheduliaUrl}/${user.email}`}
+              rel="noopener noreferrer"
+              target="_blank"
+              className={styles.circleIconsContainer}
+            >
               <FontAwesomeIcon icon={faCalendarAlt} />
             </a>
             <span className={styles.buttonsText}>Schedulia</span>
