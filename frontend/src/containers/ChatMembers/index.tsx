@@ -54,7 +54,11 @@ const ChatMembers: FunctionComponent<any> = ({
     >
       <div>
         <header className={styles.title}>Chat members</header>
-        <SearchInput onSearch={setSearchStr} stylesClassName={styles.searchInput} />
+        <SearchInput
+          onSearch={setSearchStr}
+          placeholder="Search by name or email"
+          stylesClassName={styles.searchInput}
+        />
         {
           chat.users.map((user: IUser) => {
             if (!isSuitable(user)) {
