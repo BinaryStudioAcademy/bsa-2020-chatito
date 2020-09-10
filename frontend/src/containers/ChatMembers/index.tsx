@@ -33,6 +33,7 @@ const ChatMembers: FunctionComponent<any> = ({
 }: IProps) => {
   const [searchStr, setSearchStr] = useState('');
   const handleCloseModal = () => {
+    setSearchStr('');
     toggleModal({ modalType: ModalTypes.ChatMembers, show: false });
   };
 
@@ -44,7 +45,10 @@ const ChatMembers: FunctionComponent<any> = ({
     toggleModal({ modalType: ModalTypes.ChatMembers, show: false });
     toggleModal({ modalType: ModalTypes.InviteChat, show: true });
   };
-  const isSuitable = (user: IUser) => user.displayName.includes(searchStr) || user.email.includes(searchStr);
+  const isSuitable = (user: IUser) => (
+    user.displayName.toLowerCase().includes(searchStr.toLowerCase())
+    || user.email.includes(searchStr)
+  );
   const isCreator = chat.createdByUserId === currentUser.id;
 
   return (
@@ -54,7 +58,11 @@ const ChatMembers: FunctionComponent<any> = ({
     >
       <div>
         <header className={styles.title}>Chat members</header>
-        <SearchInput onSearch={setSearchStr} stylesClassName={styles.searchInput} />
+        <SearchInput
+          onSearch={setSearchStr}
+          placeholder="Search by name or email"
+          stylesClassName={styles.searchInput}
+        />
         {
           chat.users.map((user: IUser) => {
             if (!isSuitable(user)) {

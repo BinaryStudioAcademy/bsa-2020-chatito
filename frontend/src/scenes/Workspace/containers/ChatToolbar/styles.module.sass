@@ -39,6 +39,17 @@ $colorText: var(--title-text)
   position: relative
   max-width: 275px
 
+
+a.channelSelect
+  color: $colorText
+  text-decoration: none
+
+  &:hover
+    color: $colorText
+    text-decoration: none
+    color: $colorText !important
+    text-decoration-color: none
+
 .iconWrapper
   display: flex
   justify-content: center
@@ -100,14 +111,14 @@ $colorText: var(--title-text)
   display: flex
   align-items: center
   height: 100%
-  overflow: hidden;
+  overflow: hidden
 
 .buttonText
   margin-left: 10px
   text-align: start
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
 
 .addButtonText
   margin-left: 10px

@@ -17,7 +17,7 @@
   white-space: nowrap
 
 .main
-  padding: 34px 94px 0 34px
+  padding: 34px 94px 0 78px
   display: flex
   flex-direction: column
   flex: 1 1
@@ -47,9 +47,11 @@
   flex-direction: column
   max-height: calc(100vh - 78px - 63px - 62px - 34px - 50px - 16px )
 
-.channelsWrp::-webkit-scrollbar-thumb
-  background: var(--scrollbar)
-  border-radius: 5px
+.channelsWrp
+  -ms-overflow-style: none  /* Internet Explorer 10+ */
+  scrollbar-width: none  /* Firefox */
+  &::-webkit-scrollbar
+    display: none  /* Safari and Chrome */
 
 .channelsWrp a:hover
   text-decoration: none

@@ -5,7 +5,14 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faEdit, faEllipsisH, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPlay,
+  faEdit,
+  faEllipsisH,
+  faChevronDown,
+  faChevronUp,
+  faCalendarAlt
+} from '@fortawesome/free-solid-svg-icons';
 import { IUser } from 'common/models/user/IUser';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { useKey } from 'common/hooks/onInputSubmit';
@@ -26,6 +33,8 @@ import { userLogoDefaultUrl } from 'common/configs/defaults';
 import { faTimesCircle, faSmileWink } from '@fortawesome/free-regular-svg-icons';
 import { getUserById } from 'services/userService';
 import LoaderWrapper from 'components/LoaderWrapper';
+import { env } from 'env';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 
 interface IProps {
   tempUser: IUser;
@@ -111,6 +120,89 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
       </div>
     </>
   );
+
+  const PopoverItem = (data: string) => (
+    <Popover id="" className={styles.popOverWindow}>
+      <span>
+        {data}
+      </span>
+    </Popover>
+  );
+
+  const setStatus = (
+    <OverlayTrigger
+      trigger={['hover', 'hover']}
+      delay={{ show: 300, hide: 0 }}
+      rootClose
+      placement="top"
+      overlay={PopoverItem('Set status')}
+    >
+      <button type="button" className="button-unstyled" onClick={onSetStatus}>
+        <div className={styles.circleIconsContainer}>
+          <FontAwesomeIcon icon={faSmileWink} />
+        </div>
+      </button>
+    </OverlayTrigger>
+  );
+
+  const editProfile = (
+    <OverlayTrigger
+      trigger={['hover', 'hover']}
+      delay={{ show: 300, hide: 0 }}
+      rootClose
+      placement="top"
+      overlay={PopoverItem('Edit profile')}
+    >
+      <button type="button" className="button-unstyled" onClick={onEdit}>
+        <div className={styles.circleIconsContainer}>
+          <FontAwesomeIcon icon={faEdit} />
+        </div>
+      </button>
+    </OverlayTrigger>
+  );
+
+  const schedulia = (isPersonal: boolean) => {
+    const tooltipText = isPersonal ? 'My Schedulia' : 'Public Schedulia';
+    const scheduliaUrl = isPersonal ? `${env.urls.scheduliaUrl}` : `${env.urls.scheduliaUrl}/${user.email}`;
+
+    return (
+      <OverlayTrigger
+        trigger={['hover', 'hover']}
+        delay={{ show: 300, hide: 0 }}
+        rootClose
+        placement="top"
+        overlay={PopoverItem(tooltipText)}
+      >
+        <button type="button" className="button-unstyled">
+          <a
+            href={scheduliaUrl}
+            rel="noopener noreferrer"
+            target="_blank"
+            className={styles.circleIconsContainer}
+          >
+            <FontAwesomeIcon icon={faCalendarAlt} />
+          </a>
+        </button>
+      </OverlayTrigger>
+    );
+  };
+
+  const more = (
+    <OverlayTrigger
+      trigger={['hover', 'hover']}
+      delay={{ show: 300, hide: 0 }}
+      rootClose
+      placement="top"
+      overlay={PopoverItem('More')}
+    >
+      <button type="button" className="button-unstyled">
+        <div className={styles.circleIconsContainer}>
+          <FontAwesomeIcon icon={faEllipsisH} />
+        </div>
+      </button>
+    </OverlayTrigger>
+  );
+
   const imageUrl = user.id === currentUser.id ? currentUser.imageUrl : user.imageUrl;
   return (
     <div className={styles.profileOverview}>
@@ -140,28 +232,10 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
         </InputGroup>
 
         <div className={`${styles.toolbar} ${user.id !== currentUser.id ? styles.toolbarOneItem : ''}`}>
-          {user.id === currentUser.id && (
-            <button type="button" className="button-unstyled" onClick={onSetStatus}>
-              <div className={styles.circleIconsContainer}>
-                <FontAwesomeIcon icon={faSmileWink} />
-              </div>
-              <span className={styles.buttonsText}>Set status</span>
-            </button>
-          )}
-          {user.id === currentUser.id && (
-            <button type="button" className="button-unstyled" onClick={onEdit}>
-              <div className={styles.circleIconsContainer}>
-                <FontAwesomeIcon icon={faEdit} />
-              </div>
-              <span className={styles.buttonsText}>Edit profile</span>
-            </button>
-          )}
-          <button type="button" className="button-unstyled">
-            <div className={styles.circleIconsContainer}>
-              <FontAwesomeIcon icon={faEllipsisH} />
-            </div>
-            <span className={styles.buttonsText}>More</span>
-          </button>
+          {user.id === currentUser.id ? setStatus : ''}
+          {user.id === currentUser.id ? editProfile : ''}
+          {schedulia(user.id === currentUser.id)}
+          {more}
         </div>
         <button
           className={`${styles.aboutBtn} button-unstyled`}

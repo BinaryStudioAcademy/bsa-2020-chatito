@@ -76,7 +76,7 @@ interface IProps {
   deleteComment: IBindingCallback1<any>;
   editingPost?: string;
   setEditingPost: IBindingCallback1<string>;
-  isUserChatMember?: boolean;
+  hideOptions?: boolean;
 }
 
 const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, openThread,
@@ -85,7 +85,7 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
 
   setCopiedPost, copiedPost, editPost, deletePost, editingPost, setEditingPost, editComment,
 
-  deleteComment, isUserChatMember }) => {
+  deleteComment, hideOptions }) => {
   const [post, setPost] = useState(postData);
   const [changedReaction, setChangedReaction] = useState('');
   useEffect(() => {
@@ -422,6 +422,15 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
       />
     );
   }
+
+  const renderFooter = () => (
+    post.integration === IntegrationType.None && !hideOptions
+  );
+
+  const renderOptions = () => (
+    type === PostType.Comment || (post.integration === IntegrationType.None && !hideOptions)
+  );
+
   return (
     <div ref={postRef}>
       <Media className={styles.postWrapper} onMouseEnter={onHoverRead}>
@@ -454,8 +463,8 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
             {type === PostType.Post && renderEmojis()}
           </div>
 
-          {post.integration === IntegrationType.None && isUserChatMember && postFooter}
-          {post.integration === IntegrationType.None && isUserChatMember && <ButtonOptions />}
+          {renderFooter() && postFooter}
+          {renderOptions() && <ButtonOptions />}
         </Media.Body>
       </Media>
     </div>

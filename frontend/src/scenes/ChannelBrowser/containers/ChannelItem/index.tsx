@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './styles.module.sass';
 import { Routes } from 'common/enums/Routes';
 import { Link } from 'react-router-dom';
@@ -17,13 +17,19 @@ interface IProps {
   whash: string;
   currentUserId: string;
   channel: IBrowserChannel;
-  loading: boolean;
   leaveChannel: IBindingCallback1<IJoinOrLeaveChannel>;
   joinChannel: IBindingCallback1<IJoinOrLeaveChannel>;
 }
 
-const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel, loading,
+const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel,
   leaveChannel, joinChannel }) => {
+  const [btnLoading, setBtnLoading] = useState(false);
+  useEffect(() => {
+    if (btnLoading) {
+      setBtnLoading(false);
+    }
+  }, [channel]);
+
   const { users, isPrivate, name, hash: chash, id, description } = channel;
   const isUserChatMember = users.find(user => user.id === currentUserId);
   const membersCount = users.length;
@@ -34,6 +40,7 @@ const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel, loading,
   };
 
   const onJoin = () => {
+    setBtnLoading(true);
     joinChannel({ chatId: id, userId: currentUserId });
   };
 
@@ -43,7 +50,7 @@ const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel, loading,
 
   return (
     <div className={styles.channelItem}>
-      <Link to={getChatRoute}>
+      <Link to={getChatRoute} className={styles.goToChannelLink}>
         <div className={styles.channel}>
           <h4 className={styles.channelName}>
             <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} size="xs" />
@@ -67,21 +74,20 @@ const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel, loading,
       </Link>
       <Button
         variant={isUserChatMember ? 'outline-secondary' : 'secondary'}
-        className={isUserChatMember ? 'appButton cancel' : 'appButton save'}
+        className={[isUserChatMember ? 'appButton cancel' : 'appButton save', styles.channelBtn].join(' ')}
         onClick={isUserChatMember ? onLeave : onJoin}
-        disabled={loading}
+        disabled={btnLoading}
         type="button"
       >
         {isUserChatMember ? 'Leave' : 'Join'}
-        {loading && !isUserChatMember && <Spinner animation="border" role="status" size="sm" />}
+        {btnLoading && !isUserChatMember && <Spinner animation="border" role="status" size="sm" />}
       </Button>
     </div>
   );
 };
 
 const mapStateToProps = (state: IAppState) => ({
-  currentUserId: state.user.user?.id as string,
-  loading: state.channelBrowser.btnLoading
+  currentUserId: state.user.user?.id as string
 });
 
 const mapDispatchToProps = {

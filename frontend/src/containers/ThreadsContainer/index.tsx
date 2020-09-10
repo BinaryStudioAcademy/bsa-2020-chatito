@@ -35,9 +35,11 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
   }
   if (threads && !threads.length) {
     return (
-      <header className={styles.headerContainer}>
-        <p className={styles.headerName}>You have no threads yet</p>
-      </header>
+      <div className={styles.threadsContainerComponent}>
+        <header className={styles.headerContainer}>
+          <p className={styles.headerName}>You have no threads yet</p>
+        </header>
+      </div>
     );
   }
   return (
@@ -66,7 +68,8 @@ const ThreadsContainer: FunctionComponent<IProps> = ({ fetchThreads, activeWorks
                       id: post.id,
                       chatId: post.chat.id,
                       postReactions: post.postReactions,
-                      commentsInfo: noInfo
+                      commentsInfo: noInfo,
+                      integration: post.integration
                     }}
                     comments={post.comments}
                     hideCloseBtn={hideCloseBtn}

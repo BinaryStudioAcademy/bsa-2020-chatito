@@ -16,7 +16,8 @@ import {
   faPencilAlt,
   faBookmark,
   faCodeBranch,
-  faVolumeMute
+  faVolumeMute,
+  faCalendarAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { IAppState } from 'common/models/store';
 import { IChat } from 'common/models/chat/IChat';
@@ -39,6 +40,7 @@ import { IUnreadPostComments } from 'common/models/post/IUnreadPostComments';
 import CreateRepositoryChatModal from 'containers/CreateRepositoryChatModal';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 import { IUser } from 'common/models/user/IUser';
+import { env } from 'env';
 
 interface IProps {
   channels: IChat[];
@@ -137,6 +139,24 @@ const ChatToolbar: FunctionComponent<IProps> = ({
         {text === 'Threads' ? unreadThreadsMarker() : ''}
       </div>
     </button>
+  );
+
+  const channelSelectorLink = (text: string, href: string, iconFa: IconDefinition) => (
+    <a href={href} type="button" target="_blank" rel="noopener noreferrer" className={styles.channelSelect}>
+      <div className={styles.chatBlockContainer}>
+        <div className={styles.iconWrapper}>
+          <FontAwesomeIcon icon={iconFa} color="black" />
+        </div>
+        <div className={styles.channelNameWrapper}>
+          <div className={styles.channelNameWrapper}>
+            <div className={styles.buttonTextContainer}>
+              <span className={styles.buttonText}>{text}</span>
+            </div>
+          </div>
+        </div>
+        {text === 'Threads' ? unreadThreadsMarker() : ''}
+      </div>
+    </a>
   );
 
   const unreadChatsMarker = (chatId: string) => (
@@ -402,7 +422,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
         () => isActiveChanneSelector(Routes.Drafts))}
       {channelSelector('Saved Items', faBookmark)}
       {channelSelector('File Browser', faDatabase)}
-
+      {channelSelectorLink('My Schedulia', env.urls.scheduliaUrl || '', faCalendarAlt)}
       <div className={styles.buttonChannel}>
         <button type="button" className={styles.buttonSelect} onClick={() => setChatPanel(!chatPanel)}>
           <div className={styles.iconWrapper}>

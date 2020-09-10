@@ -158,7 +158,8 @@ class PostRepository extends Repository<Post> {
         'post.createdByUser',
         'post.text',
         'post.createdAt',
-        'post.id'
+        'post.id',
+        'post.integration'
       ])
 
       .leftJoin('post.chat', 'chat')
