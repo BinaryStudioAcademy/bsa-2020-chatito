@@ -139,7 +139,7 @@ const Thread: FunctionComponent<IProps> = ({
   const threadUnreadMarker = (
     unreadPostComments.map(unreadPost => (
       unreadPost.id === post.id && unreadPost.unreadComments.length ? (
-        <span className={styles.new}>--New</span>
+        <span className={styles.new}> New</span>
       ) : (
         ''
       )
