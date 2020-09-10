@@ -20,7 +20,8 @@ export const env = {
   },
   facebookAuth: {
     appId: getOsEnv('FACEBOOK_LOGIN_APP_ID'),
-    appSecret: getOsEnv('FACEBOOK_LOGIN_APP_SECRET')
+    appSecret: getOsEnv('FACEBOOK_LOGIN_APP_SECRET'),
+    imageHost: getOsEnv('FACEBOOK_IMAGE_HOST_URL')
   },
   aws: {
     accessKeyId: getOsEnv('AWS_ACCESS_KEY_ID'),

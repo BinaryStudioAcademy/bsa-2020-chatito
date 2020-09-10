@@ -1,3 +1,3 @@
 import { env } from '../env';
 
-export const { appId, appSecret } = env.facebookAuth;
+export const { appId, appSecret, imageHost } = env.facebookAuth;
