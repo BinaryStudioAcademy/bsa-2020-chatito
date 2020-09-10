@@ -6,7 +6,7 @@ import { ICreateComment } from '../../common/models/comment/ICreateComment';
 @EntityRepository(Comment)
 class CommentRepository extends Repository<Comment> {
   getById(id: string): Promise<Comment> {
-    return this.findOne({ where: { id }, relations: ['createdByUser', 'post'] });
+    return this.findOne({ where: { id, isDeleted: false }, relations: ['createdByUser', 'post'] });
   }
 
   addComment(comment: ICreateComment): Promise<Comment> {
@@ -19,7 +19,8 @@ class CommentRepository extends Repository<Comment> {
     return this.find({
       relations: ['createdByUser', 'post'],
       where: {
-        post: { id: postId }
+        post: { id: postId, isDeleted: false },
+        isDeleted: false
       },
       order: { createdAt: 'ASC' }
     });
@@ -37,7 +38,10 @@ class CommentRepository extends Repository<Comment> {
 
   async deleteComment(id: string): Promise<Comment> {
     const deletedComment = await this.findOne({ where: { id }, relations: ['createdByUser', 'post'] });
-    await this.delete(id);
+    await this.update(
+      id,
+      { isDeleted: true }
+    );
 
     return deletedComment;
   }

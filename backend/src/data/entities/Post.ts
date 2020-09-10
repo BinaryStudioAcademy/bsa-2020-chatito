@@ -12,6 +12,9 @@ export class Post extends AbstractEntity {
   @Column()
   text: string;
 
+  @Column({ default: false })
+  isDeleted: boolean;
+
   @Column({ type: 'enum', enum: IntegrationType, default: IntegrationType.None })
   integration: IntegrationType;
 
