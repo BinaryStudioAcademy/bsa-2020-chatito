@@ -8,9 +8,10 @@ import { useKey } from 'common/hooks/onInputSubmit';
 interface IProps {
   onSearch: (query: string) => void;
   stylesClassName?: string;
+  placeholder?: string;
 }
 
-const SearchInput: FunctionComponent<IProps> = ({ onSearch, stylesClassName = '' }) => {
+const SearchInput: FunctionComponent<IProps> = ({ onSearch, stylesClassName = '', placeholder }) => {
   const [text, setText] = useState('');
   const inputRef = useRef(null);
 
@@ -22,6 +23,7 @@ const SearchInput: FunctionComponent<IProps> = ({ onSearch, stylesClassName = ''
 
   const onChange = (event: SyntheticEvent) => {
     const target = event.target as HTMLTextAreaElement;
+    onSearch(target.value);
     setText(target.value);
   };
 
@@ -30,6 +32,7 @@ const SearchInput: FunctionComponent<IProps> = ({ onSearch, stylesClassName = ''
       <FormControl
         ref={inputRef}
         aria-label="header search"
+        placeholder={placeholder || ''}
         onChange={onChange}
       />
       <FontAwesomeIcon icon={faSearch} className={styles.searchIcon} onClick={onSubmit} />
