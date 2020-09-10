@@ -7,10 +7,11 @@ import Post from 'containers/Post';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { setActiveThreadRoutine, readPostRoutine } from 'scenes/Workspace/routines';
 import InfiniteScroll from 'react-infinite-scroller';
-import { setPostsRoutine, fetchNavigationPostRoutine,
-  renderScrollDownButtonRoutine, clickToScrollRoutine } from 'scenes/Chat/routines';
+import {
+  setPostsRoutine, fetchNavigationPostRoutine,
+  renderScrollDownButtonRoutine, clickToScrollRoutine
+} from 'scenes/Chat/routines';
 import { IFetchMorePosts } from 'common/models/post/IFetchMorePosts';
-import LoaderWrapper from 'components/LoaderWrapper';
 import { PostType } from 'common/enums/PostType';
 import { IFetchNavPost } from 'common/models/post/IFetchNavPost';
 import CustomReminderModal from 'containers/CustomReminderModal';
@@ -19,7 +20,8 @@ import {
   getDate,
   getMonth,
   getYear,
-  whenWasSent } from 'common/helpers/dateHelper';
+  whenWasSent
+} from 'common/helpers/dateHelper';
 import { IPostsToRead } from 'common/models/chat/IPostsToRead';
 
 interface IProps {
@@ -215,18 +217,24 @@ const ChatBody: React.FC<IProps> = ({
     });
     readPost({ postIdsToDelete, unreadChatsCopy });
   };
-
+  const [ableToRender, setAbleToRender] = useState<boolean>(true);
   useEffect(() => {
     if (!clickedToScroll && postIdForLine) {
       renderScrollDownButton(false);
       unreadChats.forEach((unreadChat, index) => {
         if (unreadChat.id === chatId) {
           const postChat = unreadChats[index].unreadPosts;
-          postsToRead(postChat[postChat.length - 1].id);
+          if (postChat[postChat.length - 1]) {
+            postsToRead(postChat[postChat.length - 1].id);
+          }
         }
       });
     }
     scrollDown('smooth');
+    setAbleToRender(false);
+    setTimeout(() => {
+      setAbleToRender(true);
+    }, 1000);
     clickToScroll(false);
   }, [clickedToScroll]);
 
@@ -246,52 +254,47 @@ const ChatBody: React.FC<IProps> = ({
     return needToRender;
   };
   return (
-    <LoaderWrapper
-      loading={!chatId.length}
-      height="auto"
-    >
-      <div className={styles.chatBody} key={chatId} ref={chatBody}>
-        <InfiniteScroll
-          loadMore={getMorePosts}
-          isReverse
-          initialLoad={false}
-          hasMore={hasMorePosts && !loading}
-          useWindow={false}
-          id="chatScrollContainer"
-        >
-          {messages.map((m, index) => (
-            <div
-              key={m.id}
-              ref={m.id === postIdForLine ? postRef : undefined}
-              onMouseEnter={() => {
-                if (needToRenderButtonOnHover(m.id)) {
-                  renderScrollDownButton(true);
-                } else if (!postIdForLine) {
-                  renderScrollDownButton(false);
-                }
-              }}
-            >
-              {pasteDateLine(index)}
-              <div className={styles.postContainer}>
-                {postIdForLine === m.id ? newPostLineElement : ''}
-                <Post
-                  // eslint-disable-next-line no-nested-ternary
-                  isNew={unreadChatPostIds ? unreadChatPostIds.includes(m.id) ? isNew : !isNew : !isNew}
-                  post={m}
-                  postRef={m.id === postId ? postRef : null}
-                  openThread={handleOpenThread}
-                  type={PostType.Post}
-                  setCopiedPost={setCopiedPost}
-                  copiedPost={copiedPost}
-                  isUserChatMember={isUserChatMember}
-                />
-              </div>
+    <div className={styles.chatBody} key={chatId} ref={chatBody}>
+      <InfiniteScroll
+        loadMore={getMorePosts}
+        isReverse
+        initialLoad={false}
+        hasMore={hasMorePosts && !loading}
+        useWindow={false}
+        id="chatScrollContainer"
+      >
+        {messages.map((m, index) => (
+          <div
+            key={m.id}
+            ref={m.id === postIdForLine ? postRef : undefined}
+            onMouseEnter={() => {
+              if (needToRenderButtonOnHover(m.id) && ableToRender) {
+                renderScrollDownButton(true);
+              } else if (!postIdForLine) {
+                renderScrollDownButton(false);
+              }
+            }}
+          >
+            {pasteDateLine(index)}
+            <div className={styles.postContainer}>
+              {postIdForLine === m.id ? newPostLineElement : ''}
+              <Post
+                // eslint-disable-next-line no-nested-ternary
+                isNew={unreadChatPostIds ? unreadChatPostIds.includes(m.id) ? isNew : !isNew : !isNew}
+                post={m}
+                postRef={m.id === postId ? postRef : null}
+                openThread={handleOpenThread}
+                type={PostType.Post}
+                setCopiedPost={setCopiedPost}
+                copiedPost={copiedPost}
+                isUserChatMember={isUserChatMember}
+              />
             </div>
-          ))}
-          <CustomReminderModal />
-        </InfiniteScroll>
-      </div>
-    </LoaderWrapper>
+          </div>
+        ))}
+        <CustomReminderModal />
+      </InfiniteScroll>
+    </div>
   );
 };
 

@@ -5,7 +5,14 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faEdit, faEllipsisH, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPlay,
+  faEdit,
+  faEllipsisH,
+  faChevronDown,
+  faChevronUp,
+  faCalendarAlt
+} from '@fortawesome/free-solid-svg-icons';
 import { IUser } from 'common/models/user/IUser';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 import { useKey } from 'common/hooks/onInputSubmit';
@@ -26,6 +33,7 @@ import { userLogoDefaultUrl } from 'common/configs/defaults';
 import { faTimesCircle, faSmileWink } from '@fortawesome/free-regular-svg-icons';
 import { getUserById } from 'services/userService';
 import LoaderWrapper from 'components/LoaderWrapper';
+import { env } from 'env';
 
 interface IProps {
   tempUser: IUser;
@@ -156,6 +164,17 @@ const ProfileOverview: React.FC<IProps> = ({ tempUser, currentUser, directMessag
               <span className={styles.buttonsText}>Edit profile</span>
             </button>
           )}
+          <button type="button" className="button-unstyled">
+            <a
+              href={`${env.urls.scheduliaUrl}/${user.email}`}
+              rel="noopener noreferrer"
+              target="_blank"
+              className={styles.circleIconsContainer}
+            >
+              <FontAwesomeIcon icon={faCalendarAlt} />
+            </a>
+            <span className={styles.buttonsText}>Schedulia</span>
+          </button>
           <button type="button" className="button-unstyled">
             <div className={styles.circleIconsContainer}>
               <FontAwesomeIcon icon={faEllipsisH} />
