@@ -46,7 +46,7 @@ const AudioRecorder: React.FC<IProps> = ({ onRecord, maxDuration, onError, showP
       })
       .catch(() => onError && onError('Some problems with player'));
   };
-  const stopTimer = () => intervalId && clearInterval(intervalId);
+
   const start = () => {
     if (!isBlocked) {
       let timerTmp = 0;
@@ -57,7 +57,6 @@ const AudioRecorder: React.FC<IProps> = ({ onRecord, maxDuration, onError, showP
       setIntervalId(newIntervalId);
       setTimeout(() => {
         clearInterval(newIntervalId);
-        stopTimer();
         stop();
       }, maxDuration * 1000 + 300);
       Mp3Recorder
@@ -69,13 +68,13 @@ const AudioRecorder: React.FC<IProps> = ({ onRecord, maxDuration, onError, showP
   };
 
   const cancel = () => {
+    setTimer(1);
     Mp3Recorder
       .stop()
       .getMp3()
       .then(() => {
         setBlobUrl(null);
         setRecording(false);
-        setTimer(1);
         onRecord(null, '');
       })
       .catch(() => onError && onError('Some problems with player'));
