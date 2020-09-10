@@ -30,16 +30,18 @@ interface IProps {
 const ChatContainer: React.FC<IProps> = ({ isLoading, chat, match, chats,
   selectChat, fetchPublicChannel, isUserChatMember }) => {
   useEffect(() => {
-    const { chash } = match.params;
-    if (chash) {
-      const currChat = chats.find(chatItem => chatItem.hash === chash);
-      if (currChat) {
-        selectChat(currChat);
-      } else if (chats.length) {
-        fetchPublicChannel({ chash, whash: match.params.whash });
+    if (!isLoading) {
+      const { chash } = match.params;
+      if (chash) {
+        const currChat = chats.find(chatItem => chatItem.hash === chash);
+        if (currChat) {
+          selectChat(currChat);
+        } else {
+          fetchPublicChannel({ chash, whash: match.params.whash });
+        }
+      } else {
+        selectChat(null);
       }
-    } else {
-      selectChat(null);
     }
   }, [isLoading, match.params.chash]);
   return (
