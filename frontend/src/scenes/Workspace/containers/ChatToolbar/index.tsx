@@ -422,7 +422,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
         () => isActiveChanneSelector(Routes.Drafts))}
       {channelSelector('Saved Items', faBookmark)}
       {channelSelector('File Browser', faDatabase)}
-      {channelSelectorLink('Schedulia', env.urls.scheduliaUrl || '', faCalendarAlt)}
+      {channelSelectorLink('My Schedulia', env.urls.scheduliaUrl || '', faCalendarAlt)}
       <div className={styles.buttonChannel}>
         <button type="button" className={styles.buttonSelect} onClick={() => setChatPanel(!chatPanel)}>
           <div className={styles.iconWrapper}>
