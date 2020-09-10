@@ -28,7 +28,8 @@ import {
   setEditingPostRoutine,
   renderScrollDownButtonRoutine,
   clickToScrollRoutine,
-  newPostByCurrentUserRoutine
+  newPostByCurrentUserRoutine,
+  unselectChannelRoutine
 } from '../routines';
 import { IChat } from 'common/models/chat/IChat';
 import { IPost } from 'common/models/post/IPost';
@@ -381,6 +382,14 @@ const reducer = (state: IChatState = initialState, { type, payload }: Routine<an
       return {
         ...state, newPostScroll: true
       };
+    }
+    case unselectChannelRoutine.TRIGGER: {
+      return {
+        ...state, scrollDownButton: false
+      };
+    }
+    case unselectChannelRoutine.SUCCESS: {
+      return initialState;
     }
     default:
       return state;

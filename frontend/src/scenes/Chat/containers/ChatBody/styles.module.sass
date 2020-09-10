@@ -3,7 +3,12 @@
   flex-direction: column
   flex: 1
   overflow-y: auto
+  overflow-x: hidden
   padding: 15px 0 0
+  -ms-overflow-style: none  /* Internet Explorer 10+ */
+  scrollbar-width: none  /* Firefox */
+  &::-webkit-scrollbar
+    display: none  /* Safari and Chrome */
 
 .postContainer
   width: 100%

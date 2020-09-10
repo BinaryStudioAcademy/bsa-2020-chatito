@@ -14,14 +14,17 @@ import { ReactComponent as Logo } from 'img/logo-icon.svg';
 import { Link } from 'react-router-dom';
 import { IBindingCallback1 } from 'common/models/callback/IBindingCallback1';
 import { showUserProfileRoutine } from 'scenes/Workspace/routines';
+import { unselectChannelRoutine } from 'scenes/Chat/routines';
+import { IBindingAction } from 'common/models/callback/IBindingActions';
 
 interface IProps {
   user?: IUser;
   activeWorkspace: string;
   showUserProfile: IBindingCallback1<IUser>;
+  unselectChannel: IBindingAction;
 }
 
-const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showUserProfile }) => {
+const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showUserProfile, unselectChannel }) => {
   const toggleButtonClick = () => {
     // @todo decide which button to trigger
   };
@@ -44,7 +47,11 @@ const Header: FunctionComponent<IProps> = ({ user, activeWorkspace, showUserProf
 
   return (
     <header className={styles.headerContainer}>
-      <Link className={styles.logoWrapper} to={activeWorkspace ? `/w/${activeWorkspace}` : '/'}>
+      <Link
+        className={styles.logoWrapper}
+        to={activeWorkspace ? `/w/${activeWorkspace}` : '/'}
+        onClick={unselectChannel}
+      >
         <div className={styles.logoImageWrapper}>
           <Logo className={styles.logoImg} />
         </div>
@@ -84,7 +91,8 @@ const mapStateToProps = (state: IAppState) => ({
 });
 
 const mapDispatchToProps = {
-  showUserProfile: showUserProfileRoutine
+  showUserProfile: showUserProfileRoutine,
+  unselectChannel: unselectChannelRoutine
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -59,6 +59,7 @@ interface IProps {
   fetchUnreadUserComments: IBindingCallback1<IFetchWorkspaceUnreadComments>;
   renderScrollDownButton: IBindingCallback1<boolean>;
   clickToScrol: IBindingCallback1<boolean>;
+  pathName: string;
 }
 
 const Workspace: React.FC<IProps> = ({
@@ -77,11 +78,17 @@ const Workspace: React.FC<IProps> = ({
   fetchUnreadUserPosts,
   fetchUnreadUserComments,
   renderScrollDownButton,
-  clickToScrol
+  clickToScrol,
+  pathName
 }) => {
   if (!currentUserId) return <></>;
   const [workspaceChatsStatus, setWorkspaceChatsStatus] = useState(false);
   const [fetchUnreadCommentsStatus, setFetchUnreadCommentsStatus] = useState(false);
+
+  useEffect(() => {
+    renderScrollDownButton(false);
+  }, [pathName]);
+
   useEffect(() => {
     const { whash } = match.params;
     if (selectedHash !== whash) {
@@ -201,7 +208,8 @@ const mapStateToProps = (state: IAppState) => {
     selectedHash: workspace.hash,
     userProfile: state.workspace.userProfile,
     workspaceId: workspace.id,
-    scrollDownButton: state.chat.scrollDownButton
+    scrollDownButton: state.chat.scrollDownButton,
+    pathName: state.router.location.pathname
   };
 };
 
