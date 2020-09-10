@@ -5,13 +5,11 @@ import { IBrowserChannel } from 'common/models/chat/IBrowserChannel';
 export interface IChannelBrowserState {
   loading: boolean;
   channels: IBrowserChannel[];
-  btnLoading: boolean;
 }
 
 const initialState: IChannelBrowserState = {
   loading: false,
-  channels: [],
-  btnLoading: false
+  channels: []
 };
 
 const reducer = (state: IChannelBrowserState = initialState, { type, payload }: Routine<any>): IChannelBrowserState => {
@@ -32,11 +30,6 @@ const reducer = (state: IChannelBrowserState = initialState, { type, payload }: 
         ...state,
         loading: false
       };
-    case joinChannelFromBrowserRoutine.TRIGGER:
-      return {
-        ...state,
-        btnLoading: true
-      };
     case joinChannelFromBrowserRoutine.SUCCESS: {
       const { chatId, userId } = payload;
       return {
@@ -46,20 +39,9 @@ const reducer = (state: IChannelBrowserState = initialState, { type, payload }: 
             return { ...channel, users: [...channel.users, { id: userId }] };
           }
           return channel;
-        }),
-        btnLoading: false
+        })
       };
     }
-    case joinChannelFromBrowserRoutine.FAILURE:
-      return {
-        ...state,
-        btnLoading: false
-      };
-    case leaveChannelFromBrowserRoutine.TRIGGER:
-      return {
-        ...state,
-        btnLoading: true
-      };
     case leaveChannelFromBrowserRoutine.SUCCESS: {
       const { chatId, userId } = payload;
       return {
@@ -69,15 +51,9 @@ const reducer = (state: IChannelBrowserState = initialState, { type, payload }: 
             return { ...channel, users: channel.users.filter(user => user.id !== userId) };
           }
           return channel;
-        }),
-        btnLoading: false
+        })
       };
     }
-    case leaveChannelFromBrowserRoutine.FAILURE:
-      return {
-        ...state,
-        btnLoading: false
-      };
     default:
       return state;
   }
