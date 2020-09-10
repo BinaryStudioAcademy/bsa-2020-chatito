@@ -1,7 +1,7 @@
 .body
   background-color: var(--chat-background-primary)
   height: 100%
-  padding: 34px 94px 0 34px
+  padding: 34px 94px 0 78px
 
   .wrapper
     display: flex
@@ -10,9 +10,11 @@
     overflow-y: auto
     max-height: calc(100vh - 78px - 63px - 34px - 34px )
 
-  .wrapper::-webkit-scrollbar-thumb
-    background: var(--scrollbar)
-    border-radius: 5px
+  .wrapper
+    -ms-overflow-style: none  /* Internet Explorer 10+ */
+    scrollbar-width: none  /* Firefox */
+    &::-webkit-scrollbar
+      display: none  /* Safari and Chrome */
 
   .wrapper a:hover
     text-decoration: none

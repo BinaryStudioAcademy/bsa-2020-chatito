@@ -43,7 +43,7 @@ const ChannelItem: React.FC<IProps> = ({ whash, currentUserId, channel, loading,
 
   return (
     <div className={styles.channelItem}>
-      <Link to={getChatRoute}>
+      <Link to={getChatRoute} className={styles.goToChannelLink}>
         <div className={styles.channel}>
           <h4 className={styles.channelName}>
             <FontAwesomeIcon icon={isPrivate ? faLock : faHashtag} size="xs" />

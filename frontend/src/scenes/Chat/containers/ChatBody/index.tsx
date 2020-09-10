@@ -72,6 +72,16 @@ const ChatBody: React.FC<IProps> = ({
     loadMorePosts({ chatId, from, count });
   };
 
+  const needToRenderButton = () => {
+    const lastPosts = messages.slice(messages.length - 5);
+    let needToRender = true;
+    lastPosts.forEach(post => {
+      if (post.id === postIdForLine && needToRender) {
+        needToRender = false;
+      }
+    });
+    return needToRender;
+  };
   const setNewPostLine = () => {
     unreadChats.forEach(unreadChat => {
       if (unreadChat.id === chatId) {
@@ -82,7 +92,6 @@ const ChatBody: React.FC<IProps> = ({
             unreadPostIds.push(unreadPost.id);
           });
           setUnreadChatPostIds(unreadPostIds);
-          renderScrollDownButton(true);
         } else {
           setPostIdForLine('');
           setUnreadChatPostIds([]);
@@ -90,6 +99,11 @@ const ChatBody: React.FC<IProps> = ({
       }
     });
   };
+  useEffect(() => {
+    if (needToRenderButton() && postIdForLine) {
+      renderScrollDownButton(true);
+    }
+  }, [postIdForLine]);
   const scrollToRef = (ref: RefObject<HTMLElement>, behavior?: 'auto' | 'smooth') => {
     if (ref.current) {
       ref.current.scrollIntoView({
@@ -216,6 +230,21 @@ const ChatBody: React.FC<IProps> = ({
     clickToScroll(false);
   }, [clickedToScroll]);
 
+  useEffect(() => {
+    if (messages.length > 10) {
+      renderScrollDownButton(true);
+    }
+  }, [messages.length]);
+  const needToRenderButtonOnHover = (mId: string) => {
+    const lastPosts = messages.slice(messages.length - 7);
+    let needToRender = true;
+    lastPosts.forEach(lastPost => {
+      if (lastPost.id === mId && needToRender) {
+        needToRender = false;
+      }
+    });
+    return needToRender;
+  };
   return (
     <LoaderWrapper
       loading={!chatId.length}
@@ -231,7 +260,17 @@ const ChatBody: React.FC<IProps> = ({
           id="chatScrollContainer"
         >
           {messages.map((m, index) => (
-            <div key={m.id} ref={m.id === postIdForLine ? postRef : undefined}>
+            <div
+              key={m.id}
+              ref={m.id === postIdForLine ? postRef : undefined}
+              onMouseEnter={() => {
+                if (needToRenderButtonOnHover(m.id)) {
+                  renderScrollDownButton(true);
+                } else if (!postIdForLine) {
+                  renderScrollDownButton(false);
+                }
+              }}
+            >
               {pasteDateLine(index)}
               <div className={styles.postContainer}>
                 {postIdForLine === m.id ? newPostLineElement : ''}
