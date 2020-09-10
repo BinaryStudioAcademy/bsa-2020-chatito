@@ -242,7 +242,7 @@ const ChatBody: React.FC<IProps> = ({
                 type={PostType.Post}
                 setCopiedPost={setCopiedPost}
                 copiedPost={copiedPost}
-                isUserChatMember={isUserChatMember}
+                hideOptions={!isUserChatMember}
               />
             </div>
           </div>
