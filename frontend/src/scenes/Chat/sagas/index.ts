@@ -22,7 +22,8 @@ import {
   editCommentRoutine,
   deleteCommentRoutine,
   renderScrollDownButtonRoutine,
-  clickToScrollRoutine
+  clickToScrollRoutine,
+  unselectChannelRoutine
 } from '../routines';
 import { Routine } from 'redux-saga-routines';
 import {
@@ -322,12 +323,20 @@ function* watchRenderScrollDownButton() {
   yield takeEvery(renderScrollDownButtonRoutine.TRIGGER, renderScrollDownButton);
 }
 
-function* ClickToScrollRoutine({ payload }: Routine<any>) {
+function* ClickToScroll({ payload }: Routine<any>) {
   yield put(clickToScrollRoutine.success(payload));
 }
 
-function* watchClickToScrollRoutine() {
-  yield takeEvery(clickToScrollRoutine.TRIGGER, ClickToScrollRoutine);
+function* watchClickToScroll() {
+  yield takeEvery(clickToScrollRoutine.TRIGGER, ClickToScroll);
+}
+
+function* unselectChannel() {
+  yield put(unselectChannelRoutine.success());
+}
+
+function* watchUnselectChannel() {
+  yield takeEvery(unselectChannelRoutine.TRIGGER, unselectChannel);
 }
 
 export default function* chatSaga() {
@@ -353,6 +362,7 @@ export default function* chatSaga() {
     watchEditCommentRequest(),
     watchDeleteCommentRequest(),
     watchRenderScrollDownButton(),
-    watchClickToScrollRoutine()
+    watchClickToScroll(),
+    watchUnselectChannel()
   ]);
 }

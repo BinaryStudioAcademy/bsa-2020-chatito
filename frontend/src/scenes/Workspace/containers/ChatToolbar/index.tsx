@@ -90,7 +90,7 @@ const ChatToolbar: FunctionComponent<IProps> = ({
   const getClassNameImg = (state: boolean) => (state ? styles.chanelsImgRotate : styles.chanelsImg);
 
   const getChannelSelect = (chat: IChat) => {
-    if (selectedChat && selectedChat.id === chat.id) {
+    if (location.pathname.includes(chat.hash) && selectedChat && selectedChat.id === chat.id) {
       return `${styles.channelSelect} ${styles.channelCurrent}`;
     }
     return styles.channelSelect;
