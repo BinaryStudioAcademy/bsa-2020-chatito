@@ -238,20 +238,25 @@ const ChatBody: React.FC<IProps> = ({
     clickToScroll(false);
   }, [clickedToScroll]);
 
-  useEffect(() => {
-    if (messages.length > 10) {
-      renderScrollDownButton(true);
-    }
-  }, [messages.length]);
   const needToRenderButtonOnHover = (mId: string) => {
-    const lastPosts = messages.slice(messages.length - 7);
-    let needToRender = true;
-    lastPosts.forEach(lastPost => {
-      if (lastPost.id === mId && needToRender) {
-        needToRender = false;
+    if (messages.length > 13 && ableToRender) {
+      const lastPosts = messages.slice(messages.length - 6);
+      const lastBlockedPosts = messages.slice(messages.length - 14);
+      const lastPostsIds: string[] = [];
+      const lastBlockedPostsIds: string[] = [];
+      lastPosts.forEach(lastPost => {
+        lastPostsIds.push(lastPost.id);
+      });
+      if (lastPostsIds.includes(mId) && !postIdForLine) {
+        renderScrollDownButton(false);
       }
-    });
-    return needToRender;
+      lastBlockedPosts.forEach(lastPost => {
+        lastBlockedPostsIds.push(lastPost.id);
+      });
+      if (!lastBlockedPostsIds.includes(mId)) {
+        renderScrollDownButton(true);
+      }
+    }
   };
   return (
     <div className={styles.chatBody} key={chatId} ref={chatBody}>
@@ -267,13 +272,7 @@ const ChatBody: React.FC<IProps> = ({
           <div
             key={m.id}
             ref={m.id === postIdForLine ? postRef : undefined}
-            onMouseEnter={() => {
-              if (needToRenderButtonOnHover(m.id) && ableToRender) {
-                renderScrollDownButton(true);
-              } else if (!postIdForLine) {
-                renderScrollDownButton(false);
-              }
-            }}
+            onMouseEnter={() => needToRenderButtonOnHover(m.id)}
           >
             {pasteDateLine(index)}
             <div className={styles.postContainer}>
