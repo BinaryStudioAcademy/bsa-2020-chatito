@@ -238,27 +238,10 @@ const ChatBody: React.FC<IProps> = ({
     clickToScroll(false);
   }, [clickedToScroll]);
 
-  // useEffect(() => {
-  //   if (messages.length > 10) {
-  //     renderScrollDownButton(true);
-  //   }
-  // }, [messages.length]);
   const needToRenderButtonOnHover = (mId: string) => {
     if (messages.length > 13 && ableToRender) {
       const lastPosts = messages.slice(messages.length - 6);
-      // const lastBlockedPosts = messages.slice(messages.length - 14, messages.length - 6);
       const lastBlockedPosts = messages.slice(messages.length - 14);
-      // let needToRender = true;
-      // lastPosts.forEach(lastPost => {
-      //   if (lastPost.id === mId && needToRender) {
-      //     needToRender = false;
-      //   }
-      // });
-      // lastBlockedPosts.forEach(lastBlockedPost => {
-      //   if (lastBlockedPost.id !== mId && !needToRender) {
-      //     needToRender = true;
-      //   }
-      // });
       const lastPostsIds: string[] = [];
       const lastBlockedPostsIds: string[] = [];
       lastPosts.forEach(lastPost => {
