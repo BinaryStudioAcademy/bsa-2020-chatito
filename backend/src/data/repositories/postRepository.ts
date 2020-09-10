@@ -15,7 +15,7 @@ class PostRepository extends Repository<Post> {
 
   getById(id: string): Promise<Post> {
     return this.findOne({ where: { id }, relations: ['createdByUser', 'chat', 'draftComments'] });
-  } // ?
+  }
 
   async getAllChatPosts({
     userId,
@@ -121,7 +121,7 @@ class PostRepository extends Repository<Post> {
 
   getByIdWithChat(id: string): Promise<Post> {
     return this.findOne({ where: { id }, relations: ['chat'] });
-  } // ?
+  }
 
   addPost(post: ICreatePost): Promise<Post> {
     const newPost = this.create(post);
