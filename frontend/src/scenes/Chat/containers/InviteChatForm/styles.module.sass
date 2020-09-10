@@ -27,6 +27,7 @@
   flex-wrap: wrap
   font-size: 14px
   font-weight: 600
+  margin: 0 10px
 
 .selectedUser
   display: flex
@@ -34,7 +35,7 @@
   background-color: var(--workspace-background-color)
   color: var(--text-color-for-dark-bg)
   padding: 5px
-  margin-bottom: 8px
+  margin-bottom: 16px
   margin-right: 8px
   border-radius: 5px
 
@@ -48,8 +49,15 @@
   &:hover
     color: var(--close-button-dark-bg)
 
+.popoverWrapper
+  display: flex
+  justify-content: center
+
 .popover
-  max-width: 466px
+  top: -10px !important
+  display: flex
+  justify-content: center
+  max-width: 450px
   width: 100%
 
 .content
@@ -61,7 +69,6 @@
   scrollbar-width: none;  /* Firefox */
   &::-webkit-scrollbar
     display: none;  /* Safari and Chrome */
-  
 
 .userItem
   position: relative
@@ -77,6 +84,7 @@
 
 .userItem.chatUser
   cursor: default
+  min-height: 36px
 
 .userItem.chatUser:hover
   background-color: unset
@@ -109,3 +117,26 @@
 
 .notFound span
   margin-right: 5px
+
+.buttonsContainer
+  margin-top: 20px
+
+.searchInput
+  width: 100%
+  border-radius: 50px
+  padding-left: 40px
+
+.wrapper
+  position: relative
+  width: 100%
+
+  .searchIcon
+    position: absolute
+    opacity: 0.25
+    left: 15px
+    top: 12px
+    cursor: pointer
+    z-index: 5
+
+    &:hover
+      opacity: 0.5

@@ -57,37 +57,41 @@ const ChatMembers: FunctionComponent<any> = ({
       onHide={handleCloseModal}
     >
       <div>
-        <header className={styles.title}>Chat members</header>
-        <SearchInput
-          onSearch={setSearchStr}
-          placeholder="Search by name or email"
-          stylesClassName={styles.searchInput}
-        />
-        {
-          chat.users.map((user: IUser) => {
-            if (!isSuitable(user)) {
-              return null;
-            }
-            return (
-              <ChatMember
-                removeUser={removeUserFromChat}
-                user={user}
-                key={user.id}
-                isCreator={isCreator}
-                currentUser={currentUser}
-              />
-            );
-          })
-        }
-        <div className={styles.buttonWrapper}>
+        <div className="modalHeader">
+          <p>Chat members</p>
+        </div>
+        <div className="modalBody">
+          <SearchInput
+            onSearch={setSearchStr}
+            placeholder="Search by name or email"
+            stylesClassName={styles.searchInput}
+          />
+          {
+            chat.users.map((user: IUser) => {
+              if (!isSuitable(user)) {
+                return null;
+              }
+              return (
+                <ChatMember
+                  removeUser={removeUserFromChat}
+                  user={user}
+                  key={user.id}
+                  isCreator={isCreator}
+                  currentUser={currentUser}
+                />
+              );
+            })
+          }
+        </div>
+        <div className={`${styles.butonsContainer} buttonsContainer`}>
           {isUserChatMember && (
             <Button
               type="button"
               variant="secondary"
-              className={styles.addButton}
+              className="appButton save"
               onClick={onInvite}
             >
-              Add user
+              Add
             </Button>
           )}
         </div>

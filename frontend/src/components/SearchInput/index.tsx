@@ -34,6 +34,7 @@ const SearchInput: FunctionComponent<IProps> = ({ onSearch, stylesClassName = ''
         aria-label="header search"
         placeholder={placeholder || ''}
         onChange={onChange}
+        className={styles.inputField}
       />
       <FontAwesomeIcon icon={faSearch} className={styles.searchIcon} onClick={onSubmit} />
     </div>

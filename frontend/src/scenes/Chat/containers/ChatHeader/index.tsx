@@ -201,7 +201,7 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser,
                     <FontAwesomeIcon icon={faUserPlus} className={styles.icon} />
                   </button>
                 </OverlayTrigger>
-                <InviteChatModal chatName={chat.name} chatId={chat.id} toggleModal={showModal} chatUsers={chat.users} />
+                <InviteChatModal chatId={chat.id} toggleModal={showModal} chatUsers={chat.users} />
               </>
             )}
             <ChatMembers isUserChatMember={isUserChatMember} />

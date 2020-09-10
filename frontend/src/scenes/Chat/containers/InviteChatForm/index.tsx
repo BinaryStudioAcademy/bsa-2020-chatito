@@ -9,14 +9,13 @@ import LoaderWrapper from 'components/LoaderWrapper';
 import { searchUsers } from 'common/helpers/searchHelper';
 import { addUsersToChatRoutine, fetchChatUsersRoutine } from 'scenes/Chat/routines';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { IAddUsersToChat } from 'common/models/chat/IAddUsersToChat';
 import { getWorkspaceUsers } from 'services/workspaceService';
 import { IBindingAction } from 'common/models/callback/IBindingActions';
 
 interface IProps {
   workspaceId: string;
-  chatName: string;
   chatId: string;
   chatUsers: IUser[];
   hideCallback: IBindingAction;
@@ -26,7 +25,7 @@ interface IProps {
 
 let timer: NodeJS.Timeout;
 
-const InviteChatForm: React.FC<IProps> = ({ workspaceId, chatName,
+const InviteChatForm: React.FC<IProps> = ({ workspaceId,
   chatId, hideCallback, addUsersToChat, chatUsers, getUserList }) => {
   const [text, setText] = useState('');
   const [searchedUsers, setSearchedUsers] = useState<IUser[]>([]);
@@ -106,26 +105,41 @@ const InviteChatForm: React.FC<IProps> = ({ workspaceId, chatName,
 
   return (
     <div className={styles.modalWrp}>
-      <h4 className={styles.title}>Add people</h4>
-      <p className={styles.chatName}>{chatName}</p>
-      <div className={styles.selectedUsersWrp}>
-        {selectedUsers.map(selUser => (
-          <div className={styles.selectedUser} key={selUser.id}>
-            <div className={`${styles.selectedUsername} noselect`}>{selUser.fullName}</div>
-            <FontAwesomeIcon onClick={() => onUnselectUser(selUser.id)} icon={faTimes} className={styles.closeBtn} />
-          </div>
-        ))}
+      <div className="modalHeader">
+        <p>Add people</p>
       </div>
-      <LoaderWrapper loading={!users.length} height="50px">
-        <OverlayTrigger trigger="focus" overlay={popover} placement="bottom" show={!!text}>
-          <InputGroup className="mb-3">
-            <FormControl placeholder="Search by name or email" onChange={onChange} value={text} />
-          </InputGroup>
-        </OverlayTrigger>
-      </LoaderWrapper>
-      <Button variant="secondary" className={styles.addBtn} disabled={!selectedUsers.length} onClick={onAdd}>
-        Add
-      </Button>
+      <div className="modalBody">
+        <div className={styles.selectedUsersWrp}>
+          {selectedUsers.map(selUser => (
+            <div className={styles.selectedUser} key={selUser.id}>
+              <div className={`${styles.selectedUsername} noselect`}>{selUser.fullName}</div>
+              <FontAwesomeIcon onClick={() => onUnselectUser(selUser.id)} icon={faTimes} className={styles.closeBtn} />
+            </div>
+          ))}
+        </div>
+        <LoaderWrapper loading={!users.length} height="50px">
+          <div className={styles.popoverWrapper}>
+            <OverlayTrigger trigger="focus" overlay={popover} placement="bottom" show={!!text}>
+              <div className={styles.wrapper}>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="Search by name or email"
+                    onChange={onChange}
+                    value={text}
+                    className={styles.searchInput}
+                  />
+                </InputGroup>
+                <FontAwesomeIcon icon={faSearch} className={styles.searchIcon} />
+              </div>
+            </OverlayTrigger>
+          </div>
+        </LoaderWrapper>
+      </div>
+      <div className={`${styles.buttonsContainer} buttonsContainer`}>
+        <Button variant="secondary" className="appButton save" disabled={!selectedUsers.length} onClick={onAdd}>
+          Add
+        </Button>
+      </div>
     </div>
   );
 };
