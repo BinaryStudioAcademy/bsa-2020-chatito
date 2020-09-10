@@ -8,6 +8,9 @@ export class Comment extends AbstractEntity {
   @Column()
   text: string;
 
+  @Column({ default: false })
+  isDeleted: boolean;
+
   @ManyToOne(() => User, user => user.comments)
   @JoinColumn({ name: 'createdByUserId' })
   createdByUser: User;
