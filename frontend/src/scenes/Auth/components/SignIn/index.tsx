@@ -115,6 +115,7 @@ const SignIn: FunctionComponent<IProps> = ({
             link={Routes.ForgotPassword}
             linkDescription="Forgot password?"
             linkClassName={styles.forgotPasswordLink}
+            placeholder="••••••••"
           />
           <div className={`${styles.formFooter} w-100`}>
             <Button type="submit" variant="primary" className={styles.primaryBtn}>

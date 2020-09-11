@@ -22,6 +22,7 @@ const InputField = ({
   ...props
 }: IProps) => {
   const [field, meta] = useField(props);
+  const { name } = props;
   return (
     <div className={`${styles.inputContainer} w-100`}>
       <div className={styles.labelRow}>
@@ -36,8 +37,14 @@ const InputField = ({
             </Link>
           ) : null}
       </div>
-      <InputGroup size="sm" className={styles.inputGroup}>
-        <FormControl id={label} aria-label={label} {...field} {...props} />
+      <InputGroup size="sm" className={`${styles.inputGroup}`}>
+        <FormControl
+          id={label}
+          aria-label={label}
+          {...field}
+          {...props}
+          className={name === 'password' || name === 'confirmPassword' ? styles.passwordInput : ''}
+        />
       </InputGroup>
       {meta.touched && meta.error ? (
         <div className={`text-danger ${styles.error}`}>{meta.error}</div>
