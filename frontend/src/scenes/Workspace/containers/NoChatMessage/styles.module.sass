@@ -1,6 +1,7 @@
 .wrapper
   height: 100%
-  padding: 20px 70px
+  padding: 40px 50px
+  padding-right: 100px
 
   .header
     margin: 0 auto 15px auto
@@ -14,18 +15,22 @@
     text-align: justify
     &:last-child
       margin: 15px 0
+      text-align: right
 
   .text
     max-height: calc( 100vh - 220px )
     overflow-y: scroll
 
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none
+    scrollbar-width: none
     &::-webkit-scrollbar
-      display: none;  /* Safari and Chrome */
+      display: none
 
   .direction
     font-weight: 600
+
+  .marginLeft
+    margin-left: 55px
 
 .chatContainerMessage
   display: flex
@@ -34,3 +39,23 @@
   align-items: center
   height: 100%
   background-color: var(--left-bar)
+
+.icon
+  background: white
+  display: flex
+  justify-content: center
+  align-items: center
+  border: 1px solid var(--border-lightbrown)
+  border-radius: 1.25em
+  height: 40px
+  width: 40px
+  margin-right: 15px
+
+  svg
+    height: 25px
+    width: 25px
+
+.headerWrapper
+  display: flex
+  align-items: center
+  margin-bottom: 5px
