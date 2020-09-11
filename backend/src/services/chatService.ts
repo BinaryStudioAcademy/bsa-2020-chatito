@@ -20,6 +20,8 @@ import { getGithubUser, getUserByIdWithoutRelations } from './userService';
 import { IUserClient } from '../common/models/user/IUserClient';
 import { emitToChatRoom } from '../common/utils/socketHelper';
 import { ClientSockets } from '../common/enums/ClientSockets';
+import CustomError from '../common/models/CustomError';
+import { ErrorCode } from '../common/enums/ErrorCode';
 
 export const getAllChatPosts = async (filterData: IGetChatPosts) => {
   const { postId, ...filter } = filterData;
@@ -65,7 +67,12 @@ export const addChat = async (userId: string, body: IChatData, io: SocketIO.Serv
     users: [userCreator, ...users, ...githubUser],
     hash: cryptoRandomString({ length: 7, type: 'url-safe' }).toUpperCase()
   };
-  const chat = await getCustomRepository(ChatRepository).addChat(newChat);
+  let chat;
+  try {
+    chat = await getCustomRepository(ChatRepository).addChat(newChat);
+  } catch (error) {
+    throw new CustomError(409, 'Chat with such name already exists.', ErrorCode.ChatNameExist);
+  }
   const userIds = chat.users.map(user => user.id);
   io.of('/chat').emit(ClientSockets.JoinChat, chat, userIds);
   return chat;

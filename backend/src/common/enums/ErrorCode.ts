@@ -9,5 +9,6 @@ export enum ErrorCode {
   DraftCommentExists,
   UserHaveCreatedWorkspace,
   TooLongUserStatus,
-  TooLongUserLifePosition
+  TooLongUserLifePosition,
+  ChatNameExist
 }
