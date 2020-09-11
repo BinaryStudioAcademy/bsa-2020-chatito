@@ -60,6 +60,10 @@ export const addChat = async (userId: string, body: IChatData, io: SocketIO.Serv
 
   const githubUser = chatFields.type === ChatType.GithubRepository ? [await getGithubUser()] : [];
 
+  if (chatFields.type === ChatType.DirectMessage) {
+    chatFields.name = null;
+  }
+
   const newChat: ICreateChat = {
     ...chatFields,
     workspace,
