@@ -118,7 +118,7 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser,
         delay={{ show: 300, hide: 0 }}
         rootClose
         placement="bottom-start"
-        overlay={PopoverItem('Mute chat')}
+        overlay={PopoverItem('Unmute chat')}
       >
         <FontAwesomeIcon className={styles.icon} icon={faVolumeMute} onClick={setChatMute} />
       </OverlayTrigger>
@@ -128,7 +128,7 @@ const ChatHeader: React.FC<IProps> = ({ chat, showModal, setMute, currentUser,
         delay={{ show: 300, hide: 0 }}
         rootClose
         placement="bottom-start"
-        overlay={PopoverItem('Unmute chat')}
+        overlay={PopoverItem('Mute chat')}
       >
         <FontAwesomeIcon className={styles.icon} icon={faVolumeUp} onClick={setChatMute} />
       </OverlayTrigger>
