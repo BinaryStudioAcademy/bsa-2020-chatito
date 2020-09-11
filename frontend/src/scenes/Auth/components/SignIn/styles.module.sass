@@ -50,12 +50,6 @@
   .primaryBtn:global(.btn-primary)
     width: 145px
     height: 50px
-    background-color: var(--auth-scene-btn-background)
-    border-color: var(--auth-scene-btn-background)
-
-    &:hover, &:active
-      background-color: var(--auth-scene-btn-background)
-      border-color: var(--auth-scene-btn-background)
 
 .socialSignInWrapper
   width: 100%
@@ -81,7 +75,11 @@
   background-color: var(--chat-background-secondary)
   border: none
   cursor: pointer
+  transition: all .3s
 
   &:active, &:focus
     outline: none
     border: none
+  
+  &:hover
+    background-color: var(--auth-hover)

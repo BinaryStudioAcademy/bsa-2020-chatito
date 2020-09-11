@@ -118,7 +118,7 @@ const SignIn: FunctionComponent<IProps> = ({
             placeholder="••••••••"
           />
           <div className={`${styles.formFooter} w-100`}>
-            <Button type="submit" variant="primary" className={styles.primaryBtn}>
+            <Button type="submit" variant="primary" className={`${styles.primaryBtn} authButton save`}>
               Sign In
             </Button>
             <div className={styles.socialSignInWrapper}>

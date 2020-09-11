@@ -76,6 +76,8 @@
   margin-bottom: 5px
 
 .emojiStatItem
+  color: var(--header-user-name)
+  font-weight: 500
   margin-right: 5px
   margin-bottom: 5px
   padding: 2px 4px
@@ -83,15 +85,20 @@
   cursor: pointer
   background-color: var(--post-emoji-bg)
   border-radius: 20px
+  transition: all .3s
+  display: flex
+  align-items: center
+  border-width: 2px
 
 .emojiStatItem:hover
   border: 1px solid var(--border)
   border-radius: 20px
   background-color: var(--post-emoji-bg-hover)
+  border-color: var(--post-emoji-border)
+  border-width: 2px
 
 .emojiStatItem.active
-  background-color: var(--post-active-emoji-bg)
-  border-color: var(--post-active-emoji-border)
+  border-color: var(--post-emoji-border)
 
 .emoji
   margin-right: 7px

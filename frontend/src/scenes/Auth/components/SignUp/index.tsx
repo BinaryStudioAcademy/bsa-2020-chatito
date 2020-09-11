@@ -76,7 +76,7 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspace, invit
             placeholder="••••••••"
           />
           <div className={`${styles.formFooter} w-100`}>
-            <Button className={styles.primaryBtn} type="submit" variant="primary">
+            <Button className={`${styles.primaryBtn} authButton save`} type="submit" variant="primary">
               Sign Up
             </Button>
             <Link className={styles.signInLink} to={Routes.SignIn}>
