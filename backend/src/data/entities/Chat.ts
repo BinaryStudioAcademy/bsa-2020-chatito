@@ -10,7 +10,7 @@ import { DraftPost } from './DraftPost';
 @Entity()
 @Unique(['name', 'workspace'])
 export class Chat extends AbstractEntity {
-  @Column({ length: 150 })
+  @Column({ length: 150, nullable: true })
   name: string;
 
   @Column({ type: 'enum', enum: ChatType })
