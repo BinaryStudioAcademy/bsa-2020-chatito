@@ -41,6 +41,10 @@ const EditProfileForm: FunctionComponent<IProps> = ({
   const [avatarLoading, setAvatarLoading] = useState(false);
 
   const handleSubmit = () => {
+    if (fullName?.trim().length === 0) {
+      toastr.error('Error', 'Your name cannot be empty! Please enter your real name and try again');
+      return;
+    }
     const editUserProps = { ...user, fullName, displayName, title, githubUsername };
     delete editUserProps.imageUrl;
     editProfile(editUserProps);
