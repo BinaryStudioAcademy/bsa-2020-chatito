@@ -441,7 +441,7 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
             className={`${styles.author} button-unstyled`}
             type="button"
           >
-            {createdByUser.fullName}
+            {createdByUser.displayName}
           </button>
 
           <br />
