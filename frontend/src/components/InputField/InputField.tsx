@@ -38,7 +38,6 @@ const InputField = ({
           ) : null}
       </div>
       <InputGroup size="sm" className={`${styles.inputGroup}`}>
-        {console.log(label)}
         <FormControl
           id={label}
           aria-label={label}
