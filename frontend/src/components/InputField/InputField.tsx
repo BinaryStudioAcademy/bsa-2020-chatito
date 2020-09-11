@@ -23,6 +23,12 @@ const InputField = ({
 }: IProps) => {
   const [field, meta] = useField(props);
   const { name } = props;
+  let classname = '';
+  if (name === 'password' || name === 'confirmPassword') {
+    classname = styles.passwordInput;
+  } else if (name === 'email') {
+    classname = styles.emailInput;
+  }
   return (
     <div className={`${styles.inputContainer} w-100`}>
       <div className={styles.labelRow}>
@@ -43,7 +49,7 @@ const InputField = ({
           aria-label={label}
           {...field}
           {...props}
-          className={name === 'password' || name === 'confirmPassword' ? styles.passwordInput : ''}
+          className={classname}
         />
       </InputGroup>
       {meta.touched && meta.error ? (
