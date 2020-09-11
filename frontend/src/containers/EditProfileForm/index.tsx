@@ -41,7 +41,7 @@ const EditProfileForm: FunctionComponent<IProps> = ({
   const [avatarLoading, setAvatarLoading] = useState(false);
 
   const handleSubmit = () => {
-    if (fullName?.trim().length === 0) {
+    if (fullName?.trim().length === 0 || displayName?.trim().length === 0) {
       toastr.error('Error', 'Your name cannot be empty! Please enter your real name and try again');
       return;
     }

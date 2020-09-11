@@ -431,9 +431,6 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
     type === PostType.Comment || (post.integration === IntegrationType.None && !hideOptions)
   );
 
-  const displayNameInChat = createdByUser.displayName?.trim().length
-    ? createdByUser.displayName
-    : createdByUser.fullName;
   return (
     <div ref={postRef}>
       <Media className={styles.postWrapper} onMouseEnter={onHoverRead}>
@@ -444,7 +441,7 @@ const Post: React.FC<IProps> = ({ post: postData, isNew = false, userId, type, o
             className={`${styles.author} button-unstyled`}
             type="button"
           >
-            {displayNameInChat}
+            {createdByUser.displayName}
           </button>
 
           <br />
