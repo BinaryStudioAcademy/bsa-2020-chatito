@@ -38,7 +38,7 @@ const ForgotPassword: FunctionComponent<IProps> = ({ forgotPassword }) => {
             placeholder="Your email address"
           />
           <div className={`${styles.formFooter} w-100`}>
-            <Button type="submit" className={styles.primaryBtn}>
+            <Button type="submit" className={`${styles.primaryBtn} authButton save`}>
               Recover
             </Button>
             <div className={styles.linkWrapper}>

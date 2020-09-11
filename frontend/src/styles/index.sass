@@ -156,6 +156,14 @@ small
   display: flex
   justify-content: flex-end
 
+.authButton
+  cursor: pointer !important
+  line-height: 1
+  &:hover, &:active, &:focus
+    box-shadow: none !important
+    outline: none !important
+    cursor: pointer !important
+
 .appButton
   padding: 0
   font-size: 14px
@@ -188,6 +196,20 @@ small
     background-color: var(--danger-button-bg-hover) !important
   &:focus
     background-color: var(--danger-button-bg)
+
+.back
+  background-color: transparent
+  border-color: var(--back-btn-border)
+  color: var(--back-btn-hover)
+  &:hover, &:active, &:disabled
+    color: var(--white-bg)
+    border-color: var(--back-btn-hover)
+    outline: none
+    background-color: var(--back-btn-hover) !important
+  &:focus
+    outline: none
+    border-color: var(--back-btn-border) !important
+    background-color: var(--back-btn-hover)
 
 .createChannel
   width: 130px

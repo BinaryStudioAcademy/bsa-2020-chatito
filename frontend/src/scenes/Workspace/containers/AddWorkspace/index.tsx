@@ -47,12 +47,12 @@ const AddWorkspace: FunctionComponent<IProps> = ({ addWorkspace, activeWorkspace
               <div className={`${styles.formFooter} w-100`}>
                 { activeWorkspace ? (
                   <Link className={styles.backButtonWrapper} to={`/w/${activeWorkspace}`}>
-                    <Button variant="primary" className={styles.primaryBtnBack}>
+                    <Button variant="primary" className={`${styles.primaryBtnBack} authButton back`}>
                       Back
                     </Button>
                   </Link>
                 ) : null}
-                <Button type="submit" variant="primary" className={styles.primaryBtn}>
+                <Button type="submit" variant="primary" className={`${styles.primaryBtn} authButton save`}>
                   Next
                 </Button>
               </div>

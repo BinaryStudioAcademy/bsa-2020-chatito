@@ -47,7 +47,7 @@ const ForgotPassword: FunctionComponent<IProps> = ({ resetPassword, match }) => 
             type="password"
           />
           <div className={`${styles.formFooter} w-100`}>
-            <Button type="submit" className={styles.primaryBtn}>
+            <Button type="submit" className={`${styles.primaryBtn} authButton save`}>
               Reset password
             </Button>
           </div>
