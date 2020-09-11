@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, ManyToOne, ManyToMany, JoinColumn, RelationId, Unique } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne, ManyToMany, JoinColumn, RelationId } from 'typeorm';
 import { AbstractEntity } from '../abstract/AbstractEntity';
 import { Post } from './Post';
 import { User } from './User';
@@ -8,9 +8,9 @@ import { Reminder } from './Reminder';
 import { DraftPost } from './DraftPost';
 
 @Entity()
-@Unique(['name', 'workspace'])
+// @Unique(['name', 'workspace'])
 export class Chat extends AbstractEntity {
-  @Column({ length: 150 })
+  @Column({ length: 150, nullable: true })
   name: string;
 
   @Column({ type: 'enum', enum: ChatType })
