@@ -91,7 +91,7 @@ const PreferencesForm: FunctionComponent<IProps> = ({
       <div className={styles.modalBody}>
 
         <div className={styles.modalNav}>
-          <span className={styles.modalNavTitle}>Sounds</span>
+          <p className={styles.modalNavTitle}>Sounds</p>
         </div>
 
         <div className={styles.mainWrapper}>
