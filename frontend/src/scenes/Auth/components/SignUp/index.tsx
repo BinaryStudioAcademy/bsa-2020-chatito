@@ -67,11 +67,13 @@ export const SignUp: FunctionComponent<IProps> = ({ addNewUser, workspace, invit
             label="Password"
             name="password"
             type="password"
+            placeholder="••••••••"
           />
           <InputField
             label="Confirm Password"
             name="confirmPassword"
             type="password"
+            placeholder="••••••••"
           />
           <div className={`${styles.formFooter} w-100`}>
             <Button className={styles.primaryBtn} type="submit" variant="primary">
